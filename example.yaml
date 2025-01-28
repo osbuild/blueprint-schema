@@ -1,0 +1,197 @@
+#
+# Decisions for the initial version so far:
+#
+# * Minimum top-level fields (name, description).
+# * Prefer minimal nesting (two levels max).
+# * Snake case naming for all keys (snake_case).
+# * Plurals for composite elements (sequences, mappings).
+# * Utilize native YAML data types (e.g. date, time).
+# * Utilize default values from JSON Schema (boolean can be true).
+#
+# We will specify if composer request should be part of bluprint schema or not.
+
+# image request (type) aka compose request (distro, version, arch)
+---
+compose_request:
+  type: "aws"
+  distribution:
+    name: "fedora"
+    version: "42"
+  architecture: "x86_84"
+#override: # TODO discuss maybe "variables"
+  # - activation_key
+
+# the blueprint
+---
+name: "Blueprint name"
+description: ""
+#version: 2014-11-27
+hostname: "localhost" # unsure about this
+experimental:
+  reserved: true
+fips:
+  enabled: true
+dnf:
+  packages:
+    # anything that DNF library consumes
+    - "vim-enhanced"
+    - "vim-enhanced-9.1.866-1"
+    - "vim-enhanced-9.1.866-1.fc41.x86_64"
+    - "@virtualization"
+  groups:
+    - "virtualization"
+  import_keys: true
+  modules:
+    - "postgres:16/server"
+containers:
+  - source: "quay.io/fedora/fedora:latest"
+    name: "fedora"
+    tls_verify: true
+    local_storage: "/var/tmp/test"
+kernel:
+  package: "kernel-debug-6.11.5-300"
+  cmdline_append:
+    - "nosmt=force"
+registration:
+  redhat:
+    activation_key: "123456789"
+    organization: "123456"
+    subscription_manager:
+      # internal use only
+      enabled: true
+      product_plugin: true
+      repository_management: true
+      auto_registration: true
+    insights:
+      enabled: true
+    connector:
+      enabled: true
+  fdo: # TODO review the decision to put it under registration
+    manufacturing_server_url: ""
+    diun_pub_key_insecure: false
+    diun_pub_key_hash: ""
+    diun_pub_key_root_certs: ""
+    di_mfg_string_type_mac_iface: ""
+accounts:
+  users:
+    - name: "lzap"
+      description: ""
+      password: ""
+      ssh_keys:
+        - "ssh-key 1234"
+      home: "/home/lzap"
+      shell: "/usr/bin/bash"
+      uid: 1001
+      gid: 1001
+      groups: ["wheel", "operators"]
+      expires: 2050-05-13
+  groups:
+    - name: "operators"
+      gid: 1042
+timedate:
+  timezone: "Europe/Prague"
+  ntp_servers: ["0.north-america.pool.ntp.org", "1.north-america.pool.ntp.org"]
+locale:
+  languages: ["en_US.UTF-8", "cs_CZ.UTF-8"]
+  keyboards: ["cz-qwerty", "cz", "us"]
+network:
+  firewall:
+    services:
+      - service: "ssh"
+        protocol: "tcp" # default value
+        enabled: true # default value
+      - service: "dhcp"
+    ports:
+      - port: 53
+        protocol: "both"
+        enabled: false
+      - from: 60000
+        to: 60010
+        protocol: "udp"
+systemd:
+  enabled: ["sshd.service", "backup.timer"]
+  disabled: ["tuned", "cupsd"]
+  masked: []
+fsnodes: # new feature (was file/dir)
+  - path: "/var/tmp/dir"
+    type: "dir" # file as the default (file, dir, symlink)
+    state: "present" # the default
+    mode: 0755 # 0700 default
+    user: "lzap" # 0 default
+    group: "lzap" # 0 default
+    ensure_parents: true # false default
+  - path: "/var/tmp/dir/file1"
+    type: "file"
+    state: "present"
+    mode: 0644
+    user: "lzap"
+    group: "lzap"
+    contents:
+      base64: "AA43798kjsdkjhKJDJKhds" # useful for binaries
+  - path: "/var/tmp/dir/file2"
+    contents:
+      text: "test" # useful for text
+  - path: "/var/tmp/dir/file3"
+    contents:
+      ref: "file:///var/tmp/dir/file2" # new feature (could be URL as well)
+ignition:
+  embedded: ""
+  firstboot_url: ""
+anaconda_installer: # only effective for certain image types
+  unattended: true
+  sudo_nopassword: ["lzap"]
+  enabled_modules: ["org.fedoraproject.Anaconda.Modules.Subscription"]
+  disabled_modules: []
+  kickstart: ""
+
+# CUT # CUT# CUT# CUT# CUT# CUT# CUT# CUT# CUT# CUT# CUT
+
+openscap:
+  profile_id: "xccdf_org.ssgproject.content_profile_cis"
+  # hosted-only fields
+  profile_name: "CIS Red Hat Enterprise Linux 8 Benchmark for Level 2 - Server"
+  profile_description: ""
+  # on-prem only fields
+  datastream: "/usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml"
+  selected: []
+  unselected: ["xccdf_org.ssgproject.content_rule_grub2_password"]
+  json_tailorings:
+    - profile_id: "name-of-profile-used-in-json-tailoring-file"
+      filepath:  "/some/path/tailoring-file.json"
+storage:
+  installation_device: "/dev/vda"
+  partitioning_mode: "lvm"
+  filesystems: # on-prem only, ingored for anaconda type
+    - mountpoint: "/var/log"
+      size: 1073741824
+#custom_repositories:
+repositories:
+  id: ""
+  name: ""
+  filename: ""
+  baseurls: [""]
+  mirrorlist: ""
+  metalink: ""
+  gpgkeys: [""]
+  check_gpg: true
+  check_repo_gpg: true
+  priority: 99
+  ssl_verify: true
+  module_hotfixes: false
+# the following is only in hosted mostly from "image_request" (some of the fields moved to image_request)
+image:
+  client_id: "api"
+  size: 4294967296 # bytes (TODO: move it to filesystem section)
+  snapshot_date: 2024-05-13
+  upload:
+    - type: "aws"
+      share_with_accounts: ["123456789"]
+      share_with_sources: ["12345"]
+ostree:
+  url: "https://cert.console.stage.redhat.com/api/pulp-content/em652321d/myrhel-2747841137116337868"
+  content_url: ""
+  ref: "rhel/8/x86_64/edge"
+  parent: "rhel/8/x86_64/edge"
+  rhsm: true
+cacerts: ["xxx"]
+# any new features added after we started with this back in November?
