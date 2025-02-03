@@ -66,7 +66,7 @@ registration:
       enabled: true
     connector:
       enabled: true
-  fdo: # TODO review the decision to put it under registration
+  fdo:
     manufacturing_server_url: ""
     diun_pub_key_insecure: false
     diun_pub_key_hash: ""
@@ -137,15 +137,57 @@ fsnodes: # new feature (was file/dir)
 ignition:
   embedded: ""
   firstboot_url: ""
-anaconda_installer: # only effective for certain image types
-  unattended: true
-  sudo_nopassword: ["lzap"]
-  enabled_modules: ["org.fedoraproject.Anaconda.Modules.Subscription"]
-  disabled_modules: []
-  kickstart: ""
+installer:
+  anaconda: # only effective for certain image types
+    unattended: true
+    sudo_nopassword: ["lzap"]
+    enabled_modules: ["org.fedoraproject.Anaconda.Modules.Subscription"]
+    disabled_modules: []
+    kickstart: ""
+  coreos:
+    installation_device: "/dev/vda"
 
-# CUT # CUT# CUT# CUT# CUT# CUT# CUT# CUT# CUT# CUT# CUT
+repositories:
+  - type: "dnf" # the default and the only supported value
+    id: ""
+    name: ""
+    filename: ""
+    base_urls: [""]
+    mirror_list: ""
+    metalink: ""
+    gpg_keys: [""]
+    gpg_check: true
+    gpg_check_repo: true
+    priority: 99
+    ssl_verify: true
+    module_hotfixes: false
+    usage:
+      install: true # use repo for image build
+      configure: true # configure repo for dnf
 
+# CUT # CUT # CUT # CUT # CUT # CUT # CUT # CUT # CUT 
+
+ostree:
+  url: "https://cert.console.stage.redhat.com/api/pulp-content/em652321d/myrhel-2747841137116337868"
+  content_url: ""
+  ref: "rhel/8/x86_64/edge"
+  parent: "rhel/8/x86_64/edge"
+  rhsm: true
+cacerts: ["xxx"]
+# the following is only in hosted mostly from "image_request" (some of the fields moved to image_request)
+image:
+  client_id: "api"
+  size: 4294967296 # bytes (TODO: move it to filesystem section)
+  snapshot_date: 2024-05-13
+  upload:
+    - type: "aws"
+      share_with_accounts: ["123456789"]
+      share_with_sources: ["12345"]
+storage:
+  partitioning_mode: "lvm"
+  filesystems: # on-prem only, ingored for anaconda type
+    - mountpoint: "/var/log"
+      size: 1073741824
 openscap:
   profile_id: "xccdf_org.ssgproject.content_profile_cis"
   # hosted-only fields
@@ -158,40 +200,4 @@ openscap:
   json_tailorings:
     - profile_id: "name-of-profile-used-in-json-tailoring-file"
       filepath:  "/some/path/tailoring-file.json"
-storage:
-  installation_device: "/dev/vda"
-  partitioning_mode: "lvm"
-  filesystems: # on-prem only, ingored for anaconda type
-    - mountpoint: "/var/log"
-      size: 1073741824
-#custom_repositories:
-repositories:
-  id: ""
-  name: ""
-  filename: ""
-  baseurls: [""]
-  mirrorlist: ""
-  metalink: ""
-  gpgkeys: [""]
-  check_gpg: true
-  check_repo_gpg: true
-  priority: 99
-  ssl_verify: true
-  module_hotfixes: false
-# the following is only in hosted mostly from "image_request" (some of the fields moved to image_request)
-image:
-  client_id: "api"
-  size: 4294967296 # bytes (TODO: move it to filesystem section)
-  snapshot_date: 2024-05-13
-  upload:
-    - type: "aws"
-      share_with_accounts: ["123456789"]
-      share_with_sources: ["12345"]
-ostree:
-  url: "https://cert.console.stage.redhat.com/api/pulp-content/em652321d/myrhel-2747841137116337868"
-  content_url: ""
-  ref: "rhel/8/x86_64/edge"
-  parent: "rhel/8/x86_64/edge"
-  rhsm: true
-cacerts: ["xxx"]
 # any new features added after we started with this back in November?
