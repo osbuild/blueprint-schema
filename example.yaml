@@ -164,8 +164,36 @@ repositories:
     usage:
       install: true # use repo for image build
       configure: true # configure repo for dnf
+storage: # applies only to disc images
+  type: "gpt" # mbr or gpt
+  partitions:
+    - type: "plain" # lvm or btrfs
+      label: "label"
+      mountpoint: "/"
+      fs_type: "ext4" # or xfs or swap or vfat
+      minsize: "50 GiB"
+    - type: "lvm"
+      name: "vg_name"
+      minsize: "50 GiB"
+      logical_volumes:
+        - label: "label"
+          mountpoint: "/var"
+          fs_type: "ext4"
+          name: "lv_name"
+          minsize: "50 GiB"
+    - type: "btrfs"
+      minsize: "50 GiB"
+      subvolumes:
+        - name: "name"
+          mountpoint: "/opt/name"
 
-# CUT # CUT # CUT # CUT # CUT # CUT # CUT # CUT # CUT 
+# CUT # CUT # CUT # CUT # CUT # CUT # CUT # CUT # CUT
+
+firstboot: # do we like this or not?
+  string: |
+    #!/bin/bash
+    dnf -y install ansible
+    ansible-playbook -i localhost, --local 
 
 ostree:
   url: "https://cert.console.stage.redhat.com/api/pulp-content/em652321d/myrhel-2747841137116337868"
@@ -183,11 +211,6 @@ image:
     - type: "aws"
       share_with_accounts: ["123456789"]
       share_with_sources: ["12345"]
-storage:
-  partitioning_mode: "lvm"
-  filesystems: # on-prem only, ingored for anaconda type
-    - mountpoint: "/var/log"
-      size: 1073741824
 openscap:
   profile_id: "xccdf_org.ssgproject.content_profile_cis"
   # hosted-only fields
