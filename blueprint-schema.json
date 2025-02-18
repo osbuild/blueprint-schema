@@ -1,0 +1,199 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/lzap/common-blueprint-example/blueprint",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Name of the blueprint"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the blueprint"
+    },
+    "registration": {
+      "properties": {
+        "redhat": {
+          "properties": {
+            "activation_key": {
+              "type": "string"
+            },
+            "organization": {
+              "type": "string"
+            },
+            "subscription_manager": {
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "product_plugin": {
+                  "type": "boolean"
+                },
+                "repository_management": {
+                  "type": "boolean"
+                },
+                "auto_registration": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "enabled",
+                "product_plugin",
+                "repository_management",
+                "auto_registration"
+              ]
+            },
+            "insights": {
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "enabled"
+              ]
+            },
+            "connector": {
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "enabled"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "type": "object",
+          "required": [
+            "activation_key",
+            "organization",
+            "subscription_manager",
+            "insights",
+            "connector"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "redhat"
+      ],
+      "description": "Registration details"
+    },
+    "network": {
+      "properties": {
+        "firewall": {
+          "properties": {
+            "services": {
+              "items": {
+                "properties": {
+                  "service": {
+                    "type": "string"
+                  },
+                  "protocol": {
+                    "type": "string",
+                    "enum": [
+                      "tcp",
+                      "udp",
+                      "any"
+                    ],
+                    "default": "any"
+                  },
+                  "enabled": {
+                    "type": "boolean",
+                    "default": true
+                  }
+                },
+                "additionalProperties": false,
+                "type": "object",
+                "required": [
+                  "service"
+                ]
+              },
+              "type": "array"
+            },
+            "ports": {
+              "items": {
+                "anyOf": [
+                  {
+                    "required": [
+                      "port"
+                    ],
+                    "title": "port"
+                  },
+                  {
+                    "required": [
+                      "from",
+                      "to"
+                    ],
+                    "title": "from_to"
+                  }
+                ],
+                "properties": {
+                  "port": {
+                    "type": "integer",
+                    "maximum": 65535,
+                    "minimum": 1
+                  },
+                  "from": {
+                    "type": "integer",
+                    "maximum": 65535,
+                    "minimum": 1
+                  },
+                  "to": {
+                    "type": "integer",
+                    "maximum": 65535,
+                    "minimum": 1
+                  },
+                  "protocol": {
+                    "type": "string",
+                    "enum": [
+                      "tcp",
+                      "udp",
+                      "any"
+                    ],
+                    "default": "any"
+                  },
+                  "enabled": {
+                    "type": "boolean",
+                    "default": true
+                  }
+                },
+                "additionalProperties": false,
+                "type": "object"
+              },
+              "type": "array"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object",
+          "required": [
+            "services",
+            "ports"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "firewall"
+      ],
+      "description": "Networking details"
+    }
+  },
+  "additionalProperties": false,
+  "type": "object",
+  "required": [
+    "name",
+    "registration",
+    "network"
+  ],
+  "description": "Blueprint type prototype\n\nThis is just a brief example of a common blueprint structure. Just few fields\nwere selected to demonstrate the JSON schema."
+}

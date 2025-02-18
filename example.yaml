@@ -25,7 +25,6 @@ compose_request:
 ---
 name: "Blueprint name"
 description: ""
-#version: 2014-11-27
 hostname: "localhost" # unsure about this
 experimental:
   reserved: true
@@ -55,7 +54,7 @@ kernel:
 registration:
   redhat:
     activation_key: "123456789"
-    organization: "123456"
+    organization: "123456" # XXX should this be org_id instead?
     subscription_manager:
       # internal use only
       enabled: true
@@ -95,7 +94,7 @@ locale:
   languages: ["en_US.UTF-8", "cs_CZ.UTF-8"]
   keyboards: ["cz-qwerty", "cz", "us"]
 network:
-  firewall:
+  firewall: # XXX merge services and ports into one?
     services:
       - service: "ssh"
         protocol: "tcp" # default value
@@ -188,12 +187,6 @@ storage: # applies only to disc images
           mountpoint: "/opt/name"
 
 # CUT # CUT # CUT # CUT # CUT # CUT # CUT # CUT # CUT
-
-firstboot: # do we like this or not?
-  string: |
-    #!/bin/bash
-    dnf -y install ansible
-    ansible-playbook -i localhost, --local 
 
 ostree:
   url: "https://cert.console.stage.redhat.com/api/pulp-content/em652321d/myrhel-2747841137116337868"
