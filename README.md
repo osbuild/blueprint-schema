@@ -16,7 +16,7 @@ The schema is JSON Schema Draft 2020-12 compliant and can be included in OpenAPI
 
 The schema generator uses both Go struct tags `json` and `jsonschema` as well as Go documentation to create the schema. Note although YAML is supported too, no YAML Go struct tags are required since YAML is always converted to JSON first and then loaded using JSON Go struct tags to ensure consistency.
 
-Read [jsonschema](https://github.com/kaptinlin/jsonschema) library for more details about available Go struct tags and supported features.
+Read [jsonschema](https://github.com/invopop/jsonschema) library for more details about available Go struct tags and supported features.
 
 ## Using the schema in Go
 
@@ -104,6 +104,11 @@ To run tests do:
 To regenerate `*.out.yaml` and `*.valid.json` files (after a breaking change), do:
 
     make write-fixtures
+
+## Links
+
+* https://github.com/invopop/jsonschema - library to generate JSON Schema from Go types
+* https://github.com/kaptinlin/jsonschema - library to validate JSON Schema
 
 ## TODO
 

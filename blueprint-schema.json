@@ -1,6 +1,192 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/lzap/common-blueprint-example/blueprint",
+  "$defs": {
+    "Network": {
+      "properties": {
+        "firewall": {
+          "$ref": "#/$defs/NetworkFirewall",
+          "description": "Firewall details"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "NetworkFirewall": {
+      "properties": {
+        "services": {
+          "items": {
+            "properties": {
+              "service": {
+                "type": "string"
+              },
+              "protocol": {
+                "type": "string",
+                "enum": [
+                  "tcp",
+                  "udp",
+                  "any"
+                ],
+                "default": "any"
+              },
+              "enabled": {
+                "type": "boolean",
+                "default": true
+              }
+            },
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "service"
+            ]
+          },
+          "type": "array",
+          "description": "Services to enable or disable"
+        },
+        "ports": {
+          "items": {
+            "oneOf": [
+              {
+                "required": [
+                  "port"
+                ],
+                "title": "port"
+              },
+              {
+                "required": [
+                  "from",
+                  "to"
+                ],
+                "title": "from_to"
+              }
+            ],
+            "properties": {
+              "port": {
+                "type": "integer",
+                "maximum": 65535,
+                "minimum": 1
+              },
+              "from": {
+                "type": "integer",
+                "maximum": 65535,
+                "minimum": 1
+              },
+              "to": {
+                "type": "integer",
+                "maximum": 65535,
+                "minimum": 1
+              },
+              "protocol": {
+                "type": "string",
+                "enum": [
+                  "tcp",
+                  "udp",
+                  "any"
+                ],
+                "default": "any"
+              },
+              "enabled": {
+                "type": "boolean",
+                "default": true
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "type": "array",
+          "description": "Ports or ranges to enable or disable"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "services",
+        "ports"
+      ]
+    },
+    "RedHatRegistration": {
+      "properties": {
+        "activation_key": {
+          "type": "string",
+          "description": "Activation key"
+        },
+        "organization": {
+          "type": "string",
+          "description": "Organization ID"
+        },
+        "subscription_manager": {
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "product_plugin": {
+              "type": "boolean"
+            },
+            "repository_management": {
+              "type": "boolean"
+            },
+            "auto_registration": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object",
+          "required": [
+            "enabled",
+            "product_plugin",
+            "repository_management",
+            "auto_registration"
+          ],
+          "description": "Subscription manager details (internal use only)"
+        },
+        "insights": {
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object",
+          "required": [
+            "enabled"
+          ],
+          "description": "Insights client details"
+        },
+        "connector": {
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object",
+          "required": [
+            "enabled"
+          ],
+          "description": "CRC connector details"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "activation_key",
+        "organization",
+        "subscription_manager",
+        "insights",
+        "connector"
+      ]
+    },
+    "Registration": {
+      "properties": {
+        "redhat": {
+          "$ref": "#/$defs/RedHatRegistration",
+          "description": "RedHat registration details"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    }
+  },
   "properties": {
     "name": {
       "type": "string",
@@ -11,189 +197,32 @@
       "description": "Description of the blueprint"
     },
     "registration": {
-      "properties": {
-        "redhat": {
-          "properties": {
-            "activation_key": {
-              "type": "string"
-            },
-            "organization": {
-              "type": "string"
-            },
-            "subscription_manager": {
-              "properties": {
-                "enabled": {
-                  "type": "boolean"
-                },
-                "product_plugin": {
-                  "type": "boolean"
-                },
-                "repository_management": {
-                  "type": "boolean"
-                },
-                "auto_registration": {
-                  "type": "boolean"
-                }
-              },
-              "additionalProperties": false,
-              "type": "object",
-              "required": [
-                "enabled",
-                "product_plugin",
-                "repository_management",
-                "auto_registration"
-              ]
-            },
-            "insights": {
-              "properties": {
-                "enabled": {
-                  "type": "boolean"
-                }
-              },
-              "additionalProperties": false,
-              "type": "object",
-              "required": [
-                "enabled"
-              ]
-            },
-            "connector": {
-              "properties": {
-                "enabled": {
-                  "type": "boolean"
-                }
-              },
-              "additionalProperties": false,
-              "type": "object",
-              "required": [
-                "enabled"
-              ]
-            }
-          },
-          "additionalProperties": false,
-          "type": "object",
-          "required": [
-            "activation_key",
-            "organization",
-            "subscription_manager",
-            "insights",
-            "connector"
-          ]
+      "oneOf": [
+        {
+          "$ref": "#/$defs/Registration",
+          "description": "Registration details"
+        },
+        {
+          "type": "null"
         }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "required": [
-        "redhat"
-      ],
-      "description": "Registration details"
+      ]
     },
     "network": {
-      "properties": {
-        "firewall": {
-          "properties": {
-            "services": {
-              "items": {
-                "properties": {
-                  "service": {
-                    "type": "string"
-                  },
-                  "protocol": {
-                    "type": "string",
-                    "enum": [
-                      "tcp",
-                      "udp",
-                      "any"
-                    ],
-                    "default": "any"
-                  },
-                  "enabled": {
-                    "type": "boolean",
-                    "default": true
-                  }
-                },
-                "additionalProperties": false,
-                "type": "object",
-                "required": [
-                  "service"
-                ]
-              },
-              "type": "array"
-            },
-            "ports": {
-              "items": {
-                "oneOf": [
-                  {
-                    "required": [
-                      "port"
-                    ],
-                    "title": "port"
-                  },
-                  {
-                    "required": [
-                      "from",
-                      "to"
-                    ],
-                    "title": "from_to"
-                  }
-                ],
-                "properties": {
-                  "port": {
-                    "type": "integer",
-                    "maximum": 65535,
-                    "minimum": 1
-                  },
-                  "from": {
-                    "type": "integer",
-                    "maximum": 65535,
-                    "minimum": 1
-                  },
-                  "to": {
-                    "type": "integer",
-                    "maximum": 65535,
-                    "minimum": 1
-                  },
-                  "protocol": {
-                    "type": "string",
-                    "enum": [
-                      "tcp",
-                      "udp",
-                      "any"
-                    ],
-                    "default": "any"
-                  },
-                  "enabled": {
-                    "type": "boolean",
-                    "default": true
-                  }
-                },
-                "additionalProperties": false,
-                "type": "object"
-              },
-              "type": "array"
-            }
-          },
-          "additionalProperties": false,
-          "type": "object",
-          "required": [
-            "services",
-            "ports"
-          ]
+      "oneOf": [
+        {
+          "$ref": "#/$defs/Network",
+          "description": "Networking details"
+        },
+        {
+          "type": "null"
         }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "required": [
-        "firewall"
-      ],
-      "description": "Networking details"
+      ]
     }
   },
   "additionalProperties": false,
   "type": "object",
   "required": [
-    "name",
-    "registration",
-    "network"
+    "name"
   ],
   "description": "Blueprint type prototype\n\nThis is just a brief example of a common blueprint structure. Just few fields\nwere selected to demonstrate the JSON schema."
 }

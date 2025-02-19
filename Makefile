@@ -11,6 +11,7 @@ generate-schema: ## Generate schema
 
 .PHONY: write-fixtures
 write-fixtures: ## Write new test fixtures
+	@rm -f ./validate/fixtures/*.out.yaml ./validate/fixtures/*.valid.json
 	@WRITE_FIXTURES=1 go test -v ./validate
 
 .PHONY: test

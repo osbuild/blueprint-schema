@@ -12,10 +12,10 @@ type Blueprint struct {
 	Description string `json:"description,omitempty"`
 
 	// Registration details
-	Registration *Registration `json:"registration,omitempty"`
+	Registration *Registration `json:"registration,omitempty" jsonschema:"nullable"`
 
 	// Networking details
-	Network *Network `json:"network,omitempty"`
+	Network *Network `json:"network,omitempty" jsonschema:"nullable"`
 }
 
 type Registration struct {

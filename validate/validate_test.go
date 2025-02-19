@@ -80,6 +80,7 @@ func TestFix(t *testing.T) {
 		})
 	}
 
+	validJSONstring := `{ "valid": true }`
 	validationTest := func(t *testing.T, input, output string) {
 		t.Run("Valid/"+input, func(t *testing.T) {
 			//t.Parallel()
@@ -118,10 +119,6 @@ func TestFix(t *testing.T) {
 				t.Fatalf("Unknown fixture extension: %s", input)
 			}
 
-			if data == nil {
-				t.Fatalf("No data to validate")
-			}
-
 			schema, err := validate.CompileSchema()
 			if err != nil {
 				t.Fatal(err)
@@ -133,8 +130,12 @@ func TestFix(t *testing.T) {
 				}
 				defer outputFile.Close()
 
-				_, details := schema.ValidateMap(data)
-				outputFile.WriteString(details)
+				valid, details := schema.ValidateMap(data)
+				if valid {
+					outputFile.WriteString(validJSONstring)
+				} else {
+					outputFile.WriteString(details)
+				}
 				t.Logf("Written %s", output)
 			} else {
 				outputFile, err := os.Open(output)
@@ -147,7 +148,10 @@ func TestFix(t *testing.T) {
 					t.Fatal(err)
 				}
 
-				_, details := schema.ValidateMap(data)
+				valid, details := schema.ValidateMap(data)
+				if valid {
+					details = validJSONstring
+				}
 
 				diff, err := jsondiff.CompareJSON([]byte(want), []byte(details))
 				if err != nil {

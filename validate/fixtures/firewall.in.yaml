@@ -1,0 +1,16 @@
+name: "Firewall valid example"
+network:
+  firewall:
+    services:
+      - service: "dns"
+      - service: "dhcp"
+        enabled: false
+      - service: "ssh"
+        protocol: "tcp"
+    ports:
+      - port: 53
+        protocol: "any"
+        enabled: false
+      - from: 60000
+        to: 60010
+        protocol: "udp"
