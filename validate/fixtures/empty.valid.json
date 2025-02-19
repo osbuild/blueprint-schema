@@ -12,15 +12,6 @@
   },
   "details": [
     {
-      "valid": true,
-      "evaluationPath": "/properties/name",
-      "schemaLocation": "https://github.com/lzap/common-blueprint-example/blueprint#/properties/name",
-      "instanceLocation": "/name",
-      "annotations": {
-        "description": "Name of the blueprint"
-      }
-    },
-    {
       "valid": false,
       "evaluationPath": "/properties/registration",
       "schemaLocation": "https://github.com/lzap/common-blueprint-example/blueprint#/properties/registration",
@@ -42,6 +33,15 @@
       },
       "errors": {
         "type": "Value is null but should be object"
+      }
+    },
+    {
+      "valid": true,
+      "evaluationPath": "/properties/name",
+      "schemaLocation": "https://github.com/lzap/common-blueprint-example/blueprint#/properties/name",
+      "instanceLocation": "/name",
+      "annotations": {
+        "description": "Name of the blueprint"
       }
     }
   ]

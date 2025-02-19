@@ -30,7 +30,7 @@ func CompileSchema() (*Schema, error) {
 func (s *Schema) ValidateMap(data map[string]any) (bool, string) {
 	result := s.s.Validate(data)
 	if !result.IsValid() {
-		details, _ := json.MarshalIndent(result.ToList(), "", "  ")
+		details, _ := json.MarshalIndent(result.ToList(false), "", "  ")
 		return false, string(details)
 	}
 
