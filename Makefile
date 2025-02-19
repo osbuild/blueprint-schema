@@ -12,9 +12,9 @@ generate-schema: ## Generate schema
 .PHONY: write-fixtures
 write-fixtures: ## Write new test fixtures
 	@rm -f ./validate/fixtures/*.out.yaml ./validate/fixtures/*.valid.json
-	@WRITE_FIXTURES=1 go test -v ./validate
+	@WRITE_FIXTURES=1 go test ./validate
 
 .PHONY: test
 test: ## Run all tests
-	@go test -v .
-	@go test -v ./validate
+	@go test .
+	@go test ./validate

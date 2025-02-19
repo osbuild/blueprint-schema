@@ -153,7 +153,11 @@ func TestFix(t *testing.T) {
 					details = validJSONstring
 				}
 
-				diff, err := jsondiff.CompareJSON([]byte(want), []byte(details))
+				// The root 'errors` field must be ignored because it is marshaled in random order as a string:
+				// "Property 'a', 'b' does not match the schema" where a and b can be in any order. This has no effect
+				// on testing tho since errors are reported via the 'details'. Reported upstream:
+				// https://github.com/kaptinlin/jsonschema/issues/28
+				diff, err := jsondiff.CompareJSON([]byte(want), []byte(details), jsondiff.Ignores("/errors"))
 				if err != nil {
 					t.Fatal(err)
 				}
@@ -163,9 +167,7 @@ func TestFix(t *testing.T) {
 					if err != nil {
 						t.Fatal(err)
 					}
-					_ = b
-					// https://github.com/kaptinlin/jsonschema/issues/28
-					//t.Errorf("mismatch (-want +got):\n%s", string(b))
+					t.Errorf("JSON diff for %q:\n%s", output, string(b))
 				}
 			}
 		})

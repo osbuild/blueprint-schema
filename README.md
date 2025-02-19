@@ -113,5 +113,4 @@ To regenerate `*.out.yaml` and `*.valid.json` files (after a breaking change), d
 ## TODO
 
 * Only fraction of the main `example.yaml` is currently implemented as Go type - this will be done after we agree on the final version of the example data.
-* There is a [bug reported](https://github.com/kaptinlin/jsonschema/issues/27) which prevents from effective fixture testing against validator JSON output. The test is hardcoded to pass until this is solved.
 * Multiple schemas could be conditionally generated per-service: crc and cli (some fields could be hidden/marked as deprecated). This could be implemented via `onlyFor:"crc"` Go struct tag for example. Examples are in some types but this is not implemented.
