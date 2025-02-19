@@ -11,6 +11,58 @@
   },
   "details": [
     {
+      "valid": false,
+      "evaluationPath": "",
+      "schemaLocation": "",
+      "instanceLocation": "",
+      "errors": {
+        "properties": "Property 'firewall' does not match the schema"
+      }
+    },
+    {
+      "valid": false,
+      "evaluationPath": "",
+      "schemaLocation": "",
+      "instanceLocation": "",
+      "errors": {
+        "properties": "Properties 'services', 'ports' do not match their schemas",
+        "required": "Required property 'services' is missing"
+      }
+    },
+    {
+      "valid": false,
+      "evaluationPath": "/oneOf/0",
+      "schemaLocation": "https://github.com/lzap/common-blueprint-example/blueprint#/oneOf/0",
+      "instanceLocation": "",
+      "annotations": {
+        "description": "Networking details"
+      },
+      "errors": {
+        "$ref": "Value does not match the reference schema"
+      }
+    },
+    {
+      "valid": false,
+      "evaluationPath": "/oneOf/1",
+      "schemaLocation": "https://github.com/lzap/common-blueprint-example/blueprint#/oneOf/1",
+      "instanceLocation": "",
+      "errors": {
+        "type": "Value is object but should be null"
+      }
+    },
+    {
+      "valid": false,
+      "evaluationPath": "/properties/firewall",
+      "schemaLocation": "https://github.com/lzap/common-blueprint-example/blueprint#/properties/firewall",
+      "instanceLocation": "/firewall",
+      "annotations": {
+        "description": "Firewall details"
+      },
+      "errors": {
+        "$ref": "Value does not match the reference schema"
+      }
+    },
+    {
       "valid": true,
       "evaluationPath": "/properties/name",
       "schemaLocation": "https://github.com/lzap/common-blueprint-example/blueprint#/properties/name",
@@ -26,93 +78,31 @@
       "instanceLocation": "/network",
       "errors": {
         "oneOf": "Value does not match the oneOf schema"
+      }
+    },
+    {
+      "valid": false,
+      "evaluationPath": "/properties/ports",
+      "schemaLocation": "https://github.com/lzap/common-blueprint-example/blueprint#/properties/ports",
+      "instanceLocation": "/ports",
+      "annotations": {
+        "description": "Ports or ranges to enable or disable"
       },
-      "details": [
-        {
-          "valid": false,
-          "evaluationPath": "/oneOf/0",
-          "schemaLocation": "https://github.com/lzap/common-blueprint-example/blueprint#/oneOf/0",
-          "instanceLocation": "",
-          "annotations": {
-            "description": "Networking details"
-          },
-          "errors": {
-            "$ref": "Value does not match the reference schema"
-          },
-          "details": [
-            {
-              "valid": false,
-              "evaluationPath": "",
-              "schemaLocation": "",
-              "instanceLocation": "",
-              "errors": {
-                "properties": "Property 'firewall' does not match the schema"
-              },
-              "details": [
-                {
-                  "valid": false,
-                  "evaluationPath": "/properties/firewall",
-                  "schemaLocation": "https://github.com/lzap/common-blueprint-example/blueprint#/properties/firewall",
-                  "instanceLocation": "/firewall",
-                  "annotations": {
-                    "description": "Firewall details"
-                  },
-                  "errors": {
-                    "$ref": "Value does not match the reference schema"
-                  },
-                  "details": [
-                    {
-                      "valid": false,
-                      "evaluationPath": "",
-                      "schemaLocation": "",
-                      "instanceLocation": "",
-                      "errors": {
-                        "properties": "Properties 'services', 'ports' do not match their schemas",
-                        "required": "Required property 'services' is missing"
-                      },
-                      "details": [
-                        {
-                          "valid": false,
-                          "evaluationPath": "/properties/services",
-                          "schemaLocation": "https://github.com/lzap/common-blueprint-example/blueprint#/properties/services",
-                          "instanceLocation": "/services",
-                          "annotations": {
-                            "description": "Services to enable or disable"
-                          },
-                          "errors": {
-                            "type": "Value is null but should be array"
-                          }
-                        },
-                        {
-                          "valid": false,
-                          "evaluationPath": "/properties/ports",
-                          "schemaLocation": "https://github.com/lzap/common-blueprint-example/blueprint#/properties/ports",
-                          "instanceLocation": "/ports",
-                          "annotations": {
-                            "description": "Ports or ranges to enable or disable"
-                          },
-                          "errors": {
-                            "items": "Item at index 0 does not match the schema"
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "valid": false,
-          "evaluationPath": "/oneOf/1",
-          "schemaLocation": "https://github.com/lzap/common-blueprint-example/blueprint#/oneOf/1",
-          "instanceLocation": "",
-          "errors": {
-            "type": "Value is object but should be null"
-          }
-        }
-      ]
+      "errors": {
+        "items": "Item at index 0 does not match the schema"
+      }
+    },
+    {
+      "valid": false,
+      "evaluationPath": "/properties/services",
+      "schemaLocation": "https://github.com/lzap/common-blueprint-example/blueprint#/properties/services",
+      "instanceLocation": "/services",
+      "annotations": {
+        "description": "Services to enable or disable"
+      },
+      "errors": {
+        "type": "Value is null but should be array"
+      }
     }
   ]
 }

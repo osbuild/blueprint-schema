@@ -6,8 +6,8 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"sort"
 
-	gojson "github.com/goccy/go-json"
 	"github.com/invopop/yaml"
 	"github.com/kaptinlin/jsonschema"
 	blueprint "github.com/lzap/common-blueprint-example"
@@ -36,19 +36,16 @@ func CompileSchema() (*Schema, error) {
 // data is valid, otherwise false and a string with details.
 func (s *Schema) ValidateMap(data map[string]any) (bool, string) {
 	result := s.s.Validate(data)
-	if !result.IsValid() {
-		details, _ := json.MarshalIndent(result.ToList(), "", "  ")
-		return false, string(details)
-	}
+	list := result.ToList(false)
 
-	return true, ""
-}
+	// Sort details by evaluation path: https://github.com/kaptinlin/jsonschema/issues/28
+	sort.Slice(list.Details, func(i, j int) bool {
+		return list.Details[i].EvaluationPath < list.Details[j].EvaluationPath
+	})
 
-// https://github.com/kaptinlin/jsonschema/issues/27
-func (s *Schema) ValidateMap2(data map[string]any) (bool, string) {
-	result := s.s.Validate(data)
 	if !result.IsValid() {
-		details, _ := gojson.MarshalIndent(result.ToList(), "", "  ")
+		// Must use encoding/json here: // https://github.com/kaptinlin/jsonschema/issues/27
+		details, _ := json.MarshalIndent(list, "", "  ")
 		return false, string(details)
 	}
 
