@@ -87,6 +87,38 @@ func main() {
 }
 ```
 
+Example schema error reported by the validator:
+
+```json
+{
+  "valid": false,
+  "evaluationPath": "",
+  "schemaLocation": "",
+  "instanceLocation": "",
+  "annotations": {
+    "description": "Blueprint type prototype\n\nThis is just a brief example of a common blueprint structure. Just few fields\nwere selected to demonstrate the JSON schema."
+  },
+  "errors": {
+    "properties": "Property 'name' does not match the schema",
+    "required": "Required property 'name' is missing"
+  },
+  "details": [
+    {
+      "valid": false,
+      "evaluationPath": "/properties/name",
+      "schemaLocation": "https://github.com/lzap/common-blueprint-example/blueprint#/properties/name",
+      "instanceLocation": "/name",
+      "annotations": {
+        "description": "Name of the blueprint"
+      },
+      "errors": {
+        "type": "Value is null but should be string"
+      }
+    }
+  ]
+}
+```
+
 ## Testing
 
 A fixture-based test is available in the [validate/fixtures/](validate/fixtures/) directory, each fixture consist of:
