@@ -21,7 +21,7 @@ var writeFixtures = os.Getenv("WRITE_FIXTURES") != ""
 func TestFix(t *testing.T) {
 	marshalTest := func(t *testing.T, input, output string) {
 		t.Run("Marshal/"+input, func(t *testing.T) {
-			//t.Parallel()
+			t.Parallel()
 
 			var b *blueprint.Blueprint
 			inputFile, err := os.Open(input)
@@ -83,7 +83,7 @@ func TestFix(t *testing.T) {
 	validJSONstring := `{ "valid": true }`
 	validationTest := func(t *testing.T, input, output string) {
 		t.Run("Valid/"+input, func(t *testing.T) {
-			//t.Parallel()
+			t.Parallel()
 
 			inputFile, err := os.Open(input)
 			if err != nil {
