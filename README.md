@@ -18,7 +18,7 @@ The schema generator uses both Go struct tags `json` and `jsonschema` as well as
 
 Read [jsonschema](https://github.com/invopop/jsonschema) library for more details about available Go struct tags and supported features.
 
-## Using the schema in Go
+## Using the types in Go
 
 This repository is a Go package that can be used to access the schema itself, load, save and validate data. The raw schema JSON is available in `blueprint.SchemaJSON` variable. The package provides marshaling functions both to JSON and YAML:
 
@@ -51,7 +51,9 @@ func main() {
 
 JSON writing functions can optionally indent the output.
 
-## Validating the schema
+The package has minimum dependencies, only two `yaml` libraries are needed (YAML loading, YAML-JSON conversion).
+
+## Validating the schema from the command line
 
 To validate a YAML file:
 
@@ -61,33 +63,7 @@ To validate a JSON file:
 
     go run ./cmd/validate-schema -json < example.json
 
-Returns 0 when schema is valid, 1 otherwise with detailed information formatted as JSON on the standard output.
-
-## Validating the schema in Go
-
-To minimize dependencies of the main `blueprint` package, a separate package named `validate` must be used. Read [jsonschema](https://github.com/kaptinlin/jsonschema) library documentation for more information about the error output.
-
-```go
-package main
-
-import (
-    "os"
-
-    "github.com/lzap/common-blueprint-example/validate"
-)
-
-func main() {
-    // compile the schema which embedded as part of this package
-    schema, _ := validate.CompileSchema()
-
-    // returns bool, string and err
-    valid, out, _ := schema.ReadAndValidateYAML(os.Stdin)
-
-    println(valid, out)
-}
-```
-
-Example schema error reported by the validator:
+Returns 0 when schema is valid, 1 otherwise with detailed information formatted as JSON on the standard output. Example schema error reported by the validator:
 
 ```json
 {
@@ -119,6 +95,32 @@ Example schema error reported by the validator:
 }
 ```
 
+## Validating the schema in Go
+
+To minimize dependencies of the main `blueprint` package, a separate package named `validate` must be used. Read [jsonschema](https://github.com/kaptinlin/jsonschema) library documentation for more information about the error output.
+
+```go
+package main
+
+import (
+    "os"
+
+    "github.com/lzap/common-blueprint-example/validate"
+)
+
+func main() {
+    // compile the schema which embedded as part of this package
+    schema, _ := validate.CompileSchema()
+
+    // returns bool, string and err
+    valid, out, _ := schema.ReadAndValidateYAML(os.Stdin)
+
+    println(valid, out)
+}
+```
+
+The CLI utility provides the same output format as the validation library.
+
 ## Testing
 
 A fixture-based test is available in the [validate/fixtures/](validate/fixtures/) directory, each fixture consist of:
@@ -127,7 +129,7 @@ A fixture-based test is available in the [validate/fixtures/](validate/fixtures/
 * `filename.out.yaml` - output file after parsing and write (always YAML)
 * `filename.valid.json` - output of the validator (always JSON)
 
-Each `*.in.*` file is loaded, parsed, YAML converted to JSON (optionally), validated and written to YAML `*.out.yaml` file. At the same time, the data is loaded into `map[string]any` and validated against the JSON Schema and results written to `*.valid.json`.
+Each `*.in.*` file is loaded, parsed, YAML converted to JSON (if needed), validated and written to YAML `*.out.yaml` file. At the same time, the data is loaded into `map[string]any` and validated against the JSON Schema and results written to `*.valid.json`.
 
 To run tests do:
 
