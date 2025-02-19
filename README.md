@@ -6,7 +6,7 @@ This repository contains the common blueprint JSON Schema and Go types for Image
 
 Latest version of the JSON Schema is available as [blueprint-schema.json](blueprint-schema.json).
 
-The schema is generated from Go types using [generate-schema](cmd/generate-schema/main.go) tool. To generate a new version run:
+The schema is generated from [Go types](blueprint.go) using [generate-schema](cmd/generate-schema/main.go) tool. To generate a new version run:
 
     make generate-schema
 
@@ -16,16 +16,18 @@ The schema is JSON Schema Draft 2020-12 compliant and can be included in OpenAPI
 
 The schema generator uses both Go struct tags `json` and `jsonschema` as well as Go documentation to create the schema. Note although YAML is supported too, no YAML Go struct tags are required since YAML is always converted to JSON first and then loaded using JSON Go struct tags to ensure consistency.
 
+Read [jsonschema](https://github.com/kaptinlin/jsonschema) library for more details about available Go struct tags and supported features.
+
 ## Using the schema in Go
 
 This repository is a Go package that can be used to access the schema itself, load, save and validate data. The raw schema JSON is available in `blueprint.SchemaJSON` variable. The package provides marshaling functions both to JSON and YAML:
 
-* ReadJSON/WriteJSON for `io.Reader`
-* UnmarshalJSON/MarshalJSON for `[]byte`
-* ReadYAML/WriteYAML for `io.Reader`
-* UnmarshalYAML/MarshalYAML for `[]byte`
-* ConvertJSONtoYAML for `[]byte`
-* ConvertYAMLtoJSON for `[]byte`
+* `ReadJSON`/`WriteJSON` for `io.Reader`
+* `UnmarshalJSON`/`MarshalJSON` for `[]byte`
+* `ReadYAML`/`WriteYAML` for `io.Reader`
+* `UnmarshalYAML`/`MarshalYAML` for `[]byte`
+* `ConvertJSONtoYAML` for `[]byte`
+* `ConvertYAMLtoJSON` for `[]byte`
 
 Example use:
 
@@ -33,9 +35,9 @@ Example use:
 package main
 
 import (
-	"bytes"
+    "bytes"
 
-	blueprint "github.com/lzap/common-blueprint-example"
+    blueprint "github.com/lzap/common-blueprint-example"
 )
 
 func main() {
@@ -69,17 +71,17 @@ To minimize dependencies of the main `blueprint` package, a separate package nam
 package main
 
 import (
-	"os"
+    "os"
 
-	"github.com/lzap/common-blueprint-example/validate"
+    "github.com/lzap/common-blueprint-example/validate"
 )
 
 func main() {
     // compile the schema which embedded as part of this package
-	schema, _ := validate.CompileSchema()
+    schema, _ := validate.CompileSchema()
 
     // returns bool, string and err
-	valid, out, _ := schema.ReadAndValidateYAML(os.Stdin)
+    valid, out, _ := schema.ReadAndValidateYAML(os.Stdin)
 
     println(valid, out)
 }
@@ -103,6 +105,8 @@ To regenerate `out.yaml` and `valid.json` files (after a breaking change), do:
 
     make write-fixtures
 
-## TODO
+## TODO
 
+* Only fraction of the main `example.yaml` is currently implemented as Go type - this will be done after we agree on the final version of the example data.
+* There is a [bug reported](https://github.com/kaptinlin/jsonschema/issues/27) which prevents from effective fixture testing against validator JSON output. The test is hardcoded to pass until this is solved.
 * Is it wort generating per-service schemas: crc and cli (some fields could be hidden/marked as deprecated). This could be implemented via `onlyFor:"crc"` Go struct tag for example. Examples are in some types.
