@@ -121,7 +121,7 @@
             },
             "ports": {
               "items": {
-                "anyOf": [
+                "oneOf": [
                   {
                     "required": [
                       "port"

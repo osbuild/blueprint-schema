@@ -8,3 +8,12 @@ help: ## print this help
 .PHONY: generate-schema
 generate-schema: ## Generate schema
 	@go run ./cmd/generate-schema > blueprint-schema.json
+
+.PHONY: write-fixtures
+write-fixtures: ## Write new test fixtures
+	@WRITE_FIXTURES=1 go test -v ./validate
+
+.PHONY: test
+test: ## Run all tests
+	@go test -v .
+	@go test -v ./validate
