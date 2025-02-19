@@ -4,6 +4,10 @@ package blueprint
 //
 // This is just a brief example of a common blueprint structure. Just few fields
 // were selected to demonstrate the JSON schema.
+//
+// These Go comments do appear in the JSON Schema so the final version of the
+// blueprint will be broken up into multiple files and the comments will be
+// moch more extensive.
 type Blueprint struct {
 	// Name of the blueprint
 	Name string `json:"name" jsonschema:"required"`
