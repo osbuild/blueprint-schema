@@ -22,3 +22,13 @@ test: ## Run all tests
 .PHONY: run-web-editor-json
 run-web-editor-json: ## show a demo-web editor for the json format
 	xdg-open ./autocomplete-example-json.html
+
+.PHONY: run-web-editor-yaml
+run-web-editor-yaml: ## Show a demo-web editor for the yaml format
+	cd autocomplete-example-yaml && npm clean-install
+	cd autocomplete-example-yaml && npm run start
+
+.PHONY: clean
+clean: ## Clean up all build artifacts
+	rm -rf autocomplete-example-yaml/node_modules
+	rm -rf autocomplete-example-yaml/dist
