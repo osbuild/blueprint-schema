@@ -4,7 +4,7 @@
   "schemaLocation": "",
   "instanceLocation": "",
   "annotations": {
-    "description": "Blueprint type prototype\n\nThis is just a brief example of a common blueprint structure. Just few fields\nwere selected to demonstrate the JSON schema."
+    "description": "Blueprint type prototype\n\nThis is just a brief example of a common blueprint structure. Just few fields\nwere selected to demonstrate the JSON schema.\n\nThese Go comments do appear in the JSON Schema so the final version of the\nblueprint will be broken up into multiple files and the comments will be\nmoch more extensive."
   },
   "errors": {
     "properties": "Property 'name' does not match the schema",

@@ -15,94 +15,104 @@
     "NetworkFirewall": {
       "properties": {
         "services": {
-          "items": {
-            "properties": {
-              "service": {
-                "type": "string"
+          "oneOf": [
+            {
+              "items": {
+                "properties": {
+                  "service": {
+                    "type": "string"
+                  },
+                  "protocol": {
+                    "type": "string",
+                    "enum": [
+                      "tcp",
+                      "udp",
+                      "any"
+                    ],
+                    "default": "any"
+                  },
+                  "enabled": {
+                    "type": "boolean",
+                    "default": true
+                  }
+                },
+                "additionalProperties": false,
+                "type": "object",
+                "required": [
+                  "service"
+                ]
               },
-              "protocol": {
-                "type": "string",
-                "enum": [
-                  "tcp",
-                  "udp",
-                  "any"
-                ],
-                "default": "any"
-              },
-              "enabled": {
-                "type": "boolean",
-                "default": true
-              }
+              "type": "array",
+              "description": "Services to enable or disable"
             },
-            "additionalProperties": false,
-            "type": "object",
-            "required": [
-              "service"
-            ]
-          },
-          "type": "array",
-          "description": "Services to enable or disable"
+            {
+              "type": "null"
+            }
+          ]
         },
         "ports": {
-          "items": {
-            "oneOf": [
-              {
-                "required": [
-                  "port"
+          "oneOf": [
+            {
+              "items": {
+                "oneOf": [
+                  {
+                    "required": [
+                      "port"
+                    ],
+                    "title": "port"
+                  },
+                  {
+                    "required": [
+                      "from",
+                      "to"
+                    ],
+                    "title": "from_to"
+                  }
                 ],
-                "title": "port"
+                "properties": {
+                  "port": {
+                    "type": "integer",
+                    "maximum": 65535,
+                    "minimum": 1
+                  },
+                  "from": {
+                    "type": "integer",
+                    "maximum": 65535,
+                    "minimum": 1
+                  },
+                  "to": {
+                    "type": "integer",
+                    "maximum": 65535,
+                    "minimum": 1
+                  },
+                  "protocol": {
+                    "type": "string",
+                    "enum": [
+                      "tcp",
+                      "udp",
+                      "any"
+                    ],
+                    "default": "any"
+                  },
+                  "enabled": {
+                    "type": "boolean",
+                    "default": true
+                  }
+                },
+                "additionalProperties": false,
+                "type": "object"
               },
-              {
-                "required": [
-                  "from",
-                  "to"
-                ],
-                "title": "from_to"
-              }
-            ],
-            "properties": {
-              "port": {
-                "type": "integer",
-                "maximum": 65535,
-                "minimum": 1
-              },
-              "from": {
-                "type": "integer",
-                "maximum": 65535,
-                "minimum": 1
-              },
-              "to": {
-                "type": "integer",
-                "maximum": 65535,
-                "minimum": 1
-              },
-              "protocol": {
-                "type": "string",
-                "enum": [
-                  "tcp",
-                  "udp",
-                  "any"
-                ],
-                "default": "any"
-              },
-              "enabled": {
-                "type": "boolean",
-                "default": true
-              }
+              "type": "array",
+              "description": "Ports or ranges to enable or disable"
             },
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "type": "array",
-          "description": "Ports or ranges to enable or disable"
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "additionalProperties": false,
-      "type": "object",
-      "required": [
-        "services",
-        "ports"
-      ]
+      "type": "object"
     },
     "RedHatRegistration": {
       "properties": {
@@ -224,5 +234,5 @@
   "required": [
     "name"
   ],
-  "description": "Blueprint type prototype\n\nThis is just a brief example of a common blueprint structure. Just few fields\nwere selected to demonstrate the JSON schema."
+  "description": "Blueprint type prototype\n\nThis is just a brief example of a common blueprint structure. Just few fields\nwere selected to demonstrate the JSON schema.\n\nThese Go comments do appear in the JSON Schema so the final version of the\nblueprint will be broken up into multiple files and the comments will be\nmoch more extensive."
 }

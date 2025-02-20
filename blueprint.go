@@ -71,7 +71,7 @@ type NetworkFirewall struct {
 
 		// Enable (default) or disable the service
 		Enabled bool `json:"enabled,omitempty" jsonschema:"default=true"`
-	} `json:"services"`
+	} `json:"services,omitempty" jsonschema:"nullable"`
 
 	// Ports or ranges to enable or disable
 	Ports []struct {
@@ -89,5 +89,5 @@ type NetworkFirewall struct {
 
 		// Enable (default) or disable the service
 		Enabled bool `json:"enabled,omitempty" jsonschema:"default=true"`
-	} `json:"ports"`
+	} `json:"ports,omitempty" jsonschema:"nullable"`
 }

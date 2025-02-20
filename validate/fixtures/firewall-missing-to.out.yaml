@@ -4,4 +4,3 @@ network:
         ports:
             - from: 60000
               protocol: udp
-        services: null
