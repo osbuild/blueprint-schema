@@ -143,6 +143,7 @@ To regenerate `*.out.yaml` and `*.valid.json` files (after a breaking change), d
 
 * https://github.com/invopop/jsonschema - library to generate JSON Schema from Go types
 * https://github.com/kaptinlin/jsonschema - library to validate JSON Schema
+* https://github.com/invopop/yaml - library to convert YAML to JSON and vice versa
 
 ## TODO
 
