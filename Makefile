@@ -18,3 +18,7 @@ write-fixtures: ## Write new test fixtures
 test: ## Run all tests
 	@go test .
 	@go test ./validate
+
+.PHONY: run-web-editor-json
+run-web-editor-json: ## show a demo-web editor for the json format
+	xdg-open ./autocomplete-example-json.html

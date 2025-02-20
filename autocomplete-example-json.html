@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Monaco Editor with JSON Schema Autocomplete</title>
+  <style>
+    html, body, #container {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="container"></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.7/require.min.js"></script>
+  <script>
+    require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs' }});
+
+    require(['vs/editor/editor.main'], function () {
+
+      // Fetch the JSON Schema from the web
+      fetch('https://raw.githubusercontent.com/lzap/common-blueprint-example/refs/heads/main/blueprint-schema.json')
+        .then(function(response) {
+          return response.json();
+        })
+        .then(function(schema) {
+          monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+            validate: true,
+            allowComments: true,
+            schemas: [{
+              uri: 'https://raw.githubusercontent.com/lzap/common-blueprint-example/refs/heads/main/blueprint-schema.json',
+              fileMatch: ['*'],
+              schema: schema
+            }]
+          });
+
+          // Create the Monaco Editor instance with some initial JSON content
+          monaco.editor.create(document.getElementById('container'), {
+            value: `{
+  "name": "",
+  "description": "",
+  "registration": {
+    "redhat": {
+      "activation_key": "",
+      "organization": ""
+    }
+  },
+  "network": {
+    "firewall": {
+      "services": [
+        {
+          "service": ""
+        }
+      ]
+    }
+  }
+}`,
+            language: 'json',
+            theme: 'vs-light',
+          });
+        })
+        .catch(function(error) {
+          console.error('Error loading JSON Schema:', error);
+        });
+    });
+  </script>
+</body>
+</html>
