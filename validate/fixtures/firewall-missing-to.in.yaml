@@ -3,4 +3,4 @@ network:
   firewall:
     ports:
       - from: 60000
-        protocol: "udp"
+        protocol: udp
