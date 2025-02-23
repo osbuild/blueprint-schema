@@ -23,7 +23,7 @@ window.MonacoEnvironment = {
 }
 
 const defaultSchema: SchemasSettings = {
-  uri: 'https://github.com/lzap/common-blueprint-example/blob/main/blueprint-schema.json',
+  uri: 'https://github.com/osbuild/blueprint-schema/blob/main/blueprint-schema.json',
   schema,
   fileMatch: ['blueprint-yaml.yaml']
 }

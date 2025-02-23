@@ -11,8 +11,8 @@ import (
 	"github.com/goccy/go-json"
 	"github.com/google/go-cmp/cmp"
 	"github.com/invopop/yaml"
-	blueprint "github.com/lzap/common-blueprint-example"
-	validate "github.com/lzap/common-blueprint-example/validate"
+	blueprint "github.com/osbuild/blueprint-schema"
+	validate "github.com/osbuild/blueprint-schema/validate"
 	"github.com/wI2L/jsondiff"
 )
 

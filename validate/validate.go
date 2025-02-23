@@ -10,7 +10,7 @@ import (
 
 	"github.com/invopop/yaml"
 	"github.com/kaptinlin/jsonschema"
-	blueprint "github.com/lzap/common-blueprint-example"
+	blueprint "github.com/osbuild/blueprint-schema"
 )
 
 type Schema struct {

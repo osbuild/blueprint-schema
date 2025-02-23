@@ -14,7 +14,7 @@
     {
       "valid": false,
       "evaluationPath": "/properties/name",
-      "schemaLocation": "https://github.com/lzap/common-blueprint-example/blueprint#/properties/name",
+      "schemaLocation": "https://github.com/osbuild/blueprint-schema/blueprint#/properties/name",
       "instanceLocation": "/name",
       "annotations": {
         "description": "Name of the blueprint"

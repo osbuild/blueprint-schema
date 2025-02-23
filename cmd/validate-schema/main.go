@@ -4,7 +4,7 @@ import (
 	"flag"
 	"os"
 
-	"github.com/lzap/common-blueprint-example/validate"
+	"github.com/osbuild/blueprint-schema/validate"
 )
 
 func main() {

@@ -19,7 +19,7 @@ our `blueprint-schema.json` to edit/validate the syntax.
 To run the project locally, clone the repository and set it up:
 
 ```sh
-git clone https://github.com/lzap/common-blueprint-example
+git clone https://github.com/osbuild/blueprint-schema
 cd common-blueprint-example
 ```
 

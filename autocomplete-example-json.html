@@ -21,7 +21,7 @@
     require(['vs/editor/editor.main'], function () {
 
       // Fetch the JSON Schema from the web
-      fetch('https://raw.githubusercontent.com/lzap/common-blueprint-example/refs/heads/main/blueprint-schema.json')
+      fetch('https://raw.githubusercontent.com/osbuild/blueprint-schema/refs/heads/main/blueprint-schema.json')
         .then(function(response) {
           return response.json();
         })
@@ -30,7 +30,7 @@
             validate: true,
             allowComments: true,
             schemas: [{
-              uri: 'https://raw.githubusercontent.com/lzap/common-blueprint-example/refs/heads/main/blueprint-schema.json',
+              uri: 'https://raw.githubusercontent.com/osbuild/blueprint-schema/refs/heads/main/blueprint-schema.json',
               fileMatch: ['*'],
               schema: schema
             }]

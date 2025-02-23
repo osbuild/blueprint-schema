@@ -1,12 +1,12 @@
-module github.com/lzap/common-blueprint-example/cmd/generate-schema
+module github.com/osbuild/blueprint-schema/cmd/generate-schema
 
 go 1.23.5
 
-replace github.com/lzap/common-blueprint-example => ../..
+replace github.com/osbuild/blueprint-schema => ../..
 
 require (
 	github.com/invopop/jsonschema v0.13.0
-	github.com/lzap/common-blueprint-example v0.0.0-00010101000000-000000000000
+	github.com/osbuild/blueprint-schema v0.0.0-00010101000000-000000000000
 	github.com/stoewer/go-strcase v1.3.0
 )
 
