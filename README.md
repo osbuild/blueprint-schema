@@ -37,7 +37,7 @@ package main
 import (
     "bytes"
 
-    blueprint "github.com/lzap/common-blueprint-example"
+    blueprint "github.com/osbuild/blueprint-schema"
 )
 
 func main() {
@@ -82,7 +82,7 @@ Returns 0 when schema is valid, 1 otherwise with detailed information formatted 
     {
       "valid": false,
       "evaluationPath": "/properties/name",
-      "schemaLocation": "https://github.com/lzap/common-blueprint-example/blueprint#/properties/name",
+      "schemaLocation": "https://github.com/osbuild/blueprint-schema/blueprint#/properties/name",
       "instanceLocation": "/name",
       "annotations": {
         "description": "Name of the blueprint"
@@ -105,7 +105,7 @@ package main
 import (
     "os"
 
-    "github.com/lzap/common-blueprint-example/validate"
+    "github.com/osbuild/blueprint-schema/validate"
 )
 
 func main() {

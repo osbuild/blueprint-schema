@@ -1,15 +1,15 @@
-module github.com/lzap/common-blueprint-example/validate
+module github.com/osbuild/blueprint-schema/validate
 
 go 1.23.5
 
-replace github.com/lzap/common-blueprint-example => ..
+replace github.com/osbuild/blueprint-schema => ..
 
 require (
 	github.com/goccy/go-json v0.10.5
 	github.com/google/go-cmp v0.6.0
 	github.com/invopop/yaml v0.3.1
 	github.com/kaptinlin/jsonschema v0.2.2
-	github.com/lzap/common-blueprint-example v0.0.0-00010101000000-000000000000
+	github.com/osbuild/blueprint-schema v0.0.0-00010101000000-000000000000
 )
 
 require (

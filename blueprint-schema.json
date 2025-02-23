@@ -1,20 +1,25 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/lzap/common-blueprint-example/blueprint",
+  "$id": "https://github.com/osbuild/blueprint-schema/blueprint",
   "$defs": {
     "Containers": {
       "properties": {
         "source": {
-          "type": "string"
+          "type": "string",
+          "description": "Container image URL"
         },
         "name": {
-          "type": "string"
+          "type": "string",
+          "description": "Container name"
         },
         "tls_verify": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Verify TLS connection, default is true.",
+          "default": true
         },
         "local_storage": {
-          "type": "string"
+          "type": "string",
+          "description": "Use local storage"
         }
       },
       "additionalProperties": false,
@@ -90,13 +95,15 @@
     "Kernel": {
       "properties": {
         "package": {
-          "type": "string"
+          "type": "string",
+          "description": "Kernel DNF package override"
         },
         "cmdline_append": {
           "items": {
             "type": "string"
           },
-          "type": "array"
+          "type": "array",
+          "description": "Kernel append command line"
         }
       },
       "additionalProperties": false,

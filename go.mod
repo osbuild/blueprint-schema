@@ -1,4 +1,4 @@
-module github.com/lzap/common-blueprint-example
+module github.com/osbuild/blueprint-schema
 
 go 1.23.5
 

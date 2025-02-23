@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 
 	"github.com/invopop/jsonschema"
-	blueprint "github.com/lzap/common-blueprint-example"
+	blueprint "github.com/osbuild/blueprint-schema"
 	strcase "github.com/stoewer/go-strcase"
 )
 
@@ -26,7 +26,7 @@ func main() {
 	if _, err := os.Stat(filepath.Join(*pkgPath, "/blueprint.go")); errors.Is(err, os.ErrNotExist) {
 		panic("must be run from the root of the project in order to load Go comments via Go AST parser")
 	}
-	if err := r.AddGoComments("github.com/lzap/common-blueprint-example", ".", jsonschema.WithFullComment()); err != nil {
+	if err := r.AddGoComments("github.com/osbuild/blueprint-schema", ".", jsonschema.WithFullComment()); err != nil {
 		panic(err)
 	}
 
