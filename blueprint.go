@@ -62,14 +62,24 @@ type DNF struct {
 }
 
 type Containers struct {
-	Source       string `json:"source" jsonschema:"required"`
-	Name         string `json:"name" jsonschema:"required"`
-	TlsVerify    bool   `json:"tls_verify,omitempty"`
+	// Container image URL
+	Source string `json:"source" jsonschema:"required"`
+
+	// Container name
+	Name string `json:"name" jsonschema:"required"`
+
+	// Verify TLS connection, default is true.
+	TLSVerify bool `json:"tls_verify,omitempty" jsonschema:"default=true"`
+
+	// Use local storage
 	LocalStorage string `json:"local_storage,omitempty"`
 }
 
 type Kernel struct {
-	Package       string   `json:"package,omitempty"`
+	// Kernel DNF package override
+	Package string `json:"package,omitempty"`
+
+	// Kernel append command line
 	CmdlineAppend []string `json:"cmdline_append,omitempty"`
 }
 
