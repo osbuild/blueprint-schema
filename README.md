@@ -2,6 +2,8 @@
 
 This repository contains the common blueprint JSON Schema and Go types for Image Builder / osbuild customization configuration.
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/osbuild/blueprint-schema.svg)](https://pkg.go.dev/github.com/osbuild/blueprint-schema)
+
 ### The schema
 
 Latest version of the JSON Schema is available as [blueprint-schema.json](blueprint-schema.json).
