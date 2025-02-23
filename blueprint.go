@@ -1,10 +1,5 @@
 package blueprint
 
-import (
-	"errors"
-	"fmt"
-)
-
 // Blueprint type prototype
 //
 // This is just a brief example of a common blueprint structure. Just few fields
@@ -157,42 +152,4 @@ type NetworkFirewall struct {
 		// Enable (default) or disable the service
 		Enabled bool `json:"enabled,omitempty" jsonschema:"default=true"`
 	} `json:"ports,omitempty" jsonschema:"nullable"`
-}
-
-type NetworkProtocol string
-
-var ErrInvalidNetworkProtocol = errors.New("invalid network protocol")
-
-func (np *NetworkProtocol) UnmarshalJSON(data []byte) error {
-	switch string(data) {
-	case "tcp", "udp", "any":
-		*np = NetworkProtocol(data)
-		return nil
-	default:
-		return fmt.Errorf("%w: %s", ErrInvalidNetworkProtocol, data)
-	}
-}
-
-func (np *NetworkProtocol) MarshalJSON() ([]byte, error) {
-	if np == nil {
-		return []byte("null"), nil
-	}
-
-	return []byte(*np), nil
-}
-
-func (np *NetworkProtocol) String() string {
-	return string(*np)
-}
-
-func (np NetworkProtocol) IsAny() bool {
-	return np == "any"
-}
-
-func (np NetworkProtocol) IsTCP() bool {
-	return np == "tcp"
-}
-
-func (np NetworkProtocol) IsUDP() bool {
-	return np == "udp"
 }
