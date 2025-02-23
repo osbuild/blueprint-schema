@@ -20,14 +20,12 @@ compose_request:
   architecture: "x86_84"
 #override: # TODO discuss maybe "variables"
   # - activation_key
-
+...
 # the blueprint
 ---
 name: "Blueprint name"
 description: ""
-hostname: "localhost" # unsure about this
-experimental:
-  reserved: true
+hostname: "localhost" # XXX: unsure about this, also required or not?
 fips:
   enabled: true
 dnf:
@@ -71,6 +69,21 @@ registration:
     diun_pub_key_hash: ""
     diun_pub_key_root_certs: ""
     di_mfg_string_type_mac_iface: ""
+network:
+  firewall: # XXX merge services and ports into one?
+    services:
+      - service: "ssh"
+        protocol: "tcp" # default value
+        enabled: true # default value
+      - service: "dhcp"
+    ports:
+      - port: 53
+        protocol: "both"
+        enabled: false
+      - from: 60000
+        to: 60010
+        protocol: "udp"
+# schema done up to this point
 accounts:
   users:
     - name: "lzap"
@@ -93,20 +106,6 @@ timedate:
 locale:
   languages: ["en_US.UTF-8", "cs_CZ.UTF-8"]
   keyboards: ["cz-qwerty", "cz", "us"]
-network:
-  firewall: # XXX merge services and ports into one?
-    services:
-      - service: "ssh"
-        protocol: "tcp" # default value
-        enabled: true # default value
-      - service: "dhcp"
-    ports:
-      - port: 53
-        protocol: "both"
-        enabled: false
-      - from: 60000
-        to: 60010
-        protocol: "udp"
 systemd:
   enabled: ["sshd.service", "backup.timer"]
   disabled: ["tuned", "cupsd"]
@@ -216,4 +215,9 @@ openscap:
   json_tailorings:
     - profile_id: "name-of-profile-used-in-json-tailoring-file"
       filepath:  "/some/path/tailoring-file.json"
+
 # any new features added after we started with this back in November?
+
+# idea: extensions, ability to add custom fields for things that are not supported
+# by the schema, but are supported by a backend (e.g. "snapshot_date" for crc). useful
+# for transforming common blueprint into a legacy API call.

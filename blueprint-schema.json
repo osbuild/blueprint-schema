@@ -2,6 +2,106 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/lzap/common-blueprint-example/blueprint",
   "$defs": {
+    "Containers": {
+      "properties": {
+        "source": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "tls_verify": {
+          "type": "boolean"
+        },
+        "local_storage": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "source",
+        "name"
+      ]
+    },
+    "DNF": {
+      "properties": {
+        "packages": {
+          "oneOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "description": "Packages to install. Package name or NVRA is accepted as long as DNF can\nresolve it."
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "groups": {
+          "oneOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "description": "Groups to install. Groups can also be specificed via the packages field\nprefixed with @."
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "import_keys": {
+          "type": "boolean",
+          "description": "Import GPG keys, default is true.",
+          "default": true
+        },
+        "modules": {
+          "oneOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "description": "Modules to enable or disable"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "FIPS": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enable FIPS mode"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "Kernel": {
+      "properties": {
+        "package": {
+          "type": "string"
+        },
+        "cmdline_append": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
     "Network": {
       "properties": {
         "firewall": {
@@ -125,55 +225,84 @@
           "description": "Organization ID"
         },
         "subscription_manager": {
-          "properties": {
-            "enabled": {
-              "type": "boolean"
+          "oneOf": [
+            {
+              "$ref": "#/$defs/SubscriptionManagerRegistration",
+              "description": "Subscription manager details (internal use only)"
             },
-            "product_plugin": {
-              "type": "boolean"
-            },
-            "repository_management": {
-              "type": "boolean"
-            },
-            "auto_registration": {
-              "type": "boolean"
+            {
+              "type": "null"
             }
-          },
-          "additionalProperties": false,
-          "type": "object",
-          "required": [
-            "enabled",
-            "product_plugin",
-            "repository_management",
-            "auto_registration"
-          ],
-          "description": "Subscription manager details (internal use only)"
+          ]
         },
         "insights": {
-          "properties": {
-            "enabled": {
-              "type": "boolean"
+          "oneOf": [
+            {
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "enabled"
+              ],
+              "description": "Insights client details"
+            },
+            {
+              "type": "null"
             }
-          },
-          "additionalProperties": false,
-          "type": "object",
-          "required": [
-            "enabled"
-          ],
-          "description": "Insights client details"
+          ]
         },
         "connector": {
-          "properties": {
-            "enabled": {
-              "type": "boolean"
+          "oneOf": [
+            {
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "enabled"
+              ],
+              "description": "CRC connector details"
+            },
+            {
+              "type": "null"
             }
-          },
-          "additionalProperties": false,
-          "type": "object",
-          "required": [
-            "enabled"
-          ],
-          "description": "CRC connector details"
+          ]
+        },
+        "fdo": {
+          "oneOf": [
+            {
+              "properties": {
+                "manufacturing_server_url": {
+                  "type": "string"
+                },
+                "diun_pub_key_insecure": {
+                  "type": "boolean"
+                },
+                "diun_pub_key_hash": {
+                  "type": "string"
+                },
+                "diun_pub_key_root_certs": {
+                  "type": "string"
+                },
+                "di_mfg_string_type_mac_iface": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object",
+              "description": "FDO details"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "additionalProperties": false,
@@ -195,6 +324,30 @@
       },
       "additionalProperties": false,
       "type": "object"
+    },
+    "SubscriptionManagerRegistration": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "product_plugin": {
+          "type": "boolean"
+        },
+        "repository_management": {
+          "type": "boolean"
+        },
+        "auto_registration": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "enabled",
+        "product_plugin",
+        "repository_management",
+        "auto_registration"
+      ]
     }
   },
   "properties": {
@@ -227,6 +380,57 @@
           "type": "null"
         }
       ]
+    },
+    "hostname": {
+      "type": "string",
+      "description": "OS hostname"
+    },
+    "fips": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/FIPS",
+          "description": "FIPS details"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "dnf": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/DNF",
+          "description": "DNF package managers details"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "containers": {
+      "oneOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/Containers"
+          },
+          "type": "array",
+          "description": "Containers details"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "kernel": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/Kernel",
+          "description": "Linux kernel details"
+        },
+        {
+          "type": "null"
+        }
+      ]
     }
   },
   "additionalProperties": false,
@@ -234,5 +438,5 @@
   "required": [
     "name"
   ],
-  "description": "Blueprint type prototype\n\nThis is just a brief example of a common blueprint structure. Just few fields\nwere selected to demonstrate the JSON schema.\n\nThese Go comments do appear in the JSON Schema so the final version of the\nblueprint will be broken up into multiple files and the comments will be\nmoch more extensive."
+  "description": "Blueprint type prototype\n\nThis is just a brief example of a common blueprint structure. Just few fields\nwere selected to demonstrate the JSON schema.\n\nThese Go comments do appear in the JSON Schema so the final version of the\nblueprint will be broken up into multiple files and the comments will be\nmoch more extensive.\n\nTODO: Break all anonymous struct into named structs. Break this .go file into\nmultiple files."
 }
