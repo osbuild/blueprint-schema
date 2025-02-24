@@ -23,6 +23,10 @@ test: ## Run all tests
 run-web-editor-json: ## show a demo-web editor for the json format
 	xdg-open ./autocomplete-example-json.html
 
+# Just set this in your environment or call directly:
+# make YAML_DEMO_BIND_IP=your_ip run-web-editor-yaml
+export YAML_DEMO_BIND_IP?=0.0.0.0
+
 .PHONY: run-web-editor-yaml
 run-web-editor-yaml: ## Show a demo-web editor for the yaml format
 	cd autocomplete-example-yaml && npm clean-install
