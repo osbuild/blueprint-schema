@@ -281,6 +281,92 @@
       "additionalProperties": false,
       "type": "object"
     },
+    "OpenSCAP": {
+      "properties": {
+        "profile_id": {
+          "type": "string",
+          "description": "The desired securinty profile ID."
+        },
+        "datastream": {
+          "type": "string",
+          "description": "Datastream to use for the scan. The datastream is the path to the SCAP datastream file to use for the scan.\nIf the datastream parameter is not provided, a sensible default based on the selected distro will be chosen."
+        },
+        "tailoring": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/OpenSCAPTailoring",
+              "description": "An optional OpenSCAP tailoring information. Can be done via profile selection or tailoring JSON file.\n\nIn case of profile selection, a tailoring file with a new tailoring profile ID is created and saved to the image.\nThe new tailoring profile ID is created by appending the _osbuild_tailoring suffix to the base profile.\nFor example, given tailoring options for the cis profile, tailoring profile\nxccdf_org.ssgproject.content_profile_cis_osbuild_tailoring will be created. The default namespace of the rules\nis org.ssgproject.content, so the prefix may be omitted for rules under this namespace, i.e.\norg.ssgproject.content_grub2_password and grub2_password are functionally equivalent.\nThe generated tailoring file is saved to the image as /usr/share/xml/osbuild-oscap-tailoring/tailoring.xml or,\nfor newer releases, in the /oscap_data directory, this is the location used for other OpenSCAP related artifacts.\n\nIt is also possible to use JSON tailoring. In that case, custom JSON file must be provided using the blueprint and\nused in json_filepath field alongside with json_profile_id field. The generated XML tailoring file is saved to the\nimage as /oscap_data/tailoring.xml."
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "profile_id"
+      ]
+    },
+    "OpenSCAPTailoring": {
+      "oneOf": [
+        {
+          "required": [
+            "selected",
+            "unselected"
+          ],
+          "title": "tailoring_selection"
+        },
+        {
+          "required": [
+            "json_profile_id",
+            "json_filepath"
+          ],
+          "title": "tailoring_json"
+        }
+      ],
+      "properties": {
+        "selected": {
+          "oneOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "description": "Selected profiles, cannot be used with json_profile_id and json_filepath."
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "unselected": {
+          "oneOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "description": "Unselected profiles, cannot be used with json_profile_id and json_filepath."
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "json_profile_id": {
+          "type": "string",
+          "description": "JSON profile ID, must be used with json_filepath and cannot be used with selected and unselected fields."
+        },
+        "json_filepath": {
+          "type": "string",
+          "description": "JSON filepath, must be used with json_profile_id and cannot be used with selected and unselected fields."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
     "RedHatRegistration": {
       "properties": {
         "activation_key": {
@@ -483,6 +569,17 @@
         {
           "$ref": "#/$defs/Network",
           "description": "Networking details"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "openscap": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/OpenSCAP",
+          "description": "From RHEL 8.7 \u0026 RHEL 9.1 support has been added for OpenSCAP build-time remediation"
         },
         {
           "type": "null"
