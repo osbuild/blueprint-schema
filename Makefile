@@ -14,6 +14,10 @@ write-fixtures: ## Write new test fixtures
 	@rm -f ./validate/fixtures/*.out.yaml ./validate/fixtures/*.valid.json
 	@WRITE_FIXTURES=1 go test ./validate
 
+.PHONY: pkg-go-dev-update
+pkg-go-dev-update: ## Schedule https://pkg.go.dev/github.com/osbuild/blueprint-schema for update
+	GOPROXY=https://proxy.golang.org go get github.com/osbuild/blueprint-schema
+
 .PHONY: test
 test: ## Run all tests
 	@go test .
@@ -24,8 +28,8 @@ run-web-editor-json: ## show a demo-web editor for the json format
 	xdg-open ./autocomplete-example-json.html
 
 # Just set this in your environment or call directly:
-# make YAML_DEMO_BIND_IP=your_ip run-web-editor-yaml
-export YAML_DEMO_BIND_IP?=0.0.0.0
+# make WEB_EDITOR_HOST=hosname run-web-editor-yaml
+export WEB_EDITOR_HOST?=0.0.0.0
 
 .PHONY: run-web-editor-yaml
 run-web-editor-yaml: ## Show a demo-web editor for the yaml format
