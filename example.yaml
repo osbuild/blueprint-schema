@@ -13,14 +13,22 @@
 # image request (type) aka compose request (distro, version, arch)
 ---
 compose_request:
-  type: "aws"
+  type: "aws" # consequence on blueprint validation
   distribution:
     name: "fedora"
     version: "42"
   architecture: "x86_84"
-#override: # TODO discuss maybe "variables"
-  # - activation_key
+  ostree:
+    url: "https://cert.console.stage.redhat.com/api/pulp-content/em652321d/myrhel-2747841137116337868"
+    content_url: ""
+    ref: "rhel/8/x86_64/edge" # consider separating commit ref from source ref
+    parent: "rhel/8/x86_64/edge"
+    rhsm: true
+  upload:
+    - type: "aws"
+      share_with_accounts: ["123456789"]
 ...
+
 # the blueprint
 ---
 name: "Blueprint name"
@@ -53,7 +61,7 @@ kernel:
 registration:
   redhat:
     activation_key: "123456789"
-    organization: "123456" # XXX should this be org_id instead?
+    organization: "123456" # XXX should this be org_id instead? no preference.
     subscription_manager:
       # internal use only
       enabled: true
@@ -71,7 +79,7 @@ registration:
     diun_pub_key_root_certs: ""
     di_mfg_string_type_mac_iface: ""
 network:
-  firewall: # XXX merge services and ports into one?
+  firewall: # XXX merge services and ports into one? no preference.
     services:
       - service: "ssh"
         protocol: "tcp" # default value
@@ -145,7 +153,6 @@ installer:
     kickstart: ""
   coreos:
     installation_device: "/dev/vda"
-
 repositories:
   - type: "dnf" # the default and the only supported value
     id: ""
@@ -165,6 +172,7 @@ repositories:
       configure: true # configure repo for dnf
 storage: # applies only to disc images
   type: "gpt" # mbr or gpt
+  minsize: "150 GiB"
   partitions:
     - type: "plain" # lvm or btrfs
       label: "label"
@@ -185,40 +193,15 @@ storage: # applies only to disc images
       subvolumes:
         - name: "name"
           mountpoint: "/opt/name"
-
-# CUT # CUT # CUT # CUT # CUT # CUT # CUT # CUT # CUT
-
-ostree:
-  url: "https://cert.console.stage.redhat.com/api/pulp-content/em652321d/myrhel-2747841137116337868"
-  content_url: ""
-  ref: "rhel/8/x86_64/edge"
-  parent: "rhel/8/x86_64/edge"
-  rhsm: true
-cacerts: ["xxx"]
-# the following is only in hosted mostly from "image_request" (some of the fields moved to image_request)
-image:
-  client_id: "api"
-  size: 4294967296 # bytes (TODO: move it to filesystem section)
-  snapshot_date: 2024-05-13
-  upload:
-    - type: "aws"
-      share_with_accounts: ["123456789"]
-      share_with_sources: ["12345"]
-openscap:
+cacerts:
+  - cert: "pem encoded cert"
+openscap: # ask Gianlucca
   profile_id: "xccdf_org.ssgproject.content_profile_cis"
-  # hosted-only fields
-  profile_name: "CIS Red Hat Enterprise Linux 8 Benchmark for Level 2 - Server"
-  profile_description: ""
-  # on-prem only fields
   datastream: "/usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml"
-  selected: []
-  unselected: ["xccdf_org.ssgproject.content_rule_grub2_password"]
-  json_tailorings:
-    - profile_id: "name-of-profile-used-in-json-tailoring-file"
-      filepath:  "/some/path/tailoring-file.json"
+  tailorings:
+    selected: []
+    unselected: ["xccdf_org.ssgproject.content_rule_grub2_password"]
+    json_profile_id: "name-of-profile-used-in-json-tailoring-file"
+    json_ref: "file:///some/path/tailoring-file.json"
+    json_data: ""
 
-# any new features added after we started with this back in November?
-
-# idea: extensions, ability to add custom fields for things that are not supported
-# by the schema, but are supported by a backend (e.g. "snapshot_date" for crc). useful
-# for transforming common blueprint into a legacy API call.
