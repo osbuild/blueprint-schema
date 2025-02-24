@@ -17,7 +17,7 @@
       "schemaLocation": "https://github.com/osbuild/blueprint-schema/blueprint#/properties/name",
       "instanceLocation": "/name",
       "annotations": {
-        "description": "Name of the blueprint"
+        "description": "The name attribute is a string that contains the name of the blueprint. It can contain spaces,\nbut they may be converted to dash characters during build. It should be short and descriptive."
       },
       "errors": {
         "type": "Value is null but should be string"

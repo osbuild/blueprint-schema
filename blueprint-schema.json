@@ -6,11 +6,11 @@
       "properties": {
         "source": {
           "type": "string",
-          "description": "Container image URL"
+          "description": "Container image URL is a reference to a container image at a registry."
         },
         "name": {
           "type": "string",
-          "description": "Container name"
+          "description": "Container name is an optional string to set the name under which the container image will\nbe saved in the image. If not specified name falls back to the same value as source."
         },
         "tls_verify": {
           "type": "boolean",
@@ -19,7 +19,7 @@
         },
         "local_storage": {
           "type": "string",
-          "description": "Use local storage"
+          "description": "Whether to pull the container image from the host's local-storage."
         }
       },
       "additionalProperties": false,
@@ -38,7 +38,7 @@
                 "type": "string"
               },
               "type": "array",
-              "description": "Packages to install. Package name or NVRA is accepted as long as DNF can\nresolve it."
+              "description": "Packages to install. Package name or NVRA is accepted as long as DNF can\nresolve it. Examples: vim-enhanced, vim-enhanced-9.1.866-1 or vim-enhanced-9.1.866-1.fc41.x86_64.\nThe packages can also be specified as @group_name to install all packages in the group."
             },
             {
               "type": "null"
@@ -52,7 +52,7 @@
                 "type": "string"
               },
               "type": "array",
-              "description": "Groups to install. Groups can also be specificed via the packages field\nprefixed with @."
+              "description": "Groups to install, must match exactly. Groups describes groups of packages to be installed into\nthe image. Package groups are defined in the repository metadata. Each group has a descriptive name\nused primarily for display in user interfaces and an ID more commonly used in kickstart files.\nHere, the ID is the expected way of listing a group. Groups have three different ways of categorizing\ntheir packages: mandatory, default, and optional. For the purposes of blueprints, only mandatory\nand default packages will be installed. There is no mechanism for selecting optional packages."
             },
             {
               "type": "null"
@@ -60,9 +60,18 @@
           ]
         },
         "import_keys": {
-          "type": "boolean",
-          "description": "Import GPG keys, default is true.",
-          "default": true
+          "oneOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "description": "Additional file paths to the GPG keys to import. The files must be present in the image.\nDoes not support importing from URLs."
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "modules": {
           "oneOf": [
@@ -86,7 +95,7 @@
       "properties": {
         "enabled": {
           "type": "boolean",
-          "description": "Enable FIPS mode"
+          "description": "Enables the system FIPS mode (disabled by default). Currently only edge-raw-image, edge-installer,\nedge-simplified-installer, edge-ami and edge-vsphere images support this customization."
         }
       },
       "additionalProperties": false,
@@ -96,14 +105,21 @@
       "properties": {
         "package": {
           "type": "string",
-          "description": "Kernel DNF package override"
+          "description": "Kernel DNF package name to replace the standard kernel with."
         },
         "cmdline_append": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array",
-          "description": "Kernel append command line"
+          "oneOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "description": "An optional string to append arguments to the bootloader kernel command line. The list\nwill be concatenated with spaces."
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "additionalProperties": false,
@@ -113,7 +129,7 @@
       "properties": {
         "firewall": {
           "$ref": "#/$defs/NetworkFirewall",
-          "description": "Firewall details"
+          "description": "Firewall details - package firewalld must be installed in the image."
         }
       },
       "additionalProperties": false,
@@ -150,7 +166,7 @@
                 ]
               },
               "type": "array",
-              "description": "Services to enable or disable"
+              "description": "Services to enable or disable. The service name must be from the IANA list.\nAlternatively, you can specify a port or range using the ports field."
             },
             {
               "type": "null"
@@ -225,17 +241,17 @@
       "properties": {
         "activation_key": {
           "type": "string",
-          "description": "Activation key"
+          "description": "Subscription manager activation key to use during registration."
         },
         "organization": {
           "type": "string",
-          "description": "Organization ID"
+          "description": "Subscription manager organization ID to use during registration."
         },
         "subscription_manager": {
           "oneOf": [
             {
               "$ref": "#/$defs/SubscriptionManagerRegistration",
-              "description": "Subscription manager details (internal use only)"
+              "description": "Subscription manager details (internal use only). The customization expects that subscription-manager\npackage is installed in the image, which is by default part of the RHEL distribution bootable images.\nTo explicitly install the package, add it to the packages section in the blueprint.\nThe customization is not supported on Fedora distribution images."
             },
             {
               "type": "null"
@@ -255,7 +271,7 @@
               "required": [
                 "enabled"
               ],
-              "description": "Insights client details"
+              "description": "Red Hat Insights client details."
             },
             {
               "type": "null"
@@ -275,7 +291,7 @@
               "required": [
                 "enabled"
               ],
-              "description": "CRC connector details"
+              "description": "Red Hat console.redhat.com connector (rhc) details."
             },
             {
               "type": "null"
@@ -326,7 +342,7 @@
       "properties": {
         "redhat": {
           "$ref": "#/$defs/RedHatRegistration",
-          "description": "RedHat registration details"
+          "description": "Registration details for Red Hat operating system images."
         }
       },
       "additionalProperties": false,
@@ -335,23 +351,31 @@
     "SubscriptionManagerRegistration": {
       "properties": {
         "enabled": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Enables the subscription-manager DNF plugin.",
+          "default": true
         },
-        "product_plugin": {
-          "type": "boolean"
+        "product_plugin_enabled": {
+          "type": "boolean",
+          "description": "Enables the product-id DNF plugin.",
+          "default": true
         },
         "repository_management": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Enabled repository_management plugin configuration.",
+          "default": true
         },
         "auto_registration": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Enabled auto_registration plugin configuration.",
+          "default": true
         }
       },
       "additionalProperties": false,
       "type": "object",
       "required": [
         "enabled",
-        "product_plugin",
+        "product_plugin_enabled",
         "repository_management",
         "auto_registration"
       ]
@@ -360,11 +384,62 @@
   "properties": {
     "name": {
       "type": "string",
-      "description": "Name of the blueprint"
+      "description": "The name attribute is a string that contains the name of the blueprint. It can contain spaces,\nbut they may be converted to dash characters during build. It should be short and descriptive."
     },
     "description": {
       "type": "string",
-      "description": "Description of the blueprint"
+      "description": "The description attribute is a string that can be a longer description of the blueprint and is\nonly used for display purposes."
+    },
+    "hostname": {
+      "type": "string",
+      "description": "Hostname is an optional string that can be used to configure the hostname of the final image."
+    },
+    "kernel": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/Kernel",
+          "description": "Custom Linux kernel details, optional."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "fips": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/FIPS",
+          "description": "FIPS details, optional."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "dnf": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/DNF",
+          "description": "DNF package managers details. When using virtual provides as the package name the version glob\nshould be *. And be aware that you will be unable to freeze the blueprint. This is because the\nprovides will expand into multiple packages with their own names and versions."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "containers": {
+      "oneOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/Containers"
+          },
+          "type": "array",
+          "description": "Containers to be pulled during the image build and stored in the image at the default local\ncontainer storage location that is appropriate for the image type, so that all supported container\ntools like podman and cri-o will be able to work with it.\nThe embedded containers are not started, to do so you can create systemd unit files or quadlets with\nthe files customization."
+        },
+        {
+          "type": "null"
+        }
+      ]
     },
     "registration": {
       "oneOf": [
@@ -382,57 +457,6 @@
         {
           "$ref": "#/$defs/Network",
           "description": "Networking details"
-        },
-        {
-          "type": "null"
-        }
-      ]
-    },
-    "hostname": {
-      "type": "string",
-      "description": "OS hostname"
-    },
-    "fips": {
-      "oneOf": [
-        {
-          "$ref": "#/$defs/FIPS",
-          "description": "FIPS details"
-        },
-        {
-          "type": "null"
-        }
-      ]
-    },
-    "dnf": {
-      "oneOf": [
-        {
-          "$ref": "#/$defs/DNF",
-          "description": "DNF package managers details"
-        },
-        {
-          "type": "null"
-        }
-      ]
-    },
-    "containers": {
-      "oneOf": [
-        {
-          "items": {
-            "$ref": "#/$defs/Containers"
-          },
-          "type": "array",
-          "description": "Containers details"
-        },
-        {
-          "type": "null"
-        }
-      ]
-    },
-    "kernel": {
-      "oneOf": [
-        {
-          "$ref": "#/$defs/Kernel",
-          "description": "Linux kernel details"
         },
         {
           "type": "null"

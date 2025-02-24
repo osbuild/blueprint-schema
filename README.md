@@ -149,9 +149,10 @@ To regenerate `*.out.yaml` and `*.valid.json` files (after a breaking change), d
 
 ## TODO
 
-* Only fraction of the main `example.yaml` is currently implemented as Go type - this will be done after we agree on the final version of the example data.
-* Multiple schemas could be conditionally generated per-service: crc and cli (some fields could be hidden/marked as deprecated). This could be implemented via `onlyFor:"crc"` Go struct tag for example. Examples are in some types but this is not implemented.
-* Package named `transform`, list of transform function pairs, each .go file one or more pairs (ReadFirewallTOML/WriteFirewallTOML or CRC), pipeline collects errors and warnings, fixtures
+* Finalize the schema example
+* Finalize the schema itself
+* Write validation tests for all fields
+* Implement conversion tools in both crc/images repos in ./cmd subdirectories and use those tools via "go run" command to generate a nice example set:
 * https://github.com/osbuild/image-builder-crc/blob/main/internal/v1/api.go#L663
 * https://github.com/osbuild/blueprint-schema/blob/main/blueprint.go#L63
-* Generate markdown documentation for the schema with examples
+* Generate markdown/HTML documentation for the schema with examples

@@ -25,7 +25,7 @@ compose_request:
 ---
 name: "Blueprint name"
 description: ""
-hostname: "localhost" # XXX: unsure about this, also required or not?
+hostname: "localhost"
 fips:
   enabled: true
 dnf:
@@ -37,7 +37,8 @@ dnf:
     - "@virtualization"
   groups:
     - "virtualization"
-  import_keys: true
+  import_keys:
+    - "/etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-18-primary"
   modules:
     - "postgres:16/server"
 containers:
@@ -56,7 +57,7 @@ registration:
     subscription_manager:
       # internal use only
       enabled: true
-      product_plugin: true
+      product_plugin_enabled: true
       repository_management: true
       auto_registration: true
     insights:

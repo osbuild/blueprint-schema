@@ -76,7 +76,7 @@
       "schemaLocation": "https://github.com/osbuild/blueprint-schema/blueprint#/properties/firewall",
       "instanceLocation": "/firewall",
       "annotations": {
-        "description": "Firewall details"
+        "description": "Firewall details - package firewalld must be installed in the image."
       },
       "errors": {
         "$ref": "Value does not match the reference schema"
@@ -88,7 +88,7 @@
       "schemaLocation": "https://github.com/osbuild/blueprint-schema/blueprint#/properties/name",
       "instanceLocation": "/name",
       "annotations": {
-        "description": "Name of the blueprint"
+        "description": "The name attribute is a string that contains the name of the blueprint. It can contain spaces,\nbut they may be converted to dash characters during build. It should be short and descriptive."
       }
     },
     {
