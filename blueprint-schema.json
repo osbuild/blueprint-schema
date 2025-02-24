@@ -91,6 +91,50 @@
       "additionalProperties": false,
       "type": "object"
     },
+    "FDORegistration": {
+      "oneOf": [
+        {
+          "required": [
+            "diun_pub_key_hash",
+            "diun_pub_key_insecure"
+          ],
+          "title": "fdo_hash"
+        },
+        {
+          "required": [
+            "diun_pub_key_root_certs"
+          ],
+          "title": "fdo_rootcerts"
+        }
+      ],
+      "properties": {
+        "manufacturing_server_url": {
+          "type": "string",
+          "description": "FDO server URL."
+        },
+        "diun_pub_key_hash": {
+          "type": "string",
+          "description": "FDO server public key."
+        },
+        "diun_pub_key_insecure": {
+          "type": "boolean",
+          "description": "FDO server public key insecure option."
+        },
+        "diun_pub_key_root_certs": {
+          "type": "string",
+          "description": "FDO server public key root certificates."
+        },
+        "di_mfg_string_type_mac_iface": {
+          "type": "string",
+          "description": "Optional interface name for the MAC address."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "manufacturing_server_url"
+      ]
+    },
     "FIPS": {
       "properties": {
         "enabled": {
@@ -182,14 +226,14 @@
                     "required": [
                       "port"
                     ],
-                    "title": "port"
+                    "title": "firewall_port"
                   },
                   {
                     "required": [
                       "from",
                       "to"
                     ],
-                    "title": "from_to"
+                    "title": "firewall_from_to"
                   }
                 ],
                 "properties": {
@@ -297,35 +341,6 @@
               "type": "null"
             }
           ]
-        },
-        "fdo": {
-          "oneOf": [
-            {
-              "properties": {
-                "manufacturing_server_url": {
-                  "type": "string"
-                },
-                "diun_pub_key_insecure": {
-                  "type": "boolean"
-                },
-                "diun_pub_key_hash": {
-                  "type": "string"
-                },
-                "diun_pub_key_root_certs": {
-                  "type": "string"
-                },
-                "di_mfg_string_type_mac_iface": {
-                  "type": "string"
-                }
-              },
-              "additionalProperties": false,
-              "type": "object",
-              "description": "FDO details"
-            },
-            {
-              "type": "null"
-            }
-          ]
         }
       },
       "additionalProperties": false,
@@ -343,6 +358,17 @@
         "redhat": {
           "$ref": "#/$defs/RedHatRegistration",
           "description": "Registration details for Red Hat operating system images."
+        },
+        "fdo": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/FDORegistration",
+              "description": "FDO allows users to configure FIDO Device Onboard device initialization parameters. It is only available\nwith the edge-simplified-installer or iot-simplified-installer image types."
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "additionalProperties": false,

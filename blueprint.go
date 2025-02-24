@@ -103,6 +103,10 @@ type Kernel struct {
 type Registration struct {
 	// Registration details for Red Hat operating system images.
 	RedHat *RedHatRegistration `json:"redhat,omitempty"`
+
+	// FDO allows users to configure FIDO Device Onboard device initialization parameters. It is only available
+	// with the edge-simplified-installer or iot-simplified-installer image types.
+	FDO *FDORegistration `json:"fdo,omitempty" jsonschema:"nullable"`
 }
 
 type RedHatRegistration struct {
@@ -129,15 +133,19 @@ type RedHatRegistration struct {
 		// Enables rhc (Red Hat Connector) during boot.
 		Enabled bool `json:"enabled"`
 	} `json:"connector" jsonschema:"nullable"`
+}
 
-	// FDO details
-	FDO struct {
-		ManufacturingServerURL  string `json:"manufacturing_server_url,omitempty"`
-		DiunPubKeyInsecure      bool   `json:"diun_pub_key_insecure,omitempty"`
-		DiunPubKeyHash          string `json:"diun_pub_key_hash,omitempty"`
-		DiunPubKeyRootCerts     string `json:"diun_pub_key_root_certs,omitempty"`
-		DiMfgStringTypeMacIface string `json:"di_mfg_string_type_mac_iface,omitempty"`
-	} `json:"fdo,omitempty" jsonschema:"nullable"`
+type FDORegistration struct {
+	// FDO server URL.
+	ManufacturingServerURL string `json:"manufacturing_server_url,omitempty" jsonschema:"required"`
+	// FDO server public key.
+	DiunPubKeyHash string `json:"diun_pub_key_hash,omitempty" jsonschema:"oneof_required=fdo_hash"`
+	// FDO server public key insecure option.
+	DiunPubKeyInsecure bool `json:"diun_pub_key_insecure,omitempty" jsonschema:"oneof_required=fdo_hash"`
+	// FDO server public key root certificates.
+	DiunPubKeyRootCerts string `json:"diun_pub_key_root_certs,omitempty" jsonschema:"oneof_required=fdo_rootcerts"`
+	// Optional interface name for the MAC address.
+	DiMfgStringTypeMacIface string `json:"di_mfg_string_type_mac_iface,omitempty"`
 }
 
 type SubscriptionManagerRegistration struct {
@@ -183,16 +191,16 @@ type NetworkFirewall struct {
 		//
 		// A service must appear only single time in both services and ports fields to prevent
 		// conflicts.
-		Port uint16 `json:"port,omitempty" jsonschema:"minimum=1,maximum=65535,oneof_required=port"`
+		Port uint16 `json:"port,omitempty" jsonschema:"minimum=1,maximum=65535,oneof_required=firewall_port"`
 
 		// From in a port range. Must be used with To and must be less than or equal to To.
 		//
 		// Port ranges are not subject to validation and may cause conflicts with services defined
 		// via IANA service names or ports.
-		From uint16 `json:"from,omitempty" jsonschema:"minimum=1,maximum=65535,oneof_required=from_to"`
+		From uint16 `json:"from,omitempty" jsonschema:"minimum=1,maximum=65535,oneof_required=firewall_from_to"`
 
 		// To in a port range. Must be used with From and must be greater than or equal to From.
-		To uint16 `json:"to,omitempty" jsonschema:"minimum=1,maximum=65535,oneof_required=from_to"`
+		To uint16 `json:"to,omitempty" jsonschema:"minimum=1,maximum=65535,oneof_required=firewall_from_to"`
 
 		// Protocol (tcp, udp, any) - all lowercase.
 		Protocol NetworkProtocol `json:"protocol,omitempty" jsonschema:"default=any,enum=tcp,enum=udp,enum=any"`

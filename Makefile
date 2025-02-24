@@ -28,7 +28,7 @@ run-web-editor-json: ## show a demo-web editor for the json format
 	xdg-open ./autocomplete-example-json.html
 
 # Just set this in your environment or call directly:
-# make WEB_EDITOR_HOST=hosname run-web-editor-yaml
+# make WEB_EDITOR_HOST=hostname run-web-editor-yaml
 export WEB_EDITOR_HOST?=0.0.0.0
 
 .PHONY: run-web-editor-yaml
