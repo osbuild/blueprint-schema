@@ -39,6 +39,7 @@ func (s *Schema) ValidateMap(data map[string]any) (bool, string) {
 	list := result.ToList(false)
 
 	// Sort details by evaluation path: https://github.com/kaptinlin/jsonschema/issues/28
+	// Does not fully solve the problem, but it's better than nothing.
 	sort.Slice(list.Details, func(i, j int) bool {
 		return list.Details[i].EvaluationPath < list.Details[j].EvaluationPath
 	})

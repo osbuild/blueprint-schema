@@ -567,6 +567,54 @@
         "auto_registration"
       ]
     },
+    "Systemd": {
+      "properties": {
+        "enabled": {
+          "oneOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "description": "The enabled attribute is a list of strings that contains the systemd units to be enabled."
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "disabled": {
+          "oneOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "description": "The disabled attribute is a list of strings that contains the systemd units to be disabled."
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "masked": {
+          "oneOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "description": "The masked attribute is a list of strings that contains the systemd units to be masked."
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
     "TimeDate": {
       "properties": {
         "timezone": {
@@ -769,6 +817,16 @@
         {
           "$ref": "#/$defs/OpenSCAP",
           "description": "From RHEL 8.7 \u0026 RHEL 9.1 support has been added for OpenSCAP build-time remediation"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "systemd": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/Systemd"
         },
         {
           "type": "null"

@@ -43,10 +43,12 @@ type Blueprint struct {
 	TimeDate *TimeDate `json:"timedate,omitempty" jsonschema:"nullable"`
 
 	Locale *Locale `json:"locale,omitempty" jsonschema:"nullable"`
-	
+
 	// Networking details
 	Network *Network `json:"network,omitempty" jsonschema:"nullable"`
 
 	// From RHEL 8.7 & RHEL 9.1 support has been added for OpenSCAP build-time remediation
 	OpenSCAP *OpenSCAP `json:"openscap,omitempty" jsonschema:"nullable"`
+
+	Systemd *Systemd `json:"systemd,omitempty" jsonschema:"nullable"`
 }

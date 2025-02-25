@@ -113,14 +113,14 @@ timedate:
 locale:
   languages: ["en_US.UTF-8", "cs_CZ.UTF-8"]
   keyboards: ["cz-qwerty", "cz", "us"]
-# schema done up to this point
 systemd:
   enabled: ["sshd.service", "backup.timer"]
   disabled: ["tuned", "cupsd"]
   masked: []
+# schema done up to this point
 fsnodes: # new feature (was file/dir)
   - path: "/var/tmp/dir"
-    type: "dir" # file as the default (file, dir, symlink)
+    type: "dir" # file as the default (file, dir)
     state: "present" # the default
     mode: 0755 # 0700 default
     user: "lzap" # 0 default
@@ -133,13 +133,10 @@ fsnodes: # new feature (was file/dir)
     user: "lzap"
     group: "lzap"
     contents:
-      base64: "AA43798kjsdkjhKJDJKhds" # useful for binaries
+      base64: "LS0t" # useful for binaries
   - path: "/var/tmp/dir/file2"
     contents:
       text: "test" # useful for text
-  - path: "/var/tmp/dir/file3"
-    contents:
-      ref: "file:///var/tmp/dir/file2" # new feature (could be URL as well)
 ignition:
   embedded: ""
   firstboot_url: ""

@@ -1,0 +1,8 @@
+name: 'Blueprint example: systemd'
+systemd:
+    disabled:
+        - tuned
+        - cupsd
+    enabled:
+        - sshd.service
+        - backup.timer
