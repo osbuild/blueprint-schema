@@ -12,7 +12,7 @@ generate-schema: ## Generate schema
 .PHONY: write-fixtures
 write-fixtures: ## Write new test fixtures
 	@rm -f ./fixtures/*.out.yaml ./fixtures/*.valid.json
-	@WRITE_FIXTURES=1 go test ./validate
+	@WRITE_FIXTURES=1 go test -count=1 ./validate
 
 .PHONY: pkg-go-dev-update
 pkg-go-dev-update: ## Schedule https://pkg.go.dev/github.com/osbuild/blueprint-schema for update
