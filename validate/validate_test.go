@@ -80,7 +80,7 @@ func TestFix(t *testing.T) {
 		})
 	}
 
-	validJSONstring := `{ "valid": true }`
+	validJSONstring := "{ \"valid\": true }\n"
 	validationTest := func(t *testing.T, input, output string) {
 		t.Run("Valid/"+input, func(t *testing.T) {
 			t.Parallel()

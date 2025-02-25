@@ -31,7 +31,7 @@ compose_request:
 
 # the blueprint
 ---
-name: "Blueprint name"
+name: "Blueprint example: xxx"
 description: ""
 hostname: "localhost"
 fips:
@@ -202,4 +202,4 @@ openscap:
     selected: []
     unselected: ["xccdf_org.ssgproject.content_rule_grub2_password"]
     json_profile_id: "name-of-profile-used-in-json-tailoring-file"
-    json_ref: "file:///some/path/tailoring-file.json"
+    json_filepath: "file:///some/path/tailoring-file.json"
