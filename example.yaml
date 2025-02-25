@@ -107,13 +107,13 @@ accounts:
   groups:
     - name: "operators"
       gid: 1042
-# schema done up to this point
 timedate:
   timezone: "Europe/Prague"
   ntp_servers: ["0.north-america.pool.ntp.org", "1.north-america.pool.ntp.org"]
 locale:
   languages: ["en_US.UTF-8", "cs_CZ.UTF-8"]
   keyboards: ["cz-qwerty", "cz", "us"]
+# schema done up to this point
 systemd:
   enabled: ["sshd.service", "backup.timer"]
   disabled: ["tuned", "cupsd"]

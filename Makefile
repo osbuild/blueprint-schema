@@ -21,7 +21,7 @@ pkg-go-dev-update: ## Schedule https://pkg.go.dev/github.com/osbuild/blueprint-s
 .PHONY: test
 test: ## Run all tests
 	@go test .
-	@go test ./validate
+	@go test -count=1 ./validate
 
 .PHONY: run-web-editor-json
 run-web-editor-json: ## show a demo-web editor for the json format

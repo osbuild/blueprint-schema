@@ -255,6 +255,46 @@
       "additionalProperties": false,
       "type": "object"
     },
+    "Locale": {
+      "properties": {
+        "languages": {
+          "oneOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "description": "The languages attribute is a list of strings that contains the languages to be installed on the image.\nTo list available languages, run: localectl list-locales",
+              "default": [
+                "en_US.UTF-8"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "keyboards": {
+          "oneOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "description": "The keyboards attribute is a list of strings that contains the keyboards to be installed on the image.\nTo list available keyboards, run: localectl list-keymaps",
+              "default": [
+                "us"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
     "Network": {
       "properties": {
         "firewall": {
@@ -527,6 +567,27 @@
         "auto_registration"
       ]
     },
+    "TimeDate": {
+      "properties": {
+        "timezone": {
+          "type": "string",
+          "description": "System time zone. Defaults to UTC.\nTo list available time zones run: timedatectl list-timezones",
+          "default": "UTC"
+        },
+        "ntp_servers": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "An optional list of strings containing NTP servers to use. If not provided the distribution defaults are used"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "timezone"
+      ]
+    },
     "UserAccount": {
       "properties": {
         "name": {
@@ -663,7 +724,29 @@
     "accounts": {
       "oneOf": [
         {
-          "$ref": "#/$defs/Accounts"
+          "$ref": "#/$defs/Accounts",
+          "description": "Users and groups details"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "timedate": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/TimeDate",
+          "description": "Time and date details"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "locale": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/Locale"
         },
         {
           "type": "null"

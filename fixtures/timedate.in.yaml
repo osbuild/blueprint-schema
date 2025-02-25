@@ -1,0 +1,4 @@
+name: "Blueprint example: timedate"
+timedate:
+  timezone: "Europe/Prague"
+  ntp_servers: ["0.north-america.pool.ntp.org", "1.north-america.pool.ntp.org"]

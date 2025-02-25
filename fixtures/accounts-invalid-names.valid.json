@@ -27,6 +27,9 @@
       "evaluationPath": "/oneOf/0",
       "schemaLocation": "https://github.com/osbuild/blueprint-schema/blueprint#/oneOf/0",
       "instanceLocation": "",
+      "annotations": {
+        "description": "Users and groups details"
+      },
       "errors": {
         "$ref": "Value does not match the reference schema"
       }

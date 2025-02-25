@@ -36,8 +36,14 @@ type Blueprint struct {
 	// Registration details
 	Registration *Registration `json:"registration,omitempty" jsonschema:"nullable"`
 
+	// Users and groups details
 	Accounts *Accounts `json:"accounts,omitempty" jsonschema:"nullable"`
 
+	// Time and date details
+	TimeDate *TimeDate `json:"timedate,omitempty" jsonschema:"nullable"`
+
+	Locale *Locale `json:"locale,omitempty" jsonschema:"nullable"`
+	
 	// Networking details
 	Network *Network `json:"network,omitempty" jsonschema:"nullable"`
 
