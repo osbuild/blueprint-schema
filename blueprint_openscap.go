@@ -1,5 +1,7 @@
 package blueprint
 
+import "github.com/invopop/jsonschema"
+
 type OpenSCAP struct {
 	// The desired security profile ID.
 	ProfileID string `json:"profile_id,omitempty" jsonschema:"required"`
@@ -27,14 +29,44 @@ type OpenSCAP struct {
 
 type OpenSCAPTailoring struct {
 	// Selected rules, cannot be used with json_profile_id and json_filepath.
-	Selected []string `json:"selected,omitempty" jsonschema:"nullable,anyof_required=tailoring_selected,anyof_required=tailoring_both"`
+	Selected []string `json:"selected,omitempty"`
 
 	// Unselected rules, cannot be used with json_profile_id and json_filepath.
-	Unselected []string `json:"unselected,omitempty" jsonschema:"nullable,anyof_required=tailoring_unselected,anyof_required=tailoring_both"`
+	Unselected []string `json:"unselected,omitempty"`
 
 	// JSON profile ID, must be used with json_filepath and cannot be used with selected and unselected fields.
-	JSONProfileID string `json:"json_profile_id,omitempty" jsonschema:"anyof_required=tailoring_json"`
+	JSONProfileID string `json:"json_profile_id,omitempty"`
 
 	// JSON filepath, must be used with json_profile_id and cannot be used with selected and unselected fields.
-	JSONFilepath string `json:"json_filepath,omitempty" jsonschema:"anyof_required=tailoring_json"`
+	JSONFilepath string `json:"json_filepath,omitempty"`
+}
+
+// JSONSchemaExtend can be used to extend the generated JSON schema from Go struct tags
+func (OpenSCAPTailoring) JSONSchemaExtend(s *jsonschema.Schema) {
+	s.OneOf = []*jsonschema.Schema{
+		{
+			AnyOf: []*jsonschema.Schema{
+				{
+					Required: []string{"selected", "unselected"},
+					Title:    "tailoring_both",
+				},
+				{
+					Required: []string{"selected"},
+					Title:    "tailoring_selected",
+				},
+				{
+					Required: []string{"unselected"},
+					Title:    "tailoring_unselected",
+				},
+			},
+		},
+		{
+			OneOf: []*jsonschema.Schema{
+				{
+					Required: []string{"json_profile_id", "json_filepath"},
+					Title:    "tailoring_json",
+				},
+			},
+		},
+	}
 }

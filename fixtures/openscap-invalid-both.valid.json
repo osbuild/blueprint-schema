@@ -16,7 +16,7 @@
       "schemaLocation": "",
       "instanceLocation": "",
       "errors": {
-        "oneOf": "Value does not match the oneOf schema"
+        "oneOf": "Value should match exactly one schema but matches multiple at indexes 0, 1"
       }
     },
     {
@@ -37,19 +37,16 @@
         "title": "tailoring_both"
       },
       "errors": {
-        "required": "Required properties 'selected', 'unselected' are missing"
+        "required": "Required property 'unselected' is missing"
       }
     },
     {
-      "valid": false,
+      "valid": true,
       "evaluationPath": "/anyOf/1",
       "schemaLocation": "https://github.com/osbuild/blueprint-schema/blueprint#/anyOf/1",
       "instanceLocation": "",
       "annotations": {
         "title": "tailoring_selected"
-      },
-      "errors": {
-        "required": "Required property 'selected' is missing"
       }
     },
     {
@@ -77,13 +74,19 @@
       }
     },
     {
-      "valid": false,
+      "valid": true,
       "evaluationPath": "/oneOf/0",
       "schemaLocation": "https://github.com/osbuild/blueprint-schema/blueprint#/oneOf/0",
       "instanceLocation": "",
-      "errors": {
-        "anyOf": "Value does not match anyOf schema"
+      "annotations": {
+        "title": "tailoring_json"
       }
+    },
+    {
+      "valid": true,
+      "evaluationPath": "/oneOf/0",
+      "schemaLocation": "https://github.com/osbuild/blueprint-schema/blueprint#/oneOf/0",
+      "instanceLocation": ""
     },
     {
       "valid": false,
@@ -99,18 +102,6 @@
     },
     {
       "valid": false,
-      "evaluationPath": "/oneOf/0",
-      "schemaLocation": "https://github.com/osbuild/blueprint-schema/blueprint#/oneOf/0",
-      "instanceLocation": "",
-      "annotations": {
-        "title": "tailoring_json"
-      },
-      "errors": {
-        "required": "Required property 'json_profile_id' is missing"
-      }
-    },
-    {
-      "valid": false,
       "evaluationPath": "/oneOf/1",
       "schemaLocation": "https://github.com/osbuild/blueprint-schema/blueprint#/oneOf/1",
       "instanceLocation": "",
@@ -128,13 +119,10 @@
       }
     },
     {
-      "valid": false,
+      "valid": true,
       "evaluationPath": "/oneOf/1",
       "schemaLocation": "https://github.com/osbuild/blueprint-schema/blueprint#/oneOf/1",
-      "instanceLocation": "",
-      "errors": {
-        "oneOf": "Value does not match the oneOf schema"
-      }
+      "instanceLocation": ""
     },
     {
       "valid": true,
@@ -152,6 +140,15 @@
       "instanceLocation": "/json_filepath",
       "annotations": {
         "description": "JSON filepath, must be used with json_profile_id and cannot be used with selected and unselected fields."
+      }
+    },
+    {
+      "valid": true,
+      "evaluationPath": "/properties/json_profile_id",
+      "schemaLocation": "https://github.com/osbuild/blueprint-schema/blueprint#/properties/json_profile_id",
+      "instanceLocation": "/json_profile_id",
+      "annotations": {
+        "description": "JSON profile ID, must be used with json_filepath and cannot be used with selected and unselected fields."
       }
     },
     {
@@ -179,6 +176,15 @@
       "instanceLocation": "/profile_id",
       "annotations": {
         "description": "The desired security profile ID."
+      }
+    },
+    {
+      "valid": true,
+      "evaluationPath": "/properties/selected",
+      "schemaLocation": "https://github.com/osbuild/blueprint-schema/blueprint#/properties/selected",
+      "instanceLocation": "/selected",
+      "annotations": {
+        "description": "Selected rules, cannot be used with json_profile_id and json_filepath."
       }
     },
     {

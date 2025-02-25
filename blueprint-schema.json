@@ -410,62 +410,56 @@
       ]
     },
     "OpenSCAPTailoring": {
-      "anyOf": [
+      "oneOf": [
         {
-          "required": [
-            "selected"
-          ],
-          "title": "tailoring_selected"
+          "anyOf": [
+            {
+              "required": [
+                "selected",
+                "unselected"
+              ],
+              "title": "tailoring_both"
+            },
+            {
+              "required": [
+                "selected"
+              ],
+              "title": "tailoring_selected"
+            },
+            {
+              "required": [
+                "unselected"
+              ],
+              "title": "tailoring_unselected"
+            }
+          ]
         },
         {
-          "required": [
-            "selected",
-            "unselected"
-          ],
-          "title": "tailoring_both"
-        },
-        {
-          "required": [
-            "unselected"
-          ],
-          "title": "tailoring_unselected"
-        },
-        {
-          "required": [
-            "json_profile_id",
-            "json_filepath"
-          ],
-          "title": "tailoring_json"
+          "oneOf": [
+            {
+              "required": [
+                "json_profile_id",
+                "json_filepath"
+              ],
+              "title": "tailoring_json"
+            }
+          ]
         }
       ],
       "properties": {
         "selected": {
-          "oneOf": [
-            {
-              "items": {
-                "type": "string"
-              },
-              "type": "array",
-              "description": "Selected rules, cannot be used with json_profile_id and json_filepath."
-            },
-            {
-              "type": "null"
-            }
-          ]
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "Selected rules, cannot be used with json_profile_id and json_filepath."
         },
         "unselected": {
-          "oneOf": [
-            {
-              "items": {
-                "type": "string"
-              },
-              "type": "array",
-              "description": "Unselected rules, cannot be used with json_profile_id and json_filepath."
-            },
-            {
-              "type": "null"
-            }
-          ]
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "Unselected rules, cannot be used with json_profile_id and json_filepath."
         },
         "json_profile_id": {
           "type": "string",

@@ -175,6 +175,7 @@ Keep in mind that relative paths are not supported, use absolute URL instead. Fo
 
 * Finalize the schema example
 * Finalize the schema itself
+* Get rid of validate subpackage as schema is required anyway
 * Write validation tests for all fields
 * Implement conversion tools in both crc/images repos in ./cmd subdirectories and use those tools via "go run" command to generate a nice example set:
 * https://github.com/osbuild/image-builder-crc/blob/main/internal/v1/api.go#L663

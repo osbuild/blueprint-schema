@@ -2,7 +2,17 @@ module github.com/osbuild/blueprint-schema
 
 go 1.23.5
 
-require github.com/invopop/yaml v0.3.1
+require (
+	github.com/invopop/jsonschema v0.13.0
+	github.com/invopop/yaml v0.3.1
+)
+
+require (
+	github.com/bahlo/generic-list-go v0.2.0 // indirect
+	github.com/buger/jsonparser v1.1.1 // indirect
+	github.com/mailru/easyjson v0.7.7 // indirect
+	github.com/wk8/go-ordered-map/v2 v2.1.8 // indirect
+)
 
 require (
 	github.com/google/go-cmp v0.6.0
