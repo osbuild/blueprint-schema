@@ -1,1 +1,89 @@
-{ "valid": true }
+{
+  "valid": false,
+  "evaluationPath": "",
+  "schemaLocation": "",
+  "instanceLocation": "",
+  "annotations": {
+    "description": "Blueprint type prototype\n\nThis is just a brief example of a common blueprint structure. Just few fields\nwere selected to demonstrate the JSON schema.\n\nThese Go comments do appear in the JSON Schema so the final version of the\nblueprint will be broken up into multiple files and the comments will be\nmoch more extensive.\n\nTODO: Break all anonymous struct into named structs. Break this .go file into\nmultiple files."
+  },
+  "errors": {
+    "properties": "Property 'openscap' does not match the schema"
+  },
+  "details": [
+    {
+      "valid": false,
+      "evaluationPath": "",
+      "schemaLocation": "",
+      "instanceLocation": "",
+      "errors": {
+        "additionalProperties": "Additional property 'tailoring2' does not match the schema"
+      }
+    },
+    {
+      "valid": false,
+      "evaluationPath": "/additionalProperties/tailoring2",
+      "schemaLocation": "https://github.com/osbuild/blueprint-schema/blueprint#/additionalProperties/tailoring2",
+      "instanceLocation": "/tailoring2",
+      "errors": {
+        "schema": "No values are allowed because the schema is set to 'false'"
+      }
+    },
+    {
+      "valid": false,
+      "evaluationPath": "/oneOf/0",
+      "schemaLocation": "https://github.com/osbuild/blueprint-schema/blueprint#/oneOf/0",
+      "instanceLocation": "",
+      "annotations": {
+        "description": "From RHEL 8.7 \u0026 RHEL 9.1 support has been added for OpenSCAP build-time remediation"
+      },
+      "errors": {
+        "$ref": "Value does not match the reference schema"
+      }
+    },
+    {
+      "valid": false,
+      "evaluationPath": "/oneOf/1",
+      "schemaLocation": "https://github.com/osbuild/blueprint-schema/blueprint#/oneOf/1",
+      "instanceLocation": "",
+      "errors": {
+        "type": "Value is object but should be null"
+      }
+    },
+    {
+      "valid": true,
+      "evaluationPath": "/properties/datastream",
+      "schemaLocation": "https://github.com/osbuild/blueprint-schema/blueprint#/properties/datastream",
+      "instanceLocation": "/datastream",
+      "annotations": {
+        "description": "Datastream to use for the scan. The datastream is the path to the SCAP datastream file to use for the scan.\nIf the datastream parameter is not provided, a sensible default based on the selected distro will be chosen."
+      }
+    },
+    {
+      "valid": true,
+      "evaluationPath": "/properties/name",
+      "schemaLocation": "https://github.com/osbuild/blueprint-schema/blueprint#/properties/name",
+      "instanceLocation": "/name",
+      "annotations": {
+        "description": "The name attribute is a string that contains the name of the blueprint. It can contain spaces,\nbut they may be converted to dash characters during build. It should be short and descriptive."
+      }
+    },
+    {
+      "valid": false,
+      "evaluationPath": "/properties/openscap",
+      "schemaLocation": "https://github.com/osbuild/blueprint-schema/blueprint#/properties/openscap",
+      "instanceLocation": "/openscap",
+      "errors": {
+        "oneOf": "Value does not match the oneOf schema"
+      }
+    },
+    {
+      "valid": true,
+      "evaluationPath": "/properties/profile_id",
+      "schemaLocation": "https://github.com/osbuild/blueprint-schema/blueprint#/properties/profile_id",
+      "instanceLocation": "/profile_id",
+      "annotations": {
+        "description": "The desired securinty profile ID."
+      }
+    }
+  ]
+}

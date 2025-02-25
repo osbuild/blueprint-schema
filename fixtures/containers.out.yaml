@@ -1,0 +1,5 @@
+containers:
+    - local_storage: /var/tmp/fedora-latest
+      name: fedora
+      source: quay.io/fedora/fedora:latest
+name: 'Blueprint example: containers'

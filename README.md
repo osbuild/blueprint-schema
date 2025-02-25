@@ -143,6 +143,28 @@ To regenerate `*.out.yaml` and `*.valid.json` files (after a breaking change), d
 
     make write-fixtures
 
+## Editor schema support
+
+For VS Code with Red Hat's [YAML plugin](https://github.com/redhat-developer/vscode-yaml), put the following into the settings:
+
+```
+    "json.schemas": [
+
+        {
+            "fileMatch": [
+                "/fixtures/*.json",
+                "!/fixtures/*.valid.json"
+            ],
+            "url": "https://raw.githubusercontent.com/osbuild/blueprint-schema/refs/heads/main/blueprint-schema.json"
+        }
+    ],
+    "yaml.schemas": {
+        "https://raw.githubusercontent.com/osbuild/blueprint-schema/refs/heads/main/blueprint-schema.json": "/fixtures/*.yaml"
+    },
+```
+
+Keep in mind that relative paths are not supported, use absolute URL instead. For example: `file:///home/lzap/blueprint-schema/blueprint-schema.json`.
+
 ## Links
 
 * https://github.com/invopop/jsonschema - library to generate JSON Schema from Go types

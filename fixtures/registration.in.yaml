@@ -1,0 +1,18 @@
+name: "Blueprint example: registration"
+registration:
+  redhat:
+    activation_key: "123456789"
+    organization: "123456"
+    subscription_manager:
+      enabled: true
+      product_plugin_enabled: true
+      repository_management: true
+      auto_registration: true
+    insights:
+      enabled: true
+    connector:
+      enabled: true
+  fdo:
+    manufacturing_server_url: "http://192.168.122.122:8080"
+    diun_pub_key_insecure: true
+    di_mfg_string_type_mac_iface: "wg0"

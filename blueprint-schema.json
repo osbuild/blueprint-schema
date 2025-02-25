@@ -2,6 +2,19 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/osbuild/blueprint-schema/blueprint",
   "$defs": {
+    "ConnectorRegistration": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enables rhc (Red Hat Connector) during boot."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "enabled"
+      ]
+    },
     "Containers": {
       "properties": {
         "source": {
@@ -95,8 +108,13 @@
       "oneOf": [
         {
           "required": [
-            "diun_pub_key_hash",
             "diun_pub_key_insecure"
+          ],
+          "title": "fdo_insecure"
+        },
+        {
+          "required": [
+            "diun_pub_key_hash"
           ],
           "title": "fdo_hash"
         },
@@ -110,19 +128,19 @@
       "properties": {
         "manufacturing_server_url": {
           "type": "string",
-          "description": "FDO server URL."
-        },
-        "diun_pub_key_hash": {
-          "type": "string",
-          "description": "FDO server public key."
+          "description": "FDO manufacturing server URL."
         },
         "diun_pub_key_insecure": {
           "type": "boolean",
-          "description": "FDO server public key insecure option."
+          "description": "FDO insecure option. When set, both hash or root certs must not be set."
+        },
+        "diun_pub_key_hash": {
+          "type": "string",
+          "description": "FDO server public key hex-encoded hash. Cannot be used together with insecure option or root certs."
         },
         "diun_pub_key_root_certs": {
           "type": "string",
-          "description": "FDO server public key root certificates."
+          "description": "FDO server public key root certificate path. Cannot be used together with insecure option or hash."
         },
         "di_mfg_string_type_mac_iface": {
           "type": "string",
@@ -144,6 +162,19 @@
       },
       "additionalProperties": false,
       "type": "object"
+    },
+    "InsightsRegistration": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enables insights client during boot."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "enabled"
+      ]
     },
     "Kernel": {
       "properties": {
@@ -371,11 +402,11 @@
       "properties": {
         "activation_key": {
           "type": "string",
-          "description": "Subscription manager activation key to use during registration."
+          "description": "Subscription manager activation key to use during registration. A list of keys to use to redeem or apply\nspecific subscriptions to the system."
         },
         "organization": {
           "type": "string",
-          "description": "Subscription manager organization ID to use during registration."
+          "description": "Subscription manager organization name to use during registration."
         },
         "subscription_manager": {
           "oneOf": [
@@ -391,16 +422,7 @@
         "insights": {
           "oneOf": [
             {
-              "properties": {
-                "enabled": {
-                  "type": "boolean"
-                }
-              },
-              "additionalProperties": false,
-              "type": "object",
-              "required": [
-                "enabled"
-              ],
+              "$ref": "#/$defs/InsightsRegistration",
               "description": "Red Hat Insights client details."
             },
             {
@@ -411,16 +433,7 @@
         "connector": {
           "oneOf": [
             {
-              "properties": {
-                "enabled": {
-                  "type": "boolean"
-                }
-              },
-              "additionalProperties": false,
-              "type": "object",
-              "required": [
-                "enabled"
-              ],
+              "$ref": "#/$defs/ConnectorRegistration",
               "description": "Red Hat console.redhat.com connector (rhc) details."
             },
             {
@@ -430,14 +443,7 @@
         }
       },
       "additionalProperties": false,
-      "type": "object",
-      "required": [
-        "activation_key",
-        "organization",
-        "subscription_manager",
-        "insights",
-        "connector"
-      ]
+      "type": "object"
     },
     "Registration": {
       "properties": {
