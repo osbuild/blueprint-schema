@@ -1,6 +1,0 @@
-name: Firewall example - missing to
-network:
-    firewall:
-        ports:
-            - from: 60000
-              protocol: udp

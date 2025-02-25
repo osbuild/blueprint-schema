@@ -127,7 +127,7 @@ The CLI utility provides the same output format as the validation library.
 
 ## Testing
 
-A fixture-based test is available in the [validate/fixtures/](validate/fixtures/) directory, each fixture consist of:
+A fixture-based test is available in the [fixtures/](fixtures/) directory, each fixture consist of:
 
 * `filename.in.yaml` - input file (can be YAML or JSON)
 * `filename.out.yaml` - output file after parsing and write (always YAML)

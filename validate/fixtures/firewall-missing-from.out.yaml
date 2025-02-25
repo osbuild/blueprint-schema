@@ -1,5 +1,0 @@
-name: Firewall example - missing from
-network:
-    firewall:
-        ports:
-            - to: 1303
