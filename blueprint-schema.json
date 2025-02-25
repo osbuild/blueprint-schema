@@ -385,7 +385,7 @@
       "properties": {
         "profile_id": {
           "type": "string",
-          "description": "The desired securinty profile ID."
+          "description": "The desired security profile ID."
         },
         "datastream": {
           "type": "string",
@@ -410,13 +410,25 @@
       ]
     },
     "OpenSCAPTailoring": {
-      "oneOf": [
+      "anyOf": [
+        {
+          "required": [
+            "selected"
+          ],
+          "title": "tailoring_selected"
+        },
         {
           "required": [
             "selected",
             "unselected"
           ],
-          "title": "tailoring_selection"
+          "title": "tailoring_both"
+        },
+        {
+          "required": [
+            "unselected"
+          ],
+          "title": "tailoring_unselected"
         },
         {
           "required": [
@@ -434,7 +446,7 @@
                 "type": "string"
               },
               "type": "array",
-              "description": "Selected profiles, cannot be used with json_profile_id and json_filepath."
+              "description": "Selected rules, cannot be used with json_profile_id and json_filepath."
             },
             {
               "type": "null"
@@ -448,7 +460,7 @@
                 "type": "string"
               },
               "type": "array",
-              "description": "Unselected profiles, cannot be used with json_profile_id and json_filepath."
+              "description": "Unselected rules, cannot be used with json_profile_id and json_filepath."
             },
             {
               "type": "null"

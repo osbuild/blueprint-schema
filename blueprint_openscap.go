@@ -1,7 +1,7 @@
 package blueprint
 
 type OpenSCAP struct {
-	// The desired securinty profile ID.
+	// The desired security profile ID.
 	ProfileID string `json:"profile_id,omitempty" jsonschema:"required"`
 
 	// Datastream to use for the scan. The datastream is the path to the SCAP datastream file to use for the scan.
@@ -26,15 +26,15 @@ type OpenSCAP struct {
 }
 
 type OpenSCAPTailoring struct {
-	// Selected profiles, cannot be used with json_profile_id and json_filepath.
-	Selected []string `json:"selected,omitempty" jsonschema:"nullable,oneof_required=tailoring_selection"`
+	// Selected rules, cannot be used with json_profile_id and json_filepath.
+	Selected []string `json:"selected,omitempty" jsonschema:"nullable,anyof_required=tailoring_selected,anyof_required=tailoring_both"`
 
-	// Unselected profiles, cannot be used with json_profile_id and json_filepath.
-	Unselected []string `json:"unselected,omitempty" jsonschema:"nullable,oneof_required=tailoring_selection"`
+	// Unselected rules, cannot be used with json_profile_id and json_filepath.
+	Unselected []string `json:"unselected,omitempty" jsonschema:"nullable,anyof_required=tailoring_unselected,anyof_required=tailoring_both"`
 
 	// JSON profile ID, must be used with json_filepath and cannot be used with selected and unselected fields.
-	JSONProfileID string `json:"json_profile_id,omitempty" jsonschema:"oneof_required=tailoring_json"`
+	JSONProfileID string `json:"json_profile_id,omitempty" jsonschema:"anyof_required=tailoring_json"`
 
 	// JSON filepath, must be used with json_profile_id and cannot be used with selected and unselected fields.
-	JSONFilepath string `json:"json_filepath,omitempty" jsonschema:"oneof_required=tailoring_json"`
+	JSONFilepath string `json:"json_filepath,omitempty" jsonschema:"anyof_required=tailoring_json"`
 }
