@@ -1,0 +1,12 @@
+validation failed: jsonschema validation failed with 'blueprint-schema.json'
+- at '/openscap': oneOf failed, none matched
+  - at '/openscap/tailoring': oneOf failed, none matched
+    - at '/openscap/tailoring': oneOf failed, none matched
+      - at '/openscap/tailoring': anyOf failed
+        - at '/openscap/tailoring': missing properties 'selected', 'unselected'
+        - at '/openscap/tailoring': missing property 'selected'
+        - at '/openscap/tailoring': missing property 'unselected'
+      - at '/openscap/tailoring': oneOf failed, none matched
+        - at '/openscap/tailoring': missing property 'json_profile_id'
+    - at '/openscap/tailoring': got object, want null
+  - at '/openscap': got object, want null

@@ -1,0 +1,9 @@
+validation failed: jsonschema validation failed with 'blueprint-schema.json'
+- at '/network': oneOf failed, none matched
+  - at '/network/firewall/services': oneOf failed, none matched
+    - at '/network/firewall/services/0': oneOf failed, none matched
+      - at '/network/firewall/services/0': missing property 'service'
+      - at '/network/firewall/services/0': missing property 'port'
+      - at '/network/firewall/services/0': missing property 'to'
+    - at '/network/firewall/services': got array, want null
+  - at '/network': got object, want null

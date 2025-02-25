@@ -2,147 +2,101 @@ package blueprint
 
 import (
 	"bytes"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
-	"regexp"
-	"slices"
-	"sort"
-	"strings"
 
 	"github.com/invopop/yaml"
-	"github.com/kaptinlin/jsonschema"
+	"github.com/santhosh-tekuri/jsonschema/v6"
 )
 
 type Schema struct {
 	s *jsonschema.Schema
 }
 
+// ErrUnmarshal is returned when a buffer/reader cannot be unmarshaled.
+var ErrUnmarshal = errors.New("cannot unmarshal JSON/YAML")
+
 // ErrCannotCompileSchema is returned when the schema cannot be compiled.
 var ErrCannotCompileSchema = errors.New("cannot compile schema")
 
+// ErrValidateFailed is returned when the validation fails.
+var ErrValidateFailed = errors.New("validation failed")
+
 // CompileSchema compiles the JSON schema. Uses the embedded schema
-// available as blueprint.SchemaJSON.
+// available as blueprint.SchemaJSON. Returns the compiled schema or
+// an error if the schema cannot be compiled.
 func CompileSchema() (*Schema, error) {
+	jsonSchema, err := jsonschema.UnmarshalJSON(bytes.NewBuffer(SchemaJSON))
+	if err != nil {
+		return nil, fmt.Errorf("%w: %v", ErrUnmarshal, err)
+	}
+
 	compiler := jsonschema.NewCompiler()
-	schema, err := compiler.Compile(SchemaJSON)
+	compiler.AddResource("blueprint-schema.json", jsonSchema)
+	schema, err := compiler.Compile("blueprint-schema.json")
 	if err != nil {
 		return nil, fmt.Errorf("%w: %v", ErrCannotCompileSchema, err)
 	}
 
+	// The validation library converts schema locations to absolute path which is not practical
+	// for tests. Therefore, it is overridden here so errors do not contain pwd base path.
+	schema.Location = "blueprint-schema.json"
+
 	return &Schema{s: schema}, nil
 }
 
-// ValidateMap validates the map against the schema. Returns true if the
-// data is valid, otherwise false and a string with details. The result
-// details can be randomly sorted.
-func (s *Schema) ValidateMap(data map[string]any) (bool, string) {
-	result := s.s.Validate(data)
-	list := result.ToList(true)
-
-	if !result.IsValid() {
-		details, _ := json.MarshalIndent(list, "", "  ")
-		return false, string(details)
+func (s *Schema) ValidateMap(data any) error {
+	if err := s.s.Validate(data); err != nil {
+		return fmt.Errorf("%w: %v", ErrValidateFailed, err)
 	}
 
-	return true, ""
+	return nil
 }
 
-// For testing purposes, this returns the details with removed errors and annotations.
-// This is to make the output stable for comparison in test cases. For more info:
-// https://github.com/kaptinlin/jsonschema/issues/28
-func (s *Schema) ValidateMapStable(data map[string]any) (bool, string) {
-	result := s.s.Validate(data)
-	list := result.ToList(true)
-	sortSchemaSlice(list.Details)
-
-	if !result.IsValid() {
-		// Must use encoding/json here: // https://github.com/kaptinlin/jsonschema/issues/27
-		details, _ := json.MarshalIndent(list, "", "  ")
-		return false, string(details)
+// ValidateJSON reads JSON and performs validation.
+func (s *Schema) ValidateJSON(data []byte) error {
+	jsonData, err := jsonschema.UnmarshalJSON(bytes.NewBuffer(data))
+	if err != nil {
+		return fmt.Errorf("%w: %v", ErrUnmarshal, err)
 	}
 
-	return true, ""
+	return s.ValidateMap(jsonData)
 }
 
-var sortSchemaRE = regexp.MustCompile(`'[^']+'`)
-
-func sortSchemaSlice(list []jsonschema.List) {
-	if len(list) == 0 {
-		return
+// ReadAndValidateJSON reads JSON from the reader and performs validation.
+func (s *Schema) ReadAndValidateJSON(reader io.Reader) error {
+	jsonData, err := jsonschema.UnmarshalJSON(reader)
+	if err != nil {
+		return fmt.Errorf("%w: %v", ErrUnmarshal, err)
 	}
 
-	sort.Slice(list, func(i, j int) bool {
-		return list[i].EvaluationPath < list[j].EvaluationPath
-	})
-
-	for i := range list {
-		for k, v := range list[i].Errors {
-			if k != "properties" {
-				continue
-			}
-			pOrig := sortSchemaRE.FindAllString(v, -1)
-			if len(pOrig) <= 1 {
-				continue
-			}
-			pNew := make([]string, len(pOrig))
-			copy(pNew, pOrig)
-			slices.Sort(pNew)
-			list[i].Errors[k] = fmt.Sprintf("Properties %s have problems", strings.Join(pNew, ", "))
-		}
-
-		sortSchemaSlice(list[i].Details)
-	}
+	return s.ValidateMap(jsonData)
 }
 
-// ValidateJSON unmarshal JSON and calls ValidateMap.
-func (s *Schema) ValidateJSON(data []byte) (bool, string, error) {
-	var m map[string]any
-	if err := json.Unmarshal(data, &m); err != nil {
-		return false, "", err
-	}
-
-	valid, details := s.ValidateMap(m)
-	return valid, details, nil
-}
-
-// ReadAndValidateJSON reads JSON from the reader and calls ValidateMap.
-func (s *Schema) ReadAndValidateJSON(reader io.Reader) (bool, string, error) {
-	var m map[string]any
-	if err := json.NewDecoder(reader).Decode(&m); err != nil {
-		return false, "", err
-	}
-
-	valid, details := s.ValidateMap(m)
-	return valid, details, nil
-}
-
-// ValidateYAML unmarshal YAML and calls ValidateMap.
-func (s *Schema) ValidateYAML(data []byte) (bool, string, error) {
+// ValidateYAML reads YAML and performs validation.
+func (s *Schema) ValidateYAML(data []byte) error {
 	var m map[string]any
 	if err := yaml.Unmarshal(data, &m); err != nil {
-		return false, "", err
+		return fmt.Errorf("%w: %v", ErrUnmarshal, err)
 	}
 
-	valid, details := s.ValidateMap(m)
-	return valid, details, nil
+	return s.ValidateMap(m)
 }
 
 // ReadAndValidateYAML reads YAML from the reader and calls ValidateMap.
-func (s *Schema) ReadAndValidateYAML(reader io.Reader) (bool, string, error) {
+func (s *Schema) ReadAndValidateYAML(reader io.Reader) error {
 	var m map[string]any
 
 	var buf bytes.Buffer
 	_, err := buf.ReadFrom(reader)
 	if err != nil {
-		return false, "", err
+		return err
 	}
 
 	if err := yaml.Unmarshal(buf.Bytes(), &m); err != nil {
-		return false, "", err
+		return fmt.Errorf("%w: %v", ErrUnmarshal, err)
 	}
 
-	valid, details := s.ValidateMap(m)
-	return valid, details, nil
+	return s.ValidateMap(m)
 }

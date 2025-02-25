@@ -2,17 +2,16 @@ package blueprint_test
 
 import (
 	"bytes"
+	"encoding/json"
 	"io"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
 
-	"github.com/goccy/go-json"
 	"github.com/google/go-cmp/cmp"
 	"github.com/invopop/yaml"
 	blueprint "github.com/osbuild/blueprint-schema"
-	"github.com/wI2L/jsondiff"
 )
 
 var writeFixtures = os.Getenv("WRITE_FIXTURES") != ""
@@ -79,7 +78,6 @@ func TestFix(t *testing.T) {
 		})
 	}
 
-	validJSONstring := "{ \"valid\": true }\n"
 	validationTest := func(t *testing.T, input, output string) {
 		t.Run("Valid/"+input, func(t *testing.T) {
 			t.Parallel()
@@ -129,11 +127,9 @@ func TestFix(t *testing.T) {
 				}
 				defer outputFile.Close()
 
-				valid, details := schema.ValidateMapStable(data)
-				if valid {
-					outputFile.WriteString(validJSONstring)
-				} else {
-					outputFile.WriteString(details)
+				err = schema.ValidateMap(data)
+				if err != nil {
+					outputFile.WriteString(err.Error())
 				}
 				t.Logf("Written %s", output)
 			} else {
@@ -142,31 +138,20 @@ func TestFix(t *testing.T) {
 					t.Fatal(err)
 				}
 				defer outputFile.Close()
-				want, err := io.ReadAll(outputFile)
+				wantBuf, err := io.ReadAll(outputFile)
 				if err != nil {
 					t.Fatal(err)
 				}
+				want := string(wantBuf)
 
-				valid, details := schema.ValidateMapStable(data)
-				if valid {
-					details = validJSONstring
-				}
-
-				// The root 'errors` field must be ignored because it is marshaled in random order as a string:
-				// "Property 'a', 'b' does not match the schema" where a and b can be in any order. This has no effect
-				// on testing tho since errors are reported via the 'details'. Reported upstream:
-				// https://github.com/kaptinlin/jsonschema/issues/28
-				diff, err := jsondiff.CompareJSON([]byte(want), []byte(details), jsondiff.Ignores("/errors"))
+				var got string
+				err = schema.ValidateMap(data)
 				if err != nil {
-					t.Fatal(err)
+					got = err.Error()
 				}
 
-				if len(diff) > 0 {
-					b, err := json.MarshalIndent(diff, "", "    ")
-					if err != nil {
-						t.Fatal(err)
-					}
-					t.Errorf("JSON diff for %q:\n%s", output, string(b))
+				if diff := cmp.Diff(want, got); diff != "" {
+					t.Errorf("validity mismatch (-want +got):\n%s", diff)
 				}
 			}
 		})
@@ -186,7 +171,7 @@ func TestFix(t *testing.T) {
 		direction := filepath.Ext(fileWithoutFormat)
 		baseFile := file[0 : len(fileWithoutFormat)-len(direction)]
 		outFile := baseFile + ".out.yaml"
-		validFile := baseFile + ".valid.json"
+		validFile := baseFile + ".valid.out"
 
 		marshalTest(t, file, outFile)
 		validationTest(t, file, validFile)

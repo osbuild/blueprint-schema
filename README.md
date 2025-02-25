@@ -61,42 +61,21 @@ The package has minimum dependencies, only two `yaml` libraries are needed (YAML
 
 To validate a YAML file:
 
-    go run ./cmd/validate-schema < example.yaml
+    go run ./cmd/validate-schema < fixtures/openscap-invalid-both.in.yaml 
 
 To validate a JSON file:
 
-    go run ./cmd/validate-schema -json < example.json
+    go run ./cmd/validate-schema -json < fixtures/minimal-j.in.json
 
-Returns 0 when schema is valid, 1 otherwise with detailed information formatted as JSON on the standard output. Example schema error reported by the validator:
+Returns 0 when schema is valid, 1 otherwise with detailed information printed on the standard output. Example schema error reported by the validator:
 
-```json
-{
-  "valid": false,
-  "evaluationPath": "",
-  "schemaLocation": "",
-  "instanceLocation": "",
-  "annotations": {
-    "description": "Blueprint type prototype\n\nThis is just a brief example of a common blueprint structure. Just few fields\nwere selected to demonstrate the JSON schema."
-  },
-  "errors": {
-    "properties": "Property 'name' does not match the schema",
-    "required": "Required property 'name' is missing"
-  },
-  "details": [
-    {
-      "valid": false,
-      "evaluationPath": "/properties/name",
-      "schemaLocation": "https://github.com/osbuild/blueprint-schema/blueprint#/properties/name",
-      "instanceLocation": "/name",
-      "annotations": {
-        "description": "Name of the blueprint"
-      },
-      "errors": {
-        "type": "Value is null but should be string"
-      }
-    }
-  ]
-}
+```
+validation failed: jsonschema validation failed with 'blueprint-schema.json'
+- at '/openscap': oneOf failed, none matched
+  - at '/openscap/tailoring': oneOf failed, none matched
+    - at '/openscap/tailoring': oneOf failed, subschemas 0, 1 matched
+    - at '/openscap/tailoring': got object, want null
+  - at '/openscap': got object, want nullexit status 1
 ```
 
 To validate the JSON Schema, use `CompileSchema` function:
@@ -111,17 +90,14 @@ import (
 )
 
 func main() {
-    // compile the schema which embedded as part of this package
     schema, _ := blueprint.CompileSchema()
+    err := schema.ReadAndValidateYAML(os.Stdin)
 
-    // returns bool, string and err
-    valid, out, _ := schema.ReadAndValidateYAML(os.Stdin)
-
-    println(valid, out)
+    println(err)
 }
 ```
 
-Read [jsonschema](https://github.com/kaptinlin/jsonschema) library documentation for more information about the error output. The CLI utility provides the same output format as the validation library.
+Read [jsonschema](https://github.com/santhosh-tekuri/jsonschema) library documentation for more information about the error output. The CLI utility provides the same output format as the validation library.
 
 ## Testing
 
@@ -129,15 +105,15 @@ A fixture-based test is available in the [fixtures/](fixtures/) directory, each 
 
 * `filename.in.yaml` - input file (can be YAML or JSON)
 * `filename.out.yaml` - output file after parsing and write (always YAML)
-* `filename.valid.json` - output of the validator (always JSON)
+* `filename.valid.out` - output of the validator (always JSON)
 
-Each `*.in.*` file is loaded, YAML converted to JSON (if needed), parsed into the blueprint type and written to YAML `*.out.yaml` file. At the same time, the data is loaded into `map[string]any` and validated against the JSON Schema and results written to `*.valid.json`.
+Each `*.in.*` file is loaded, YAML converted to JSON (if needed), parsed into the blueprint type and written to YAML `*.out.yaml` file. At the same time, the data is loaded into `map[string]any` and validated against the JSON Schema and results written to `*.valid.out`.
 
 To run tests do:
 
     make test
 
-To regenerate `*.out.yaml` and `*.valid.json` files (after a breaking change), do:
+To regenerate `*.out.yaml` and `*.valid.out` files (after a breaking change), do:
 
     make write-fixtures
 
@@ -151,7 +127,6 @@ For VS Code with Red Hat's [YAML plugin](https://github.com/redhat-developer/vsc
         {
             "fileMatch": [
                 "/fixtures/*.json",
-                "!/fixtures/*.valid.json"
             ],
             "url": "https://raw.githubusercontent.com/osbuild/blueprint-schema/refs/heads/main/blueprint-schema.json"
         }
@@ -165,16 +140,17 @@ Keep in mind that relative paths are not supported, use absolute URL instead. Fo
 
 ## Links
 
-* https://github.com/invopop/jsonschema - library to generate JSON Schema from Go types
-* https://github.com/kaptinlin/jsonschema - library to validate JSON Schema
 * https://github.com/invopop/yaml - library to convert YAML to JSON and vice versa
+* https://github.com/invopop/jsonschema - library to generate JSON Schema from Go types
+* https://github.com/santhosh-tekuri/jsonschema - library to validate JSON Schema
 
 ## TODO
 
-* Finalize the schema example
-* Finalize the schema itself
-* Write validation tests for all fields
+* Finalize the schema
 * Implement conversion tools in both crc/images repos in ./cmd subdirectories and use those tools via "go run" command to generate a nice example set:
 * https://github.com/osbuild/image-builder-crc/blob/main/internal/v1/api.go#L663
 * https://github.com/osbuild/blueprint-schema/blob/main/blueprint.go#L63
 * Generate markdown/HTML documentation for the schema with examples
+* Github page with JSON/YAML editors
+* Example loading on github page
+* WASI/WASM conversion API and convertor on github page

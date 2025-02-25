@@ -4,7 +4,7 @@ import (
 	"flag"
 	"os"
 
-	"github.com/osbuild/blueprint-schema/validate"
+	"github.com/osbuild/blueprint-schema"
 )
 
 func main() {
@@ -13,28 +13,22 @@ func main() {
 
 	flag.Parse()
 
-	schema, err := validate.CompileSchema()
+	schema, err := blueprint.CompileSchema()
 	if err != nil {
 		panic(err)
 	}
-
-	var valid bool
-	var out string
 
 	if *json {
-		valid, out, err = schema.ReadAndValidateJSON(os.Stdin)
+		err = schema.ReadAndValidateJSON(os.Stdin)
 	} else {
-		valid, out, err = schema.ReadAndValidateYAML(os.Stdin)
+		err = schema.ReadAndValidateYAML(os.Stdin)
 	}
+
+	if !*quiet && err != nil {
+		os.Stdout.WriteString(err.Error())
+	}
+
 	if err != nil {
-		panic(err)
-	}
-
-	if !*quiet {
-		os.Stdout.WriteString(out)
-	}
-
-	if !valid {
 		os.Exit(1)
 	}
 }
