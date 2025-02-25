@@ -99,9 +99,7 @@ Returns 0 when schema is valid, 1 otherwise with detailed information formatted 
 }
 ```
 
-## Validating the schema in Go
-
-To minimize dependencies of the main `blueprint` package, a separate package named `validate` must be used. Read [jsonschema](https://github.com/kaptinlin/jsonschema) library documentation for more information about the error output.
+To validate the JSON Schema, use `CompileSchema` function:
 
 ```go
 package main
@@ -109,12 +107,12 @@ package main
 import (
     "os"
 
-    "github.com/osbuild/blueprint-schema/validate"
+    blueprint "github.com/osbuild/blueprint-schema"
 )
 
 func main() {
     // compile the schema which embedded as part of this package
-    schema, _ := validate.CompileSchema()
+    schema, _ := blueprint.CompileSchema()
 
     // returns bool, string and err
     valid, out, _ := schema.ReadAndValidateYAML(os.Stdin)
@@ -123,7 +121,7 @@ func main() {
 }
 ```
 
-The CLI utility provides the same output format as the validation library.
+Read [jsonschema](https://github.com/kaptinlin/jsonschema) library documentation for more information about the error output. The CLI utility provides the same output format as the validation library.
 
 ## Testing
 
@@ -175,7 +173,6 @@ Keep in mind that relative paths are not supported, use absolute URL instead. Fo
 
 * Finalize the schema example
 * Finalize the schema itself
-* Get rid of validate subpackage as schema is required anyway
 * Write validation tests for all fields
 * Implement conversion tools in both crc/images repos in ./cmd subdirectories and use those tools via "go run" command to generate a nice example set:
 * https://github.com/osbuild/image-builder-crc/blob/main/internal/v1/api.go#L663

@@ -1,4 +1,4 @@
-package validate_test
+package blueprint_test
 
 import (
 	"bytes"
@@ -12,7 +12,6 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/invopop/yaml"
 	blueprint "github.com/osbuild/blueprint-schema"
-	validate "github.com/osbuild/blueprint-schema/validate"
 	"github.com/wI2L/jsondiff"
 )
 
@@ -119,7 +118,7 @@ func TestFix(t *testing.T) {
 				t.Fatalf("Unknown fixture extension: %s", input)
 			}
 
-			schema, err := validate.CompileSchema()
+			schema, err := blueprint.CompileSchema()
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -130,7 +129,7 @@ func TestFix(t *testing.T) {
 				}
 				defer outputFile.Close()
 
-				valid, details := schema.ValidateMap(data)
+				valid, details := schema.ValidateMapStable(data)
 				if valid {
 					outputFile.WriteString(validJSONstring)
 				} else {
@@ -148,7 +147,7 @@ func TestFix(t *testing.T) {
 					t.Fatal(err)
 				}
 
-				valid, details := schema.ValidateMap(data)
+				valid, details := schema.ValidateMapStable(data)
 				if valid {
 					details = validJSONstring
 				}
@@ -173,7 +172,7 @@ func TestFix(t *testing.T) {
 		})
 	}
 
-	files, err := filepath.Glob("../fixtures/*.in.*")
+	files, err := filepath.Glob("fixtures/*.in.*")
 	if err != nil {
 		t.Fatal(err)
 	}
