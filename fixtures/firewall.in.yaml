@@ -7,7 +7,6 @@ network:
         enabled: false
       - service: "ssh"
         protocol: tcp
-    ports:
       - port: 53
         protocol: "any"
         enabled: false

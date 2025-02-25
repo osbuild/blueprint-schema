@@ -79,13 +79,12 @@ registration:
     diun_pub_key_root_certs: ""
     di_mfg_string_type_mac_iface: ""
 network:
-  firewall: # XXX merge services and ports into one? no preference.
+  firewall:
     services:
       - service: "ssh"
         protocol: "tcp" # default value
         enabled: true # default value
       - service: "dhcp"
-    ports:
       - port: 53
         protocol: "both"
         enabled: false

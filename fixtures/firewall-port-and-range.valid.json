@@ -25,7 +25,7 @@
       "schemaLocation": "",
       "instanceLocation": "",
       "errors": {
-        "properties": "Property 'ports' does not match the schema"
+        "properties": "Property 'services' does not match the schema"
       }
     },
     {
@@ -46,7 +46,7 @@
       "schemaLocation": "https://github.com/osbuild/blueprint-schema/blueprint#/oneOf/0",
       "instanceLocation": "",
       "annotations": {
-        "description": "Ports or ranges to enable or disable"
+        "description": "Services to enable or disable. The service can be defined via an assigned IANA name,\nport number or port range.\n\nServices are processed in order, when a service is disabled and then accidentally enabled\nvia a port or a port range, the service will be enabled in the end."
       },
       "errors": {
         "items": "Item at index 0 does not match the schema"
@@ -102,9 +102,9 @@
     },
     {
       "valid": false,
-      "evaluationPath": "/properties/ports",
-      "schemaLocation": "https://github.com/osbuild/blueprint-schema/blueprint#/properties/ports",
-      "instanceLocation": "/ports",
+      "evaluationPath": "/properties/services",
+      "schemaLocation": "https://github.com/osbuild/blueprint-schema/blueprint#/properties/services",
+      "instanceLocation": "/services",
       "errors": {
         "oneOf": "Value does not match the oneOf schema"
       }

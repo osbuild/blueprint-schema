@@ -216,43 +216,13 @@
           "oneOf": [
             {
               "items": {
-                "properties": {
-                  "service": {
-                    "type": "string"
-                  },
-                  "protocol": {
-                    "type": "string",
-                    "enum": [
-                      "tcp",
-                      "udp",
-                      "any"
-                    ],
-                    "default": "any"
-                  },
-                  "enabled": {
-                    "type": "boolean",
-                    "default": true
-                  }
-                },
-                "additionalProperties": false,
-                "type": "object",
-                "required": [
-                  "service"
-                ]
-              },
-              "type": "array",
-              "description": "Services to enable or disable. The service name must be from the IANA list.\nAlternatively, you can specify a port or range using the ports field."
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "ports": {
-          "oneOf": [
-            {
-              "items": {
                 "oneOf": [
+                  {
+                    "required": [
+                      "service"
+                    ],
+                    "title": "firewall_service"
+                  },
                   {
                     "required": [
                       "port"
@@ -268,6 +238,9 @@
                   }
                 ],
                 "properties": {
+                  "service": {
+                    "type": "string"
+                  },
                   "port": {
                     "type": "integer",
                     "maximum": 65535,
@@ -301,7 +274,7 @@
                 "type": "object"
               },
               "type": "array",
-              "description": "Ports or ranges to enable or disable"
+              "description": "Services to enable or disable. The service can be defined via an assigned IANA name,\nport number or port range.\n\nServices are processed in order, when a service is disabled and then accidentally enabled\nvia a port or a port range, the service will be enabled in the end."
             },
             {
               "type": "null"

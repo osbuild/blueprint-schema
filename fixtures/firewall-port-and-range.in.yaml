@@ -1,7 +1,7 @@
 name: "Firewall example - port and range specified"
 network:
   firewall:
-    ports:
+    services:
       - port: 1301
         from: 1302
         to: 1303
