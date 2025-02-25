@@ -231,6 +231,24 @@
       },
       "else": {
         "properties": {
+          "contents": {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "base64"
+                  ],
+                  "title": "fsnodes_base64"
+                },
+                {
+                  "required": [
+                    "text"
+                  ],
+                  "title": "fsnodes_text"
+                }
+              ]
+            }
+          },
           "mode": {
             "default": 493
           }

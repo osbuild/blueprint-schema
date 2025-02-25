@@ -88,8 +88,23 @@ func (FSNode) JSONSchemaExtend(s *jsonschema.Schema) {
 		Properties: pThen,
 	}
 
-	// ...else set default mode for directories
 	pElse := jsonschema.NewProperties()
+	// ...else contents must not be set
+	pElse.Set("contents", &jsonschema.Schema{
+		Not: &jsonschema.Schema{
+			AnyOf: []*jsonschema.Schema{
+				{
+					Required: []string{"base64"},
+					Title:    "fsnodes_base64",
+				},
+				{
+					Required: []string{"text"},
+					Title:    "fsnodes_text",
+				},
+			},
+		},
+	})
+	// ...and set default mode for directories
 	pElse.Set("mode", &jsonschema.Schema{
 		Default: 0755,
 	})

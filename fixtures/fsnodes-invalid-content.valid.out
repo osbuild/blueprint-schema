@@ -1,0 +1,6 @@
+validation failed: jsonschema validation failed with 'blueprint-schema.json'
+- at '/fsnodes': oneOf failed, none matched
+  - at '/fsnodes': validation failed
+    - at '/fsnodes/0/contents': not failed
+    - at '/fsnodes/1/contents': not failed
+  - at '/fsnodes': got array, want null
