@@ -50,5 +50,9 @@ type Blueprint struct {
 	// From RHEL 8.7 & RHEL 9.1 support has been added for OpenSCAP build-time remediation
 	OpenSCAP *OpenSCAP `json:"openscap,omitempty" jsonschema:"nullable"`
 
+	// Systemd details
 	Systemd *Systemd `json:"systemd,omitempty" jsonschema:"nullable"`
+
+	// File system nodes details
+	FSNodes []FSNode `json:"fsnodes,omitempty" jsonschema:"nullable"`
 }

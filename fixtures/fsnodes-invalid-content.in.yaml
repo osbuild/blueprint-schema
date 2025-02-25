@@ -1,0 +1,10 @@
+name: "Blueprint example: fsnodes"
+fsnodes:
+  - path: "/var/tmp/dir"
+    type: "dir"
+    contents:
+      text: "test" # invalid
+  - path: "/var/tmp/dir"
+    type: "dir"
+    contents:
+      base64: "test" # invalid

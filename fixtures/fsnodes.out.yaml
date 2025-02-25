@@ -1,0 +1,17 @@
+fsnodes:
+    - ensure_parents: true
+      group: lzap
+      mode: 488
+      path: /var/tmp/dir
+      state: present
+      type: dir
+      user: lzap
+    - contents:
+        base64: LS0t
+      mode: 416
+      path: /var/tmp/dir/file1
+      type: file
+    - contents:
+        text: test
+      path: /var/tmp/dir/file2
+name: 'Blueprint example: fsnodes'

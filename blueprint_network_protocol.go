@@ -12,7 +12,7 @@ type NetworkProtocol string
 var ErrInvalidNetworkProtocol = errors.New("invalid network protocol")
 
 func (np *NetworkProtocol) UnmarshalJSON(data []byte) error {
-	if len(data) < 5 {
+	if data[0] != '"' || data[len(data)-1] != '"' {
 		return fmt.Errorf("%w: %q", ErrInvalidNetworkProtocol, string(data))
 	}
 	switch string(data[1 : len(data)-1]) {
