@@ -239,7 +239,8 @@
                 ],
                 "properties": {
                   "service": {
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 2
                   },
                   "port": {
                     "type": "integer",
@@ -571,5 +572,5 @@
   "required": [
     "name"
   ],
-  "description": "Blueprint type prototype\n\nThis is just a brief example of a common blueprint structure. Just few fields\nwere selected to demonstrate the JSON schema.\n\nThese Go comments do appear in the JSON Schema so the final version of the\nblueprint will be broken up into multiple files and the comments will be\nmoch more extensive.\n\nTODO: Break all anonymous struct into named structs. Break this .go file into\nmultiple files."
+  "description": "Image Builder new blueprint schema.\n\nTHIS IS WORK IN PROGRESS"
 }
