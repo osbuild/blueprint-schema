@@ -1,0 +1,15 @@
+accounts:
+    groups:
+        - name: -the-same-for-groups
+    users:
+        - expires: "0001-01-01T00:00:00Z"
+          name: -names-starting-with-dash
+        - expires: "0001-01-01T00:00:00Z"
+          name: all-names-longer-than-256-characters-------------------------------------- -------------------------------------------------------------------------- -------------------------------------------------------------------------- --------------------------------------------------------------------------
+        - expires: "0001-01-01T00:00:00Z"
+          name: names-with-diakritics-žluťoučký-kůň
+        - expires: "0001-01-01T00:00:00Z"
+          name: names with spaces
+        - expires: "0001-01-01T00:00:00Z"
+          name: uid-0
+name: 'Blueprint example: accounts'

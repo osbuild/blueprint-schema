@@ -1,0 +1,15 @@
+name: "Blueprint example: accounts"
+accounts:
+  users:
+    - name: "-names-starting-with-dash"
+    - name: >-
+        all-names-longer-than-256-characters--------------------------------------
+        --------------------------------------------------------------------------
+        --------------------------------------------------------------------------
+        --------------------------------------------------------------------------
+    - name: "names-with-diakritics-žluťoučký-kůň"
+    - name: "names with spaces"
+    - name: "uid-0"
+      uid: 0
+  groups:
+    - name: "-the-same-for-groups"

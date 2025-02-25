@@ -91,7 +91,6 @@ network:
       - from: 60000
         to: 60010
         protocol: "udp"
-# schema done up to this point
 accounts:
   users:
     - name: "lzap"
@@ -108,6 +107,7 @@ accounts:
   groups:
     - name: "operators"
       gid: 1042
+# schema done up to this point
 timedate:
   timezone: "Europe/Prague"
   ntp_servers: ["0.north-america.pool.ntp.org", "1.north-america.pool.ntp.org"]

@@ -36,6 +36,8 @@ type Blueprint struct {
 	// Registration details
 	Registration *Registration `json:"registration,omitempty" jsonschema:"nullable"`
 
+	Accounts *Accounts `json:"accounts,omitempty" jsonschema:"nullable"`
+
 	// Networking details
 	Network *Network `json:"network,omitempty" jsonschema:"nullable"`
 

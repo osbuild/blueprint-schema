@@ -1,0 +1,33 @@
+accounts:
+    groups:
+        - gid: 1042
+          name: operators
+        - gid: 1313
+          name: kiosk
+    users:
+        - description: Lukáš Zapletal
+          expires: "2050-05-13T00:00:00Z"
+          gid: 1001
+          groups:
+            - wheel
+            - operators
+          home: /home/lzap
+          name: lzap
+          password: $1$yLbp23ib$BNYcV9CQV17e1460PNrVe.
+          shell: /usr/bin/bash
+          ssh_keys:
+            - ssh-key 1234
+          uid: 1001
+        - expires: "0001-01-01T00:00:00Z"
+          name: dash-allowed
+        - expires: "0001-01-01T00:00:00Z"
+          name: underscore_allowed
+        - expires: "0001-01-01T00:00:00Z"
+          name: dot.allowed
+        - expires: "0001-01-01T00:00:00Z"
+          name: .head-dot-allowed-too
+        - expires: "0001-01-01T00:00:00Z"
+          name: "123456789"
+        - expires: "0001-01-01T00:00:00Z"
+          name: trailing-dollar-for-samba$
+name: 'Blueprint example: accounts'

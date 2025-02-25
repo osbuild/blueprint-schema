@@ -1,0 +1,25 @@
+name: "Blueprint example: accounts"
+accounts:
+  users:
+    - name: "lzap"
+      description: "Lukáš Zapletal"
+      password: "$1$yLbp23ib$BNYcV9CQV17e1460PNrVe."
+      ssh_keys:
+        - "ssh-key 1234"
+      home: "/home/lzap"
+      shell: "/usr/bin/bash"
+      uid: 1001
+      gid: 1001
+      groups: ["wheel", "operators"]
+      expires: 2050-05-13
+    - name: "dash-allowed"
+    - name: "underscore_allowed"
+    - name: "dot.allowed"
+    - name: ".head-dot-allowed-too"
+    - name: "123456789" # numbers allowed everywhere
+    - name: "trailing-dollar-for-samba$"
+  groups:
+    - name: "operators"
+      gid: 1042
+    - name: "kiosk"
+      gid: 1313

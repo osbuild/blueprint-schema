@@ -2,6 +2,41 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/osbuild/blueprint-schema/blueprint",
   "$defs": {
+    "Accounts": {
+      "properties": {
+        "users": {
+          "oneOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/UserAccount"
+              },
+              "type": "array",
+              "description": "Operating system user accounts to be created on the image."
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "groups": {
+          "oneOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/GroupAccount"
+              },
+              "type": "array",
+              "description": "Operating system group accounts to be created on the image."
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "accounts:\n\n\tusers:\n\t  - name: \"lzap\"\n\t    description: \"\"\n\t    password: \"\"\n\t    ssh_keys:\n\t      - \"ssh-key 1234\"\n\t    home: \"/home/lzap\"\n\t    shell: \"/usr/bin/bash\"\n\t    uid: 1001\n\t    gid: 1001\n\t    groups: [\"wheel\", \"operators\"]\n\t    expires: 2050-05-13\n\tgroups:\n\t  - name: \"operators\"\n\t    gid: 1042"
+    },
     "ConnectorRegistration": {
       "properties": {
         "enabled": {
@@ -162,6 +197,26 @@
       },
       "additionalProperties": false,
       "type": "object"
+    },
+    "GroupAccount": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "maxLength": 256,
+          "pattern": "^[a-zA-Z0-9_.][a-zA-Z0-9_.$-]*$",
+          "description": "Group name. Accepted characters: lowercase letters, digits, underscores, dollars, and hyphens.\nName must not start with a hyphen. Maximum length is 256 characters. The validation pattern is\na relaxed version of https://github.com/shadow-maint/shadow/blob/master/lib/chkname.c"
+        },
+        "gid": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "The group ID (GID) of the group."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name"
+      ]
     },
     "InsightsRegistration": {
       "properties": {
@@ -471,6 +526,67 @@
         "repository_management",
         "auto_registration"
       ]
+    },
+    "UserAccount": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "maxLength": 256,
+          "pattern": "^[a-zA-Z0-9_.][a-zA-Z0-9_.$-]*$",
+          "description": "Account name. Accepted characters: lowercase letters, digits, underscores, dollars, and hyphens.\nName must not start with a hyphen. Maximum length is 256 characters. The validation pattern is\na relaxed version of https://github.com/shadow-maint/shadow/blob/master/lib/chkname.c"
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 4096,
+          "description": "A longer description of the account."
+        },
+        "password": {
+          "type": "string",
+          "description": "Password either in plain text or encrypted form. If the password is not provided, the account will be\nlocked and the user will not be able to log in with a password. The password can be encrypted using\nthe crypt(3) function. The format of the encrypted password is $id$salt$hashed,\nwhere $id is the algorithm used (1, 5, 6, or 2a)."
+        },
+        "ssh_keys": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "SSH keys to be added to the account's authorized_keys file."
+        },
+        "home": {
+          "type": "string",
+          "description": "The home directory of the user."
+        },
+        "shell": {
+          "type": "string",
+          "description": "The shell of the user."
+        },
+        "uid": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "The user ID (UID) of the user."
+        },
+        "gid": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "The primary group ID (GID) of the user."
+        },
+        "groups": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "Additional groups that the user should be a member of."
+        },
+        "expires": {
+          "type": "string",
+          "format": "date",
+          "description": "The expiration date of the account in the format YYYY-MM-DD."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name"
+      ]
     }
   },
   "properties": {
@@ -538,6 +654,16 @@
         {
           "$ref": "#/$defs/Registration",
           "description": "Registration details"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "accounts": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/Accounts"
         },
         {
           "type": "null"
