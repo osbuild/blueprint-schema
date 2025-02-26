@@ -114,6 +114,19 @@
       "additionalProperties": false,
       "type": "object"
     },
+    "CACerts": {
+      "properties": {
+        "cert": {
+          "type": "string",
+          "description": "The PEM-encoded certificate."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "cert"
+      ]
+    },
     "ConnectorRegistration": {
       "properties": {
         "enabled": {
@@ -1155,6 +1168,20 @@
         {
           "$ref": "#/$defs/Installer",
           "description": "Extra customization for Anaconda installer (ISO) and Edge/IOT simplified installer image types."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "cacerts": {
+      "oneOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/CACerts"
+          },
+          "type": "array",
+          "description": "The CA certificates to be added to the image. The certificates are added to the system-wide CA trust store.\nThe certificates are added to the /etc/pki/ca-trust/source/anchors/ directory and the update-ca-trust command\nis run to update the system-wide CA trust store."
         },
         {
           "type": "null"

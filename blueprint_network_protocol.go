@@ -8,6 +8,12 @@ import (
 // NetworkProtocol type, one of: tcp, udp, any
 type NetworkProtocol string
 
+const (
+	NetworkProtocolTCP NetworkProtocol = "tcp"
+	NetworkProtocolUDP NetworkProtocol = "udp"
+	NetworkProtocolAny NetworkProtocol = "any"
+)
+
 // ErrInvalidNetworkProtocol is returned when the NetworkProtocol is invalid
 var ErrInvalidNetworkProtocol = errors.New("invalid network protocol")
 

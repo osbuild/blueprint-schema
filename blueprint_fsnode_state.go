@@ -8,6 +8,11 @@ import (
 // FSNodeState type, one of: file, dir
 type FSNodeState string
 
+const (
+	FSNodeStatePresent FSNodeState = "present"
+	FSNodeStateAbsent  FSNodeState = "absent"
+)
+
 // ErrInvalidFSNodeState is returned when enum value is invalid
 var ErrInvalidFSNodeState = errors.New("unexpected file system state")
 

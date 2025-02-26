@@ -97,4 +97,11 @@ type Blueprint struct {
 
 	// Extra customization for Anaconda installer (ISO) and Edge/IOT simplified installer image types.
 	Installer *Installer `json:"installer,omitempty" jsonschema:"nullable"`
+
+	// The CA certificates to be added to the image. The certificates are added to the system-wide CA trust store.
+	// The certificates are added to the /etc/pki/ca-trust/source/anchors/ directory and the update-ca-trust command
+	// is run to update the system-wide CA trust store.
+	CACerts []CACerts `json:"cacerts,omitempty" jsonschema:"nullable"`
+
+	Storage *Storage `json:"storage,omitempty" jsonschema:"nullable"`
 }

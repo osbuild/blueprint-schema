@@ -146,27 +146,19 @@ installer:
     sudo_nopasswd: ["lzap"]
     enabled_modules: ["org.fedoraproject.Anaconda.Modules.Subscription"]
     disabled_modules: []
-    kickstart: ""
+    kickstart_text: ""
   coreos:
     installation_device: "/dev/vda"
-# schema done up to this point
-repositories:
-  - type: "dnf" # the default and the only supported value
-    id: ""
-    name: ""
-    filename: ""
-    base_urls: [""]
-    mirror_list: ""
-    metalink: ""
-    gpg_keys: [""]
-    gpg_check: true
-    gpg_check_repo: true
-    priority: 99
-    ssl_verify: true
-    module_hotfixes: false
-    usage:
-      install: true # use repo for image build
-      configure: true # configure repo for dnf
+cacerts:
+  - cert: "pem encoded cert"
+openscap:
+  profile_id: "xccdf_org.ssgproject.content_profile_cis"
+  datastream: "/usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml"
+  tailoring:
+    selected: []
+    unselected: ["xccdf_org.ssgproject.content_rule_grub2_password"]
+    json_profile_id: "name-of-profile-used-in-json-tailoring-file"
+    json_filepath: "file:///some/path/tailoring-file.json"
 storage: # applies only to disc images
   type: "gpt" # mbr or gpt
   minsize: "150 GiB"
@@ -190,13 +182,22 @@ storage: # applies only to disc images
       subvolumes:
         - name: "name"
           mountpoint: "/opt/name"
-cacerts:
-  - cert: "pem encoded cert"
-openscap:
-  profile_id: "xccdf_org.ssgproject.content_profile_cis"
-  datastream: "/usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml"
-  tailoring:
-    selected: []
-    unselected: ["xccdf_org.ssgproject.content_rule_grub2_password"]
-    json_profile_id: "name-of-profile-used-in-json-tailoring-file"
-    json_filepath: "file:///some/path/tailoring-file.json"
+# schema done up to this point
+# move to /dnf field
+repositories:
+  - type: "dnf" # the default and the only supported value
+    id: ""
+    name: ""
+    filename: ""
+    base_urls: [""]
+    mirror_list: ""
+    metalink: ""
+    gpg_keys: [""]
+    gpg_check: true
+    gpg_check_repo: true
+    priority: 99
+    ssl_verify: true
+    module_hotfixes: false
+    usage:
+      install: true # use repo for image build
+      configure: true # configure repo for dnf
