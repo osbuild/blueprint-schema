@@ -1,0 +1,5 @@
+name: "Blueprint example: ingition invalid"
+ignition:
+  embedded_text: ""
+  embedded_base64: ""
+  firstboot_url: ""

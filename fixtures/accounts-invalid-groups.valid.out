@@ -1,0 +1,13 @@
+validation failed: jsonschema validation failed with 'blueprint-schema.json'
+- at '/accounts': oneOf failed, none matched
+  - at '/accounts/groups': oneOf failed, none matched
+    - at '/accounts/groups': validation failed
+      - at '/accounts/groups/0/name': '-names-starting-with-dash' does not match pattern '^[a-zA-Z0-9_.][a-zA-Z0-9_.$-]*$'
+      - at '/accounts/groups/1': validation failed
+        - at '/accounts/groups/1/name': maxLength: got 299, want 256
+        - at '/accounts/groups/1/name': 'all-names-longer-than-256-characters-------------------------------------- -------------------------------------------------------------------------- -------------------------------------------------------------------------- --------------------------------------------------------------------------' does not match pattern '^[a-zA-Z0-9_.][a-zA-Z0-9_.$-]*$'
+      - at '/accounts/groups/2/name': 'names-with-diakritics-žluťoučký-kůň' does not match pattern '^[a-zA-Z0-9_.][a-zA-Z0-9_.$-]*$'
+      - at '/accounts/groups/3/name': 'names with spaces' does not match pattern '^[a-zA-Z0-9_.][a-zA-Z0-9_.$-]*$'
+      - at '/accounts/groups/4': additional properties 'uid' not allowed
+    - at '/accounts/groups': got array, want null
+  - at '/accounts': got object, want null

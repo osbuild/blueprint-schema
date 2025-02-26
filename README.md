@@ -152,6 +152,7 @@ Only after some of these fields are known, then additional validation can be don
 
 * Field `installer.anaconda` does not apply for any image types which are not installers.
 * Field `openscap` cannot be used for distros older than a specific version.
+* Field `ignition` is only available for iot/edge image types.
 
 There are two options how to achieve that:
 

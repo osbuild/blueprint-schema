@@ -1,0 +1,19 @@
+ignition:
+    embedded_text: |
+        {
+          "ignition": {
+            "version": "3.1.0"
+          },
+          "storage": {
+            "files": [
+              {
+                "path": "/etc/hostname",
+                "mode": 420,
+                "contents": {
+                  "source": "data:,myhostname"
+                }
+              }
+            ]
+          }
+        }
+name: 'Blueprint example: ingition'

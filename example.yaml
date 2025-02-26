@@ -137,7 +137,8 @@ fsnodes: # new feature (was file/dir)
     contents:
       text: "test" # useful for text
 ignition:
-  embedded: ""
+  embedded_text: ""
+  embedded_base64: ""
   firstboot_url: ""
 installer:
   anaconda: # only effective for certain image types

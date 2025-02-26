@@ -11,5 +11,3 @@ accounts:
     - name: "names with spaces"
     - name: "uid-0"
       uid: 0
-  groups:
-    - name: "-the-same-for-groups"

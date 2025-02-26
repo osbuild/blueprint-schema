@@ -87,4 +87,11 @@ type Blueprint struct {
 	// the directory already exists in the image, the image build will fail. The intention is to prevent changing
 	// the ownership or permissions of existing directories.
 	FSNodes []FSNode `json:"fsnodes,omitempty" jsonschema:"nullable"`
+
+	// Provides Ignition configuration files to be used in edge-raw-image and edge-simplified-installer images.
+	// Check the RHEL for Edge butane specification for a description of the supported configuration options.
+	//
+	// The blueprint configuration can be done either by embedding an Ignition configuration file into the image,
+	// or providing a provisioning URL that will be fetched at first boot.
+	Ignition *Ignition `json:"ignition,omitempty" jsonschema:"nullable"`
 }
