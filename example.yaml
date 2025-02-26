@@ -117,7 +117,6 @@ systemd:
   enabled: ["sshd.service", "backup.timer"]
   disabled: ["tuned", "cupsd"]
   masked: []
-# schema done up to this point
 fsnodes: # new feature (was file/dir)
   - path: "/var/tmp/dir"
     type: "dir" # file as the default (file, dir)
@@ -149,6 +148,7 @@ installer:
     kickstart: ""
   coreos:
     installation_device: "/dev/vda"
+# schema done up to this point
 repositories:
   - type: "dnf" # the default and the only supported value
     id: ""

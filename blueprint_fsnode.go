@@ -2,25 +2,6 @@ package blueprint
 
 import "github.com/invopop/jsonschema"
 
-// fsnodes: # new feature (was file/dir)
-//   - path: "/var/tmp/dir"
-//     type: "dir" # file as the default (file, dir)
-//     state: "present" # the default
-//     mode: 0755 # 0700 default
-//     user: "lzap" # 0 default
-//     group: "lzap" # 0 default
-//     ensure_parents: true # false default
-//   - path: "/var/tmp/dir/file1"
-//     type: "file"
-//     state: "present"
-//     mode: 0644
-//     user: "lzap"
-//     group: "lzap"
-//     contents:
-//     base64: "LS0t" # useful for binaries
-//   - path: "/var/tmp/dir/file2"
-//     contents:
-//     text: "test" # useful for text
 type FSNode struct {
 	// Path is the absolute path to the file or directory.
 	Path string `json:"path" jsonschema:"required,pattern=^/"`
@@ -41,7 +22,7 @@ type FSNode struct {
 	Group string `json:"group,omitempty" jsonschema:"default=root"`
 
 	// EnsureParents is a boolean that determines if the parent directories should be created if they do not exist.
-	EnsureParent bool `json:"ensure_parents,omitempty" jsonschema:"default=false"`
+	EnsureParents bool `json:"ensure_parents,omitempty" jsonschema:"default=false"`
 
 	// Contents is the file system node contents. When not present, an empty file is created.
 	Contents *FSNodeContents `json:"contents,omitempty" jsonschema:"nullable"`

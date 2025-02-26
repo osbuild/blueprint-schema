@@ -11,6 +11,9 @@ type NetworkFirewall struct {
 	//
 	// Services are processed in order, when a service is disabled and then accidentally enabled
 	// via a port or a port range, the service will be enabled in the end.
+	//
+	// By default the firewall blocks all access, except for services that enable their ports
+	// explicitly such as the sshd.
 	Services []struct {
 		// Service name from the IANA list. Examples: ssh, http, https, etc.
 		//

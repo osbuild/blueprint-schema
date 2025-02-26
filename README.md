@@ -123,7 +123,6 @@ For VS Code with Red Hat's [YAML plugin](https://github.com/redhat-developer/vsc
 
 ```
     "json.schemas": [
-
         {
             "fileMatch": [
                 "/fixtures/*.json",
@@ -138,6 +137,56 @@ For VS Code with Red Hat's [YAML plugin](https://github.com/redhat-developer/vsc
 
 Keep in mind that relative paths are not supported, use absolute URL instead. For example: `file:///home/lzap/blueprint-schema/blueprint-schema.json`.
 
+## Attestation
+
+Blueprint does not carry enough information to build an image, additional input is necessary:
+
+* Image type: `ami`, `vhd`, `gce`, `qcow2`, `tar`, `vmdk`, `image-installer` and others
+* Distribution: `fedora`, `centos` or `rhel`
+* Version: `42` or `9.5`
+* Architecture: `x86_64` or `arm64`
+* Upload information (AWS/Azure/GCP credentials)
+* Additional `ostree` information (optional)
+
+Only after some of these fields are known, then additional validation can be done. For example:
+
+* Field `installer.anaconda` does not apply for any image types which are not installers.
+* Field `openscap` cannot be used for distros older than a specific version.
+
+There are two options how to achieve that:
+
+### Via JSON Schema
+
+```yaml
+---
+name: "Example of a blueprint attestation"
+attestation:
+    type: ami
+    distribution: rhel
+    version: 8.3
+...
+```
+
+* Pretty complex and unreadable (e.g. test for distro version string - regular expression)
+* Additional input must be part of the schema itself.
+* Users have a great editing experience (if they fill the attestation in)
+
+### Via Go code
+
+```go
+aData := Attestation{
+    Type: "ami"
+    Distribution: "rhel"
+    Version: "8.3"
+}
+schema.ReadAndAttestYAML(os.Stdin, aData)
+```
+
+* Limitless validations.
+* Easy to work with.
+* When compiled to WASM/WASI could be accessible through a web browser editor.
+* Conversions to/from YAML/CRC-JSON will be done in Go anyway.
+
 ## Links
 
 * https://github.com/invopop/yaml - library to convert YAML to JSON and vice versa
@@ -151,6 +200,7 @@ Keep in mind that relative paths are not supported, use absolute URL instead. Fo
 * https://github.com/osbuild/image-builder-crc/blob/main/internal/v1/api.go#L663
 * https://github.com/osbuild/blueprint-schema/blob/main/blueprint.go#L63
 * Generate markdown/HTML documentation for the schema with examples
+* Attestations
 * Github page with JSON/YAML editors
 * Example loading on github page
 * WASI/WASM conversion API and convertor on github page
