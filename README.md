@@ -6,6 +6,25 @@ This repository contains the common blueprint JSON Schema and Go types for Image
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/osbuild/blueprint-schema.svg)](https://pkg.go.dev/github.com/osbuild/blueprint-schema)
 
+### Why
+
+Users of Image Builder must work with several blueprint customization formats:
+
+* composer uses TOML format also known as "on-prem" blueprint
+* image-builder-cli accept TOML and JSON "on-prem" blueprint
+* bootc-image-builder accept a subset of the composer TOML schema
+* console.redhat.com API has a modified subset of the same but as JSON (and different from the cli JSON)
+* there are few more intermediate/technical blueprint formats but you get the idea
+
+At the end of 2024 we held a series of meetings where the core team agreed on a common blueprint schema we would like to converge to and this repository contains exactly that, it contains:
+
+* blueprint JSON Schema
+* Go library for loading/saving JSON and YAML
+* Go validating library and CLI
+* YAML examples with automated tests
+* documentation with examples (from automated tests)
+* conversion library and CLI app for both "on-prem" and "console" formats
+
 ### The schema
 
 Latest version of the JSON Schema is available as [blueprint-schema.json](blueprint-schema.json).
@@ -189,13 +208,21 @@ schema.ReadAndAttestYAML(os.Stdin, aData)
 * When compiled to WASM/WASI could be accessible through a web browser editor.
 * Conversions to/from YAML/CRC-JSON will be done in Go anyway.
 
-## Links
+### Conversion tools
+
+TBD
+
+### Schema documentation
+
+TBD
+
+### Links
 
 * https://github.com/invopop/yaml - library to convert YAML to JSON and vice versa
 * https://github.com/invopop/jsonschema - library to generate JSON Schema from Go types
 * https://github.com/santhosh-tekuri/jsonschema - library to validate JSON Schema
 
-## TODO
+### TODO
 
 * Finalize the schema
 * Implement conversion tools in both crc/images repos in ./cmd subdirectories and use those tools via "go run" command to generate a nice example set:
