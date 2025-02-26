@@ -26,12 +26,12 @@ type PartitionsStorage struct {
 	// Mount point of the partition. Required except for swap fs_type.
 	//
 	// Relevant for partition types: plain.
-	MountPoint string `json:"mountpoint" jsonschema:"pattern=^/"`
+	MountPoint string `json:"mountpoint,omitempty" jsonschema:"pattern=^/"`
 
 	// File system type: ext4 (default), xfs, swap, or vfat.
 	//
 	// Relevant for partition types: plain.
-	FSType string `json:"fs_type" jsonschema:"required,default=ext4,enum=ext4,enum=xfs,enum=swap,enum=vfat"`
+	FSType string `json:"fs_type,omitempty" jsonschema:"default=ext4,enum=ext4,enum=xfs,enum=swap,enum=vfat"`
 
 	// Minimum size of the volume.
 	//
@@ -39,7 +39,7 @@ type PartitionsStorage struct {
 	// (B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB, TiB, PiB, EiB).
 	//
 	// Relevant for partition types: plain, lvm, btrfs.
-	MinSize string `json:"minsize" jsonschema:"pattern=^\\d+\\s*[BKkMGTPE]i?[BKMGTPE]?$"`
+	MinSize string `json:"minsize,omitempty" jsonschema:"pattern=^\\d+\\s*[BKkMGTPE]i?[BKMGTPE]?$"`
 
 	// LVM volume group name. When not set, will be generated automatically.
 	//
@@ -59,28 +59,28 @@ type PartitionsStorage struct {
 
 type LogicalVolumesStorage struct {
 	// Logical volume name. When not set, will be generated automatically.
-	Name string `json:"name"`
+	Name string `json:"name,omitempty"`
 
 	// Label of the logical volume.
 	Label string `json:"label,omitempty"`
 
 	// Mount point of the logical volume. Required except for swap fs_type.
-	MountPoint string `json:"mountpoint" jsonschema:"pattern=^/"`
+	MountPoint string `json:"mountpoint,omitempty" jsonschema:"pattern=^/"`
 
 	// File system type: ext4 (default), xfs, swap, or vfat.
-	FSType string `json:"fs_type" jsonschema:"required,default=ext4,enum=ext4,enum=xfs,enum=swap,enum=vfat"`
+	FSType string `json:"fs_type,omitempty" jsonschema:"default=ext4,enum=ext4,enum=xfs,enum=swap,enum=vfat"`
 
 	// Minimum size of the logical volume.
 	//
 	// Size must be formatted as an integer followed by whitespace and then either a decimal unit
 	// (B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB, TiB, PiB, EiB).
-	MinSize string `json:"minsize" jsonschema:"pattern=^\\d+\\s*[BKkMGTPE]i?[BKMGTPE]?$"`
+	MinSize string `json:"minsize,omitempty" jsonschema:"pattern=^\\d+\\s*[BKkMGTPE]i?[BKMGTPE]?$"`
 }
 
 type SubvolumesStorage struct {
 	// Subvolume name, must also define its parent volume.
-	Name string `json:"name" jsonschema:"required"`
+	Name string `json:"name,omitempty"`
 
 	// Mount point of the subvolume. Required. Swap filesystem type is not supported on BTRFS volumes.
-	MountPoint string `json:"mountpoint" jsonschema:"required,pattern=^/"`
+	MountPoint string `json:"mountpoint,omitempty" jsonschema:"pattern=^/"`
 }

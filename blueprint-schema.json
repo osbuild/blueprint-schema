@@ -592,6 +592,41 @@
       "additionalProperties": false,
       "type": "object"
     },
+    "LogicalVolumesStorage": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Logical volume name. When not set, will be generated automatically."
+        },
+        "label": {
+          "type": "string",
+          "description": "Label of the logical volume."
+        },
+        "mountpoint": {
+          "type": "string",
+          "pattern": "^/",
+          "description": "Mount point of the logical volume. Required except for swap fs_type."
+        },
+        "fs_type": {
+          "type": "string",
+          "enum": [
+            "ext4",
+            "xfs",
+            "swap",
+            "vfat"
+          ],
+          "description": "File system type: ext4 (default), xfs, swap, or vfat.",
+          "default": "ext4"
+        },
+        "minsize": {
+          "type": "string",
+          "pattern": "^\\d+\\s*[BKkMGTPE]i?[BKMGTPE]?$",
+          "description": "Minimum size of the logical volume.\n\nSize must be formatted as an integer followed by whitespace and then either a decimal unit\n(B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB, TiB, PiB, EiB)."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
     "Network": {
       "properties": {
         "firewall": {
@@ -770,6 +805,68 @@
       "additionalProperties": false,
       "type": "object"
     },
+    "PartitionsStorage": {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "plain",
+            "lvm",
+            "btrfs"
+          ],
+          "description": "Partition type: plain (default), lvm, or btrfs.",
+          "default": "plain"
+        },
+        "label": {
+          "type": "string",
+          "description": "Label of the partition.\n\nRelevant for partition types: plain."
+        },
+        "mountpoint": {
+          "type": "string",
+          "pattern": "^/",
+          "description": "Mount point of the partition. Required except for swap fs_type.\n\nRelevant for partition types: plain."
+        },
+        "fs_type": {
+          "type": "string",
+          "enum": [
+            "ext4",
+            "xfs",
+            "swap",
+            "vfat"
+          ],
+          "description": "File system type: ext4 (default), xfs, swap, or vfat.\n\nRelevant for partition types: plain.",
+          "default": "ext4"
+        },
+        "minsize": {
+          "type": "string",
+          "pattern": "^\\d+\\s*[BKkMGTPE]i?[BKMGTPE]?$",
+          "description": "Minimum size of the volume.\n\nSize must be formatted as an integer followed by whitespace and then either a decimal unit\n(B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB, TiB, PiB, EiB).\n\nRelevant for partition types: plain, lvm, btrfs."
+        },
+        "name": {
+          "type": "string",
+          "description": "LVM volume group name. When not set, will be generated automatically.\n\nRelevant for partition types: lvm."
+        },
+        "logical_volumes": {
+          "items": {
+            "$ref": "#/$defs/LogicalVolumesStorage"
+          },
+          "type": "array",
+          "description": "LVM logical volumes to create within the volume group.\n\nRelevant for partition types: lvm."
+        },
+        "subvolumes": {
+          "items": {
+            "$ref": "#/$defs/SubvolumesStorage"
+          },
+          "type": "array",
+          "description": "BTRFS subvolumes to create.\n\nRelevant for partition types: btrfs."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "type"
+      ]
+    },
     "RedHatRegistration": {
       "properties": {
         "activation_key": {
@@ -838,6 +935,38 @@
       "additionalProperties": false,
       "type": "object"
     },
+    "Storage": {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "gpt",
+            "mbr"
+          ],
+          "description": "Device partitioning type: gpt (default) or mbr.",
+          "default": "gpt"
+        },
+        "minsize": {
+          "type": "string",
+          "pattern": "^\\d+\\s*[BKkMGTPE]i?[BKMGTPE]?$",
+          "description": "Minimum size of the storage device. When not set, the image size is acquired from image request.\n\nSize must be formatted as an integer followed by whitespace and then either a decimal unit\n(B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB, TiB, PiB, EiB)."
+        },
+        "partitions": {
+          "items": {
+            "$ref": "#/$defs/PartitionsStorage"
+          },
+          "type": "array",
+          "description": "Partitions of the following types: plain (default), lvm, or btrfs."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "type",
+        "minsize",
+        "partitions"
+      ]
+    },
     "SubscriptionManagerRegistration": {
       "properties": {
         "enabled": {
@@ -869,6 +998,21 @@
         "repository_management",
         "auto_registration"
       ]
+    },
+    "SubvolumesStorage": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Subvolume name, must also define its parent volume."
+        },
+        "mountpoint": {
+          "type": "string",
+          "pattern": "^/",
+          "description": "Mount point of the subvolume. Required. Swap filesystem type is not supported on BTRFS volumes."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
     "Systemd": {
       "properties": {
@@ -1182,6 +1326,16 @@
           },
           "type": "array",
           "description": "The CA certificates to be added to the image. The certificates are added to the system-wide CA trust store.\nThe certificates are added to the /etc/pki/ca-trust/source/anchors/ directory and the update-ca-trust command\nis run to update the system-wide CA trust store."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "storage": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/Storage"
         },
         {
           "type": "null"
