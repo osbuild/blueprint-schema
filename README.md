@@ -185,6 +185,7 @@ schema.ReadAndAttestYAML(os.Stdin, aData)
 
 * Limitless validations.
 * Easy to work with.
+* Go struct tags can be leveraged to do the job.
 * When compiled to WASM/WASI could be accessible through a web browser editor.
 * Conversions to/from YAML/CRC-JSON will be done in Go anyway.
 

@@ -1,0 +1,8 @@
+installer:
+    anaconda:
+        enabled_modules:
+            - org.fedoraproject.xxx
+        kickstart_text: Both text and base-64 kickstart
+        sudo_nopasswd:
+            - invalid username
+name: 'Blueprint example: invalid installer'

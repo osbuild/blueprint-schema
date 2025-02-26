@@ -37,6 +37,83 @@
       "type": "object",
       "description": "accounts:\n\n\tusers:\n\t  - name: \"lzap\"\n\t    description: \"\"\n\t    password: \"\"\n\t    ssh_keys:\n\t      - \"ssh-key 1234\"\n\t    home: \"/home/lzap\"\n\t    shell: \"/usr/bin/bash\"\n\t    uid: 1001\n\t    gid: 1001\n\t    groups: [\"wheel\", \"operators\"]\n\t    expires: 2050-05-13\n\tgroups:\n\t  - name: \"operators\"\n\t    gid: 1042"
     },
+    "AnacondaInstaller": {
+      "oneOf": [
+        {
+          "required": [
+            "kickstart_text"
+          ],
+          "title": "kickstart_text"
+        },
+        {
+          "required": [
+            "kickstart_base64"
+          ],
+          "title": "kickstart_base64"
+        }
+      ],
+      "properties": {
+        "unattended": {
+          "type": "boolean",
+          "description": "Unattended installation Anaconda flag. When not set, Anaconda installer will ask for user input."
+        },
+        "sudo_nopasswd": {
+          "items": {
+            "type": "string",
+            "maxLength": 256,
+            "pattern": "^[%a-zA-Z0-9_.][a-zA-Z0-9_.$-]*$"
+          },
+          "type": "array",
+          "description": "Sudo users with NOPASSWD option. Adds a snippet to the kickstart file that, after installation, will create\ndrop-in files in /etc/sudoers.d to allow the specified users and groups to run sudo without a password\n(groups must be prefixed with %)."
+        },
+        "enabled_modules": {
+          "items": {
+            "type": "string",
+            "enum": [
+              "org.fedoraproject.Anaconda.Modules.Localization",
+              "org.fedoraproject.Anaconda.Modules.Network",
+              "org.fedoraproject.Anaconda.Modules.Payloads",
+              "org.fedoraproject.Anaconda.Modules.Runtime",
+              "org.fedoraproject.Anaconda.Modules.Security",
+              "org.fedoraproject.Anaconda.Modules.Services",
+              "org.fedoraproject.Anaconda.Modules.Storage",
+              "org.fedoraproject.Anaconda.Modules.Subscription",
+              "org.fedoraproject.Anaconda.Modules.Timezone",
+              "org.fedoraproject.Anaconda.Modules.Users"
+            ]
+          },
+          "type": "array"
+        },
+        "disabled_modules": {
+          "items": {
+            "type": "string",
+            "enum": [
+              "org.fedoraproject.Anaconda.Modules.Localization",
+              "org.fedoraproject.Anaconda.Modules.Network",
+              "org.fedoraproject.Anaconda.Modules.Payloads",
+              "org.fedoraproject.Anaconda.Modules.Runtime",
+              "org.fedoraproject.Anaconda.Modules.Security",
+              "org.fedoraproject.Anaconda.Modules.Services",
+              "org.fedoraproject.Anaconda.Modules.Storage",
+              "org.fedoraproject.Anaconda.Modules.Subscription",
+              "org.fedoraproject.Anaconda.Modules.Timezone",
+              "org.fedoraproject.Anaconda.Modules.Users"
+            ]
+          },
+          "type": "array"
+        },
+        "kickstart_text": {
+          "type": "string",
+          "description": "Kickstart file formatted in plain text."
+        },
+        "kickstart_base64": {
+          "type": "string",
+          "description": "Kickstart file formatted in base64."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
     "ConnectorRegistration": {
       "properties": {
         "enabled": {
@@ -76,6 +153,16 @@
         "source",
         "name"
       ]
+    },
+    "CoreOSInstaller": {
+      "properties": {
+        "installation_device": {
+          "type": "string",
+          "description": "Installation device for iot/edge simplified installer image types."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
     "DNF": {
       "properties": {
@@ -399,6 +486,34 @@
       "required": [
         "enabled"
       ]
+    },
+    "Installer": {
+      "properties": {
+        "anaconda": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/AnacondaInstaller",
+              "description": "Extra customizations for Anaconda installer (ISO) image types.\n\nBlueprint customizations that match the kickstart options (languages, keyboard, timezone)\nwill change the value in the kickstart file as well."
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "coreos": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/CoreOSInstaller",
+              "description": "CoreOS installer configuration is required by the edge-simplified-installer image. It allows to define the\ndestination device for the installation."
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
     "Kernel": {
       "properties": {
@@ -1029,6 +1144,17 @@
         {
           "$ref": "#/$defs/Ignition",
           "description": "Provides Ignition configuration files to be used in edge-raw-image and edge-simplified-installer images.\nCheck the RHEL for Edge butane specification for a description of the supported configuration options.\n\nThe blueprint configuration can be done either by embedding an Ignition configuration file into the image,\nor providing a provisioning URL that will be fetched at first boot."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "installer": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/Installer",
+          "description": "Extra customization for Anaconda installer (ISO) and Edge/IOT simplified installer image types."
         },
         {
           "type": "null"

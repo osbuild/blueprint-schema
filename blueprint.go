@@ -94,4 +94,7 @@ type Blueprint struct {
 	// The blueprint configuration can be done either by embedding an Ignition configuration file into the image,
 	// or providing a provisioning URL that will be fetched at first boot.
 	Ignition *Ignition `json:"ignition,omitempty" jsonschema:"nullable"`
+
+	// Extra customization for Anaconda installer (ISO) and Edge/IOT simplified installer image types.
+	Installer *Installer `json:"installer,omitempty" jsonschema:"nullable"`
 }

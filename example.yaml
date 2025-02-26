@@ -143,7 +143,7 @@ ignition:
 installer:
   anaconda: # only effective for certain image types
     unattended: true
-    sudo_nopassword: ["lzap"]
+    sudo_nopasswd: ["lzap"]
     enabled_modules: ["org.fedoraproject.Anaconda.Modules.Subscription"]
     disabled_modules: []
     kickstart: ""

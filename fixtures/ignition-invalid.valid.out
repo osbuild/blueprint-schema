@@ -1,0 +1,4 @@
+validation failed: jsonschema validation failed with 'blueprint-schema.json'
+- at '/ignition': oneOf failed, none matched
+  - at '/ignition': oneOf failed, subschemas 0, 1 matched
+  - at '/ignition': got object, want null
