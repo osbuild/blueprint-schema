@@ -124,28 +124,33 @@ func TestFix(t *testing.T) {
 				t.Fatal(err)
 			}
 			if writeFixtures {
-				outputFile, err := os.OpenFile(output, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0644)
-				if err != nil {
-					t.Fatal(err)
-				}
-				defer outputFile.Close()
+				schemaErr := schema.ValidateMap(data)
+				if schemaErr != nil && schemaErr.Error() != "" {
+					outFile, err := os.OpenFile(output, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0644)
+					if err != nil {
+						t.Fatal(err)
+					}
+					defer outFile.Close()
 
-				err = schema.ValidateMap(data)
-				if err != nil {
-					outputFile.WriteString(err.Error())
+					outFile.WriteString(schemaErr.Error())
+					t.Logf("Written %s", output)
 				}
-				t.Logf("Written %s", output)
 			} else {
-				outputFile, err := os.Open(output)
-				if err != nil {
-					t.Fatal(err)
+				var want string
+
+				// if file output exists
+				if _, err := os.Stat(output); err == nil {
+					inFile, err := os.Open(output)
+					if err != nil {
+						t.Fatal(err)
+					}
+					defer inFile.Close()
+					wantBuf, err := io.ReadAll(inFile)
+					if err != nil {
+						t.Fatal(err)
+					}
+					want = string(wantBuf)
 				}
-				defer outputFile.Close()
-				wantBuf, err := io.ReadAll(outputFile)
-				if err != nil {
-					t.Fatal(err)
-				}
-				want := string(wantBuf)
 
 				var got string
 				err = schema.ValidateMap(data)
@@ -174,7 +179,7 @@ func TestFix(t *testing.T) {
 		direction := filepath.Ext(fileWithoutFormat)
 		baseFile := file[0 : len(fileWithoutFormat)-len(direction)]
 		outFile := baseFile + ".out.yaml"
-		validFile := baseFile + ".valid.out"
+		validFile := baseFile + ".validator.out"
 
 		marshalTest(t, file, outFile)
 		validationTest(t, file, validFile)

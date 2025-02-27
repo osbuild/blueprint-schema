@@ -20,7 +20,7 @@ generate-schema: ## Generate schema
 
 .PHONY: write-fixtures
 write-fixtures: ## Write new test fixtures
-	@rm -f ./fixtures/*.out.yaml ./fixtures/*.valid.out
+	@rm -f ./fixtures/*.out.yaml ./fixtures/*.validator.out
 	@WRITE_FIXTURES=1 go test -count=1 .
 
 .PHONY: pkg-go-dev-update
