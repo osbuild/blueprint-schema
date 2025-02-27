@@ -1,5 +1,3 @@
-go 1.23.5
+go 1.21
 
 use ./cmd/generate-schema
-
-use ./cmd/validate-schema

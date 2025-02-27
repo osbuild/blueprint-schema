@@ -1,6 +1,6 @@
 module github.com/osbuild/blueprint-schema/cmd/generate-schema
 
-go 1.23.5
+go 1.21
 
 replace github.com/osbuild/blueprint-schema => ../..
 

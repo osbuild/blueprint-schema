@@ -1,3 +1,6 @@
+//go:build !js
+// +build !js
+
 package main
 
 import (
@@ -9,7 +12,8 @@ import (
 
 func main() {
 	quiet := flag.Bool("quiet", false, "do not print details to the output")
-	json := flag.Bool("json", false, "input is JSON (default: YAML)")
+	validateJSON := flag.Bool("validate-json", false, "validate JSON input")
+	validateYAML := flag.Bool("validate-yaml", false, "validate YAML input (default behavior)")
 
 	flag.Parse()
 
@@ -18,9 +22,12 @@ func main() {
 		panic(err)
 	}
 
-	if *json {
+	if *validateJSON {
 		err = schema.ReadAndValidateJSON(os.Stdin)
+	} else if *validateYAML {
+		err = schema.ReadAndValidateYAML(os.Stdin)
 	} else {
+		// default behavior
 		err = schema.ReadAndValidateYAML(os.Stdin)
 	}
 

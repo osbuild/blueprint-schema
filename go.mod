@@ -1,11 +1,12 @@
 module github.com/osbuild/blueprint-schema
 
-go 1.23.5
+go 1.21
 
 require (
 	github.com/invopop/jsonschema v0.13.0
 	github.com/invopop/yaml v0.3.1
 	github.com/santhosh-tekuri/jsonschema/v6 v6.0.1
+	github.com/wk8/go-ordered-map/v2 v2.1.8
 )
 
 require (
@@ -13,7 +14,6 @@ require (
 	github.com/buger/jsonparser v1.1.1 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/stretchr/testify v1.9.0 // indirect
-	github.com/wk8/go-ordered-map/v2 v2.1.8 // indirect
 	golang.org/x/text v0.19.0 // indirect
 )
 

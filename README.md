@@ -78,13 +78,13 @@ The package has minimum dependencies, only two `yaml` libraries are needed (YAML
 
 ## Validating the schema from the command line
 
-To validate a YAML file:
+The command line utility named `blueconv` can be used for validations. To validate a YAML file:
 
-    go run ./cmd/validate-schema < fixtures/openscap-invalid-both.in.yaml 
+    go run ./cmd/blueconv -validate-yaml < fixtures/openscap-invalid-both.in.yaml 
 
 To validate a JSON file:
 
-    go run ./cmd/validate-schema -json < fixtures/minimal-j.in.json
+    go run ./cmd/blueconv -validate-json < fixtures/minimal-j.in.json
 
 Returns 0 when schema is valid, 1 otherwise with detailed information printed on the standard output. Example schema error reported by the validator:
 
@@ -211,6 +211,21 @@ schema.ReadAndAttestYAML(os.Stdin, aData)
 ### Conversion tools
 
 TBD
+
+### WASM
+
+Compiling WASM binaries:
+
+    sudo dnf -y install tinygo clang17 binaryen
+
+The WASM binaries sizes:
+
+* Native Go size: 5.6M
+* Compressed native Go size (gz): 1.6M
+* TinyGo size: 1.6M
+* Compressed TinyGo size (gz): 900kB
+
+Since GitHub Pages performs on-the-fly compression of assets
 
 ### Schema documentation
 
