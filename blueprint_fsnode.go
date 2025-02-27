@@ -38,58 +38,7 @@ type FSNodeContents struct {
 
 // JSONSchemaExtend can be used to extend the generated JSON schema from Go struct tags
 func (FSNode) JSONSchemaExtend(s *jsonschema.Schema) {
-	// If type is file...
-	pIf := jsonschema.NewProperties()
-	pIf.Set("type", &jsonschema.Schema{
-		Const: "file",
-	})
-	s.If = &jsonschema.Schema{
-		Properties: pIf,
-	}
-
-	// ...then require contents
-	pThen := jsonschema.NewProperties()
-	pThen.Set("contents", &jsonschema.Schema{
-		OneOf: []*jsonschema.Schema{
-			{
-				Required: []string{"base64"},
-				Title:    "fsnodes_base64",
-			},
-			{
-				Required: []string{"text"},
-				Title:    "fsnodes_text",
-			},
-		},
-	})
-	// ...and set default mode for files
-	pThen.Set("mode", &jsonschema.Schema{
-		Default: 0644,
-	})
-	s.Then = &jsonschema.Schema{
-		Properties: pThen,
-	}
-
-	pElse := jsonschema.NewProperties()
-	// ...else contents must not be set
-	pElse.Set("contents", &jsonschema.Schema{
-		Not: &jsonschema.Schema{
-			AnyOf: []*jsonschema.Schema{
-				{
-					Required: []string{"base64"},
-					Title:    "fsnodes_base64",
-				},
-				{
-					Required: []string{"text"},
-					Title:    "fsnodes_text",
-				},
-			},
-		},
-	})
-	// ...and set default mode for directories
-	pElse.Set("mode", &jsonschema.Schema{
-		Default: 0755,
-	})
-	s.Else = &jsonschema.Schema{
-		Properties: pElse,
+	s.AllOf = []*jsonschema.Schema{
+		PartialSchema("blueprint_fsnode_dir.yaml"),
 	}
 }

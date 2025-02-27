@@ -1,4 +1,5 @@
 fsnodes:
+    - path: /var/tmp/file1
     - ensure_parents: true
       group: lzap
       mode: 488

@@ -1,5 +1,7 @@
 name: "Blueprint example: fsnodes"
 fsnodes:
+  - path: "/var/tmp/file1"
+    # ^ creates an empty file if no contents is specified
   - path: "/var/tmp/dir"
     type: "dir"
     state: "present"

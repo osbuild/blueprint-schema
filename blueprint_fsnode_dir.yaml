@@ -1,0 +1,11 @@
+---
+if:
+  required:
+    - type
+  properties:
+    type:
+      const: "dir"
+then:
+  not:
+    required:
+      - contents

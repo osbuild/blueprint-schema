@@ -3,8 +3,8 @@ fsnodes:
   - path: "/var/tmp/dir"
     type: "dir"
     contents:
-      text: "test" # invalid
+      text: "test" # invalid - directory must not have contents
   - path: "/var/tmp/dir"
     type: "dir"
     contents:
-      base64: "test" # invalid
+      base64: "test" # invalid - directory must not have contents

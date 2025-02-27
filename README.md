@@ -93,7 +93,7 @@ func (OpenSCAPTailoring) JSONSchema() *jsonschema.Schema {
 }
 ```
 
-It is also possible to achieve a hybrid approach with `JSONSchemaExtend` or `JSONSchemaProperty` methods. Read [jsonschema](https://github.com/invopop/jsonschema) library for more details about available Go struct tags and supported features. More information about the JSON Schema can be found [on the project webpage](https://json-schema.org).
+It is also possible to achieve a hybrid approach with `JSONSchemaExtend` or `JSONSchemaProperty` methods, this is preferred because Go struct fields (properties) do automatically get description fields from Go documentation, overriding the whole schema with properties required description to be copied. Read [jsonschema](https://github.com/invopop/jsonschema) library for more details about available Go struct tags and supported features. More information about the JSON Schema can be found [on the project webpage](https://json-schema.org).
 
 ## Using the types in Go
 

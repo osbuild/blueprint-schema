@@ -298,61 +298,27 @@
       "type": "object"
     },
     "FSNode": {
-      "if": {
-        "properties": {
-          "type": {
-            "const": "file"
-          }
-        }
-      },
-      "then": {
-        "properties": {
-          "contents": {
-            "oneOf": [
-              {
-                "required": [
-                  "base64"
-                ],
-                "title": "fsnodes_base64"
-              },
-              {
-                "required": [
-                  "text"
-                ],
-                "title": "fsnodes_text"
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "dir"
               }
+            },
+            "required": [
+              "type"
             ]
           },
-          "mode": {
-            "default": 420
-          }
-        }
-      },
-      "else": {
-        "properties": {
-          "contents": {
+          "then": {
             "not": {
-              "anyOf": [
-                {
-                  "required": [
-                    "base64"
-                  ],
-                  "title": "fsnodes_base64"
-                },
-                {
-                  "required": [
-                    "text"
-                  ],
-                  "title": "fsnodes_text"
-                }
+              "required": [
+                "contents"
               ]
             }
-          },
-          "mode": {
-            "default": 493
           }
         }
-      },
+      ],
       "properties": {
         "path": {
           "type": "string",
@@ -771,22 +737,26 @@
       ],
       "properties": {
         "json_filepath": {
-          "type": "string"
+          "type": "string",
+          "description": "JSON file path, cannot be used with selected and unselected."
         },
         "json_profile_id": {
-          "type": "string"
+          "type": "string",
+          "description": "JSON profile ID, cannot be used with selected and unselected."
         },
         "selected": {
           "items": {
             "type": "string"
           },
-          "type": "array"
+          "type": "array",
+          "description": "Selected rules, cannot be used with json_profile_id and json_filepath."
         },
         "unselected": {
           "items": {
             "type": "string"
           },
-          "type": "array"
+          "type": "array",
+          "description": "Unselected rules, cannot be used with json_profile_id and json_filepath."
         }
       }
     },
