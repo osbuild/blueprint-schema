@@ -41,7 +41,7 @@ type OpenSCAPTailoring struct {
 	JSONFilepath string `json:"json_filepath,omitempty"`
 }
 
-// JSONSchema can be used to generate JSON schema programmatically.
-func (OpenSCAPTailoring) JSONSchema() *jsonschema.Schema {
-	return PartialSchema("blueprint_openscap.yaml")
+// JSONSchemaExtend can be used to extend the generated JSON schema from Go struct tags
+func (OpenSCAPTailoring) JSONSchemaExtend(s *jsonschema.Schema) {
+	s.OneOf = PartialSchema("blueprint_openscap.yaml").OneOf
 }

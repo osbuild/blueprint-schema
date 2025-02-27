@@ -736,14 +736,6 @@
         }
       ],
       "properties": {
-        "json_filepath": {
-          "type": "string",
-          "description": "JSON file path, cannot be used with selected and unselected."
-        },
-        "json_profile_id": {
-          "type": "string",
-          "description": "JSON profile ID, cannot be used with selected and unselected."
-        },
         "selected": {
           "items": {
             "type": "string"
@@ -757,8 +749,18 @@
           },
           "type": "array",
           "description": "Unselected rules, cannot be used with json_profile_id and json_filepath."
+        },
+        "json_profile_id": {
+          "type": "string",
+          "description": "JSON profile ID, must be used with json_filepath and cannot be used with selected and unselected fields."
+        },
+        "json_filepath": {
+          "type": "string",
+          "description": "JSON filepath, must be used with json_profile_id and cannot be used with selected and unselected fields."
         }
-      }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
     "PartitionsStorage": {
       "properties": {

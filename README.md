@@ -87,13 +87,38 @@ oneOf:
 Then used from a Go type via `JSONSchema` method which overrides all `jsonschema` Go types for that particular type. 
 
 ```go
-// JSONSchema can be used to generate JSON schema programmatically.
 func (OpenSCAPTailoring) JSONSchema() *jsonschema.Schema {
 	return PartialSchema("blueprint_openscap.yaml")
 }
 ```
 
-It is also possible to achieve a hybrid approach with `JSONSchemaExtend` or `JSONSchemaProperty` methods, this is preferred because Go struct fields (properties) do automatically get description fields from Go documentation, overriding the whole schema with properties required description to be copied. Read [jsonschema](https://github.com/invopop/jsonschema) library for more details about available Go struct tags and supported features. More information about the JSON Schema can be found [on the project webpage](https://json-schema.org).
+It is also possible to achieve a hybrid approach with `JSONSchemaExtend` or `JSONSchemaProperty` methods, this is preferred because Go struct fields (properties) do automatically get description fields from Go documentation, overriding the whole schema with properties required description to be copied. Example:
+
+```yaml
+---
+oneOf:
+  - anyOf:
+    - required:
+        - selected
+    - required:
+        - unselected
+    - required:
+        - selected
+        - unselected
+  - required:
+      - json_profile_id
+      - json_filepath
+```
+
+With the following code:
+
+```go
+func (OpenSCAPTailoring) JSONSchemaExtend(s *jsonschema.Schema) {
+	s.OneOf = PartialSchema("blueprint_openscap.yaml").OneOf
+}
+```
+
+Read [jsonschema](https://github.com/invopop/jsonschema) library for more details about available Go struct tags and supported features. More information about the JSON Schema can be found [on the project webpage](https://json-schema.org).
 
 ## Using the types in Go
 
