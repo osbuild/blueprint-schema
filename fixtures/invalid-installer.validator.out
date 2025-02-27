@@ -2,8 +2,8 @@ validation failed: jsonschema validation failed with 'blueprint-schema.json'
 - at '/installer': oneOf failed, none matched
   - at '/installer/anaconda': oneOf failed, none matched
     - at '/installer/anaconda': validation failed
-      - at '/installer/anaconda/enabled_modules/0': value must be one of 'org.fedoraproject.Anaconda.Modules.Localization', 'org.fedoraproject.Anaconda.Modules.Network', 'org.fedoraproject.Anaconda.Modules.Payloads', 'org.fedoraproject.Anaconda.Modules.Runtime', 'org.fedoraproject.Anaconda.Modules.Security', 'org.fedoraproject.Anaconda.Modules.Services', 'org.fedoraproject.Anaconda.Modules.Storage', 'org.fedoraproject.Anaconda.Modules.Subscription', 'org.fedoraproject.Anaconda.Modules.Timezone', 'org.fedoraproject.Anaconda.Modules.Users'
       - at '/installer/anaconda/sudo_nopasswd/0': 'invalid username' does not match pattern '^[%a-zA-Z0-9_.][a-zA-Z0-9_.$-]*$'
+      - at '/installer/anaconda/enabled_modules/0': value must be one of 'org.fedoraproject.Anaconda.Modules.Localization', 'org.fedoraproject.Anaconda.Modules.Network', 'org.fedoraproject.Anaconda.Modules.Payloads', 'org.fedoraproject.Anaconda.Modules.Runtime', 'org.fedoraproject.Anaconda.Modules.Security', 'org.fedoraproject.Anaconda.Modules.Services', 'org.fedoraproject.Anaconda.Modules.Storage', 'org.fedoraproject.Anaconda.Modules.Subscription', 'org.fedoraproject.Anaconda.Modules.Timezone', 'org.fedoraproject.Anaconda.Modules.Users'
       - at '/installer/anaconda': oneOf failed, subschemas 0, 1 matched
     - at '/installer/anaconda': got object, want null
   - at '/installer': got object, want null

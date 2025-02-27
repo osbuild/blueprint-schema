@@ -1,8 +1,7 @@
-name: 'Blueprint example: valid storage'
+name: 'Blueprint example: disallowed properties for storage'
 storage:
     minsize: 550 GiB
     partitions:
-        - type: plain
         - fs_type: ext4
           label: boot
           logical_volumes:

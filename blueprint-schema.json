@@ -777,10 +777,22 @@
           },
           "then": {
             "not": {
-              "required": [
-                "name",
-                "logical_volumes",
-                "subvolumes"
+              "anyOf": [
+                {
+                  "required": [
+                    "name"
+                  ]
+                },
+                {
+                  "required": [
+                    "logical_volumes"
+                  ]
+                },
+                {
+                  "required": [
+                    "subvolumes"
+                  ]
+                }
               ]
             },
             "required": [
@@ -804,11 +816,27 @@
           },
           "then": {
             "not": {
-              "required": [
-                "mountpoint",
-                "fs_type",
-                "label",
-                "subvolumes"
+              "anyOf": [
+                {
+                  "required": [
+                    "mountpoint"
+                  ]
+                },
+                {
+                  "required": [
+                    "fs_type"
+                  ]
+                },
+                {
+                  "required": [
+                    "label"
+                  ]
+                },
+                {
+                  "required": [
+                    "subvolumes"
+                  ]
+                }
               ]
             },
             "required": [
@@ -831,12 +859,32 @@
           },
           "then": {
             "not": {
-              "required": [
-                "name",
-                "logical_volumes",
-                "mountpoint",
-                "fs_type",
-                "label"
+              "anyOf": [
+                {
+                  "required": [
+                    "name"
+                  ]
+                },
+                {
+                  "required": [
+                    "logical_volumes"
+                  ]
+                },
+                {
+                  "required": [
+                    "mountpoint"
+                  ]
+                },
+                {
+                  "required": [
+                    "fs_type"
+                  ]
+                },
+                {
+                  "required": [
+                    "label"
+                  ]
+                }
               ]
             },
             "required": [

@@ -1,0 +1,6 @@
+name: "Blueprint example: missing required properties for storage"
+storage:
+  type: "gpt"
+  minsize: "550 GiB"
+  partitions:
+    - type: "plain"

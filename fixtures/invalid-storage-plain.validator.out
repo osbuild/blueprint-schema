@@ -2,7 +2,9 @@ validation failed: jsonschema validation failed with 'blueprint-schema.json'
 - at '/storage': oneOf failed, none matched
   - at '/storage': validation failed
     - at '/storage/partitions/0': allOf failed
-      - at '/storage/partitions/0': missing properties 'mountpoint', 'fs_type', 'minsize', 'label'
-    - at '/storage/partitions/2': allOf failed
-      - at '/storage/partitions/2': missing properties 'mountpoint', 'fs_type', 'label'
+      - at '/storage/partitions/0': not failed
+    - at '/storage/partitions/1': allOf failed
+      - at '/storage/partitions/1': validation failed
+        - at '/storage/partitions/1': missing properties 'mountpoint', 'fs_type', 'label'
+        - at '/storage/partitions/1': not failed
   - at '/storage': got object, want null
