@@ -212,20 +212,34 @@ schema.ReadAndAttestYAML(os.Stdin, aData)
 
 TBD
 
-### WASM
+### Building
 
-Compiling WASM binaries:
+To build the library and the CLI:
+
+    make build-cli -j
+
+Compiling WASM binaries requires TinyGo, clang, WASM tools and Go version that is compatible with TinyGo, typically few major releases behind the latest and greatest. TinyGo can be used from Fedora, but it is not compatible with its `golang` package version, so `WASM_GOROOT` variable must be explicitly passed:
 
     sudo dnf -y install tinygo clang17 binaryen
+    make build-wasm WASM_GOROOT=$HOME/sdk/go1.21.0
 
-The WASM binaries sizes:
+To cross-build everything:
 
-* Native Go size: 5.6M
-* Compressed native Go size (gz): 1.6M
-* TinyGo size: 1.6M
-* Compressed TinyGo size (gz): 900kB
+    make build WASM_GOROOT=$HOME/sdk/go1.21.0 -j
 
-Since GitHub Pages performs on-the-fly compression of assets
+Builds the CLI for all supported platforms plus WASM built with Go and TinyGo. The latter is significantly smaller binary (2M) which thanks to HTTP compression can be as small as 1M.
+
+```
+$ ls dist/ -1
+blueconv_darwin_amd64
+blueconv_darwin_arm64
+blueconv_linux_amd64
+blueconv_linux_arm64
+blueconv_windows_amd64
+blueconv_windows_arm64
+blueprint_go.wasm
+blueprint_tgo.wasm
+```
 
 ### Schema documentation
 

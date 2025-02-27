@@ -1,7 +1,8 @@
-DISTDIR=dist
-
 # TinyGo requires a compatible Go version, typically older than the current one.
-WASM_GOROOT?=$$HOME/sdk/go1.21.13
+WASM_GOROOT?=$(HOME)/sdk/go1.21.13
+
+SOURCES=$(shell find . -name '*.go' -name 'blueprint-schema.json' -name 'go.mod' -name 'go.sum' -name 'Makefile')
+DISTDIR=dist
 
 .PHONY: help
 help: ## print this help
@@ -30,15 +31,35 @@ pkg-go-dev-update: ## Schedule https://pkg.go.dev/github.com/osbuild/blueprint-s
 test: ## Run all tests
 	@go test -count=1 .
 
-.PHONY: build-wasm
-build-wasm: build-wasm-go build-wasm-tinygo ## Builds wasm binaries
+PLATFORMS:=$(DISTDIR)/blueconv_linux_amd64 \
+	$(DISTDIR)/blueconv_linux_arm64 \
+	$(DISTDIR)/blueconv_windows_amd64 \
+	$(DISTDIR)/blueconv_windows_arm64 \
+	$(DISTDIR)/blueconv_darwin_amd64 \
+	$(DISTDIR)/blueconv_darwin_arm64
 
-.PHONY: build-wasm-go
-build-wasm-go: $(DISTDIR) ## Builds wasm via go
+temp = $(subst _, ,$@)
+os = $(word 2, $(temp))
+arch = $(word 3, $(temp))
+
+.PHONY: build
+build: build-cli build-wasm ## Builds all binaries
+
+.PHONY: build-cli
+build-cli: $(PLATFORMS) ## Builds cli binaries
+
+.PHONY: build-wasm
+build-wasm: $(DISTDIR)/blueprint_go.wasm $(DISTDIR)/blueprint_tgo.wasm ## Builds wasm binaries
+
+.PHONY: $(PLATFORMS)
+$(PLATFORMS):
+	GOOS=$(os) GOARCH=$(arch) go build -o $(DISTDIR)/blueconv_$(os)_$(arch) ./cmd/blueconv/
+
+.PHONY: $(DISTDIR)/blueprint_go.wasm
+$(DISTDIR)/blueprint_go.wasm: $(DISTDIR) ## Builds wasm via go
 	GOOS=js GOARCH=wasm go build -o $(DISTDIR)/blueprint_go.wasm ./cmd/blueconv/
 
-.PHONY: build-wasm-tinygo
-build-wasm-tinygo: $(DISTDIR) ## Builds wasm via tinygo - GOROOT and GOPATH must be set to compatible Go
+$(DISTDIR)/blueprint_tgo.wasm: $(SOURCES) $(DISTDIR) ## Builds wasm via tinygo - GOROOT and GOPATH must be set to compatible Go
 	GOROOT=$(WASM_GOROOT) PATH="$(WASM_GOROOT)/bin:$(PATH)" GOOS=js GOARCH=wasm tinygo build -scheduler=none -o $(DISTDIR)/blueprint_tgo.wasm ./cmd/blueconv/
 
 .PHONY: run-web-editor-json
