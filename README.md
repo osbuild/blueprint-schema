@@ -332,11 +332,12 @@ TBD
 
 ### TODO
 
-* Finalize the schema
+* Add extra test: `out.yaml` must validate as well (date for account does not work currently)
 * Implement conversion tools in both crc/images repos in ./cmd subdirectories and use those tools via "go run" command to generate a nice example set:
 * https://github.com/osbuild/image-builder-crc/blob/main/internal/v1/api.go#L663
 * https://github.com/osbuild/blueprint-schema/blob/main/blueprint.go#L63
 * Generate markdown/HTML documentation for the schema with examples
+* Reformat comments in the comment map to support proper paragraphs
 * Attestations
 * Implement [common defs/refs](https://tour.json-schema.org/content/06-Combining-Subschemas/01-Reusing-and-Referencing-with-defs-and-ref).
 * Github page with JSON/YAML editors

@@ -1,0 +1,6 @@
+validation failed: jsonschema validation failed with 'blueprint-schema.json'
+- at '/dnf': oneOf failed, none matched
+  - at '/dnf/repositories': oneOf failed, none matched
+    - at '/dnf/repositories/0': oneOf failed, subschemas 0, 2 matched
+    - at '/dnf/repositories': got array, want null
+  - at '/dnf': got object, want null

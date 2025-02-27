@@ -103,5 +103,20 @@ type Blueprint struct {
 	// is run to update the system-wide CA trust store.
 	CACerts []CACerts `json:"cacerts,omitempty" jsonschema:"nullable"`
 
+	// Disk partitioning details. Not available for installer-based images.
+	//
+	// General principles:
+	//
+	// 1. All sizes, whether for specific filesystems, partitions, logical volumes, or the image
+	// itself, are treated as minimum requirements. This means the full disk image size is always
+	// larger than the size of the sum of the partitions, due to requirements for headers and metadata.
+	//
+	// 2. The partition that contains the root filesystem, whether this is a plain formatted partition,
+	// an LVM Volume Group, or a Btrfs partition, is always last in the partition table layout when it is
+	// automatically added. For Disk customizations the user-defined order is respected.
+	//
+	// 3. In the case of raw partitioning (no LVM and no Btrfs), the partition containing the root
+	// filesystem is grown to fill any left over space on the partition table. Logical Volumes are not
+	// grown to fill the space in the Volume Group since they are trivial to grow on a live system.
 	Storage *Storage `json:"storage,omitempty" jsonschema:"nullable"`
 }

@@ -20,4 +20,9 @@ type DNF struct {
 
 	// Modules to enable or disable
 	Modules []string `json:"modules,omitempty" jsonschema:"nullable"`
+
+	// Third-party repositories are supported by the blueprint customizations.
+	//
+	// All fields reflect configuration values of dnf, see man dnf.conf(5) for more information.
+	Repositories []DNFRepository `json:"repositories,omitempty" jsonschema:"nullable"`
 }

@@ -233,6 +233,139 @@
               "type": "null"
             }
           ]
+        },
+        "repositories": {
+          "oneOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/DNFRepository"
+              },
+              "type": "array",
+              "description": "Third-party repositories are supported by the blueprint customizations.\n\nAll fields reflect configuration values of dnf, see man dnf.conf(5) for more information."
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "DNFRepository": {
+      "oneOf": [
+        {
+          "required": [
+            "base_urls"
+          ],
+          "title": "dnf_repo_base_urls"
+        },
+        {
+          "required": [
+            "mirror_list"
+          ],
+          "title": "dnf_repo_mirrorlist"
+        },
+        {
+          "required": [
+            "metalink"
+          ],
+          "title": "dnf_repo_metalink"
+        }
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 256,
+          "pattern": "^[a-zA-Z0-9_-]+$",
+          "description": "Repository ID. Required."
+        },
+        "name": {
+          "type": "string",
+          "description": "Repository name."
+        },
+        "filename": {
+          "type": "string",
+          "maxLength": 256,
+          "pattern": "^[a-zA-Z0-9_-]+$",
+          "description": "Repository filename to use for the repository configuration file. If not provided, the ID is used.\nFilename must be provided without the .repo extension."
+        },
+        "base_urls": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "Base URLs for the repository."
+        },
+        "mirror_list": {
+          "type": "string",
+          "description": "Mirror list for the repository."
+        },
+        "metalink": {
+          "type": "string",
+          "description": "Metalink for the repository."
+        },
+        "gpg_keys": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "GPG keys for the repository.\n\nThe blueprint accepts both inline GPG keys and GPG key urls. If an inline GPG key is provided\nit will be saved to the /etc/pki/rpm-gpg directory and will be referenced accordingly in the\nrepository configuration. GPG keys are not imported to the RPM database and will only be imported\nwhen first installing a package from the third-party repository."
+        },
+        "gpg_check": {
+          "type": "boolean",
+          "description": "Enable GPG check for the repository.",
+          "default": true
+        },
+        "gpg_check_repo": {
+          "type": "boolean",
+          "description": "Enable GPG check for the repository metadata.",
+          "default": true
+        },
+        "priority": {
+          "type": "integer",
+          "description": "Repository priority.",
+          "default": 99
+        },
+        "ssl_verify": {
+          "type": "boolean",
+          "description": "Enable SSL verification for the repository.",
+          "default": true
+        },
+        "module_hotfixes": {
+          "type": "boolean",
+          "description": "Enable module hotfixes for the repository.\n\nAdds module_hotfixes flag to all repo types so it can be used during osbuild.\nThis enables users to disable modularity filtering on specific repositories.",
+          "default": false
+        },
+        "usage": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/DNFRepositoryUsage",
+              "description": "Repository usage. By default, the repository is configured on the image but not used for image build."
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id"
+      ]
+    },
+    "DNFRepositoryUsage": {
+      "properties": {
+        "install": {
+          "type": "boolean",
+          "description": "Use the repository for image build.\n\nWhen this flag is set, it is possible to install third-party packages during the image build.",
+          "default": false
+        },
+        "configure": {
+          "type": "boolean",
+          "description": "Configure the repository for dnf.\n\nA repository will be saved to the /etc/yum.repos.d directory in an image.\nAn optional filename argument can be set, otherwise the repository will be saved using the the repository\nID, i.e. /etc/yum.repos.d/\u003crepo-id\u003e.repo.",
+          "default": true
         }
       },
       "additionalProperties": false,
@@ -1423,7 +1556,8 @@
     "storage": {
       "oneOf": [
         {
-          "$ref": "#/$defs/Storage"
+          "$ref": "#/$defs/Storage",
+          "description": "Disk partitioning details. Not available for installer-based images.\n\nGeneral principles:\n\n1. All sizes, whether for specific filesystems, partitions, logical volumes, or the image\nitself, are treated as minimum requirements. This means the full disk image size is always\nlarger than the size of the sum of the partitions, due to requirements for headers and metadata.\n\n2. The partition that contains the root filesystem, whether this is a plain formatted partition,\nan LVM Volume Group, or a Btrfs partition, is always last in the partition table layout when it is\nautomatically added. For Disk customizations the user-defined order is respected.\n\n3. In the case of raw partitioning (no LVM and no Btrfs), the partition containing the root\nfilesystem is grown to fill any left over space on the partition table. Logical Volumes are not\ngrown to fill the space in the Volume Group since they are trivial to grow on a live system."
         },
         {
           "type": "null"

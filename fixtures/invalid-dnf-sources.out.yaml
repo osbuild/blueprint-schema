@@ -1,0 +1,7 @@
+dnf:
+    repositories:
+        - base_urls:
+            - https://mirror.fedora.example.com/fedora/$releasever/$basearch/cisco-openh264
+          id: fedora-cisco-openh264
+          metalink: https://mirrors.fedoraproject.org/metalink?repo=fedora-cisco-openh264-$releasever&arch=$basearch
+name: 'Blueprint example: DNF'

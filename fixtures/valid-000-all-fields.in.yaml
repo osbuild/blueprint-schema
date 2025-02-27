@@ -1,44 +1,14 @@
 #
-# Decisions for the initial version so far:
+# A complete example of a blueprint with all possible fields.
 #
-# * Minimum top-level fields (name, description).
-# * Prefer minimal nesting (two levels max).
-# * Snake case naming for all keys (snake_case).
-# * Plurals for composite elements (sequences, mappings).
-# * Utilize native YAML data types (e.g. date, time).
-# * Utilize default values from JSON Schema (boolean can be true).
-#
-# We will specify if composer request should be part of bluprint schema or not.
-
-# image request (type) aka compose request (distro, version, arch)
 ---
-compose_request:
-  type: "aws" # consequence on blueprint validation
-  distribution:
-    name: "fedora"
-    version: "42"
-  architecture: "x86_84"
-  ostree:
-    url: "https://cert.console.stage.redhat.com/api/pulp-content/em652321d/myrhel-2747841137116337868"
-    content_url: ""
-    ref: "rhel/8/x86_64/edge" # consider separating commit ref from source ref
-    parent: "rhel/8/x86_64/edge"
-    rhsm: true
-  upload:
-    - type: "aws"
-      share_with_accounts: ["123456789"]
-...
-
-# the blueprint
----
-name: "Blueprint example: xxx"
-description: ""
-hostname: "localhost"
+name: "Blueprint example"
+description: "A complete example of a blueprint with all possible fields"
+hostname: "worker.example.com"
 fips:
   enabled: true
 dnf:
   packages:
-    # anything that DNF library consumes
     - "vim-enhanced"
     - "vim-enhanced-9.1.866-1"
     - "vim-enhanced-9.1.866-1.fc41.x86_64"
@@ -49,6 +19,16 @@ dnf:
     - "/etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-18-primary"
   modules:
     - "postgres:16/server"
+  repositories:
+    - id: "fedora-cisco-openh264"
+      name: "Fedora $releasever openh264 (From Cisco) - $basearch"
+      metalink: "https://mirrors.fedoraproject.org/metalink?repo=fedora-cisco-openh264-$releasever&arch=$basearch"
+      gpg_keys: ["file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch"]
+      gpg_check_repo: false
+      ssl_verify: true
+      usage:
+        install: true
+        configure: true
 containers:
   - source: "quay.io/fedora/fedora:latest"
     name: "fedora"
@@ -61,9 +41,8 @@ kernel:
 registration:
   redhat:
     activation_key: "123456789"
-    organization: "123456" # XXX should this be org_id instead? no preference.
+    organization: "123456"
     subscription_manager:
-      # internal use only
       enabled: true
       product_plugin_enabled: true
       repository_management: true
@@ -74,19 +53,19 @@ registration:
       enabled: true
   fdo:
     manufacturing_server_url: ""
-    diun_pub_key_insecure: false
-    diun_pub_key_hash: ""
     diun_pub_key_root_certs: ""
+    #diun_pub_key_insecure: false
+    #diun_pub_key_hash: ""
     di_mfg_string_type_mac_iface: ""
 network:
   firewall:
     services:
       - service: "ssh"
-        protocol: "tcp" # default value
-        enabled: true # default value
+        protocol: "tcp"
+        enabled: true
       - service: "dhcp"
       - port: 53
-        protocol: "both"
+        protocol: "any"
         enabled: false
       - from: 60000
         to: 60010
@@ -117,14 +96,14 @@ systemd:
   enabled: ["sshd.service", "backup.timer"]
   disabled: ["tuned", "cupsd"]
   masked: []
-fsnodes: # new feature (was file/dir)
+fsnodes:
   - path: "/var/tmp/dir"
-    type: "dir" # file as the default (file, dir)
-    state: "present" # the default
-    mode: 0755 # 0700 default
-    user: "lzap" # 0 default
-    group: "lzap" # 0 default
-    ensure_parents: true # false default
+    type: "dir"
+    state: "present"
+    mode: 0755
+    user: "lzap"
+    group: "lzap"
+    ensure_parents: true
   - path: "/var/tmp/dir/file1"
     type: "file"
     state: "present"
@@ -137,11 +116,11 @@ fsnodes: # new feature (was file/dir)
     contents:
       text: "test" # useful for text
 ignition:
-  embedded_text: ""
-  embedded_base64: ""
-  firstboot_url: ""
+  firstboot_url: "https://ignition.example.com/firstboot"
+  #embedded_text: ""
+  #embedded_base64: ""
 installer:
-  anaconda: # only effective for certain image types
+  anaconda:
     unattended: true
     sudo_nopasswd: ["lzap"]
     enabled_modules: ["org.fedoraproject.Anaconda.Modules.Subscription"]
@@ -157,16 +136,16 @@ openscap:
   tailoring:
     selected: []
     unselected: ["xccdf_org.ssgproject.content_rule_grub2_password"]
-    json_profile_id: "name-of-profile-used-in-json-tailoring-file"
-    json_filepath: "file:///some/path/tailoring-file.json"
-storage: # applies only to disc images
-  type: "gpt" # mbr or gpt
+    #json_profile_id: "name-of-profile-used-in-json-tailoring-file"
+    #json_filepath: "file:///some/path/tailoring-file.json"
+storage:
+  type: "gpt"
   minsize: "150 GiB"
   partitions:
-    - type: "plain" # lvm or btrfs
+    - type: "plain"
       label: "label"
       mountpoint: "/"
-      fs_type: "ext4" # or xfs or swap or vfat
+      fs_type: "ext4"
       minsize: "50 GiB"
     - type: "lvm"
       name: "vg_name"
@@ -182,22 +161,3 @@ storage: # applies only to disc images
       subvolumes:
         - name: "name"
           mountpoint: "/opt/name"
-# schema done up to this point
-# move to /dnf field
-repositories:
-  - type: "dnf" # the default and the only supported value
-    id: ""
-    name: ""
-    filename: ""
-    base_urls: [""]
-    mirror_list: ""
-    metalink: ""
-    gpg_keys: [""]
-    gpg_check: true
-    gpg_check_repo: true
-    priority: 99
-    ssl_verify: true
-    module_hotfixes: false
-    usage:
-      install: true # use repo for image build
-      configure: true # configure repo for dnf

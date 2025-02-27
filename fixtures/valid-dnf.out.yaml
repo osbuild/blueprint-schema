@@ -9,4 +9,14 @@ dnf:
         - mosh
         - vim-enhanced-9.1.866-1.fc41.x86_64
         - '@virtualization'
+    repositories:
+        - gpg_keys:
+            - file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
+          id: fedora-cisco-openh264
+          metalink: https://mirrors.fedoraproject.org/metalink?repo=fedora-cisco-openh264-$releasever&arch=$basearch
+          name: Fedora $releasever openh264 (From Cisco) - $basearch
+          ssl_verify: true
+          usage:
+            configure: true
+            install: true
 name: 'Blueprint example: DNF'
