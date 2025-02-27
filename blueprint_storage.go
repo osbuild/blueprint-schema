@@ -89,4 +89,5 @@ type SubvolumesStorage struct {
 
 // JSONSchemaExtend can be used to extend the generated JSON schema from Go struct tags
 func (PartitionsStorage) JSONSchemaExtend(s *jsonschema.Schema) {
+	s.AllOf = PartialSchema("blueprint_storage.yaml").AllOf
 }

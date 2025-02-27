@@ -39,6 +39,6 @@ type FSNodeContents struct {
 // JSONSchemaExtend can be used to extend the generated JSON schema from Go struct tags
 func (FSNode) JSONSchemaExtend(s *jsonschema.Schema) {
 	s.AllOf = []*jsonschema.Schema{
-		PartialSchema("blueprint_fsnode_dir.yaml"),
+		PartialSchema("blueprint_fsnode.yaml"),
 	}
 }

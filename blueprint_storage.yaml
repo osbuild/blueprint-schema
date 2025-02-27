@@ -1,0 +1,53 @@
+---
+allOf:
+  - if:
+      required:
+        - type
+      properties:
+        type:
+          const: plain
+    then:
+      required:
+        - mountpoint
+        - fs_type
+        - minsize
+        - label
+      not:
+        required:
+          - name
+          - logical_volumes
+          - subvolumes
+  - if:
+      required:
+        - type
+      properties:
+        type:
+          const: lvm
+    then:
+      required:
+        - name
+        - logical_volumes
+        - minsize
+      not:
+        required:
+          - mountpoint
+          - fs_type
+          - label
+          - subvolumes
+  - if:
+      required:
+        - type
+      properties:
+        type:
+          const: btrfs
+    then:
+      required:
+        - subvolumes
+        - minsize
+      not:
+        required:
+          - name
+          - logical_volumes
+          - mountpoint
+          - fs_type
+          - label

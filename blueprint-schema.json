@@ -763,6 +763,89 @@
       "type": "object"
     },
     "PartitionsStorage": {
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "plain"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "not": {
+              "required": [
+                "name",
+                "logical_volumes",
+                "subvolumes"
+              ]
+            },
+            "required": [
+              "mountpoint",
+              "fs_type",
+              "minsize",
+              "label"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "lvm"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "not": {
+              "required": [
+                "mountpoint",
+                "fs_type",
+                "label",
+                "subvolumes"
+              ]
+            },
+            "required": [
+              "name",
+              "logical_volumes",
+              "minsize"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "btrfs"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "not": {
+              "required": [
+                "name",
+                "logical_volumes",
+                "mountpoint",
+                "fs_type",
+                "label"
+              ]
+            },
+            "required": [
+              "subvolumes",
+              "minsize"
+            ]
+          }
+        }
+      ],
       "properties": {
         "type": {
           "type": "string",
