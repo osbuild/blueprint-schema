@@ -2,23 +2,6 @@ package blueprint
 
 import "time"
 
-// accounts:
-//
-//	users:
-//	  - name: "lzap"
-//	    description: ""
-//	    password: ""
-//	    ssh_keys:
-//	      - "ssh-key 1234"
-//	    home: "/home/lzap"
-//	    shell: "/usr/bin/bash"
-//	    uid: 1001
-//	    gid: 1001
-//	    groups: ["wheel", "operators"]
-//	    expires: 2050-05-13
-//	groups:
-//	  - name: "operators"
-//	    gid: 1042
 type Accounts struct {
 	// Operating system user accounts to be created on the image.
 	Users []UserAccount `json:"users,omitempty" jsonschema:"nullable"`

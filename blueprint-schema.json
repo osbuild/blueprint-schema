@@ -34,8 +34,7 @@
         }
       },
       "additionalProperties": false,
-      "type": "object",
-      "description": "accounts:\n\n\tusers:\n\t  - name: \"lzap\"\n\t    description: \"\"\n\t    password: \"\"\n\t    ssh_keys:\n\t      - \"ssh-key 1234\"\n\t    home: \"/home/lzap\"\n\t    shell: \"/usr/bin/bash\"\n\t    uid: 1001\n\t    gid: 1001\n\t    groups: [\"wheel\", \"operators\"]\n\t    expires: 2050-05-13\n\tgroups:\n\t  - name: \"operators\"\n\t    gid: 1042"
+      "type": "object"
     },
     "AnacondaInstaller": {
       "oneOf": [
@@ -747,63 +746,49 @@
           "anyOf": [
             {
               "required": [
+                "selected"
+              ]
+            },
+            {
+              "required": [
+                "unselected"
+              ]
+            },
+            {
+              "required": [
                 "selected",
                 "unselected"
-              ],
-              "title": "tailoring_both"
-            },
-            {
-              "required": [
-                "selected"
-              ],
-              "title": "tailoring_selected"
-            },
-            {
-              "required": [
-                "unselected"
-              ],
-              "title": "tailoring_unselected"
+              ]
             }
           ]
         },
         {
-          "oneOf": [
-            {
-              "required": [
-                "json_profile_id",
-                "json_filepath"
-              ],
-              "title": "tailoring_json"
-            }
+          "required": [
+            "json_profile_id",
+            "json_filepath"
           ]
         }
       ],
       "properties": {
+        "json_filepath": {
+          "type": "string"
+        },
+        "json_profile_id": {
+          "type": "string"
+        },
         "selected": {
           "items": {
             "type": "string"
           },
-          "type": "array",
-          "description": "Selected rules, cannot be used with json_profile_id and json_filepath."
+          "type": "array"
         },
         "unselected": {
           "items": {
             "type": "string"
           },
-          "type": "array",
-          "description": "Unselected rules, cannot be used with json_profile_id and json_filepath."
-        },
-        "json_profile_id": {
-          "type": "string",
-          "description": "JSON profile ID, must be used with json_filepath and cannot be used with selected and unselected fields."
-        },
-        "json_filepath": {
-          "type": "string",
-          "description": "JSON filepath, must be used with json_profile_id and cannot be used with selected and unselected fields."
+          "type": "array"
         }
-      },
-      "additionalProperties": false,
-      "type": "object"
+      }
     },
     "PartitionsStorage": {
       "properties": {

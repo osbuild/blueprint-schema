@@ -1,5 +1,7 @@
 package blueprint
 
+import "github.com/invopop/jsonschema"
+
 type Storage struct {
 	// Device partitioning type: gpt (default) or mbr.
 	Type string `json:"type" jsonschema:"required,default=gpt,enum=gpt,enum=mbr"`
@@ -83,4 +85,8 @@ type SubvolumesStorage struct {
 
 	// Mount point of the subvolume. Required. Swap filesystem type is not supported on BTRFS volumes.
 	MountPoint string `json:"mountpoint,omitempty" jsonschema:"pattern=^/"`
+}
+
+// JSONSchemaExtend can be used to extend the generated JSON schema from Go struct tags
+func (PartitionsStorage) JSONSchemaExtend(s *jsonschema.Schema) {
 }

@@ -1,0 +1,26 @@
+---
+properties:
+  selected:
+    type: array
+    items:
+      type: string
+  unselected:
+    type: array
+    items:
+      type: string
+  json_profile_id:
+    type: string
+  json_filepath:
+    type: string
+oneOf:
+  - anyOf:
+    - required:
+        - selected
+    - required:
+        - unselected
+    - required:
+        - selected
+        - unselected
+  - required:
+      - json_profile_id
+      - json_filepath

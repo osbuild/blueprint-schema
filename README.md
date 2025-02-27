@@ -39,7 +39,61 @@ The schema is JSON Schema Draft 2020-12 compliant and can be included in OpenAPI
 
 The schema generator uses both Go struct tags `json` and `jsonschema` as well as Go documentation to create the schema. Note although YAML is supported too, no YAML Go struct tags are required since YAML is always converted to JSON first and then loaded using JSON Go struct tags to ensure consistency.
 
-Read [jsonschema](https://github.com/invopop/jsonschema) library for more details about available Go struct tags and supported features.
+Example type:
+
+```go
+type Locale struct {
+	// The languages attribute is a list of strings that contains the languages to be installed on the image.
+	// To list available languages, run: localectl list-locales
+	Languages []string `json:"languages,omitempty" jsonschema:"nullable,default=en_US.UTF-8"`
+
+	// The keyboards attribute is a list of strings that contains the keyboards to be installed on the image.
+	// To list available keyboards, run: localectl list-keymaps
+	Keyboards []string `json:"keyboards,omitempty" jsonschema:"nullable,default=us"`
+}
+```
+
+There are few types where defining schema via Go struct tags is unreadable or limiting. In that cases, files with the pattern `blueprint_*.yaml` are embedded and loaded into memory and compiled into the schema during application load. These are called schema *partials* and they can only be written in YAML which is then turned into JSON (Schema). Example:
+
+```yaml
+---
+properties:
+  selected:
+    type: array
+    items:
+      type: string
+  unselected:
+    type: array
+    items:
+      type: string
+  json_profile_id:
+    type: string
+  json_filepath:
+    type: string
+oneOf:
+  - anyOf:
+    - required:
+        - selected
+    - required:
+        - unselected
+    - required:
+        - selected
+        - unselected
+  - required:
+      - json_profile_id
+      - json_filepath
+```
+
+Then used from a Go type via `JSONSchema` method which overrides all `jsonschema` Go types for that particular type. 
+
+```go
+// JSONSchema can be used to generate JSON schema programmatically.
+func (OpenSCAPTailoring) JSONSchema() *jsonschema.Schema {
+	return PartialSchema("blueprint_openscap.yaml")
+}
+```
+
+It is also possible to achieve a hybrid approach with `JSONSchemaExtend` or `JSONSchemaProperty` methods. Read [jsonschema](https://github.com/invopop/jsonschema) library for more details about available Go struct tags and supported features. More information about the JSON Schema can be found [on the project webpage](https://json-schema.org).
 
 ## Using the types in Go
 
@@ -259,6 +313,7 @@ TBD
 * https://github.com/osbuild/blueprint-schema/blob/main/blueprint.go#L63
 * Generate markdown/HTML documentation for the schema with examples
 * Attestations
+* Implement [common defs/refs](https://tour.json-schema.org/content/06-Combining-Subschemas/01-Reusing-and-Referencing-with-defs-and-ref).
 * Github page with JSON/YAML editors
 * Example loading on github page
 * WASI/WASM conversion API and convertor on github page
