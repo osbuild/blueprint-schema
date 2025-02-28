@@ -1,6 +1,7 @@
 name: "Blueprint example: ingition"
 ignition:
-  embedded_text: |
+  embedded:
+    text: |
       {
         "ignition": {
           "version": "3.1.0"

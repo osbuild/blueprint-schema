@@ -6,7 +6,7 @@ accounts:
           name: kiosk
     users:
         - description: Lukáš Zapletal
-          expires: "2050-05-13T00:00:00Z"
+          expires: "2050-05-13"
           gid: 1001
           groups:
             - wheel
@@ -18,16 +18,16 @@ accounts:
           ssh_keys:
             - ssh-key 1234
           uid: 1001
-        - expires: "0001-01-01T00:00:00Z"
+        - expires: "0001-01-01"
           name: dash-allowed
-        - expires: "0001-01-01T00:00:00Z"
+        - expires: "0001-01-01"
           name: underscore_allowed
-        - expires: "0001-01-01T00:00:00Z"
+        - expires: "0001-01-01"
           name: dot.allowed
-        - expires: "0001-01-01T00:00:00Z"
+        - expires: "0001-01-01"
           name: .head-dot-allowed-too
-        - expires: "0001-01-01T00:00:00Z"
+        - expires: "0001-01-01"
           name: "123456789"
-        - expires: "0001-01-01T00:00:00Z"
+        - expires: "0001-01-01"
           name: trailing-dollar-for-samba$
 name: 'Blueprint example: accounts'

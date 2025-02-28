@@ -2,7 +2,6 @@ package blueprint
 
 import (
 	"github.com/invopop/jsonschema"
-	orderedmap "github.com/wk8/go-ordered-map/v2"
 )
 
 type Installer struct {
@@ -35,16 +34,13 @@ type AnacondaInstaller struct {
 	// The disable list is processed after the enable list and therefore takes priority. In other words, adding the
 	// same module in both enable and disable will result in the module being disabled. Furthermore, adding a module
 	// that is enabled by default to disable will result in the module being disabled.
-	EnabledModules []string `json:"enabled_modules,omitempty"`
+	EnabledModules []string `json:"enabled_modules,omitempty" jsonschema:"nullable"`
 
 	// Disabled modules. See enabled flag for more information.
-	DisabledModules []string `json:"disabled_modules,omitempty"`
+	DisabledModules []string `json:"disabled_modules,omitempty" jsonschema:"nullable"`
 
-	// Kickstart file formatted in plain text.
-	KickstartText string `json:"kickstart_text,omitempty" jsonschema:"oneof_required=kickstart_text"`
-
-	// Kickstart file formatted in base64.
-	KickstartBase64 string `json:"kickstart_base64,omitempty" jsonschema:"oneof_required=kickstart_base64"`
+	// Kickstart installer configuration.
+	Kickstart *KickstartInstaller `json:"kickstart,omitempty" jsonschema:"nullable"`
 }
 
 type CoreOSInstaller struct {
@@ -52,34 +48,19 @@ type CoreOSInstaller struct {
 	InstallationDevice string `json:"installation_device,omitempty"`
 }
 
+type KickstartInstaller struct {
+	// Kickstart file formatted in plain text.
+	Text string `json:"text,omitempty" jsonschema:"oneof_required=kickstart_text"`
+
+	// Kickstart file formatted in base64.
+	Base64 string `json:"base64,omitempty" jsonschema:"oneof_required=kickstart_base64"`
+}
+
 // JSONSchemaExtend can be used to extend the generated JSON schema from Go struct tags
 func (AnacondaInstaller) JSONSchemaExtend(s *jsonschema.Schema) {
-	enum := &jsonschema.Schema{
-		Type: "array",
-		Items: &jsonschema.Schema{
-			Type: "string",
-			Enum: []any{
-				"org.fedoraproject.Anaconda.Modules.Localization",
-				"org.fedoraproject.Anaconda.Modules.Network",
-				"org.fedoraproject.Anaconda.Modules.Payloads",
-				"org.fedoraproject.Anaconda.Modules.Runtime",
-				"org.fedoraproject.Anaconda.Modules.Security",
-				"org.fedoraproject.Anaconda.Modules.Services",
-				"org.fedoraproject.Anaconda.Modules.Storage",
-				"org.fedoraproject.Anaconda.Modules.Subscription",
-				"org.fedoraproject.Anaconda.Modules.Timezone",
-				"org.fedoraproject.Anaconda.Modules.Users",
-			},
-		},
-	}
-
-	enabledPair := orderedmap.Pair[string, *jsonschema.Schema]{
-		Key:   "enabled_modules",
-		Value: enum,
-	}
-	disabledPair := orderedmap.Pair[string, *jsonschema.Schema]{
-		Key:   "disabled_modules",
-		Value: enum,
-	}
-	s.Properties.AddPairs(enabledPair, disabledPair)
+	ps := PartialSchema("blueprint_installer.yaml")
+	s.Properties.AddPairs(
+		*ps.Properties.GetPair("enabled_modules"),
+		*ps.Properties.GetPair("disabled_modules"),
+	)
 }

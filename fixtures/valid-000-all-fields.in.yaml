@@ -52,11 +52,11 @@ registration:
     connector:
       enabled: true
   fdo:
-    manufacturing_server_url: ""
-    diun_pub_key_root_certs: ""
-    #diun_pub_key_insecure: false
-    #diun_pub_key_hash: ""
-    di_mfg_string_type_mac_iface: ""
+    manufacturing_server_url: "https://fdo.example.com/manufacturing"
+    #diun_pub_key_root_certs: ""
+    diun_pub_key_insecure: true
+    diun_pub_key_hash: "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    di_mfg_string_type_mac_iface: "enp0s3"
 network:
   firewall:
     services:
@@ -82,7 +82,7 @@ accounts:
       uid: 1001
       gid: 1001
       groups: ["wheel", "operators"]
-      expires: 2050-05-13
+      expires: "2050-05-13"
   groups:
     - name: "operators"
       gid: 1042
@@ -117,15 +117,13 @@ fsnodes:
       text: "test" # useful for text
 ignition:
   firstboot_url: "https://ignition.example.com/firstboot"
-  #embedded_text: ""
-  #embedded_base64: ""
 installer:
   anaconda:
     unattended: true
     sudo_nopasswd: ["lzap"]
     enabled_modules: ["org.fedoraproject.Anaconda.Modules.Subscription"]
-    disabled_modules: []
-    kickstart_text: ""
+    kickstart:
+      text: "# some kickstart data"
   coreos:
     installation_device: "/dev/vda"
 cacerts:

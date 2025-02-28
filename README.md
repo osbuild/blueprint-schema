@@ -332,14 +332,15 @@ TBD
 
 ### TODO
 
-* Add extra test: `out.yaml` must validate as well (date for account does not work currently)
+* Make a release and CLI/WASM build pipeline
+* Github page with JSON/YAML editors
+* Example loading on github page
+* WASI/WASM conversion API and convertor on github page
+* More fixtures: add intermediate JSON in, JSON out and modify validation so it validates ALL steps (4 in total), results should be probably in YAML rather than OUT so there is a single file
 * Implement conversion tools in both crc/images repos in ./cmd subdirectories and use those tools via "go run" command to generate a nice example set:
 * https://github.com/osbuild/image-builder-crc/blob/main/internal/v1/api.go#L663
 * https://github.com/osbuild/blueprint-schema/blob/main/blueprint.go#L63
 * Generate markdown/HTML documentation for the schema with examples
 * Reformat comments in the comment map to support proper paragraphs
-* Attestations
-* Implement [common defs/refs](https://tour.json-schema.org/content/06-Combining-Subschemas/01-Reusing-and-Referencing-with-defs-and-ref).
-* Github page with JSON/YAML editors
-* Example loading on github page
-* WASI/WASM conversion API and convertor on github page
+* Attestations after confirmed with the team
+* Implement [common defs/refs](https://tour.json-schema.org/content/06-Combining-Subschemas/01-Reusing-and-Referencing-with-defs-and-ref) for example InstallerAnaconda.EnabledModules.

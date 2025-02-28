@@ -45,7 +45,7 @@ type FDORegistration struct {
 	ManufacturingServerURL string `json:"manufacturing_server_url,omitempty" jsonschema:"required"`
 
 	// FDO insecure option. When set, both hash or root certs must not be set.
-	DiunPubKeyInsecure bool `json:"diun_pub_key_insecure,omitempty" jsonschema:"oneof_required=fdo_insecure"`
+	DiunPubKeyInsecure bool `json:"diun_pub_key_insecure,omitempty" jsonschema:"default=false"`
 
 	// FDO server public key hex-encoded hash. Cannot be used together with insecure option or root certs.
 	DiunPubKeyHash string `json:"diun_pub_key_hash,omitempty" jsonschema:"oneof_required=fdo_hash"`

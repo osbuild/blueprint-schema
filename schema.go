@@ -36,7 +36,10 @@ func init() {
 		}
 		f.Close()
 
-		schema := mustBuildFromYAML(contents)
+		schema, err := buildFromYAML(contents)
+		if err != nil {
+			panic(err.Error() + " in file " + file.Name())
+		}
 		partialSchemaMap[file.Name()] = schema
 	}
 }
@@ -61,13 +64,4 @@ func buildFromYAML(yaml []byte) (*jsonschema.Schema, error) {
 	}
 
 	return schema, nil
-}
-
-func mustBuildFromYAML(yaml []byte) *jsonschema.Schema {
-	schema, err := buildFromYAML(yaml)
-	if err != nil {
-		panic(err)
-	}
-
-	return schema
 }

@@ -1,7 +1,5 @@
 package blueprint
 
-import "time"
-
 type Accounts struct {
 	// Operating system user accounts to be created on the image.
 	Users []UserAccount `json:"users,omitempty" jsonschema:"nullable"`
@@ -44,7 +42,9 @@ type UserAccount struct {
 	Groups []string `json:"groups,omitempty"`
 
 	// The expiration date of the account in the format YYYY-MM-DD.
-	Expires time.Time `json:"expires,omitempty" jsonschema:"format=date"`
+	//
+	// Only date is taken into account, time allowed but is ignored for JSON/YAML compatibility.
+	Expires Date `json:"expires,omitempty"`
 }
 
 type GroupAccount struct {

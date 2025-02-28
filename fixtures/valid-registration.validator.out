@@ -1,0 +1,8 @@
+validation failed: jsonschema validation failed with 'blueprint-schema.json'
+- at '/registration': oneOf failed, none matched
+  - at '/registration/fdo': oneOf failed, none matched
+    - at '/registration/fdo': oneOf failed, none matched
+      - at '/registration/fdo': missing property 'diun_pub_key_hash'
+      - at '/registration/fdo': missing property 'diun_pub_key_root_certs'
+    - at '/registration/fdo': got object, want null
+  - at '/registration': got object, want null
