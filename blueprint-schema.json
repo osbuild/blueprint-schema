@@ -11,7 +11,7 @@
                 "$ref": "#/$defs/UserAccount"
               },
               "type": "array",
-              "description": "Operating system user accounts to be created on the image."
+              "description": "Operating system user accounts to be created on the image.\n"
             },
             {
               "type": "null"
@@ -25,7 +25,7 @@
                 "$ref": "#/$defs/GroupAccount"
               },
               "type": "array",
-              "description": "Operating system group accounts to be created on the image."
+              "description": "Operating system group accounts to be created on the image.\n"
             },
             {
               "type": "null"
@@ -40,7 +40,7 @@
       "properties": {
         "unattended": {
           "type": "boolean",
-          "description": "Unattended installation Anaconda flag. When not set, Anaconda installer will ask for user input."
+          "description": "Unattended installation Anaconda flag. When not set, Anaconda installer will ask for user input.\n"
         },
         "sudo_nopasswd": {
           "items": {
@@ -49,7 +49,7 @@
             "pattern": "^[%a-zA-Z0-9_.][a-zA-Z0-9_.$-]*$"
           },
           "type": "array",
-          "description": "Sudo users with NOPASSWD option. Adds a snippet to the kickstart file that, after installation, will create\ndrop-in files in /etc/sudoers.d to allow the specified users and groups to run sudo without a password\n(groups must be prefixed with %)."
+          "description": "Sudo users with NOPASSWD option. Adds a snippet to the kickstart file that, after installation, will create drop-in files in /etc/sudoers.d to allow the specified users and groups to run sudo without a password (groups must be prefixed with %).\n"
         },
         "enabled_modules": {
           "oneOf": [
@@ -105,7 +105,7 @@
           "oneOf": [
             {
               "$ref": "#/$defs/KickstartInstaller",
-              "description": "Kickstart installer configuration."
+              "description": "Kickstart installer configuration.\n"
             },
             {
               "type": "null"
@@ -120,7 +120,7 @@
       "properties": {
         "cert": {
           "type": "string",
-          "description": "The PEM-encoded certificate."
+          "description": "The PEM-encoded certificate.\n"
         }
       },
       "additionalProperties": false,
@@ -133,7 +133,7 @@
       "properties": {
         "enabled": {
           "type": "boolean",
-          "description": "Enables rhc (Red Hat Connector) during boot."
+          "description": "Enables rhc (Red Hat Connector) during boot.\n"
         }
       },
       "additionalProperties": false,
@@ -146,20 +146,20 @@
       "properties": {
         "source": {
           "type": "string",
-          "description": "Container image URL is a reference to a container image at a registry."
+          "description": "Container image URL is a reference to a container image at a registry.\n"
         },
         "name": {
           "type": "string",
-          "description": "Container name is an optional string to set the name under which the container image will\nbe saved in the image. If not specified name falls back to the same value as source."
+          "description": "Container name is an optional string to set the name under which the container image will be saved in the image. If not specified name falls back to the same value as source.\n"
         },
         "tls_verify": {
           "type": "boolean",
-          "description": "Verify TLS connection, default is true.",
+          "description": "Verify TLS connection, default is true.\n",
           "default": true
         },
         "local_storage": {
           "type": "string",
-          "description": "Whether to pull the container image from the host's local-storage."
+          "description": "Whether to pull the container image from the host's local-storage.\n"
         }
       },
       "additionalProperties": false,
@@ -173,7 +173,7 @@
       "properties": {
         "installation_device": {
           "type": "string",
-          "description": "Installation device for iot/edge simplified installer image types."
+          "description": "Installation device for iot/edge simplified installer image types.\n"
         }
       },
       "additionalProperties": false,
@@ -188,7 +188,7 @@
                 "type": "string"
               },
               "type": "array",
-              "description": "Packages to install. Package name or NVRA is accepted as long as DNF can\nresolve it. Examples: vim-enhanced, vim-enhanced-9.1.866-1 or vim-enhanced-9.1.866-1.fc41.x86_64.\nThe packages can also be specified as @group_name to install all packages in the group."
+              "description": "Packages to install. Package name or NVRA is accepted as long as DNF can resolve it. Examples: vim-enhanced, vim-enhanced-9.1.866-1 or vim-enhanced-9.1.866-1.fc41.x86_64. The packages can also be specified as @group_name to install all packages in the group.\n"
             },
             {
               "type": "null"
@@ -202,7 +202,7 @@
                 "type": "string"
               },
               "type": "array",
-              "description": "Groups to install, must match exactly. Groups describes groups of packages to be installed into\nthe image. Package groups are defined in the repository metadata. Each group has a descriptive name\nused primarily for display in user interfaces and an ID more commonly used in kickstart files.\nHere, the ID is the expected way of listing a group. Groups have three different ways of categorizing\ntheir packages: mandatory, default, and optional. For the purposes of blueprints, only mandatory\nand default packages will be installed. There is no mechanism for selecting optional packages."
+              "description": "Groups to install, must match exactly. Groups describes groups of packages to be installed into the image. Package groups are defined in the repository metadata. Each group has a descriptive name used primarily for display in user interfaces and an ID more commonly used in kickstart files. Here, the ID is the expected way of listing a group. Groups have three different ways of categorizing their packages: mandatory, default, and optional. For the purposes of blueprints, only mandatory and default packages will be installed. There is no mechanism for selecting optional packages.\n"
             },
             {
               "type": "null"
@@ -216,7 +216,7 @@
                 "type": "string"
               },
               "type": "array",
-              "description": "Additional file paths to the GPG keys to import. The files must be present in the image.\nDoes not support importing from URLs."
+              "description": "Additional file paths to the GPG keys to import. The files must be present in the image. Does not support importing from URLs.\n"
             },
             {
               "type": "null"
@@ -230,7 +230,7 @@
                 "type": "string"
               },
               "type": "array",
-              "description": "Modules to enable or disable"
+              "description": "Modules to enable or disable\n"
             },
             {
               "type": "null"
@@ -244,7 +244,7 @@
                 "$ref": "#/$defs/DNFRepository"
               },
               "type": "array",
-              "description": "Third-party repositories are supported by the blueprint customizations.\n\nAll fields reflect configuration values of dnf, see man dnf.conf(5) for more information."
+              "description": "Third-party repositories are supported by the blueprint customizations.\n\nAll fields reflect configuration values of dnf, see man dnf.conf(5) for more information.\n"
             },
             {
               "type": "null"
@@ -281,70 +281,70 @@
           "type": "string",
           "maxLength": 256,
           "pattern": "^[a-zA-Z0-9_-]+$",
-          "description": "Repository ID. Required."
+          "description": "Repository ID. Required.\n"
         },
         "name": {
           "type": "string",
-          "description": "Repository name."
+          "description": "Repository name.\n"
         },
         "filename": {
           "type": "string",
           "maxLength": 256,
           "pattern": "^[a-zA-Z0-9_-]+$",
-          "description": "Repository filename to use for the repository configuration file. If not provided, the ID is used.\nFilename must be provided without the .repo extension."
+          "description": "Repository filename to use for the repository configuration file. If not provided, the ID is used. Filename must be provided without the .repo extension.\n"
         },
         "base_urls": {
           "items": {
             "type": "string"
           },
           "type": "array",
-          "description": "Base URLs for the repository."
+          "description": "Base URLs for the repository.\n"
         },
         "mirror_list": {
           "type": "string",
-          "description": "Mirror list for the repository."
+          "description": "Mirror list for the repository.\n"
         },
         "metalink": {
           "type": "string",
-          "description": "Metalink for the repository."
+          "description": "Metalink for the repository.\n"
         },
         "gpg_keys": {
           "items": {
             "type": "string"
           },
           "type": "array",
-          "description": "GPG keys for the repository.\n\nThe blueprint accepts both inline GPG keys and GPG key urls. If an inline GPG key is provided\nit will be saved to the /etc/pki/rpm-gpg directory and will be referenced accordingly in the\nrepository configuration. GPG keys are not imported to the RPM database and will only be imported\nwhen first installing a package from the third-party repository."
+          "description": "GPG keys for the repository.\n\nThe blueprint accepts both inline GPG keys and GPG key urls. If an inline GPG key is provided it will be saved to the /etc/pki/rpm-gpg directory and will be referenced accordingly in the repository configuration. GPG keys are not imported to the RPM database and will only be imported when first installing a package from the third-party repository.\n"
         },
         "gpg_check": {
           "type": "boolean",
-          "description": "Enable GPG check for the repository.",
+          "description": "Enable GPG check for the repository.\n",
           "default": true
         },
         "gpg_check_repo": {
           "type": "boolean",
-          "description": "Enable GPG check for the repository metadata.",
+          "description": "Enable GPG check for the repository metadata.\n",
           "default": true
         },
         "priority": {
           "type": "integer",
-          "description": "Repository priority.",
+          "description": "Repository priority.\n",
           "default": 99
         },
         "ssl_verify": {
           "type": "boolean",
-          "description": "Enable SSL verification for the repository.",
+          "description": "Enable SSL verification for the repository.\n",
           "default": true
         },
         "module_hotfixes": {
           "type": "boolean",
-          "description": "Enable module hotfixes for the repository.\n\nAdds module_hotfixes flag to all repo types so it can be used during osbuild.\nThis enables users to disable modularity filtering on specific repositories.",
+          "description": "Enable module hotfixes for the repository.\n\nAdds module_hotfixes flag to all repo types so it can be used during osbuild. This enables users to disable modularity filtering on specific repositories.\n",
           "default": false
         },
         "usage": {
           "oneOf": [
             {
               "$ref": "#/$defs/DNFRepositoryUsage",
-              "description": "Repository usage. By default, the repository is configured on the image but not used for image build."
+              "description": "Repository usage. By default, the repository is configured on the image but not used for image build.\n"
             },
             {
               "type": "null"
@@ -362,12 +362,12 @@
       "properties": {
         "install": {
           "type": "boolean",
-          "description": "Use the repository for image build.\n\nWhen this flag is set, it is possible to install third-party packages during the image build.",
+          "description": "Use the repository for image build.\n\nWhen this flag is set, it is possible to install third-party packages during the image build.\n",
           "default": false
         },
         "configure": {
           "type": "boolean",
-          "description": "Configure the repository for dnf.\n\nA repository will be saved to the /etc/yum.repos.d directory in an image.\nAn optional filename argument can be set, otherwise the repository will be saved using the the repository\nID, i.e. /etc/yum.repos.d/\u003crepo-id\u003e.repo.",
+          "description": "Configure the repository for dnf.\n\nA repository will be saved to the /etc/yum.repos.d directory in an image. An optional filename argument can be set, otherwise the repository will be saved using the the repository ID, i.e. /etc/yum.repos.d/\u003crepo-id\u003e.repo.\n",
           "default": true
         }
       },
@@ -379,7 +379,7 @@
       "additionalProperties": false,
       "type": "string",
       "pattern": "^\\d{4}-\\d{2}-\\d{2}$T?[0-9:Z-]*",
-      "description": "Date type which accepts date (YYYY-MM-DD) or date-time (RFC3339) format and only\nmarshals into date format. This is needed for JSON/YAML compatibility since YAML\nautomatically converts strings which look like dates into time.Time."
+      "description": "Date type which accepts date (YYYY-MM-DD) or date-time (RFC3339) format and only marshals into date format. This is needed for JSON/YAML compatibility since YAML automatically converts strings which look like dates into time.Time.\n"
     },
     "FDORegistration": {
       "oneOf": [
@@ -399,24 +399,24 @@
       "properties": {
         "manufacturing_server_url": {
           "type": "string",
-          "description": "FDO manufacturing server URL."
+          "description": "FDO manufacturing server URL.\n"
         },
         "diun_pub_key_insecure": {
           "type": "boolean",
-          "description": "FDO insecure option. When set, both hash or root certs must not be set.",
+          "description": "FDO insecure option. When set, both hash or root certs must not be set.\n",
           "default": false
         },
         "diun_pub_key_hash": {
           "type": "string",
-          "description": "FDO server public key hex-encoded hash. Cannot be used together with insecure option or root certs."
+          "description": "FDO server public key hex-encoded hash. Cannot be used together with insecure option or root certs.\n"
         },
         "diun_pub_key_root_certs": {
           "type": "string",
-          "description": "FDO server public key root certificate path. Cannot be used together with insecure option or hash."
+          "description": "FDO server public key root certificate path. Cannot be used together with insecure option or hash.\n"
         },
         "di_mfg_string_type_mac_iface": {
           "type": "string",
-          "description": "Optional interface name for the MAC address."
+          "description": "Optional interface name for the MAC address.\n"
         }
       },
       "additionalProperties": false,
@@ -429,7 +429,7 @@
       "properties": {
         "enabled": {
           "type": "boolean",
-          "description": "Enables the system FIPS mode (disabled by default). Currently only edge-raw-image, edge-installer,\nedge-simplified-installer, edge-ami and edge-vsphere images support this customization."
+          "description": "Enables the system FIPS mode (disabled by default). Currently only edge-raw-image, edge-installer, edge-simplified-installer, edge-ami and edge-vsphere images support this customization.\n"
         }
       },
       "additionalProperties": false,
@@ -461,7 +461,7 @@
         "path": {
           "type": "string",
           "pattern": "^/",
-          "description": "Path is the absolute path to the file or directory."
+          "description": "Path is the absolute path to the file or directory.\n"
         },
         "type": {
           "type": "string",
@@ -469,7 +469,7 @@
             "file",
             "dir"
           ],
-          "description": "Type is the type of the file system node, one of: file, dir.",
+          "description": "Type is the type of the file system node, one of: file, dir.\n",
           "default": "file"
         },
         "state": {
@@ -478,33 +478,33 @@
             "present",
             "absent"
           ],
-          "description": "State is the state of the file system node, one of: present, absent.",
+          "description": "State is the state of the file system node, one of: present, absent.\n",
           "default": "present"
         },
         "mode": {
           "type": "integer",
-          "description": "Mode is the file system node permissions. Defaults to 0644 for files and 0755 for directories."
+          "description": "Mode is the file system node permissions. Defaults to 0644 for files and 0755 for directories.\n"
         },
         "user": {
           "type": "string",
-          "description": "User is the file system node owner. Defaults to root.",
+          "description": "User is the file system node owner. Defaults to root.\n",
           "default": "root"
         },
         "group": {
           "type": "string",
-          "description": "Group is the file system node group. Defaults to root.",
+          "description": "Group is the file system node group. Defaults to root.\n",
           "default": "root"
         },
         "ensure_parents": {
           "type": "boolean",
-          "description": "EnsureParents is a boolean that determines if the parent directories should be created if they do not exist.",
+          "description": "EnsureParents is a boolean that determines if the parent directories should be created if they do not exist.\n",
           "default": false
         },
         "contents": {
           "oneOf": [
             {
               "$ref": "#/$defs/FSNodeContents",
-              "description": "Contents is the file system node contents. When not present, an empty file is created."
+              "description": "Contents is the file system node contents. When not present, an empty file is created.\n"
             },
             {
               "type": "null"
@@ -522,11 +522,11 @@
       "properties": {
         "base64": {
           "type": "string",
-          "description": "Base64-encoded file contents. Useful for binaries."
+          "description": "Base64-encoded file contents. Useful for binaries.\n"
         },
         "text": {
           "type": "string",
-          "description": "Plain text file contents."
+          "description": "Plain text file contents.\n"
         }
       },
       "additionalProperties": false,
@@ -538,12 +538,12 @@
           "type": "string",
           "maxLength": 256,
           "pattern": "^[a-zA-Z0-9_.][a-zA-Z0-9_.$-]*$",
-          "description": "Group name. Accepted characters: lowercase letters, digits, underscores, dollars, and hyphens.\nName must not start with a hyphen. Maximum length is 256 characters. The validation pattern is\na relaxed version of https://github.com/shadow-maint/shadow/blob/master/lib/chkname.c"
+          "description": "Group name. Accepted characters: lowercase letters, digits, underscores, dollars, and hyphens. Name must not start with a hyphen. Maximum length is 256 characters. The validation pattern is a relaxed version of https://github.com/shadow-maint/shadow/blob/master/lib/chkname.c\n"
         },
         "gid": {
           "type": "integer",
           "minimum": 1,
-          "description": "The group ID (GID) of the group."
+          "description": "The group ID (GID) of the group.\n"
         }
       },
       "additionalProperties": false,
@@ -570,11 +570,11 @@
       "properties": {
         "firstboot_url": {
           "type": "string",
-          "description": "The URL to the Ignition configuration to be used by Ignition. This configuration is a URL to a remote Ignition\nconfiguration. The firstboot_url is used if the embedded configuration is not specified.\n\nCannot be used with embedded_base64 or embedded_text."
+          "description": "The URL to the Ignition configuration to be used by Ignition. This configuration is a URL to a remote Ignition configuration. The firstboot_url is used if the embedded configuration is not specified.\n\nCannot be used with embedded_base64 or embedded_text.\n"
         },
         "embedded": {
           "$ref": "#/$defs/IgnitionEmbedded",
-          "description": "The embedded Ignition configuration to be used by Ignition. This configuration is embedded in the blueprint.\n\nCannot be used with firstboot_url."
+          "description": "The embedded Ignition configuration to be used by Ignition. This configuration is embedded in the blueprint.\n\nCannot be used with firstboot_url.\n"
         }
       },
       "additionalProperties": false,
@@ -598,11 +598,11 @@
       "properties": {
         "text": {
           "type": "string",
-          "description": "Ignition data formatted in plain text."
+          "description": "Ignition data formatted in plain text.\n"
         },
         "base64": {
           "type": "string",
-          "description": "Ignition data formatted in base64."
+          "description": "Ignition data formatted in base64.\n"
         }
       },
       "additionalProperties": false,
@@ -612,7 +612,7 @@
       "properties": {
         "enabled": {
           "type": "boolean",
-          "description": "Enables insights client during boot."
+          "description": "Enables insights client during boot.\n"
         }
       },
       "additionalProperties": false,
@@ -627,7 +627,7 @@
           "oneOf": [
             {
               "$ref": "#/$defs/AnacondaInstaller",
-              "description": "Extra customizations for Anaconda installer (ISO) image types.\n\nBlueprint customizations that match the kickstart options (languages, keyboard, timezone)\nwill change the value in the kickstart file as well."
+              "description": "Extra customizations for Anaconda installer (ISO) image types.\n\nBlueprint customizations that match the kickstart options (languages, keyboard, timezone) will change the value in the kickstart file as well.\n"
             },
             {
               "type": "null"
@@ -638,7 +638,7 @@
           "oneOf": [
             {
               "$ref": "#/$defs/CoreOSInstaller",
-              "description": "CoreOS installer configuration is required by the edge-simplified-installer image. It allows to define the\ndestination device for the installation."
+              "description": "CoreOS installer configuration is required by the edge-simplified-installer image. It allows to define the destination device for the installation.\n"
             },
             {
               "type": "null"
@@ -653,7 +653,7 @@
       "properties": {
         "package": {
           "type": "string",
-          "description": "Kernel DNF package name to replace the standard kernel with."
+          "description": "Kernel DNF package name to replace the standard kernel with.\n"
         },
         "cmdline_append": {
           "oneOf": [
@@ -662,7 +662,7 @@
                 "type": "string"
               },
               "type": "array",
-              "description": "An optional string to append arguments to the bootloader kernel command line. The list\nwill be concatenated with spaces."
+              "description": "An optional string to append arguments to the bootloader kernel command line. The list will be concatenated with spaces.\n"
             },
             {
               "type": "null"
@@ -691,11 +691,11 @@
       "properties": {
         "text": {
           "type": "string",
-          "description": "Kickstart file formatted in plain text."
+          "description": "Kickstart file formatted in plain text.\n"
         },
         "base64": {
           "type": "string",
-          "description": "Kickstart file formatted in base64."
+          "description": "Kickstart file formatted in base64.\n"
         }
       },
       "additionalProperties": false,
@@ -710,7 +710,7 @@
                 "type": "string"
               },
               "type": "array",
-              "description": "The languages attribute is a list of strings that contains the languages to be installed on the image.\nTo list available languages, run: localectl list-locales",
+              "description": "The languages attribute is a list of strings that contains the languages to be installed on the image. To list available languages, run: localectl list-locales\n",
               "default": [
                 "en_US.UTF-8"
               ]
@@ -727,7 +727,7 @@
                 "type": "string"
               },
               "type": "array",
-              "description": "The keyboards attribute is a list of strings that contains the keyboards to be installed on the image.\nTo list available keyboards, run: localectl list-keymaps",
+              "description": "The keyboards attribute is a list of strings that contains the keyboards to be installed on the image. To list available keyboards, run: localectl list-keymaps\n",
               "default": [
                 "us"
               ]
@@ -745,16 +745,16 @@
       "properties": {
         "name": {
           "type": "string",
-          "description": "Logical volume name. When not set, will be generated automatically."
+          "description": "Logical volume name. When not set, will be generated automatically.\n"
         },
         "label": {
           "type": "string",
-          "description": "Label of the logical volume."
+          "description": "Label of the logical volume.\n"
         },
         "mountpoint": {
           "type": "string",
           "pattern": "^/",
-          "description": "Mount point of the logical volume. Required except for swap fs_type."
+          "description": "Mount point of the logical volume. Required except for swap fs_type.\n"
         },
         "fs_type": {
           "type": "string",
@@ -764,13 +764,13 @@
             "swap",
             "vfat"
           ],
-          "description": "File system type: ext4 (default), xfs, swap, or vfat.",
+          "description": "File system type: ext4 (default), xfs, swap, or vfat.\n",
           "default": "ext4"
         },
         "minsize": {
           "type": "string",
           "pattern": "^\\d+\\s*[BKkMGTPE]i?[BKMGTPE]?$",
-          "description": "Minimum size of the logical volume.\n\nSize must be formatted as an integer followed by whitespace and then either a decimal unit\n(B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB, TiB, PiB, EiB)."
+          "description": "Minimum size of the logical volume.\n\nSize must be formatted as an integer followed by whitespace and then either a decimal unit (B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB, TiB, PiB, EiB).\n"
         }
       },
       "additionalProperties": false,
@@ -780,7 +780,7 @@
       "properties": {
         "firewall": {
           "$ref": "#/$defs/NetworkFirewall",
-          "description": "Firewall details - package firewalld must be installed in the image."
+          "description": "Firewall details - package firewalld must be installed in the image.\n"
         }
       },
       "additionalProperties": false,
@@ -851,7 +851,7 @@
                 "type": "object"
               },
               "type": "array",
-              "description": "Services to enable or disable. The service can be defined via an assigned IANA name,\nport number or port range.\n\nServices are processed in order, when a service is disabled and then accidentally enabled\nvia a port or a port range, the service will be enabled in the end.\n\nBy default the firewall blocks all access, except for services that enable their ports\nexplicitly such as the sshd."
+              "description": "Services to enable or disable. The service can be defined via an assigned IANA name, port number or port range.\n\nServices are processed in order, when a service is disabled and then accidentally enabled via a port or a port range, the service will be enabled in the end.\n\nBy default the firewall blocks all access, except for services that enable their ports explicitly such as the sshd.\n"
             },
             {
               "type": "null"
@@ -866,17 +866,17 @@
       "properties": {
         "profile_id": {
           "type": "string",
-          "description": "The desired security profile ID."
+          "description": "The desired security profile ID.\n"
         },
         "datastream": {
           "type": "string",
-          "description": "Datastream to use for the scan. The datastream is the path to the SCAP datastream file to use for the scan.\nIf the datastream parameter is not provided, a sensible default based on the selected distro will be chosen."
+          "description": "Datastream to use for the scan. The datastream is the path to the SCAP datastream file to use for the scan. If the datastream parameter is not provided, a sensible default based on the selected distro will be chosen.\n"
         },
         "tailoring": {
           "oneOf": [
             {
               "$ref": "#/$defs/OpenSCAPTailoring",
-              "description": "An optional OpenSCAP tailoring information. Can be done via profile selection or tailoring JSON file.\n\nIn case of profile selection, a tailoring file with a new tailoring profile ID is created and saved to the image.\nThe new tailoring profile ID is created by appending the _osbuild_tailoring suffix to the base profile.\nFor example, given tailoring options for the cis profile, tailoring profile\nxccdf_org.ssgproject.content_profile_cis_osbuild_tailoring will be created. The default namespace of the rules\nis org.ssgproject.content, so the prefix may be omitted for rules under this namespace, i.e.\norg.ssgproject.content_grub2_password and grub2_password are functionally equivalent.\nThe generated tailoring file is saved to the image as /usr/share/xml/osbuild-oscap-tailoring/tailoring.xml or,\nfor newer releases, in the /oscap_data directory, this is the location used for other OpenSCAP related artifacts.\n\nIt is also possible to use JSON tailoring. In that case, custom JSON file must be provided using the blueprint and\nused in json_filepath field alongside with json_profile_id field. The generated XML tailoring file is saved to the\nimage as /oscap_data/tailoring.xml."
+              "description": "An optional OpenSCAP tailoring information. Can be done via profile selection or tailoring JSON file.\n\nIn case of profile selection, a tailoring file with a new tailoring profile ID is created and saved to the image. The new tailoring profile ID is created by appending the _osbuild_tailoring suffix to the base profile. For example, given tailoring options for the cis profile, tailoring profile xccdf_org.ssgproject.content_profile_cis_osbuild_tailoring will be created. The default namespace of the rules is org.ssgproject.content, so the prefix may be omitted for rules under this namespace, i.e. org.ssgproject.content_grub2_password and grub2_password are functionally equivalent. The generated tailoring file is saved to the image as /usr/share/xml/osbuild-oscap-tailoring/tailoring.xml or, for newer releases, in the /oscap_data directory, this is the location used for other OpenSCAP related artifacts.\n\nIt is also possible to use JSON tailoring. In that case, custom JSON file must be provided using the blueprint and used in json_filepath field alongside with json_profile_id field. The generated XML tailoring file is saved to the image as /oscap_data/tailoring.xml.\n"
             },
             {
               "type": "null"
@@ -925,22 +925,22 @@
             "type": "string"
           },
           "type": "array",
-          "description": "Selected rules, cannot be used with json_profile_id and json_filepath."
+          "description": "Selected rules, cannot be used with json_profile_id and json_filepath.\n"
         },
         "unselected": {
           "items": {
             "type": "string"
           },
           "type": "array",
-          "description": "Unselected rules, cannot be used with json_profile_id and json_filepath."
+          "description": "Unselected rules, cannot be used with json_profile_id and json_filepath.\n"
         },
         "json_profile_id": {
           "type": "string",
-          "description": "JSON profile ID, must be used with json_filepath and cannot be used with selected and unselected fields."
+          "description": "JSON profile ID, must be used with json_filepath and cannot be used with selected and unselected fields.\n"
         },
         "json_filepath": {
           "type": "string",
-          "description": "JSON filepath, must be used with json_profile_id and cannot be used with selected and unselected fields."
+          "description": "JSON filepath, must be used with json_profile_id and cannot be used with selected and unselected fields.\n"
         }
       },
       "additionalProperties": false,
@@ -1086,17 +1086,17 @@
             "lvm",
             "btrfs"
           ],
-          "description": "Partition type: plain (default), lvm, or btrfs.",
+          "description": "Partition type: plain (default), lvm, or btrfs.\n",
           "default": "plain"
         },
         "label": {
           "type": "string",
-          "description": "Label of the partition.\n\nRelevant for partition types: plain."
+          "description": "Label of the partition.\n\nRelevant for partition types: plain.\n"
         },
         "mountpoint": {
           "type": "string",
           "pattern": "^/",
-          "description": "Mount point of the partition. Required except for swap fs_type.\n\nRelevant for partition types: plain."
+          "description": "Mount point of the partition. Required except for swap fs_type.\n\nRelevant for partition types: plain.\n"
         },
         "fs_type": {
           "type": "string",
@@ -1106,31 +1106,31 @@
             "swap",
             "vfat"
           ],
-          "description": "File system type: ext4 (default), xfs, swap, or vfat.\n\nRelevant for partition types: plain.",
+          "description": "File system type: ext4 (default), xfs, swap, or vfat.\n\nRelevant for partition types: plain.\n",
           "default": "ext4"
         },
         "minsize": {
           "type": "string",
           "pattern": "^\\d+\\s*[BKkMGTPE]i?[BKMGTPE]?$",
-          "description": "Minimum size of the volume.\n\nSize must be formatted as an integer followed by whitespace and then either a decimal unit\n(B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB, TiB, PiB, EiB).\n\nRelevant for partition types: plain, lvm, btrfs."
+          "description": "Minimum size of the volume.\n\nSize must be formatted as an integer followed by whitespace and then either a decimal unit (B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB, TiB, PiB, EiB).\n\nRelevant for partition types: plain, lvm, btrfs.\n"
         },
         "name": {
           "type": "string",
-          "description": "LVM volume group name. When not set, will be generated automatically.\n\nRelevant for partition types: lvm."
+          "description": "LVM volume group name. When not set, will be generated automatically.\n\nRelevant for partition types: lvm.\n"
         },
         "logical_volumes": {
           "items": {
             "$ref": "#/$defs/LogicalVolumesStorage"
           },
           "type": "array",
-          "description": "LVM logical volumes to create within the volume group.\n\nRelevant for partition types: lvm."
+          "description": "LVM logical volumes to create within the volume group.\n\nRelevant for partition types: lvm.\n"
         },
         "subvolumes": {
           "items": {
             "$ref": "#/$defs/SubvolumesStorage"
           },
           "type": "array",
-          "description": "BTRFS subvolumes to create.\n\nRelevant for partition types: btrfs."
+          "description": "BTRFS subvolumes to create.\n\nRelevant for partition types: btrfs.\n"
         }
       },
       "additionalProperties": false,
@@ -1143,17 +1143,17 @@
       "properties": {
         "activation_key": {
           "type": "string",
-          "description": "Subscription manager activation key to use during registration. A list of keys to use to redeem or apply\nspecific subscriptions to the system."
+          "description": "Subscription manager activation key to use during registration. A list of keys to use to redeem or apply specific subscriptions to the system.\n"
         },
         "organization": {
           "type": "string",
-          "description": "Subscription manager organization name to use during registration."
+          "description": "Subscription manager organization name to use during registration.\n"
         },
         "subscription_manager": {
           "oneOf": [
             {
               "$ref": "#/$defs/SubscriptionManagerRegistration",
-              "description": "Subscription manager details (internal use only). The customization expects that subscription-manager\npackage is installed in the image, which is by default part of the RHEL distribution bootable images.\nTo explicitly install the package, add it to the packages section in the blueprint.\nThe customization is not supported on Fedora distribution images."
+              "description": "Subscription manager details (internal use only). The customization expects that subscription-manager package is installed in the image, which is by default part of the RHEL distribution bootable images. To explicitly install the package, add it to the packages section in the blueprint. The customization is not supported on Fedora distribution images.\n"
             },
             {
               "type": "null"
@@ -1164,7 +1164,7 @@
           "oneOf": [
             {
               "$ref": "#/$defs/InsightsRegistration",
-              "description": "Red Hat Insights client details."
+              "description": "Red Hat Insights client details.\n"
             },
             {
               "type": "null"
@@ -1175,7 +1175,7 @@
           "oneOf": [
             {
               "$ref": "#/$defs/ConnectorRegistration",
-              "description": "Red Hat console.redhat.com connector (rhc) details."
+              "description": "Red Hat console.redhat.com connector (rhc) details.\n"
             },
             {
               "type": "null"
@@ -1190,13 +1190,13 @@
       "properties": {
         "redhat": {
           "$ref": "#/$defs/RedHatRegistration",
-          "description": "Registration details for Red Hat operating system images."
+          "description": "Registration details for Red Hat operating system images.\n"
         },
         "fdo": {
           "oneOf": [
             {
               "$ref": "#/$defs/FDORegistration",
-              "description": "FDO allows users to configure FIDO Device Onboard device initialization parameters. It is only available\nwith the edge-simplified-installer or iot-simplified-installer image types."
+              "description": "FDO allows users to configure FIDO Device Onboard device initialization parameters. It is only available with the edge-simplified-installer or iot-simplified-installer image types.\n"
             },
             {
               "type": "null"
@@ -1215,20 +1215,20 @@
             "gpt",
             "mbr"
           ],
-          "description": "Device partitioning type: gpt (default) or mbr.",
+          "description": "Device partitioning type: gpt (default) or mbr.\n",
           "default": "gpt"
         },
         "minsize": {
           "type": "string",
           "pattern": "^\\d+\\s*[BKkMGTPE]i?[BKMGTPE]?$",
-          "description": "Minimum size of the storage device. When not set, the image size is acquired from image request.\n\nSize must be formatted as an integer followed by whitespace and then either a decimal unit\n(B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB, TiB, PiB, EiB)."
+          "description": "Minimum size of the storage device. When not set, the image size is acquired from image request.\n\nSize must be formatted as an integer followed by whitespace and then either a decimal unit (B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB, TiB, PiB, EiB).\n"
         },
         "partitions": {
           "items": {
             "$ref": "#/$defs/PartitionsStorage"
           },
           "type": "array",
-          "description": "Partitions of the following types: plain (default), lvm, or btrfs."
+          "description": "Partitions of the following types: plain (default), lvm, or btrfs.\n"
         }
       },
       "additionalProperties": false,
@@ -1243,22 +1243,22 @@
       "properties": {
         "enabled": {
           "type": "boolean",
-          "description": "Enables the subscription-manager DNF plugin.",
+          "description": "Enables the subscription-manager DNF plugin.\n",
           "default": true
         },
         "product_plugin_enabled": {
           "type": "boolean",
-          "description": "Enables the product-id DNF plugin.",
+          "description": "Enables the product-id DNF plugin.\n",
           "default": true
         },
         "repository_management": {
           "type": "boolean",
-          "description": "Enabled repository_management plugin configuration.",
+          "description": "Enabled repository_management plugin configuration.\n",
           "default": true
         },
         "auto_registration": {
           "type": "boolean",
-          "description": "Enabled auto_registration plugin configuration.",
+          "description": "Enabled auto_registration plugin configuration.\n",
           "default": true
         }
       },
@@ -1275,12 +1275,12 @@
       "properties": {
         "name": {
           "type": "string",
-          "description": "Subvolume name, must also define its parent volume."
+          "description": "Subvolume name, must also define its parent volume.\n"
         },
         "mountpoint": {
           "type": "string",
           "pattern": "^/",
-          "description": "Mount point of the subvolume. Required. Swap filesystem type is not supported on BTRFS volumes."
+          "description": "Mount point of the subvolume. Required. Swap filesystem type is not supported on BTRFS volumes.\n"
         }
       },
       "additionalProperties": false,
@@ -1295,7 +1295,7 @@
                 "type": "string"
               },
               "type": "array",
-              "description": "The enabled attribute is a list of strings that contains the systemd units to be enabled."
+              "description": "The enabled attribute is a list of strings that contains the systemd units to be enabled.\n"
             },
             {
               "type": "null"
@@ -1309,7 +1309,7 @@
                 "type": "string"
               },
               "type": "array",
-              "description": "The disabled attribute is a list of strings that contains the systemd units to be disabled."
+              "description": "The disabled attribute is a list of strings that contains the systemd units to be disabled.\n"
             },
             {
               "type": "null"
@@ -1323,7 +1323,7 @@
                 "type": "string"
               },
               "type": "array",
-              "description": "The masked attribute is a list of strings that contains the systemd units to be masked."
+              "description": "The masked attribute is a list of strings that contains the systemd units to be masked.\n"
             },
             {
               "type": "null"
@@ -1338,7 +1338,7 @@
       "properties": {
         "timezone": {
           "type": "string",
-          "description": "System time zone. Defaults to UTC.\nTo list available time zones run: timedatectl list-timezones",
+          "description": "System time zone. Defaults to UTC. To list available time zones run: timedatectl list-timezones\n",
           "default": "UTC"
         },
         "ntp_servers": {
@@ -1346,7 +1346,7 @@
             "type": "string"
           },
           "type": "array",
-          "description": "An optional list of strings containing NTP servers to use. If not provided the distribution defaults are used"
+          "description": "An optional list of strings containing NTP servers to use. If not provided the distribution defaults are used\n"
         }
       },
       "additionalProperties": false,
@@ -1361,52 +1361,52 @@
           "type": "string",
           "maxLength": 256,
           "pattern": "^[a-zA-Z0-9_.][a-zA-Z0-9_.$-]*$",
-          "description": "Account name. Accepted characters: lowercase letters, digits, underscores, dollars, and hyphens.\nName must not start with a hyphen. Maximum length is 256 characters. The validation pattern is\na relaxed version of https://github.com/shadow-maint/shadow/blob/master/lib/chkname.c"
+          "description": "Account name. Accepted characters: lowercase letters, digits, underscores, dollars, and hyphens. Name must not start with a hyphen. Maximum length is 256 characters. The validation pattern is a relaxed version of https://github.com/shadow-maint/shadow/blob/master/lib/chkname.c\n"
         },
         "description": {
           "type": "string",
           "maxLength": 4096,
-          "description": "A longer description of the account."
+          "description": "A longer description of the account.\n"
         },
         "password": {
           "type": "string",
-          "description": "Password either in plain text or encrypted form. If the password is not provided, the account will be\nlocked and the user will not be able to log in with a password. The password can be encrypted using\nthe crypt(3) function. The format of the encrypted password is $id$salt$hashed,\nwhere $id is the algorithm used (1, 5, 6, or 2a)."
+          "description": "Password either in plain text or encrypted form. If the password is not provided, the account will be locked and the user will not be able to log in with a password. The password can be encrypted using the crypt(3) function. The format of the encrypted password is $id$salt$hashed, where $id is the algorithm used (1, 5, 6, or 2a).\n"
         },
         "ssh_keys": {
           "items": {
             "type": "string"
           },
           "type": "array",
-          "description": "SSH keys to be added to the account's authorized_keys file."
+          "description": "SSH keys to be added to the account's authorized_keys file.\n"
         },
         "home": {
           "type": "string",
-          "description": "The home directory of the user."
+          "description": "The home directory of the user.\n"
         },
         "shell": {
           "type": "string",
-          "description": "The shell of the user."
+          "description": "The shell of the user.\n"
         },
         "uid": {
           "type": "integer",
           "minimum": 1,
-          "description": "The user ID (UID) of the user."
+          "description": "The user ID (UID) of the user.\n"
         },
         "gid": {
           "type": "integer",
           "minimum": 1,
-          "description": "The primary group ID (GID) of the user."
+          "description": "The primary group ID (GID) of the user.\n"
         },
         "groups": {
           "items": {
             "type": "string"
           },
           "type": "array",
-          "description": "Additional groups that the user should be a member of."
+          "description": "Additional groups that the user should be a member of.\n"
         },
         "expires": {
           "$ref": "#/$defs/Date",
-          "description": "The expiration date of the account in the format YYYY-MM-DD.\n\nOnly date is taken into account, time allowed but is ignored for JSON/YAML compatibility."
+          "description": "The expiration date of the account in the format YYYY-MM-DD.\n\nOnly date is taken into account, time allowed but is ignored for JSON/YAML compatibility.\n"
         }
       },
       "additionalProperties": false,
@@ -1419,21 +1419,21 @@
   "properties": {
     "name": {
       "type": "string",
-      "description": "The name attribute is a string that contains the name of the blueprint. It can contain spaces,\nbut they may be converted to dash characters during build. It should be short and descriptive."
+      "description": "The name attribute is a string that contains the name of the blueprint. It can contain spaces, but they may be converted to dash characters during build. It should be short and descriptive.\n"
     },
     "description": {
       "type": "string",
-      "description": "The description attribute is a string that can be a longer description of the blueprint and is\nonly used for display purposes."
+      "description": "The description attribute is a string that can be a longer description of the blueprint and is only used for display purposes.\n"
     },
     "hostname": {
       "type": "string",
-      "description": "Hostname is an optional string that can be used to configure the hostname of the final image."
+      "description": "Hostname is an optional string that can be used to configure the hostname of the final image.\n"
     },
     "kernel": {
       "oneOf": [
         {
           "$ref": "#/$defs/Kernel",
-          "description": "Custom Linux kernel details, optional."
+          "description": "Custom Linux kernel details, optional.\n"
         },
         {
           "type": "null"
@@ -1444,7 +1444,7 @@
       "oneOf": [
         {
           "$ref": "#/$defs/FIPS",
-          "description": "FIPS details, optional."
+          "description": "FIPS details, optional.\n"
         },
         {
           "type": "null"
@@ -1455,7 +1455,7 @@
       "oneOf": [
         {
           "$ref": "#/$defs/DNF",
-          "description": "DNF package managers details. When using virtual provides as the package name the version glob\nshould be *. And be aware that you will be unable to freeze the blueprint. This is because the\nprovides will expand into multiple packages with their own names and versions."
+          "description": "DNF package managers details. When using virtual provides as the package name the version glob should be *. And be aware that you will be unable to freeze the blueprint. This is because the provides will expand into multiple packages with their own names and versions.\n"
         },
         {
           "type": "null"
@@ -1469,7 +1469,7 @@
             "$ref": "#/$defs/Containers"
           },
           "type": "array",
-          "description": "Containers to be pulled during the image build and stored in the image at the default local\ncontainer storage location that is appropriate for the image type, so that all supported container\ntools like podman and cri-o will be able to work with it.\nThe embedded containers are not started, to do so you can create systemd unit files or quadlets with\nthe files customization."
+          "description": "Containers to be pulled during the image build and stored in the image at the default local container storage location that is appropriate for the image type, so that all supported container tools like podman and cri-o will be able to work with it. The embedded containers are not started, to do so you can create systemd unit files or quadlets with the files customization.\n"
         },
         {
           "type": "null"
@@ -1480,7 +1480,7 @@
       "oneOf": [
         {
           "$ref": "#/$defs/Registration",
-          "description": "Registration details for various registration types, namely Red Hat Subscription Manager."
+          "description": "Registration details for various registration types, namely Red Hat Subscription Manager.\n"
         },
         {
           "type": "null"
@@ -1491,7 +1491,7 @@
       "oneOf": [
         {
           "$ref": "#/$defs/Accounts",
-          "description": "Users and groups details"
+          "description": "Users and groups details\n"
         },
         {
           "type": "null"
@@ -1502,7 +1502,7 @@
       "oneOf": [
         {
           "$ref": "#/$defs/TimeDate",
-          "description": "Time and date details allowing configuration of the timezone and NTP servers. The timezone is\nset by default to UTC."
+          "description": "Time and date details allowing configuration of the timezone and NTP servers. The timezone is set by default to UTC.\n"
         },
         {
           "type": "null"
@@ -1513,7 +1513,7 @@
       "oneOf": [
         {
           "$ref": "#/$defs/Locale",
-          "description": "An optional object that contains the following attributes to customize the locale settings for the system.\nIf the locale is not specified, the default locale and keyboard settings are used: en_US.UTF-8 and us."
+          "description": "An optional object that contains the following attributes to customize the locale settings for the system. If the locale is not specified, the default locale and keyboard settings are used: en_US.UTF-8 and us.\n"
         },
         {
           "type": "null"
@@ -1524,7 +1524,7 @@
       "oneOf": [
         {
           "$ref": "#/$defs/Network",
-          "description": "Networking details including firewall configuration."
+          "description": "Networking details including firewall configuration.\n"
         },
         {
           "type": "null"
@@ -1535,7 +1535,7 @@
       "oneOf": [
         {
           "$ref": "#/$defs/OpenSCAP",
-          "description": "OpenSCAP policy to be applied on the operating system. Added in RHEL 8.7 \u0026 RHEL 9.1. It is possible to either\nlist policy rules (enable or disable) or to provide a full policy file."
+          "description": "OpenSCAP policy to be applied on the operating system. Added in RHEL 8.7 \u0026 RHEL 9.1. It is possible to either list policy rules (enable or disable) or to provide a full policy file.\n"
         },
         {
           "type": "null"
@@ -1546,7 +1546,7 @@
       "oneOf": [
         {
           "$ref": "#/$defs/Systemd",
-          "description": "Systemd unit configuration.\n\nThis section can be used to control which services are enabled at boot time. Some image types already\nhave services enabled or disabled in order for the image to work correctly, and cannot be overridden.\nFor example, ami image type requires sshd, chronyd, and cloud-init services. Blueprint services do not\nreplace these services, but add them to the list of services already present in the templates, if any."
+          "description": "Systemd unit configuration.\n\nThis section can be used to control which services are enabled at boot time. Some image types already have services enabled or disabled in order for the image to work correctly, and cannot be overridden. For example, ami image type requires sshd, chronyd, and cloud-init services. Blueprint services do not replace these services, but add them to the list of services already present in the templates, if any.\n"
         },
         {
           "type": "null"
@@ -1560,7 +1560,7 @@
             "$ref": "#/$defs/FSNode"
           },
           "type": "array",
-          "description": "File system nodes details.\n\nYou can use the customization to create new files or to replace existing ones, if not restricted by\nthe policy specified below. If the target path is an existing symlink to another file, the symlink\nwill be replaced by the custom file.\n\nPlease note that the parent directory of a specified file must exist. If it does not exist, the image\nbuild will fail. One can ensure that the parent directory exists by specifying \"ensure_parents\".\n\nIn addition, the following files are not allowed to be created or replaced by policy: /etc/fstab,\n/etc/shadow, /etc/passwd and /etc/group.\n\nUsing the files customization comes with a high chance of creating an image that doesn't boot. Use this\nfeature only if you know what you are doing. Although the files customization can be used to configure\nparts of the OS which can also be configured by other blueprint customizations, this use is discouraged.\nIf possible, users should always default to using the specialized blueprint customizations. Note that\nif you combine the files customizations with other customizations, the other customizations may not work\nas expected or may be overridden by the files customizations.\n\nYou can create custom directories as well. The existence of a specified directory is handled gracefully\nonly if no explicit mode, user or group is specified. If any of these customizations are specified and\nthe directory already exists in the image, the image build will fail. The intention is to prevent changing\nthe ownership or permissions of existing directories."
+          "description": "File system nodes details.\n\nYou can use the customization to create new files or to replace existing ones, if not restricted by the policy specified below. If the target path is an existing symlink to another file, the symlink will be replaced by the custom file.\n\nPlease note that the parent directory of a specified file must exist. If it does not exist, the image build will fail. One can ensure that the parent directory exists by specifying \"ensure_parents\".\n\nIn addition, the following files are not allowed to be created or replaced by policy: /etc/fstab, /etc/shadow, /etc/passwd and /etc/group.\n\nUsing the files customization comes with a high chance of creating an image that doesn't boot. Use this feature only if you know what you are doing. Although the files customization can be used to configure parts of the OS which can also be configured by other blueprint customizations, this use is discouraged. If possible, users should always default to using the specialized blueprint customizations. Note that if you combine the files customizations with other customizations, the other customizations may not work as expected or may be overridden by the files customizations.\n\nYou can create custom directories as well. The existence of a specified directory is handled gracefully only if no explicit mode, user or group is specified. If any of these customizations are specified and the directory already exists in the image, the image build will fail. The intention is to prevent changing the ownership or permissions of existing directories.\n"
         },
         {
           "type": "null"
@@ -1571,7 +1571,7 @@
       "oneOf": [
         {
           "$ref": "#/$defs/Ignition",
-          "description": "Provides Ignition configuration files to be used in edge-raw-image and edge-simplified-installer images.\nCheck the RHEL for Edge butane specification for a description of the supported configuration options.\n\nThe blueprint configuration can be done either by embedding an Ignition configuration file into the image,\nor providing a provisioning URL that will be fetched at first boot."
+          "description": "Provides Ignition configuration files to be used in edge-raw-image and edge-simplified-installer images. Check the RHEL for Edge butane specification for a description of the supported configuration options.\n\nThe blueprint configuration can be done either by embedding an Ignition configuration file into the image, or providing a provisioning URL that will be fetched at first boot.\n"
         },
         {
           "type": "null"
@@ -1582,7 +1582,7 @@
       "oneOf": [
         {
           "$ref": "#/$defs/Installer",
-          "description": "Extra customization for Anaconda installer (ISO) and Edge/IOT simplified installer image types."
+          "description": "Extra customization for Anaconda installer (ISO) and Edge/IOT simplified installer image types.\n"
         },
         {
           "type": "null"
@@ -1596,7 +1596,7 @@
             "$ref": "#/$defs/CACerts"
           },
           "type": "array",
-          "description": "The CA certificates to be added to the image. The certificates are added to the system-wide CA trust store.\nThe certificates are added to the /etc/pki/ca-trust/source/anchors/ directory and the update-ca-trust command\nis run to update the system-wide CA trust store."
+          "description": "The CA certificates to be added to the image. The certificates are added to the system-wide CA trust store. The certificates are added to the /etc/pki/ca-trust/source/anchors/ directory and the update-ca-trust command is run to update the system-wide CA trust store.\n"
         },
         {
           "type": "null"
@@ -1607,7 +1607,7 @@
       "oneOf": [
         {
           "$ref": "#/$defs/Storage",
-          "description": "Disk partitioning details. Not available for installer-based images.\n\nGeneral principles:\n\n1. All sizes, whether for specific filesystems, partitions, logical volumes, or the image\nitself, are treated as minimum requirements. This means the full disk image size is always\nlarger than the size of the sum of the partitions, due to requirements for headers and metadata.\n\n2. The partition that contains the root filesystem, whether this is a plain formatted partition,\nan LVM Volume Group, or a Btrfs partition, is always last in the partition table layout when it is\nautomatically added. For Disk customizations the user-defined order is respected.\n\n3. In the case of raw partitioning (no LVM and no Btrfs), the partition containing the root\nfilesystem is grown to fill any left over space on the partition table. Logical Volumes are not\ngrown to fill the space in the Volume Group since they are trivial to grow on a live system."
+          "description": "Disk partitioning details. Not available for installer-based images.\n\nGeneral principles:\n\n1. All sizes, whether for specific filesystems, partitions, logical volumes, or the image itself, are treated as minimum requirements. This means the full disk image size is always larger than the size of the sum of the partitions, due to requirements for headers and metadata.\n\n2. The partition that contains the root filesystem, whether this is a plain formatted partition, an LVM Volume Group, or a Btrfs partition, is always last in the partition table layout when it is automatically added. For Disk customizations the user-defined order is respected.\n\n3. In the case of raw partitioning (no LVM and no Btrfs), the partition containing the root filesystem is grown to fill any left over space on the partition table. Logical Volumes are not grown to fill the space in the Volume Group since they are trivial to grow on a live system.\n"
         },
         {
           "type": "null"
@@ -1620,5 +1620,5 @@
   "required": [
     "name"
   ],
-  "description": "Image Builder new blueprint schema.\n\nTHIS IS WORK IN PROGRESS"
+  "description": "Image Builder new blueprint schema.\n\nTHIS IS WORK IN PROGRESS\n"
 }

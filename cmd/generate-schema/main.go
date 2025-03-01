@@ -1,18 +1,66 @@
 package main
 
 import (
+	"bufio"
 	"bytes"
 	"encoding/json"
 	"errors"
 	"flag"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/invopop/jsonschema"
 	blueprint "github.com/osbuild/blueprint-schema"
 	strcase "github.com/stoewer/go-strcase"
 )
+
+func rewrapText(text string) string {
+	r := bufio.NewReader(bytes.NewBufferString(text))
+	var wt bytes.Buffer
+	for {
+		line, err := r.ReadString('\n')
+		if err != nil {
+			if errors.Is(err, bufio.ErrFinalToken) || errors.Is(err, io.EOF) {
+				wt.WriteString(line)
+				break
+			} else {
+				panic(err)
+			}
+		}
+
+		peek, err := r.Peek(1)
+		if err != nil {
+			if errors.Is(err, bufio.ErrFinalToken) || errors.Is(err, io.EOF) {
+				wt.WriteString(line)
+				break
+			} else {
+				panic(err)
+			}
+		}
+
+		if strings.HasSuffix(line, "\n") && peek[0] == '\n' {
+			wt.WriteString(line)
+			wt.WriteByte('\n')
+			r.ReadByte()
+		} else if strings.HasSuffix(line, "\n") {
+			wt.WriteString(line[:len(line)-1])
+			wt.WriteByte(' ')
+		} else {
+			wt.WriteString(line)
+		}
+	}
+	result := wt.String()
+	if strings.HasSuffix(result, "\n") {
+		return result
+	} else if result != "" {
+		return result + "\n"
+	} else {
+		return result
+	}
+}
 
 func main() {
 	pkgPath := flag.String("src-path", ".", "path to Go source package with structs to reflect")
@@ -28,6 +76,10 @@ func main() {
 	}
 	if err := r.AddGoComments("github.com/osbuild/blueprint-schema", ".", jsonschema.WithFullComment()); err != nil {
 		panic(err)
+	}
+
+	for k, v := range r.CommentMap {
+		r.CommentMap[k] = rewrapText(v)
 	}
 
 	schema := r.Reflect(&blueprint.Blueprint{})

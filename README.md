@@ -120,6 +120,14 @@ func (OpenSCAPTailoring) JSONSchemaExtend(s *jsonschema.Schema) {
 
 Read [jsonschema](https://github.com/invopop/jsonschema) library for more details about available Go struct tags and supported features. More information about the JSON Schema can be found [on the project webpage](https://json-schema.org).
 
+## Go documentation
+
+All Go `godoc` documentation is used for JSON Schema `description` fields. Please keep in mind that only the following syntax is supported:
+
+* Plain text
+* Lines are unwrapped (all `\n` are removed)
+* Paragraphs are preserved (all `\n\n` are kept)
+
 ## Using the types in Go
 
 This repository is a Go package that can be used to access the schema itself, load, save and validate data. The raw schema JSON is available in `blueprint.SchemaJSON` variable. The package provides marshaling functions both to JSON and YAML:
@@ -336,7 +344,7 @@ TBD
 * Github page with JSON/YAML editors
 * Example loading on github page
 * WASI/WASM conversion API and convertor on github page
-* More fixtures: add intermediate JSON in, JSON out and modify validation so it validates ALL steps (4 in total), results should be probably in YAML rather than OUT so there is a single file
+* Add intermediate JSON into fixtures
 * Implement conversion tools in both crc/images repos in ./cmd subdirectories and use those tools via "go run" command to generate a nice example set:
 * https://github.com/osbuild/image-builder-crc/blob/main/internal/v1/api.go#L663
 * https://github.com/osbuild/blueprint-schema/blob/main/blueprint.go#L63
