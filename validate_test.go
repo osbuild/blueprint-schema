@@ -1,7 +1,7 @@
 //go:build !js
 // +build !js
 
-package blueprint_test
+package blueprint
 
 import (
 	"bytes"
@@ -14,7 +14,6 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/invopop/yaml"
-	blueprint "github.com/osbuild/blueprint-schema"
 )
 
 var writeFixtures = os.Getenv("WRITE_FIXTURES") != ""
@@ -24,7 +23,7 @@ func TestFix(t *testing.T) {
 		t.Run("Marshal/"+input, func(t *testing.T) {
 			t.Parallel()
 
-			var b *blueprint.Blueprint
+			var b *Blueprint
 			inputFile, err := os.Open(input)
 			if err != nil {
 				t.Fatal(err)
@@ -32,12 +31,12 @@ func TestFix(t *testing.T) {
 			defer inputFile.Close()
 
 			if strings.HasSuffix(input, ".json") {
-				b, err = blueprint.ReadJSON(inputFile)
+				b, err = ReadJSON(inputFile)
 				if err != nil {
 					t.Fatal(err)
 				}
 			} else if strings.HasSuffix(input, ".yaml") {
-				b, err = blueprint.ReadYAML(inputFile)
+				b, err = ReadYAML(inputFile)
 				if err != nil {
 					t.Fatal(err)
 				}
@@ -52,7 +51,7 @@ func TestFix(t *testing.T) {
 				}
 				defer outputFile.Close()
 
-				err = blueprint.WriteYAML(b, outputFile)
+				err = WriteYAML(b, outputFile)
 				if err != nil {
 					t.Fatal(err)
 				}
@@ -69,7 +68,7 @@ func TestFix(t *testing.T) {
 				}
 
 				buf := bytes.Buffer{}
-				err = blueprint.WriteYAML(b, &buf)
+				err = WriteYAML(b, &buf)
 				if err != nil {
 					t.Fatal(err)
 				}
@@ -119,24 +118,25 @@ func TestFix(t *testing.T) {
 				t.Fatalf("Unknown fixture extension: %s", input)
 			}
 
-			schema, err := blueprint.CompileSchema()
+			schema, err := CompileSchema()
 			if err != nil {
 				t.Fatal(err)
 			}
 			if writeFixtures {
-				schemaErr := schema.ValidateMap(data)
-				if schemaErr != nil && schemaErr.Error() != "" {
+				jsonResult := schema.validateMapJSONResult(data)
+
+				if len(jsonResult) > 0 {
 					outFile, err := os.OpenFile(output, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0644)
 					if err != nil {
 						t.Fatal(err)
 					}
 					defer outFile.Close()
 
-					outFile.WriteString(schemaErr.Error())
+					outFile.Write(jsonResult)
 					t.Logf("Written %s", output)
 				}
 			} else {
-				var want string
+				want := []byte{}
 
 				// if file output exists
 				if _, err := os.Stat(output); err == nil {
@@ -145,19 +145,13 @@ func TestFix(t *testing.T) {
 						t.Fatal(err)
 					}
 					defer inFile.Close()
-					wantBuf, err := io.ReadAll(inFile)
+					want, err = io.ReadAll(inFile)
 					if err != nil {
 						t.Fatal(err)
 					}
-					want = string(wantBuf)
 				}
 
-				var got string
-				err = schema.ValidateMap(data)
-				if err != nil {
-					got = err.Error()
-				}
-
+				got := schema.validateMapJSONResult(data)
 				if diff := cmp.Diff(want, got); diff != "" {
 					t.Errorf("validity mismatch (-want +got):\n%s", diff)
 				}

@@ -2,12 +2,19 @@ package blueprint
 
 import (
 	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
+	"regexp"
+	"slices"
+	"sort"
+	"strings"
+	"text/scanner"
 
 	"github.com/invopop/yaml"
 	"github.com/santhosh-tekuri/jsonschema/v6"
+	"golang.org/x/text/message"
 )
 
 type Schema struct {
@@ -39,19 +46,107 @@ func CompileSchema() (*Schema, error) {
 		return nil, fmt.Errorf("%w: %v", ErrCannotCompileSchema, err)
 	}
 
-	// The validation library converts schema locations to absolute path which is not practical
-	// for tests. Therefore, it is overridden here so errors do not contain pwd base path.
-	schema.Location = "blueprint-schema.json"
-
 	return &Schema{s: schema}, nil
 }
 
+// ValidateMap validates the given map. Returns an error if the validation fails.
 func (s *Schema) ValidateMap(data any) error {
 	if err := s.s.Validate(data); err != nil {
 		return fmt.Errorf("%w: %v", ErrValidateFailed, err)
 	}
 
 	return nil
+}
+
+var sortSchemaRE = regexp.MustCompile(`'[^']+'`)
+
+func sortQuotedSubstrings(str string) string {
+	subs := sortSchemaRE.FindAllString(str, -1)
+	if len(subs) <= 1 {
+		return str
+	}
+	slices.Sort(subs)
+
+	var s scanner.Scanner
+	var sb strings.Builder
+	var quoted bool
+	s.Init(strings.NewReader(str))
+	s.Whitespace = 0
+	for _, c := range str {
+		if c == '\'' {
+			quoted = !quoted
+
+			if quoted {
+				sb.WriteString(subs[0])
+				subs = subs[1:]
+			}
+			continue
+		}
+		if !quoted {
+			sb.WriteRune(c)
+		}
+	}
+
+	return sb.String()
+}
+
+type wrappedErrorKind struct {
+	jsonschema.ErrorKind
+}
+
+var _ jsonschema.ErrorKind = (*wrappedErrorKind)(nil)
+
+func (w *wrappedErrorKind) KeywordPath() []string {
+	// After upgrade to Go 1.23 can be replaced just with ... range slices.Sorted(arr)
+	sarr := make([]string, len(w.ErrorKind.KeywordPath()))
+	copy(sarr, w.ErrorKind.KeywordPath())
+	sort.Strings(sarr)
+	return sarr
+}
+
+func (w *wrappedErrorKind) LocalizedString(p *message.Printer) string {
+	//println("LocalizedString", p.Sprintf(w.ErrorKind.LocalizedString(p)))
+	return sortQuotedSubstrings(p.Sprintf(w.ErrorKind.LocalizedString(p)))
+}
+
+func deepSortResult(result *jsonschema.OutputUnit) {
+	// The validation library converts schema locations to absolute path which is not practical
+	// for tests. Therefore, it is overridden here so errors do not contain pwd base path.
+	result.AbsoluteKeywordLocation = ""
+
+	if result.Error != nil {
+		result.Error.Kind = &wrappedErrorKind{result.Error.Kind}
+	}
+
+	slices.SortFunc(result.Errors, func(a, b jsonschema.OutputUnit) int {
+		return strings.Compare(a.InstanceLocation, b.InstanceLocation)
+	})
+
+	for i := range result.Errors {
+		deepSortResult(&result.Errors[i])
+	}
+}
+
+// ValidateMapJSONResult validates the given map and returns the result as JSON.
+// The JSON output is sorted to make it deterministic for JSON/text comparison.
+// This method is only useful for testing, use ValidateMap for regular validation.
+func (s *Schema) validateMapJSONResult(data any) []byte {
+	err := s.s.Validate(data)
+
+	var validationErr *jsonschema.ValidationError
+	if err != nil && errors.As(err, &validationErr) {
+		outputUnit := validationErr.DetailedOutput()
+		deepSortResult(outputUnit)
+
+		result, err := json.MarshalIndent(outputUnit, "", "  ")
+		if err != nil {
+			return fmt.Appendf(nil, "Error marshalling error output: %v", err)
+		}
+
+		return result
+	}
+
+	return []byte("")
 }
 
 // ValidateJSON reads JSON and performs validation.

@@ -1,6 +1,39 @@
-validation failed: jsonschema validation failed with 'blueprint-schema.json'
-- at '/openscap': oneOf failed, none matched
-  - at '/openscap/tailoring': oneOf failed, none matched
-    - at '/openscap/tailoring': oneOf failed, subschemas 0, 1 matched
-    - at '/openscap/tailoring': got object, want null
-  - at '/openscap': got object, want null
+{
+  "valid": false,
+  "keywordLocation": "",
+  "instanceLocation": "",
+  "errors": [
+    {
+      "valid": false,
+      "keywordLocation": "/properties/openscap/oneOf",
+      "instanceLocation": "/openscap",
+      "errors": [
+        {
+          "valid": false,
+          "keywordLocation": "/properties/openscap/oneOf/1/type",
+          "instanceLocation": "/openscap",
+          "error": "got object, want null"
+        },
+        {
+          "valid": false,
+          "keywordLocation": "/properties/openscap/oneOf/0/$ref/properties/tailoring/oneOf",
+          "instanceLocation": "/openscap/tailoring",
+          "errors": [
+            {
+              "valid": false,
+              "keywordLocation": "/properties/openscap/oneOf/0/$ref/properties/tailoring/oneOf/0/$ref/oneOf",
+              "instanceLocation": "/openscap/tailoring",
+              "error": "oneOf failed, subschemas 0, 1 matched"
+            },
+            {
+              "valid": false,
+              "keywordLocation": "/properties/openscap/oneOf/0/$ref/properties/tailoring/oneOf/1/type",
+              "instanceLocation": "/openscap/tailoring",
+              "error": "got object, want null"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

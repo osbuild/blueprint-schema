@@ -1,6 +1,39 @@
-validation failed: jsonschema validation failed with 'blueprint-schema.json'
-- at '/dnf': oneOf failed, none matched
-  - at '/dnf/repositories': oneOf failed, none matched
-    - at '/dnf/repositories/0': oneOf failed, subschemas 0, 2 matched
-    - at '/dnf/repositories': got array, want null
-  - at '/dnf': got object, want null
+{
+  "valid": false,
+  "keywordLocation": "",
+  "instanceLocation": "",
+  "errors": [
+    {
+      "valid": false,
+      "keywordLocation": "/properties/dnf/oneOf",
+      "instanceLocation": "/dnf",
+      "errors": [
+        {
+          "valid": false,
+          "keywordLocation": "/properties/dnf/oneOf/1/type",
+          "instanceLocation": "/dnf",
+          "error": "got object, want null"
+        },
+        {
+          "valid": false,
+          "keywordLocation": "/properties/dnf/oneOf/0/$ref/properties/repositories/oneOf",
+          "instanceLocation": "/dnf/repositories",
+          "errors": [
+            {
+              "valid": false,
+              "keywordLocation": "/properties/dnf/oneOf/0/$ref/properties/repositories/oneOf/1/type",
+              "instanceLocation": "/dnf/repositories",
+              "error": "got array, want null"
+            },
+            {
+              "valid": false,
+              "keywordLocation": "/properties/dnf/oneOf/0/$ref/properties/repositories/oneOf/0/items/$ref/oneOf",
+              "instanceLocation": "/dnf/repositories/0",
+              "error": "oneOf failed, subschemas 0, 2 matched"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

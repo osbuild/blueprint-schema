@@ -1,6 +1,39 @@
-validation failed: jsonschema validation failed with 'blueprint-schema.json'
-- at '/accounts': oneOf failed, none matched
-  - at '/accounts/users': oneOf failed, none matched
-    - at '/accounts/users/0/expires': '2050-05-13T00:00:00Z' does not match pattern '^\\d{4}-\\d{2}-\\d{2}$T?[0-9:Z-]*'
-    - at '/accounts/users': got array, want null
-  - at '/accounts': got object, want null
+{
+  "valid": false,
+  "keywordLocation": "",
+  "instanceLocation": "",
+  "errors": [
+    {
+      "valid": false,
+      "keywordLocation": "/properties/accounts/oneOf",
+      "instanceLocation": "/accounts",
+      "errors": [
+        {
+          "valid": false,
+          "keywordLocation": "/properties/accounts/oneOf/1/type",
+          "instanceLocation": "/accounts",
+          "error": "got object, want null"
+        },
+        {
+          "valid": false,
+          "keywordLocation": "/properties/accounts/oneOf/0/$ref/properties/users/oneOf",
+          "instanceLocation": "/accounts/users",
+          "errors": [
+            {
+              "valid": false,
+              "keywordLocation": "/properties/accounts/oneOf/0/$ref/properties/users/oneOf/1/type",
+              "instanceLocation": "/accounts/users",
+              "error": "got array, want null"
+            },
+            {
+              "valid": false,
+              "keywordLocation": "/properties/accounts/oneOf/0/$ref/properties/users/oneOf/0/items/$ref/properties/expires/$ref/pattern",
+              "instanceLocation": "/accounts/users/0/expires",
+              "error": "'2050-05-13T00:00:00Z' does not match pattern '^\\\\d{4}-\\\\d{2}-\\\\d{2}$T?[0-9:Z-]*'"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

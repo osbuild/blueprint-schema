@@ -1,2 +1,13 @@
-validation failed: jsonschema validation failed with 'blueprint-schema.json'
-- at '': missing property 'name'
+{
+  "valid": false,
+  "keywordLocation": "",
+  "instanceLocation": "",
+  "errors": [
+    {
+      "valid": false,
+      "keywordLocation": "/required",
+      "instanceLocation": "",
+      "error": "missing property 'name'"
+    }
+  ]
+}
