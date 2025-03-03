@@ -25,6 +25,10 @@ At the end of 2024 we held a series of meetings where the core team agreed on a 
 * documentation with examples (from automated tests)
 * conversion library and CLI app for both "on-prem" and "console" formats
 
+### An example
+
+If you just want an example of a blueprint, [here is one](fixtures/valid-000-all-fields.in.yaml) that covers all the supported fields. There are many more in the `fixtures/` directory, read on for more information.
+
 ### The schema
 
 Latest version of the JSON Schema is available as [blueprint-schema.json](blueprint-schema.json).
