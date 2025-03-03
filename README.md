@@ -317,10 +317,6 @@ schema.ReadAndAttestYAML(os.Stdin, aData)
 * When compiled to WASM/WASI could be accessible through a web browser editor.
 * Conversions to/from YAML/CRC-JSON will be done in Go anyway.
 
-### Conversion tools
-
-TBD
-
 ### Building
 
 To build the library and the CLI:
@@ -350,6 +346,10 @@ blueprint_go.wasm
 blueprint_tgo.wasm
 ```
 
+### Conversion tools
+
+TBD
+
 ### Schema documentation
 
 TBD
@@ -362,16 +362,12 @@ TBD
 
 ### TODO
 
-* Make a release and CLI/WASM build pipeline
-* Github page with JSON/YAML editors
-* Example loading on github page
-* WASI/WASM conversion API and convertor on github page
-* Add intermediate JSON into fixtures
-* Fix default values - schema definition is not used correctly for non-pointers (e.g. bool must be pointer if defaults to true)
-* Implement conversion tools in both crc/images repos in ./cmd subdirectories and use those tools via "go run" command to generate a nice example set:
-* https://github.com/osbuild/image-builder-crc/blob/main/internal/v1/api.go#L663
-* https://github.com/osbuild/blueprint-schema/blob/main/blueprint.go#L63
+* Discuss Attestations and implement it
+* Implement conversion tools for onprem TOML/JSON and CRC-JSON
 * Generate markdown/HTML documentation for the schema with examples
-* Reformat comments in the comment map to support proper paragraphs
-* Attestations after confirmed with the team
+* Make a release and CLI/WASM build pipeline
+* Github page with JSON/YAML editors and few starting examples
+* Implement WASI/WASM conversion to the on github page
+* Fix default values - schema definition is not used correctly for non-pointers (e.g. bool must be pointer if defaults to true)
+* Add intermediate JSON into fixtures for a quick "peek" into YAML/JSON interoperability
 * Implement [common defs/refs](https://tour.json-schema.org/content/06-Combining-Subschemas/01-Reusing-and-Referencing-with-defs-and-ref) for example InstallerAnaconda.EnabledModules.
