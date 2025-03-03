@@ -175,13 +175,33 @@ To validate a JSON file:
 
 Returns 0 when schema is valid, 1 otherwise with detailed information printed on the standard output. Example schema error reported by the validator:
 
-```
-validation failed: jsonschema validation failed with 'blueprint-schema.json'
-- at '/openscap': oneOf failed, none matched
-  - at '/openscap/tailoring': oneOf failed, none matched
-    - at '/openscap/tailoring': oneOf failed, subschemas 0, 1 matched
-    - at '/openscap/tailoring': got object, want null
-  - at '/openscap': got object, want nullexit status 1
+```json
+{
+  "valid": false,
+  "keywordLocation": "",
+  "instanceLocation": "",
+  "errors": [
+    {
+      "valid": false,
+      "keywordLocation": "/properties/ignition/oneOf",
+      "instanceLocation": "/ignition",
+      "errors": [
+        {
+          "valid": false,
+          "keywordLocation": "/properties/ignition/oneOf/0/$ref/oneOf",
+          "instanceLocation": "/ignition",
+          "error": "oneOf failed, subschemas 0, 1 matched"
+        },
+        {
+          "valid": false,
+          "keywordLocation": "/properties/ignition/oneOf/1/type",
+          "instanceLocation": "/ignition",
+          "error": "got object, want null"
+        }
+      ]
+    }
+  ]
+}
 ```
 
 To validate the JSON Schema, use `CompileSchema` function:
@@ -211,7 +231,7 @@ A fixture-based test is available in the [fixtures/](fixtures/) directory, each 
 
 * `filename.in.yaml` - input file (can be YAML or JSON)
 * `filename.out.yaml` - output file after parsing and write (always YAML)
-* `filename.validator.json` - output of the validator (always JSON)
+* `filename.validator.json` - output of the validator (always JSON - see the example above)
 
 Each `*.in.*` file is loaded, YAML converted to JSON (if needed), parsed into the blueprint type and written to YAML `*.out.yaml` file. At the same time, the data is loaded into `map[string]any` and validated against the JSON Schema and results written to `*.validator.json`.
 
@@ -222,6 +242,8 @@ To run tests do:
 To regenerate `*.out.yaml` and `*.validator.json` files (after a breaking change), do:
 
     make write-fixtures
+
+All `*.validator.json` files have a custom JSON marshaller that sorts arrays and some string enumerations so it is diff-friendly.
 
 ## Editor schema support
 
