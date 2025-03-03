@@ -32,10 +32,10 @@ type UserAccount struct {
 	// The shell of the user.
 	Shell string `json:"shell,omitempty"`
 
-	// The user ID (UID) of the user.
+	// The user ID (UID) of the user. Value of zero (or ommited value) means that the next available UID will be assigned.
 	UID int `json:"uid,omitempty" jsonschema:"minimum=1"`
 
-	// The primary group ID (GID) of the user.
+	// The primary group ID (GID) of the user. Value of zero (or ommited value) means that the next available UID will be assigned.
 	GID int `json:"gid,omitempty" jsonschema:"minimum=1"`
 
 	// Additional groups that the user should be a member of.

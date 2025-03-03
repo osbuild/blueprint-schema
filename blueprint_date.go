@@ -35,6 +35,15 @@ func (d *Date) MarshalJSON() ([]byte, error) {
 	return []byte(d.Time.Format(`"2006-01-02"`)), nil
 }
 
+// DaysFrom1970 returns the number of days since 1970-01-01 as required for useradd/usermod commands.
+func (d *Date) DaysFrom1970() int {
+	return int(d.Time.Sub(time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC)).Hours() / 24)
+}
+
+func (d *Date) IsZero() bool {
+	return d.Time.IsZero()
+}
+
 // JSONSchemaExtend can be used to extend the generated JSON schema from Go struct tags
 func (Date) JSONSchemaExtend(s *jsonschema.Schema) {
 	s.Type = "string"

@@ -33,7 +33,7 @@ containers:
   - source: "quay.io/fedora/fedora:latest"
     name: "fedora"
     tls_verify: true
-    local_storage: "/var/tmp/test"
+    local_storage: true
 kernel:
   package: "kernel-debug-6.11.5-300"
   cmdline_append:

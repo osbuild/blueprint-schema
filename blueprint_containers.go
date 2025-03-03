@@ -1,6 +1,6 @@
 package blueprint
 
-type Containers struct {
+type Container struct {
 	// Container image URL is a reference to a container image at a registry.
 	Source string `json:"source" jsonschema:"required"`
 
@@ -9,8 +9,8 @@ type Containers struct {
 	Name string `json:"name" jsonschema:"required"`
 
 	// Verify TLS connection, default is true.
-	TLSVerify bool `json:"tls_verify,omitempty" jsonschema:"default=true"`
+	TLSVerify *bool `json:"tls_verify,omitempty" jsonschema:"default=true"`
 
 	// Whether to pull the container image from the host's local-storage.
-	LocalStorage string `json:"local_storage,omitempty"`
+	LocalStorage bool `json:"local_storage,omitempty" jsonschema:"default=false"`
 }

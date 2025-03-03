@@ -345,6 +345,7 @@ TBD
 * Example loading on github page
 * WASI/WASM conversion API and convertor on github page
 * Add intermediate JSON into fixtures
+* Fix default values - schema definition is not used correctly for non-pointers (e.g. bool must be pointer if defaults to true)
 * Implement conversion tools in both crc/images repos in ./cmd subdirectories and use those tools via "go run" command to generate a nice example set:
 * https://github.com/osbuild/image-builder-crc/blob/main/internal/v1/api.go#L663
 * https://github.com/osbuild/blueprint-schema/blob/main/blueprint.go#L63

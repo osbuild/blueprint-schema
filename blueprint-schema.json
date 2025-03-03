@@ -142,7 +142,7 @@
         "enabled"
       ]
     },
-    "Containers": {
+    "Container": {
       "properties": {
         "source": {
           "type": "string",
@@ -158,8 +158,9 @@
           "default": true
         },
         "local_storage": {
-          "type": "string",
-          "description": "Whether to pull the container image from the host's local-storage.\n"
+          "type": "boolean",
+          "description": "Whether to pull the container image from the host's local-storage.\n",
+          "default": false
         }
       },
       "additionalProperties": false,
@@ -1466,7 +1467,7 @@
       "oneOf": [
         {
           "items": {
-            "$ref": "#/$defs/Containers"
+            "$ref": "#/$defs/Container"
           },
           "type": "array",
           "description": "Containers to be pulled during the image build and stored in the image at the default local container storage location that is appropriate for the image type, so that all supported container tools like podman and cri-o will be able to work with it. The embedded containers are not started, to do so you can create systemd unit files or quadlets with the files customization.\n"

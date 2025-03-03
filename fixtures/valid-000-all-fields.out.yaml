@@ -17,7 +17,7 @@ accounts:
 cacerts:
     - cert: pem encoded cert
 containers:
-    - local_storage: /var/tmp/test
+    - local_storage: true
       name: fedora
       source: quay.io/fedora/fedora:latest
       tls_verify: true

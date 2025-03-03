@@ -31,7 +31,7 @@ type Blueprint struct {
 	// tools like podman and cri-o will be able to work with it.
 	// The embedded containers are not started, to do so you can create systemd unit files or quadlets with
 	// the files customization.
-	Containers []Containers `json:"containers,omitempty" jsonschema:"nullable"`
+	Containers []Container `json:"containers,omitempty" jsonschema:"nullable"`
 
 	// Registration details for various registration types, namely Red Hat Subscription Manager.
 	Registration *Registration `json:"registration,omitempty" jsonschema:"nullable"`
