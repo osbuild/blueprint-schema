@@ -58,6 +58,21 @@ func (s *Schema) ValidateMap(data any) error {
 	return nil
 }
 
+// Validates blueprint and returns an error if the validation fails.
+func (s *Schema) Validate(bp *Blueprint) error {
+	buf, err := json.Marshal(bp)
+	if err != nil {
+		return fmt.Errorf("cannot marshal blueprint: %w", err)
+	}
+
+	var bpMap map[string]any
+	if err := json.Unmarshal(buf, &bpMap); err != nil {
+		return fmt.Errorf("cannot unmarshal blueprint: %w", err)
+	}
+
+	return s.ValidateMap(bpMap)
+}
+
 var sortSchemaRE = regexp.MustCompile(`'[^']+'`)
 
 func sortQuotedSubstrings(str string) string {

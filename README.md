@@ -352,7 +352,20 @@ blueprint_tgo.wasm
 
 ### Conversion tools
 
-TBD
+WORK IN PROGRESS
+
+```
+go run ./cmd/blueconv/ -convert < fixtures/valid-000-all-fields.in.yaml 
+```
+
+Generates something like
+
+```
+name = "Blueprint example"
+description = "A complete example of a blueprint with all possible fields"
+
+# ...
+```
 
 ### Schema documentation
 
@@ -366,11 +379,12 @@ TBD
 
 ### TODO
 
-* Discuss Attestations and implement it
-* Implement conversion tools for onprem TOML/JSON and CRC-JSON
-* Generate markdown/HTML documentation for the schema with examples
+* Implement JSON Schema attestation (folks did not like the Go-based ones)
 * Make a release and CLI/WASM build pipeline
 * Github page with JSON/YAML editors and few starting examples
+* Explore fully YAML-based schema with optionally generated Go code
+* Implement conversion tools for onprem TOML/JSON and CRC-JSON
+* Generate markdown/HTML documentation for the schema with examples
 * Implement WASI/WASM conversion to the on github page
 * Fix default values - schema definition is not used correctly for non-pointers (e.g. bool must be pointer if defaults to true)
 * Add intermediate JSON into fixtures for a quick "peek" into YAML/JSON interoperability

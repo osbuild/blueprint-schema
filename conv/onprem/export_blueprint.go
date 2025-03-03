@@ -4,8 +4,8 @@ import (
 	"strings"
 
 	int "github.com/osbuild/blueprint-schema"
-	ext "github.com/osbuild/blueprint-schema/cmd/blueconv/onprem/blueprint"
-	ptr "github.com/osbuild/blueprint-schema/cmd/blueconv/ptr"
+	ext "github.com/osbuild/blueprint-schema/conv/onprem/blueprint"
+	ptr "github.com/osbuild/blueprint-schema/conv/ptr"
 )
 
 func ExportBlueprint(to *ext.Blueprint, from *int.Blueprint, errs *Errors) {
@@ -18,6 +18,7 @@ func ExportBlueprint(to *ext.Blueprint, from *int.Blueprint, errs *Errors) {
 	ExportGroups(to.Groups, from, errs)
 	ExportModules(to.Modules, from, errs)
 	ExportContainers(to.Containers, from, errs)
+	to.Customizations = &ext.Customizations{}
 	ExportCustomizations(to.Customizations, from, errs)
 }
 
@@ -85,7 +86,10 @@ func ExportContainers(to []ext.Container, from *int.Blueprint, errs *Errors) {
 func ExportCustomizations(to *ext.Customizations, from *int.Blueprint, errs *Errors) {
 	to.Hostname = &from.Hostname
 
+	to.Kernel = &ext.KernelCustomization{}
 	ExportKernelCustomization(to.Kernel, from.Kernel, errs)
+
+	to.User = []ext.UserCustomization{}
 	ExportUserCustomization(to.User, from.Accounts.Users, errs)
 }
 
@@ -95,8 +99,11 @@ func ExportKernelCustomization(to *ext.KernelCustomization, from *int.Kernel, er
 }
 
 func ExportUserCustomization(to []ext.UserCustomization, from []int.UserAccount, errs *Errors) {
-	errs.Warn("user force password reset ignored")
+	if from == nil {
+		return
+	}
 
+	errs.Warn("user force password reset ignored")
 	for _, fUser := range from {
 		toUser := ext.UserCustomization{}
 		toUser.Name = fUser.Name
