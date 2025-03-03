@@ -1391,12 +1391,12 @@
         "uid": {
           "type": "integer",
           "minimum": 1,
-          "description": "The user ID (UID) of the user.\n"
+          "description": "The user ID (UID) of the user. Value of zero (or ommited value) means that the next available UID will be assigned.\n"
         },
         "gid": {
           "type": "integer",
           "minimum": 1,
-          "description": "The primary group ID (GID) of the user.\n"
+          "description": "The primary group ID (GID) of the user. Value of zero (or ommited value) means that the next available UID will be assigned.\n"
         },
         "groups": {
           "items": {

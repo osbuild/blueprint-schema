@@ -173,7 +173,7 @@ func TestFix(t *testing.T) {
 		direction := filepath.Ext(fileWithoutFormat)
 		baseFile := file[0 : len(fileWithoutFormat)-len(direction)]
 		outFile := baseFile + ".out.yaml"
-		validFile := baseFile + ".validator.out"
+		validFile := baseFile + ".validator.json"
 
 		marshalTest(t, file, outFile)
 		validationTest(t, file, validFile)

@@ -211,15 +211,15 @@ A fixture-based test is available in the [fixtures/](fixtures/) directory, each 
 
 * `filename.in.yaml` - input file (can be YAML or JSON)
 * `filename.out.yaml` - output file after parsing and write (always YAML)
-* `filename.validator.out` - output of the validator (always JSON)
+* `filename.validator.json` - output of the validator (always JSON)
 
-Each `*.in.*` file is loaded, YAML converted to JSON (if needed), parsed into the blueprint type and written to YAML `*.out.yaml` file. At the same time, the data is loaded into `map[string]any` and validated against the JSON Schema and results written to `*.validator.out`.
+Each `*.in.*` file is loaded, YAML converted to JSON (if needed), parsed into the blueprint type and written to YAML `*.out.yaml` file. At the same time, the data is loaded into `map[string]any` and validated against the JSON Schema and results written to `*.validator.json`.
 
 To run tests do:
 
     make test
 
-To regenerate `*.out.yaml` and `*.validator.out` files (after a breaking change), do:
+To regenerate `*.out.yaml` and `*.validator.json` files (after a breaking change), do:
 
     make write-fixtures
 
