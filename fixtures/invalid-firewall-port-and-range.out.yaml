@@ -2,6 +2,7 @@ name: Firewall example - port and range specified
 network:
     firewall:
         services:
-            - from: 1302
+            - enabled: null
+              from: 1302
               port: 1301
               to: 1303

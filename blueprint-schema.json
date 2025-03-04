@@ -116,6 +116,17 @@
       "additionalProperties": false,
       "type": "object"
     },
+    "BoolDefaultTrue": {
+      "oneOf": [
+        {
+          "type": "boolean",
+          "default": true
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
     "CACerts": {
       "properties": {
         "cert": {
@@ -844,8 +855,7 @@
                     "default": "any"
                   },
                   "enabled": {
-                    "type": "boolean",
-                    "default": true
+                    "$ref": "#/$defs/BoolDefaultTrue"
                   }
                 },
                 "additionalProperties": false,

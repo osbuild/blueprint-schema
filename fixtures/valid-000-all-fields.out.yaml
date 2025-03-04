@@ -98,10 +98,15 @@ network:
             - enabled: true
               protocol: tcp
               service: ssh
-            - service: dhcp
-            - port: 53
+            - enabled: null
+              service: dhcp
+            - enabled: false
+              service: cups
+            - enabled: false
+              port: 53
               protocol: any
-            - from: 60000
+            - enabled: null
+              from: 60000
               protocol: udp
               to: 60010
 openscap:

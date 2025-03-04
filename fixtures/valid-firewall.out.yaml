@@ -2,12 +2,17 @@ name: Firewall valid example
 network:
     firewall:
         services:
-            - service: dns
-            - service: dhcp
-            - protocol: tcp
+            - enabled: null
+              service: dns
+            - enabled: false
+              service: dhcp
+            - enabled: null
+              protocol: tcp
               service: ssh
-            - port: 53
+            - enabled: false
+              port: 53
               protocol: any
-            - from: 60000
+            - enabled: null
+              from: 60000
               protocol: udp
               to: 60010

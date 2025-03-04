@@ -64,8 +64,8 @@ func main() {
 			os.Exit(1)
 		}
 
+		errs := notes.ConversionNotes{}
 		if *outputFormat == "toml" {
-			errs := notes.ConversionNotes{}
 			to := onprem.ExportBlueprint(from, &errs)
 			err = toml.NewEncoder(os.Stdout).Encode(to)
 			if err != nil {
@@ -75,6 +75,12 @@ func main() {
 			panic("invalid output format")
 		}
 
+		if !*quiet {
+			for _, err := range errs.Errors() {
+				os.Stdout.WriteString(err.Error())
+				os.Stdout.WriteString("\n")
+			}
+		}
 	} else if *validateJSON {
 		schemaErr = schema.ReadAndValidateJSON(in)
 	} else if *validateYAML {

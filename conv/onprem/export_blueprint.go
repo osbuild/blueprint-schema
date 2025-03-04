@@ -80,8 +80,6 @@ func ExportContainers(from *int.Blueprint, nts *notes.ConversionNotes) []ext.Con
 }
 
 //	type Customizations struct {
-//		Timezone           *TimezoneCustomization         `json:"timezone,omitempty" toml:"timezone,omitempty"`
-//		Locale             *LocaleCustomization           `json:"locale,omitempty" toml:"locale,omitempty"`
 //		Firewall           *FirewallCustomization         `json:"firewall,omitempty" toml:"firewall,omitempty"`
 //		Services           *ServicesCustomization         `json:"services,omitempty" toml:"services,omitempty"`
 //		Filesystem         []FilesystemCustomization      `json:"filesystem,omitempty" toml:"filesystem,omitempty"`
@@ -112,6 +110,8 @@ func ExportCustomizations(from *int.Blueprint, nts *notes.ConversionNotes) *ext.
 	to.User = ExportUserCustomization(from.Accounts.Users, nts)
 	to.Group = ExportGroupCustomization(from.Accounts.Groups, nts)
 	to.Timezone = ExportTimezoneCustomization(from, nts)
+	to.Locale = ExportLocaleCustomization(from.Locale, nts)
+	to.Firewall = ExportFirewallCustomization(from.Network.Firewall, nts)
 
 	return to
 }
@@ -144,7 +144,7 @@ func ExportUserCustomization(from []int.UserAccount, nts *notes.ConversionNotes)
 			toUser.Key = &fUser.SshKeys[0]
 		} else if len(fUser.SshKeys) > 1 {
 			toUser.Key = &fUser.SshKeys[0]
-			nts.Fatal("only one ssh key supported for user", fUser.Name)
+			nts.Warn("only one ssh key supported for user: %s", fUser.Name)
 		}
 		toUser.Home = &fUser.Home
 		toUser.Shell = &fUser.Shell
@@ -190,4 +190,82 @@ func ExportTimezoneCustomization(from *int.Blueprint, nts *notes.ConversionNotes
 	to.NTPServers = from.TimeDate.NTPServers
 
 	return to
+}
+
+func ExportLocaleCustomization(from *int.Locale, nts *notes.ConversionNotes) *ext.LocaleCustomization {
+	if from == nil {
+		return nil
+	}
+
+	to := &ext.LocaleCustomization{}
+	to.Languages = from.Languages
+	if len(from.Keyboards) == 1 {
+		to.Keyboard = &from.Keyboards[0]
+	} else if len(from.Keyboards) > 1 {
+		to.Keyboard = &from.Keyboards[0]
+		nts.Warn("only one keyboard layout converted: %s", *to.Keyboard)
+	}
+
+	return to
+}
+
+func ExportFirewallCustomization(from *int.NetworkFirewall, nts *notes.ConversionNotes) *ext.FirewallCustomization {
+	if from == nil {
+		return nil
+	}
+
+	to := &ext.FirewallCustomization{}
+	to.Services = ExportServicesCustomization(from, nts)
+	to.Ports = ExportPortsCustomization(from, nts)
+	
+	return to
+}
+
+func ExportServicesCustomization(from *int.NetworkFirewall, nts *notes.ConversionNotes) *ext.FirewallServicesCustomization {
+	if from == nil {
+		return nil
+	}
+
+	enabled, err := from.ServicesAsFirewalld(true)
+	if err != nil {
+		nts.Fatal("error converting services to firewalld: %s", err)
+		return nil
+	}
+
+	disabled, err := from.ServicesAsFirewalld(false)
+	if err != nil {
+		nts.Fatal("error converting services to firewalld: %s", err)
+		return nil
+	}
+
+	to := &ext.FirewallServicesCustomization{
+		Enabled:  make([]string, len(enabled)),
+		Disabled: make([]string, len(disabled)),
+	}
+	copy(to.Enabled, enabled)
+	copy(to.Disabled, disabled)
+	return to
+}
+
+func ExportPortsCustomization(from *int.NetworkFirewall, nts *notes.ConversionNotes) []string {
+	if from == nil {
+		return nil
+	}
+
+	enabled, err := from.PortsAsFirewalld(true)
+	if err != nil {
+		nts.Fatal("error converting ports to firewalld: %s", err)
+		return nil
+	}
+
+	disabled, err := from.PortsAsFirewalld(false)
+	if err != nil {
+		nts.Fatal("error converting ports to firewalld: %s", err)
+		return nil
+	}
+	if len(disabled) > 0 {
+		nts.Warn("skipping disabled firewall ports: %q", disabled)
+	}
+
+	return enabled
 }

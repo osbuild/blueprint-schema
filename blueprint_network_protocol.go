@@ -53,3 +53,14 @@ func (np NetworkProtocol) IsTCP() bool {
 func (np NetworkProtocol) IsUDP() bool {
 	return np == "udp"
 }
+
+func (np NetworkProtocol) AsFirewalld() []string {
+	switch np {
+	case NetworkProtocolTCP:
+		return []string{"tcp"}
+	case NetworkProtocolUDP:
+		return []string{"udp"}
+	default:
+		return []string{"tcp", "udp"}
+	}
+}

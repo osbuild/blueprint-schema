@@ -2,4 +2,5 @@ name: Firewall example - missing from
 network:
     firewall:
         services:
-            - to: 1303
+            - enabled: null
+              to: 1303

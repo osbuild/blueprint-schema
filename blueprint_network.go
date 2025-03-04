@@ -1,5 +1,10 @@
 package blueprint
 
+import (
+	"errors"
+	"fmt"
+)
+
 type Network struct {
 	// Firewall details - package firewalld must be installed in the image.
 	Firewall *NetworkFirewall `json:"firewall,omitempty"`
@@ -40,6 +45,69 @@ type NetworkFirewall struct {
 
 		// Enable (default) or disable the service. If a port or service is disabled and enabled at
 		// the same time either using services or ports fields, the service will be disabled.
-		Enabled bool `json:"enabled,omitempty" jsonschema:"default=true"`
+		Enabled BoolDefaultTrue `json:"enabled,omitempty"`
 	} `json:"services,omitempty" jsonschema:"nullable"`
+}
+
+func (nf *NetworkFirewall) AsFirewalld(enabled bool) ([]string, error) {
+	var result []string
+
+	svc, err := nf.ServicesAsFirewalld(enabled)
+	if err != nil {
+		return nil, err
+	}
+	result = append(result, svc...)
+
+	ports, err := nf.PortsAsFirewalld(enabled)
+	if err != nil {
+		return nil, err
+	}
+	result = append(result, ports...)
+
+	return result, nil
+}
+
+func (nf *NetworkFirewall) ServicesAsFirewalld(enabled bool) ([]string, error) {
+	var result []string
+
+	for _, service := range nf.Services {
+		if service.Enabled.Bool() != enabled {
+			continue
+		}
+
+		if service.Service != "" {
+			result = append(result, service.Service)
+		}
+	}
+
+	return result, nil
+}
+
+func (nf *NetworkFirewall) PortsAsFirewalld(enabled bool) ([]string, error) {
+	var result []string
+
+	// XXX loading of port/ranges do not work
+	println(len(nf.Services))
+	for _, srv := range nf.Services {
+		for _, proto := range srv.Protocol.AsFirewalld() {
+			println(srv.Service, proto, srv.Port, srv.From, srv.To)
+			if srv.Enabled.Bool() == enabled {
+				continue
+			}
+
+			if srv.Port != 0 {
+				result = append(result, fmt.Sprintf("port=%d/%s", srv.Port, proto))
+			} else if srv.From != 0 && srv.To != 0 {
+				if srv.From > srv.To {
+					return nil, errors.New("from must be less than or equal to to")
+				}
+
+				result = append(result, fmt.Sprintf("port=%d-%d/%s", srv.From, srv.To, proto))
+			} else {
+				return nil, errors.New("service, port or from/to pair must be defined")
+			}
+		}
+	}
+
+	return result, nil
 }

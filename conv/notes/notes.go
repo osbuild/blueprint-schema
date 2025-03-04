@@ -3,7 +3,6 @@ package notes
 import (
 	"errors"
 	"fmt"
-	"strings"
 )
 
 var ErrConversionWarning = errors.New("warning")
@@ -17,15 +16,15 @@ type ConversionNotes struct {
 
 // Warn adds a warning to the conversion notes. Warnings are considered recoverable
 // and should not stop the conversion process.
-func (e *ConversionNotes) Warn(err ...string) {
-	msg := strings.Join(err, " ")
+func (e *ConversionNotes) Warn(format string, a ...any) {
+	msg := fmt.Sprintf(format, a...)
 	e.errors = append(e.errors, fmt.Errorf("%w: %s", ErrConversionWarning, msg))
 }
 
 // Fatal adds a fatal error to the conversion notes. Fatal errors are considered
 // unrecoverable and should stop the conversion process.
-func (e *ConversionNotes) Fatal(err ...string) {
-	msg := strings.Join(err, " ")
+func (e *ConversionNotes) Fatal(format string, a ...any) {
+	msg := fmt.Sprintf(format, a...)
 	e.errors = append(e.errors, fmt.Errorf("%w: %s", ErrConversionFatal, msg))
 }
 
@@ -33,4 +32,12 @@ func (e *ConversionNotes) Fatal(err ...string) {
 // Errors can be unwrapped using errors.Unwrap and checked using errors.Is individually.
 func (e *ConversionNotes) Join() error {
 	return errors.Join(e.errors...)
+}
+
+// Errors returns all the errors as a slice of errors. Never returns nil.
+func (e *ConversionNotes) Errors() []error {
+	if e.errors == nil {
+		return []error{}
+	}
+	return e.errors
 }

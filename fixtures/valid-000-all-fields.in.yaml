@@ -64,6 +64,8 @@ network:
         protocol: "tcp"
         enabled: true
       - service: "dhcp"
+      - service: "cups"
+        enabled: false
       - port: 53
         protocol: "any"
         enabled: false
