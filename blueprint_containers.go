@@ -9,7 +9,7 @@ type Container struct {
 	Name string `json:"name" jsonschema:"required"`
 
 	// Verify TLS connection, default is true.
-	TLSVerify *bool `json:"tls_verify,omitempty" jsonschema:"default=true"`
+	TLSVerify BoolDefaultTrue `json:"tls_verify,omitempty"`
 
 	// Whether to pull the container image from the host's local-storage.
 	LocalStorage bool `json:"local_storage,omitempty" jsonschema:"default=false"`

@@ -71,7 +71,7 @@ func ExportContainers(from *int.Blueprint, nts *notes.ConversionNotes) []ext.Con
 		to = append(to, ext.Container{
 			Name:         container.Name,
 			Source:       container.Source,
-			TLSVerify:    container.TLSVerify,
+			TLSVerify:    container.TLSVerify.BoolPtr(),
 			LocalStorage: container.LocalStorage,
 		})
 	}
@@ -217,7 +217,7 @@ func ExportFirewallCustomization(from *int.NetworkFirewall, nts *notes.Conversio
 	to := &ext.FirewallCustomization{}
 	to.Services = ExportServicesCustomization(from, nts)
 	to.Ports = ExportPortsCustomization(from, nts)
-	
+
 	return to
 }
 

@@ -45,12 +45,22 @@ func (b *BoolDefaultTrue) IsSet() bool {
 	return b.set
 }
 
-// Bool returns the boolean value of the BoolDefaultTrue. If the value is not set, it returns true.
+// Bool returns the boolean value of the BoolDefaultTrue. If the value is not set,
+// it returns true.
 func (b *BoolDefaultTrue) Bool() bool {
 	if !b.set {
 		return true
 	}
 	return b.v
+}
+
+// BoolPtr returns a pointer to the boolean value of the BoolDefaultTrue. 
+// If the value is not set, it returns nil.
+func (b *BoolDefaultTrue) BoolPtr() *bool {
+	if !b.set {
+		return nil
+	}
+	return &b.v
 }
 
 func (BoolDefaultTrue) JSONSchema() *jsonschema.Schema {

@@ -164,9 +164,8 @@
           "description": "Container name is an optional string to set the name under which the container image will be saved in the image. If not specified name falls back to the same value as source.\n"
         },
         "tls_verify": {
-          "type": "boolean",
-          "description": "Verify TLS connection, default is true.\n",
-          "default": true
+          "$ref": "#/$defs/BoolDefaultTrue",
+          "description": "Verify TLS connection, default is true.\n"
         },
         "local_storage": {
           "type": "boolean",
