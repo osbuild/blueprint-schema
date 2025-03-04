@@ -1,6 +1,3 @@
-# TinyGo requires a compatible Go version, typically older than the current one.
-WASM_GOROOT?=$(HOME)/sdk/go1.21.13
-
 SOURCES=$(shell find . -name '*.go' -name 'blueprint-schema.json' -name 'go.mod' -name 'go.sum' -name 'Makefile')
 DISTDIR=dist
 
@@ -60,7 +57,7 @@ $(DISTDIR)/blueprint_go.wasm: $(DISTDIR) ## Builds wasm via go
 	GOOS=js GOARCH=wasm go build -o $(DISTDIR)/blueprint_go.wasm ./cmd/blueconv/
 
 $(DISTDIR)/blueprint_tgo.wasm: $(SOURCES) $(DISTDIR) ## Builds wasm via tinygo - GOROOT and GOPATH must be set to compatible Go
-	GOROOT=$(WASM_GOROOT) PATH="$(WASM_GOROOT)/bin:$(PATH)" GOOS=js GOARCH=wasm tinygo build -scheduler=none -o $(DISTDIR)/blueprint_tgo.wasm ./cmd/blueconv/
+	GOOS=js GOARCH=wasm tinygo build -scheduler=none -o $(DISTDIR)/blueprint_tgo.wasm ./cmd/blueconv/
 
 .PHONY: run-web-editor-json
 run-web-editor-json: ## show a demo-web editor for the json format
