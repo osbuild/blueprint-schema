@@ -77,6 +77,7 @@ run-editor: ## Build, run webserver and open a demo-web editor
 
 .PHONY: build-editor
 build-editor: ## Build the demo-web editor
+	cd web && npm clean-install
 	cd web && npm run build
 
 .PHONY: clean
