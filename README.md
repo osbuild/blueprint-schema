@@ -4,6 +4,8 @@
 
 This repository contains the common blueprint JSON Schema and Go types for Image Builder / osbuild customization configuration.
 
+[See it in action](https://osbuild.org/blueprint-schema/).
+
 [![Go Reference](https://pkg.go.dev/badge/github.com/osbuild/blueprint-schema.svg)](https://pkg.go.dev/github.com/osbuild/blueprint-schema)
 
 ### Why
@@ -25,10 +27,6 @@ At the end of 2024 we held a series of meetings where the core team agreed on a 
 * documentation with examples (from automated tests)
 * conversion library and CLI app for both "on-prem" and "console" formats
 
-### An example
-
-If you just want an example of a blueprint, [here is one](fixtures/valid-000-all-fields.in.yaml) that covers all the supported fields. There are many more in the `fixtures/` directory, read on for more information.
-
 ### The schema
 
 Latest version of the JSON Schema is available as [blueprint-schema.json](blueprint-schema.json).
@@ -38,6 +36,8 @@ The schema is generated from [Go types](blueprint.go) using [generate-schema](cm
     make generate-schema
 
 The schema is JSON Schema Draft 2020-12 compliant and can be included in OpenAPI 3.1 endpoints.
+
+If you just want an example of a blueprint, [here is one](fixtures/valid-000-all-fields.in.yaml) that covers all the supported fields. There are many more in the `fixtures/` directory, read on for more information.
 
 ## Go types
 
