@@ -9,48 +9,64 @@ import (
 	ptr "github.com/osbuild/blueprint-schema/conv/ptr"
 )
 
-func ExportBlueprint(to *ext.Blueprint, from *int.Blueprint, nts *notes.ConversionNotes) {
+func ExportBlueprint(from *int.Blueprint, nts *notes.ConversionNotes) *ext.Blueprint {
+	to := &ext.Blueprint{}
 	to.Name = from.Name
 	to.Description = from.Description
 	nts.Warn("version skipped")
 	nts.Warn("distro skipped")
 
-	ExportPackages(to.Packages, from, nts)
-	ExportGroups(to.Groups, from, nts)
-	ExportModules(to.Modules, from, nts)
-	ExportContainers(to.Containers, from, nts)
-	to.Customizations = &ext.Customizations{}
-	ExportCustomizations(to.Customizations, from, nts)
+	to.Packages = ExportPackages(from, nts)
+	to.Groups = ExportGroups(from, nts)
+	to.Modules = ExportModules(from, nts)
+	to.Containers = ExportContainers(from, nts)
+	to.Customizations = ExportCustomizations(from, nts)
+
+	return to
 }
 
-func ExportPackages(to []ext.Package, from *int.Blueprint, nts *notes.ConversionNotes) {
+func ExportPackages(from *int.Blueprint, nts *notes.ConversionNotes) []ext.Package {
+	var to []ext.Package
+
 	nts.Warn("packages added with version in name")
 	for _, pkg := range from.DNF.Packages {
 		to = append(to, ext.Package{
 			Name: pkg,
 		})
 	}
+
+	return to
 }
 
-func ExportGroups(to []ext.Group, from *int.Blueprint, nts *notes.ConversionNotes) {
+func ExportGroups(from *int.Blueprint, nts *notes.ConversionNotes) []ext.Group {
+	var to []ext.Group
 	nts.Warn("groups added with version in name")
+
 	for _, group := range from.DNF.Groups {
 		to = append(to, ext.Group{
 			Name: group,
 		})
 	}
+
+	return to
 }
 
-func ExportModules(to []ext.Package, from *int.Blueprint, nts *notes.ConversionNotes) {
+func ExportModules(from *int.Blueprint, nts *notes.ConversionNotes) []ext.Package {
+	var to []ext.Package
 	nts.Warn("modules added with version in name")
+
 	for _, module := range from.DNF.Modules {
 		to = append(to, ext.Package{
 			Name: module,
 		})
 	}
+
+	return to
 }
 
-func ExportContainers(to []ext.Container, from *int.Blueprint, nts *notes.ConversionNotes) {
+func ExportContainers(from *int.Blueprint, nts *notes.ConversionNotes) []ext.Container {
+	var to []ext.Container
+
 	for _, container := range from.Containers {
 		to = append(to, ext.Container{
 			Name:         container.Name,
@@ -59,11 +75,11 @@ func ExportContainers(to []ext.Container, from *int.Blueprint, nts *notes.Conver
 			LocalStorage: container.LocalStorage,
 		})
 	}
+
+	return to
 }
 
 //	type Customizations struct {
-//		User               []UserCustomization            `json:"user,omitempty" toml:"user,omitempty"`
-//		Group              []GroupCustomization           `json:"group,omitempty" toml:"group,omitempty"`
 //		Timezone           *TimezoneCustomization         `json:"timezone,omitempty" toml:"timezone,omitempty"`
 //		Locale             *LocaleCustomization           `json:"locale,omitempty" toml:"locale,omitempty"`
 //		Firewall           *FirewallCustomization         `json:"firewall,omitempty" toml:"firewall,omitempty"`
@@ -84,25 +100,39 @@ func ExportContainers(to []ext.Container, from *int.Blueprint, nts *notes.Conver
 //		RHSM               *RHSMCustomization             `json:"rhsm,omitempty" toml:"rhsm,omitempty"`
 //		CACerts            *CACustomization               `json:"cacerts,omitempty" toml:"cacerts,omitempty"`
 //	}
-func ExportCustomizations(to *ext.Customizations, from *int.Blueprint, nts *notes.ConversionNotes) {
+func ExportCustomizations(from *int.Blueprint, nts *notes.ConversionNotes) *ext.Customizations {
+	if from == nil {
+		return nil
+	}
+
+	to := &ext.Customizations{}
 	to.Hostname = &from.Hostname
 
-	to.Kernel = &ext.KernelCustomization{}
-	ExportKernelCustomization(to.Kernel, from.Kernel, nts)
+	to.Kernel = ExportKernelCustomization(from.Kernel, nts)
+	to.User = ExportUserCustomization(from.Accounts.Users, nts)
+	to.Group = ExportGroupCustomization(from.Accounts.Groups, nts)
+	to.Timezone = ExportTimezoneCustomization(from, nts)
 
-	to.User = []ext.UserCustomization{}
-	ExportUserCustomization(to.User, from.Accounts.Users, nts)
+	return to
 }
 
-func ExportKernelCustomization(to *ext.KernelCustomization, from *int.Kernel, nts *notes.ConversionNotes) {
+func ExportKernelCustomization(from *int.Kernel, nts *notes.ConversionNotes) *ext.KernelCustomization {
+	if from == nil {
+		return nil
+	}
+
+	to := &ext.KernelCustomization{}
 	to.Name = from.Package
 	to.Append = strings.Join(from.CmdlineAppend, " ")
+	return to
 }
 
-func ExportUserCustomization(to []ext.UserCustomization, from []int.UserAccount, nts *notes.ConversionNotes) {
+func ExportUserCustomization(from []int.UserAccount, nts *notes.ConversionNotes) []ext.UserCustomization {
 	if from == nil {
-		return
+		return nil
 	}
+
+	var to []ext.UserCustomization
 
 	nts.Warn("user force password reset ignored")
 	for _, fUser := range from {
@@ -130,4 +160,34 @@ func ExportUserCustomization(to []ext.UserCustomization, from []int.UserAccount,
 		}
 		to = append(to, toUser)
 	}
+
+	return to
+}
+
+func ExportGroupCustomization(from []int.GroupAccount, nts *notes.ConversionNotes) []ext.GroupCustomization {
+	if from == nil {
+		return nil
+	}
+
+	var to []ext.GroupCustomization
+	for _, fGroup := range from {
+		toGroup := ext.GroupCustomization{}
+		toGroup.Name = fGroup.Name
+		toGroup.GID = &fGroup.GID
+		to = append(to, toGroup)
+	}
+
+	return to
+}
+
+func ExportTimezoneCustomization(from *int.Blueprint, nts *notes.ConversionNotes) *ext.TimezoneCustomization {
+	if from.TimeDate == nil {
+		return nil
+	}
+
+	to := &ext.TimezoneCustomization{}
+	to.Timezone = &from.TimeDate.Timezone
+	to.NTPServers = from.TimeDate.NTPServers
+
+	return to
 }

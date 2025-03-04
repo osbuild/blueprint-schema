@@ -364,7 +364,7 @@ Generates something like
 name = "Blueprint example"
 description = "A complete example of a blueprint with all possible fields"
 
-# ...
+# ...
 ```
 
 ### Links
