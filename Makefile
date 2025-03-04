@@ -1,3 +1,4 @@
+TINYGO?=tinygo
 SOURCES=$(shell find . -name '*.go' -name 'blueprint-schema.json' -name 'go.mod' -name 'go.sum' -name 'Makefile')
 DISTDIR=dist
 
@@ -57,7 +58,7 @@ $(DISTDIR)/blueprint_go.wasm: $(DISTDIR) ## Builds wasm via go
 	GOOS=js GOARCH=wasm go build -o $(DISTDIR)/blueprint_go.wasm ./cmd/blueconv/
 
 $(DISTDIR)/blueprint_tgo.wasm: $(SOURCES) $(DISTDIR) ## Builds wasm via tinygo - GOROOT and GOPATH must be set to compatible Go
-	GOOS=js GOARCH=wasm tinygo build -scheduler=none -o $(DISTDIR)/blueprint_tgo.wasm ./cmd/blueconv/
+	GOOS=js GOARCH=wasm $(TINYGO) build -scheduler=none -o $(DISTDIR)/blueprint_tgo.wasm ./cmd/blueconv/
 
 .PHONY: run-web-editor-json
 run-web-editor-json: ## show a demo-web editor for the json format
