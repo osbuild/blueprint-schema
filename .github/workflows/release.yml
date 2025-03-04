@@ -40,6 +40,4 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
-            name: v0.0.0
-            draft: true
             files: dist/*
