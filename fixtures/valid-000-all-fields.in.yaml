@@ -67,6 +67,8 @@ network:
       - service: "cups"
         enabled: false
       - port: 53
+        protocol: "udp"
+      - port: 1313
         protocol: "any"
         enabled: false
       - from: 60000

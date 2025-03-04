@@ -86,23 +86,21 @@ func (nf *NetworkFirewall) ServicesAsFirewalld(enabled bool) ([]string, error) {
 func (nf *NetworkFirewall) PortsAsFirewalld(enabled bool) ([]string, error) {
 	var result []string
 
-	// XXX loading of port/ranges do not work
-	println(len(nf.Services))
 	for _, srv := range nf.Services {
-		for _, proto := range srv.Protocol.AsFirewalld() {
-			println(srv.Service, proto, srv.Port, srv.From, srv.To)
-			if srv.Enabled.Bool() == enabled {
-				continue
-			}
+		println(srv.Service, srv.Port, srv.From, srv.To, srv.Enabled.Bool(), enabled)
+		if srv.Enabled.Bool() != enabled || srv.Service != "" {
+			continue
+		}
 
+		for _, proto := range srv.Protocol.AsFirewalld() {
 			if srv.Port != 0 {
-				result = append(result, fmt.Sprintf("port=%d/%s", srv.Port, proto))
+				result = append(result, fmt.Sprintf("%d/%s", srv.Port, proto))
 			} else if srv.From != 0 && srv.To != 0 {
 				if srv.From > srv.To {
 					return nil, errors.New("from must be less than or equal to to")
 				}
 
-				result = append(result, fmt.Sprintf("port=%d-%d/%s", srv.From, srv.To, proto))
+				result = append(result, fmt.Sprintf("%d-%d/%s", srv.From, srv.To, proto))
 			} else {
 				return nil, errors.New("service, port or from/to pair must be defined")
 			}

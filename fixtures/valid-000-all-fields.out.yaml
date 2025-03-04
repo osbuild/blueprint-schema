@@ -102,8 +102,11 @@ network:
               service: dhcp
             - enabled: false
               service: cups
-            - enabled: false
+            - enabled: null
               port: 53
+              protocol: udp
+            - enabled: false
+              port: 1313
               protocol: any
             - enabled: null
               from: 60000

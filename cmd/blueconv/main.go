@@ -76,6 +76,7 @@ func main() {
 		}
 
 		if !*quiet {
+			os.Stdout.WriteString("\n")
 			for _, err := range errs.Errors() {
 				os.Stdout.WriteString(err.Error())
 				os.Stdout.WriteString("\n")
