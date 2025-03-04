@@ -9,6 +9,7 @@ import (
 
 	"github.com/BurntSushi/toml"
 	"github.com/osbuild/blueprint-schema"
+	"github.com/osbuild/blueprint-schema/conv/notes"
 	"github.com/osbuild/blueprint-schema/conv/onprem"
 	onprem_blueprint "github.com/osbuild/blueprint-schema/conv/onprem/blueprint"
 )
@@ -66,7 +67,7 @@ func main() {
 
 		if *outputFormat == "toml" {
 			to := onprem_blueprint.Blueprint{}
-			errs := onprem.Errors{}
+			errs := notes.ConversionNotes{}
 			onprem.ExportBlueprint(&to, from, &errs)
 			err = toml.NewEncoder(os.Stdout).Encode(to)
 			if err != nil {

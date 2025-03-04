@@ -1,4 +1,4 @@
-package onprem
+package notes
 
 import (
 	"errors"
@@ -9,20 +9,20 @@ import (
 var ErrConversionWarning = errors.New("warning")
 var ErrConversionFatal = errors.New("fatal")
 
-type Errors struct {
+type ConversionNotes struct {
 	errors []error
 }
 
-func (e *Errors) Warn(err ...string) {
+func (e *ConversionNotes) Warn(err ...string) {
 	msg := strings.Join(err, " ")
 	e.errors = append(e.errors, fmt.Errorf("%w: %s", ErrConversionWarning, msg))
 }
 
-func (e *Errors) Fatal(err ...string) {
+func (e *ConversionNotes) Fatal(err ...string) {
 	msg := strings.Join(err, " ")
 	e.errors = append(e.errors, fmt.Errorf("%w: %s", ErrConversionFatal, msg))
 }
 
-func (e *Errors) Join() error {
+func (e *ConversionNotes) Join() error {
 	return errors.Join(e.errors...)
 }

@@ -4,26 +4,27 @@ import (
 	"strings"
 
 	int "github.com/osbuild/blueprint-schema"
+	"github.com/osbuild/blueprint-schema/conv/notes"
 	ext "github.com/osbuild/blueprint-schema/conv/onprem/blueprint"
 	ptr "github.com/osbuild/blueprint-schema/conv/ptr"
 )
 
-func ExportBlueprint(to *ext.Blueprint, from *int.Blueprint, errs *Errors) {
+func ExportBlueprint(to *ext.Blueprint, from *int.Blueprint, nts *notes.ConversionNotes) {
 	to.Name = from.Name
 	to.Description = from.Description
-	errs.Warn("version skipped")
-	errs.Warn("distro skipped")
+	nts.Warn("version skipped")
+	nts.Warn("distro skipped")
 
-	ExportPackages(to.Packages, from, errs)
-	ExportGroups(to.Groups, from, errs)
-	ExportModules(to.Modules, from, errs)
-	ExportContainers(to.Containers, from, errs)
+	ExportPackages(to.Packages, from, nts)
+	ExportGroups(to.Groups, from, nts)
+	ExportModules(to.Modules, from, nts)
+	ExportContainers(to.Containers, from, nts)
 	to.Customizations = &ext.Customizations{}
-	ExportCustomizations(to.Customizations, from, errs)
+	ExportCustomizations(to.Customizations, from, nts)
 }
 
-func ExportPackages(to []ext.Package, from *int.Blueprint, errs *Errors) {
-	errs.Warn("packages added with version in name")
+func ExportPackages(to []ext.Package, from *int.Blueprint, nts *notes.ConversionNotes) {
+	nts.Warn("packages added with version in name")
 	for _, pkg := range from.DNF.Packages {
 		to = append(to, ext.Package{
 			Name: pkg,
@@ -31,8 +32,8 @@ func ExportPackages(to []ext.Package, from *int.Blueprint, errs *Errors) {
 	}
 }
 
-func ExportGroups(to []ext.Group, from *int.Blueprint, errs *Errors) {
-	errs.Warn("groups added with version in name")
+func ExportGroups(to []ext.Group, from *int.Blueprint, nts *notes.ConversionNotes) {
+	nts.Warn("groups added with version in name")
 	for _, group := range from.DNF.Groups {
 		to = append(to, ext.Group{
 			Name: group,
@@ -40,8 +41,8 @@ func ExportGroups(to []ext.Group, from *int.Blueprint, errs *Errors) {
 	}
 }
 
-func ExportModules(to []ext.Package, from *int.Blueprint, errs *Errors) {
-	errs.Warn("modules added with version in name")
+func ExportModules(to []ext.Package, from *int.Blueprint, nts *notes.ConversionNotes) {
+	nts.Warn("modules added with version in name")
 	for _, module := range from.DNF.Modules {
 		to = append(to, ext.Package{
 			Name: module,
@@ -49,7 +50,7 @@ func ExportModules(to []ext.Package, from *int.Blueprint, errs *Errors) {
 	}
 }
 
-func ExportContainers(to []ext.Container, from *int.Blueprint, errs *Errors) {
+func ExportContainers(to []ext.Container, from *int.Blueprint, nts *notes.ConversionNotes) {
 	for _, container := range from.Containers {
 		to = append(to, ext.Container{
 			Name:         container.Name,
@@ -83,27 +84,27 @@ func ExportContainers(to []ext.Container, from *int.Blueprint, errs *Errors) {
 //		RHSM               *RHSMCustomization             `json:"rhsm,omitempty" toml:"rhsm,omitempty"`
 //		CACerts            *CACustomization               `json:"cacerts,omitempty" toml:"cacerts,omitempty"`
 //	}
-func ExportCustomizations(to *ext.Customizations, from *int.Blueprint, errs *Errors) {
+func ExportCustomizations(to *ext.Customizations, from *int.Blueprint, nts *notes.ConversionNotes) {
 	to.Hostname = &from.Hostname
 
 	to.Kernel = &ext.KernelCustomization{}
-	ExportKernelCustomization(to.Kernel, from.Kernel, errs)
+	ExportKernelCustomization(to.Kernel, from.Kernel, nts)
 
 	to.User = []ext.UserCustomization{}
-	ExportUserCustomization(to.User, from.Accounts.Users, errs)
+	ExportUserCustomization(to.User, from.Accounts.Users, nts)
 }
 
-func ExportKernelCustomization(to *ext.KernelCustomization, from *int.Kernel, errs *Errors) {
+func ExportKernelCustomization(to *ext.KernelCustomization, from *int.Kernel, nts *notes.ConversionNotes) {
 	to.Name = from.Package
 	to.Append = strings.Join(from.CmdlineAppend, " ")
 }
 
-func ExportUserCustomization(to []ext.UserCustomization, from []int.UserAccount, errs *Errors) {
+func ExportUserCustomization(to []ext.UserCustomization, from []int.UserAccount, nts *notes.ConversionNotes) {
 	if from == nil {
 		return
 	}
 
-	errs.Warn("user force password reset ignored")
+	nts.Warn("user force password reset ignored")
 	for _, fUser := range from {
 		toUser := ext.UserCustomization{}
 		toUser.Name = fUser.Name
@@ -113,7 +114,7 @@ func ExportUserCustomization(to []ext.UserCustomization, from []int.UserAccount,
 			toUser.Key = &fUser.SshKeys[0]
 		} else if len(fUser.SshKeys) > 1 {
 			toUser.Key = &fUser.SshKeys[0]
-			errs.Fatal("only one ssh key supported for user", fUser.Name)
+			nts.Fatal("only one ssh key supported for user", fUser.Name)
 		}
 		toUser.Home = &fUser.Home
 		toUser.Shell = &fUser.Shell
