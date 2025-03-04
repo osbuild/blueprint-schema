@@ -34,7 +34,8 @@ make run-web-editor-yaml
 The demo will open in your browser.
 
 # Kudos
-This whole demo setup was shamelessly copied
+This whole demo setup was copied
 from https://github.com/remcohaszing/monaco-yaml/tree/main/examples/demo
+with minor adjustments to our usecase
 
 THANKS alot for this great work!
