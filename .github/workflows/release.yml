@@ -1,0 +1,36 @@
+name: release
+
+on:
+  push:
+    branches: ["main"] # TODO remove
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+  packages: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+
+      - name: Set up TinyGo
+        uses: acifani/setup-tinygo@v2
+
+      - name: Build
+        run: make build
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+            name: v0.0.0
+            draft: true
+            files: dist/*
