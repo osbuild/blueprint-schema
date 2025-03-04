@@ -2,14 +2,13 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="<%= require('./icon.svg') %>" />
-    <title>Monaco YAML</title>
+    <link rel="icon" type="image/svg+xml" href="https://osbuild.org/img/logo.svg" />
+    <title>Image Builder Blueprint YAML Demo</title>
     <meta name="description" content="YAML support common blueprint" />
-    <meta name="theme-color" content="#42e3ff" />
+    <meta name="theme-color" content="#FFFFFF" />
   </head>
   <body>
-    <nav>
-      <h1>Image builder YAML blueprint editor with schema support</h1>
+    <nav style="padding: 0.5rem 1rem;">
       <a
         href="https://osbuild.org"
         class="nav-icon"
@@ -20,20 +19,23 @@
           height="32"
           src="https://osbuild.org/img/logo.svg"
           width="32"
-        />
+        /><b class="nav-project-name">Image Builder</b>
       </a>
-      <a
-        href="https://github.com/osbuild/blueprint-schema"
-        class="nav-icon"
-        title="View common blueprint example on GitHub"
-      >
-        <img
-          alt="GitHub icon"
-          height="32"
-          src="<%= require('@fortawesome/fontawesome-free/svgs/brands/github.svg') %>"
-          width="32"
-        />
-      </a>
+      <div>Blueprint YAML demo</div>
+      <div>
+        <a
+          href="https://github.com/osbuild/blueprint-schema"
+          class="nav-icon"
+          title="View common blueprint example on GitHub"
+        >
+          <img
+            alt="GitHub icon"
+            height="32"
+            src="<%= require('@fortawesome/fontawesome-free/svgs/brands/github.svg') %>"
+            width="32"
+          />
+        </a>
+      </div>
     </nav>
     <main>
       <select id="schema-selection">
