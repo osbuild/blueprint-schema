@@ -64,19 +64,23 @@ $(DISTDIR)/blueprint_tgo.wasm: $(SOURCES) $(DISTDIR) ## Builds wasm via tinygo -
 
 .PHONY: run-web-editor-json
 run-web-editor-json: ## show a demo-web editor for the json format
-	xdg-open ./autocomplete-example-json.html
+	xdg-open ./web/src/json.html
 
 # Just set this in your environment or call directly:
-# make WEB_EDITOR_HOST=hostname run-web-editor-yaml
-export WEB_EDITOR_HOST?=0.0.0.0
+# make WEB_EDITOR_HOST=hostname run-editor
+export WEB_EDITOR_HOST?=localhost
 
-.PHONY: run-web-editor-yaml
-run-web-editor-yaml: ## Show a demo-web editor for the yaml format
-	cd autocomplete-example-yaml && npm clean-install
-	cd autocomplete-example-yaml && npm run start
+.PHONY: run-editor
+run-editor: ## Build, run webserver and open a demo-web editor
+	cd web && npm clean-install
+	cd web && npm run start
+
+.PHONY: build-editor
+build-editor: ## Build the demo-web editor
+	cd web && npm run build
 
 .PHONY: clean
 clean: ## Clean up all build artifacts
 	rm -rf $(DISTDIR)
-	rm -rf autocomplete-example-yaml/node_modules
-	rm -rf autocomplete-example-yaml/dist
+	rm -rf web/node_modules
+	rm -rf web/dist
