@@ -33,16 +33,14 @@ const monacoYaml = configureMonacoYaml(monaco, {
   schemas: [defaultSchema]
 })
 
-const value = `
-name: "My Blueprint"
-
-# You can continue editing the blueprint here or
-# start autocomplete by pressing Ctrl+Space
-`.replace(/:$/m, ': ')
+var defaultValue = await fetch('https://raw.githubusercontent.com/osbuild/blueprint-schema/refs/heads/main/fixtures/valid-000-all-fields.in.yaml')
+  .then((response) => {
+  return response.text()
+})
 
 const ed = editor.create(document.getElementById('editor')!, {
   automaticLayout: true,
-  model: editor.createModel(value, 'yaml', Uri.parse('blueprint-yaml.yaml')),
+  model: editor.createModel(defaultValue, 'yaml', Uri.parse('blueprint-yaml.yaml')),
   theme: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'vs-dark' : 'vs-light',
   quickSuggestions: {
     other: true,
