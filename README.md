@@ -367,25 +367,8 @@ description = "A complete example of a blueprint with all possible fields"
 # ...
 ```
 
-### Schema documentation
-
-TBD
-
 ### Links
 
 * https://github.com/invopop/yaml - library to convert YAML to JSON and vice versa
 * https://github.com/invopop/jsonschema - library to generate JSON Schema from Go types
 * https://github.com/santhosh-tekuri/jsonschema - library to validate JSON Schema
-
-### TODO
-
-* Implement JSON Schema attestation (folks did not like the Go-based ones)
-* Make a release and CLI/WASM build pipeline
-* Github page with JSON/YAML editors and few starting examples
-* Explore fully YAML-based schema with optionally generated Go code
-* Implement conversion tools for onprem TOML/JSON and CRC-JSON
-* Generate markdown/HTML documentation for the schema with examples
-* Implement WASI/WASM conversion to the on github page
-* Fix default values - schema definition is not used correctly for non-pointers (e.g. bool must be pointer if defaults to true)
-* Add intermediate JSON into fixtures for a quick "peek" into YAML/JSON interoperability
-* Implement [common defs/refs](https://tour.json-schema.org/content/06-Combining-Subschemas/01-Reusing-and-Referencing-with-defs-and-ref) for example InstallerAnaconda.EnabledModules.
