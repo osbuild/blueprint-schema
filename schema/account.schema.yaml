@@ -1,0 +1,20 @@
+---
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://github.com/osbuild/blueprint-schema/account
+type: object
+properties:
+  groups:
+    oneOf:
+    - description: Operating system group accounts to be created on the image.
+      type: array
+      items:
+        "$ref": "#/$defs/GroupAccount"
+    - type: 'null'
+  users:
+    oneOf:
+    - description: Operating system user accounts to be created on the image.
+      type: array
+      items:
+        "$ref": "#/$defs/UserAccount"
+    - type: 'null'
+additionalProperties: false

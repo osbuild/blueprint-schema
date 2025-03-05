@@ -1,5 +1,6 @@
 TINYGO?=tinygo
 SOURCES=$(shell find . -name '*.go' -name 'blueprint-schema.json' -name 'go.mod' -name 'go.sum' -name 'Makefile')
+SCHEMA_SRC=$(shell find ./schema -name '*schema.yaml')
 DISTDIR=dist
 
 .PHONY: help
@@ -28,6 +29,19 @@ pkg-go-dev-update: ## Schedule https://pkg.go.dev/github.com/osbuild/blueprint-s
 .PHONY: test
 test: ## Run all tests
 	@go test -count=1 .
+
+blueprint-schema2.json: $(SCHEMA_SRC) Makefile
+	echo $@ # TODO output
+	jsonschema bundle schema/blueprint.schema.yaml --verbose --resolve schema/ --extension schema.yaml --without-id
+
+.PHONY: schema-fmt
+schema-fmt: ## Format the schema against JSON Metaschema
+	jsonschema lint --fix blueprint-schema2.json
+	jsonschema fmt blueprint-schema2.json
+
+.PHONY: schema-meta
+schema-meta: ## Validate the schema against JSON Metaschema
+	jsonschema metaschema blueprint-schema2.json
 
 PLATFORMS:=$(DISTDIR)/blueconv_linux_amd64 \
 	$(DISTDIR)/blueconv_linux_arm64 \

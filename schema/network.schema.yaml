@@ -1,0 +1,10 @@
+---
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://github.com/osbuild/blueprint-schema/network
+type: object
+properties:
+  firewall:
+    description: Firewall details - package firewalld must be installed in the
+      image.
+    "$ref": "#/$defs/NetworkFirewall"
+additionalProperties: false

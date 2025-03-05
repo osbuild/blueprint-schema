@@ -1,0 +1,11 @@
+---
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://github.com/osbuild/blueprint-schema/registration_insights
+type: object
+required:
+- enabled
+properties:
+  enabled:
+    description: Enables insights client during boot.
+    type: boolean
+additionalProperties: false

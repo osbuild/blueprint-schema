@@ -1,0 +1,25 @@
+---
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://github.com/osbuild/blueprint-schema/container
+type: object
+required:
+- source
+- name
+properties:
+  local_storage:
+    description: Whether to pull the container image from the host's local-storage.
+    default: false
+    type: boolean
+  name:
+    description: Container name is an optional string to set the name under which
+      the container image will be saved in the image. If not specified name falls
+      back to the same value as source.
+    type: string
+  source:
+    description: Container image URL is a reference to a container image at a
+      registry.
+    type: string
+  tls_verify:
+    description: Verify TLS connection, default is true.
+    "$ref": "#/$defs/BoolDefaultTrue"
+additionalProperties: false

@@ -1,0 +1,59 @@
+---
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://github.com/osbuild/blueprint-schema/user_account
+type: object
+required:
+- name
+properties:
+  description:
+    description: A longer description of the account.
+    type: string
+    maxLength: 4096
+  expires:
+    description: |-
+      The expiration date of the account in the format YYYY-MM-DD.
+
+      Only date is taken into account, time allowed but is ignored for JSON/YAML compatibility.
+    "$ref": "#/$defs/Date"
+  gid:
+    description: The primary group ID (GID) of the user. Value of zero (or ommited
+      value) means that the next available UID will be assigned.
+    type: integer
+    minimum: 1
+  groups:
+    description: Additional groups that the user should be a member of.
+    type: array
+    items:
+      type: string
+  home:
+    description: The home directory of the user.
+    type: string
+  name:
+    description: 'Account name. Accepted characters: lowercase letters, digits,
+      underscores, dollars, and hyphens. Name must not start with a hyphen. Maximum
+      length is 256 characters. The validation pattern is a relaxed version of
+      https://github.com/shadow-maint/shadow/blob/master/lib/chkname.c'
+    type: string
+    pattern: "^[a-zA-Z0-9_.][a-zA-Z0-9_.$-]*$"
+    maxLength: 256
+  password:
+    description: Password either in plain text or encrypted form. If the password
+      is not provided, the account will be locked and the user will not be able
+      to log in with a password. The password can be encrypted using the crypt(3)
+      function. The format of the encrypted password is $id$salt$hashed, where
+      $id is the algorithm used (1, 5, 6, or 2a).
+    type: string
+  shell:
+    description: The shell of the user.
+    type: string
+  ssh_keys:
+    description: SSH keys to be added to the account's authorized_keys file.
+    type: array
+    items:
+      type: string
+  uid:
+    description: The user ID (UID) of the user. Value of zero (or ommited value)
+      means that the next available UID will be assigned.
+    type: integer
+    minimum: 1
+additionalProperties: false

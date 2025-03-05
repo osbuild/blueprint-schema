@@ -1,0 +1,19 @@
+---
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://github.com/osbuild/blueprint-schema/time_date
+type: object
+required:
+- timezone
+properties:
+  ntp_servers:
+    description: An optional list of strings containing NTP servers to use. If
+      not provided the distribution defaults are used
+    type: array
+    items:
+      type: string
+  timezone:
+    description: 'System time zone. Defaults to UTC. To list available time zones
+      run: timedatectl list-timezones'
+    default: UTC
+    type: string
+additionalProperties: false

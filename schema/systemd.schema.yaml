@@ -1,0 +1,30 @@
+---
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://github.com/osbuild/blueprint-schema/systemd
+type: object
+properties:
+  disabled:
+    oneOf:
+    - description: The disabled attribute is a list of strings that contains the
+        systemd units to be disabled.
+      type: array
+      items:
+        type: string
+    - type: 'null'
+  enabled:
+    oneOf:
+    - description: The enabled attribute is a list of strings that contains the
+        systemd units to be enabled.
+      type: array
+      items:
+        type: string
+    - type: 'null'
+  masked:
+    oneOf:
+    - description: The masked attribute is a list of strings that contains the
+        systemd units to be masked.
+      type: array
+      items:
+        type: string
+    - type: 'null'
+additionalProperties: false

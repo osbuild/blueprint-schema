@@ -1,0 +1,81 @@
+---
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://github.com/osbuild/blueprint-schema/dnf_repository
+type: object
+oneOf:
+- title: dnf_repo_base_urls
+  required:
+  - base_urls
+- title: dnf_repo_mirrorlist
+  required:
+  - mirror_list
+- title: dnf_repo_metalink
+  required:
+  - metalink
+required:
+- id
+properties:
+  id:
+    description: Repository ID. Required.
+    type: string
+    pattern: "^[a-zA-Z0-9_-]+$"
+    maxLength: 256
+  base_urls:
+    description: Base URLs for the repository.
+    type: array
+    items:
+      type: string
+  filename:
+    description: Repository filename to use for the repository configuration file.
+      If not provided, the ID is used. Filename must be provided without the .repo
+      extension.
+    type: string
+    pattern: "^[a-zA-Z0-9_-]+$"
+    maxLength: 256
+  gpg_check:
+    description: Enable GPG check for the repository.
+    default: true
+    type: boolean
+  gpg_check_repo:
+    description: Enable GPG check for the repository metadata.
+    default: true
+    type: boolean
+  gpg_keys:
+    description: |-
+      GPG keys for the repository.
+
+      The blueprint accepts both inline GPG keys and GPG key urls. If an inline GPG key is provided it will be saved to the /etc/pki/rpm-gpg directory and will be referenced accordingly in the repository configuration. GPG keys are not imported to the RPM database and will only be imported when first installing a package from the third-party repository.
+    type: array
+    items:
+      type: string
+  metalink:
+    description: Metalink for the repository.
+    type: string
+  mirror_list:
+    description: Mirror list for the repository.
+    type: string
+  module_hotfixes:
+    description: |-
+      Enable module hotfixes for the repository.
+
+      Adds module_hotfixes flag to all repo types so it can be used during osbuild. This enables users to disable modularity filtering on specific repositories.
+    default: false
+    type: boolean
+  name:
+    description: Repository name.
+    type: string
+  priority:
+    description: Repository priority.
+    default: 99
+    type: integer
+  ssl_verify:
+    description: Enable SSL verification for the repository.
+    default: true
+    type: boolean
+  usage:
+    oneOf:
+    - description: Repository usage. By default, the repository is configured
+        on the image but not used for image build.
+      "$ref": "#/$defs/DNFRepositoryUsage"
+    - type: 'null'
+additionalProperties: false

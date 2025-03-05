@@ -1,0 +1,16 @@
+---
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://github.com/osbuild/blueprint-schema/registration
+type: object
+properties:
+  fdo:
+    oneOf:
+    - description: FDO allows users to configure FIDO Device Onboard device initialization
+        parameters. It is only available with the edge-simplified-installer or
+        iot-simplified-installer image types.
+      "$ref": "#/$defs/FDORegistration"
+    - type: 'null'
+  redhat:
+    description: Registration details for Red Hat operating system images.
+    "$ref": "#/$defs/RedHatRegistration"
+additionalProperties: false

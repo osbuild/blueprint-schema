@@ -1,0 +1,56 @@
+---
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://github.com/osbuild/blueprint-schema/dnf
+type: object
+properties:
+  groups:
+    oneOf:
+    - description: 'Groups to install, must match exactly. Groups describes groups
+        of packages to be installed into the image. Package groups are defined
+        in the repository metadata. Each group has a descriptive name used primarily
+        for display in user interfaces and an ID more commonly used in kickstart
+        files. Here, the ID is the expected way of listing a group. Groups have
+        three different ways of categorizing their packages: mandatory, default,
+        and optional. For the purposes of blueprints, only mandatory and default
+        packages will be installed. There is no mechanism for selecting optional
+        packages.'
+      type: array
+      items:
+        type: string
+    - type: 'null'
+  import_keys:
+    oneOf:
+    - description: Additional file paths to the GPG keys to import. The files
+        must be present in the image. Does not support importing from URLs.
+      type: array
+      items:
+        type: string
+    - type: 'null'
+  modules:
+    oneOf:
+    - description: Modules to enable or disable
+      type: array
+      items:
+        type: string
+    - type: 'null'
+  packages:
+    oneOf:
+    - description: 'Packages to install. Package name or NVRA is accepted as long
+        as DNF can resolve it. Examples: vim-enhanced, vim-enhanced-9.1.866-1
+        or vim-enhanced-9.1.866-1.fc41.x86_64. The packages can also be specified
+        as @group_name to install all packages in the group.'
+      type: array
+      items:
+        type: string
+    - type: 'null'
+  repositories:
+    oneOf:
+    - description: |-
+        Third-party repositories are supported by the blueprint customizations.
+
+        All fields reflect configuration values of dnf, see man dnf.conf(5) for more information.
+      type: array
+      items:
+        "$ref": "#/$defs/DNFRepository"
+    - type: 'null'
+additionalProperties: false

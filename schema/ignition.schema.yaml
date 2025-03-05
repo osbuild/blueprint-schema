@@ -1,0 +1,25 @@
+---
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://github.com/osbuild/blueprint-schema/ignition
+type: object
+oneOf:
+- title: ignition_url
+  required:
+  - firstboot_url
+- title: ignition_embedded
+  required:
+  - embedded
+properties:
+  embedded:
+    description: |-
+      The embedded Ignition configuration to be used by Ignition. This configuration is embedded in the blueprint.
+
+      Cannot be used with firstboot_url.
+    "$ref": "#/$defs/IgnitionEmbedded"
+  firstboot_url:
+    description: |-
+      The URL to the Ignition configuration to be used by Ignition. This configuration is a URL to a remote Ignition configuration. The firstboot_url is used if the embedded configuration is not specified.
+
+      Cannot be used with embedded_base64 or embedded_text.
+    type: string
+additionalProperties: false

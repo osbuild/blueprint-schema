@@ -1,0 +1,19 @@
+---
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://github.com/osbuild/blueprint-schema/installer_kickstart
+type: object
+oneOf:
+- title: kickstart_text
+  required:
+  - text
+- title: kickstart_base64
+  required:
+  - base64
+properties:
+  base64:
+    description: Kickstart file formatted in base64.
+    type: string
+  text:
+    description: Kickstart file formatted in plain text.
+    type: string
+additionalProperties: false

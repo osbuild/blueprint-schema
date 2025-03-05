@@ -1,0 +1,20 @@
+---
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://github.com/osbuild/blueprint-schema/installer
+type: object
+properties:
+  anaconda:
+    oneOf:
+    - description: |-
+        Extra customizations for Anaconda installer (ISO) image types.
+
+        Blueprint customizations that match the kickstart options (languages, keyboard, timezone) will change the value in the kickstart file as well.
+      "$ref": "#/$defs/AnacondaInstaller"
+    - type: 'null'
+  coreos:
+    oneOf:
+    - description: CoreOS installer configuration is required by the edge-simplified-installer
+        image. It allows to define the destination device for the installation.
+      "$ref": "#/$defs/CoreOSInstaller"
+    - type: 'null'
+additionalProperties: false

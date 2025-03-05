@@ -53,13 +53,7 @@ func rewrapText(text string) string {
 		}
 	}
 	result := wt.String()
-	if strings.HasSuffix(result, "\n") {
-		return result
-	} else if result != "" {
-		return result + "\n"
-	} else {
-		return result
-	}
+	return strings.TrimSuffix(strings.TrimSuffix(result, "\n"), "\n")
 }
 
 func main() {

@@ -17,35 +17,35 @@ func TestRewrapText(t *testing.T) {
 		},
 		{
 			input:    "\n",
-			expected: "\n",
+			expected: "",
 		},
 		{
 			input:    "\n\n",
-			expected: "\n\n",
+			expected: "",
 		},
 		{
 			input:    "Text with no linebreaks",
-			expected: "Text with no linebreaks\n",
+			expected: "Text with no linebreaks",
 		},
 		{
 			input:    "Text with one\nlinebreak",
-			expected: "Text with one linebreak\n",
+			expected: "Text with one linebreak",
 		},
 		{
 			input:    "Text with\ntwo\nlinebreaks",
-			expected: "Text with two linebreaks\n",
+			expected: "Text with two linebreaks",
 		},
 		{
 			input:    "Text with a trailing linebreak\n",
-			expected: "Text with a trailing linebreak\n",
+			expected: "Text with a trailing linebreak",
 		},
 		{
 			input:    "Text with one\n\nparagraph\n",
-			expected: "Text with one\n\nparagraph\n",
+			expected: "Text with one\n\nparagraph",
 		},
 		{
 			input:    "Text with one\nlinebreak and\n\none paragraph",
-			expected: "Text with one linebreak and\n\none paragraph\n",
+			expected: "Text with one linebreak and\n\none paragraph",
 		},
 	}
 

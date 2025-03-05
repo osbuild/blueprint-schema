@@ -1,0 +1,12 @@
+---
+"$schema": https://json-schema.org/draft/2020-12/schema
+"$id": https://github.com/osbuild/blueprint-schema/fsnode_contents
+type: object
+properties:
+  base64:
+    description: Base64-encoded file contents. Useful for binaries.
+    type: string
+  text:
+    description: Plain text file contents.
+    type: string
+additionalProperties: false
