@@ -523,11 +523,7 @@
           ]
         }
       },
-      "additionalProperties": false,
-      "type": "object",
-      "required": [
-        "path"
-      ]
+      "additionalProperties": false
     },
     "FSNodeContents": {
       "properties": {

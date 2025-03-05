@@ -65,6 +65,8 @@ build-cli: $(PLATFORMS) ## Builds cli binaries
 
 .PHONY: build-wasm
 build-wasm: $(DISTDIR)/blueprint_go.wasm $(DISTDIR)/blueprint_tgo.wasm ## Builds wasm binaries
+	@wasm-objdump -j Export -x dist/blueprint_go.wasm
+	@wasm-objdump -j Export -x dist/blueprint_tgo.wasm
 
 .PHONY: $(PLATFORMS)
 $(PLATFORMS):
@@ -72,10 +74,10 @@ $(PLATFORMS):
 
 .PHONY: $(DISTDIR)/blueprint_go.wasm
 $(DISTDIR)/blueprint_go.wasm: $(DISTDIR) ## Builds wasm via go
-	GOOS=js GOARCH=wasm go build -o $(DISTDIR)/blueprint_go.wasm ./cmd/blueconv/
+	GOOS=js GOARCH=wasm go build -o $(DISTDIR)/blueprint_go.wasm ./conv/wasm/
 
 $(DISTDIR)/blueprint_tgo.wasm: $(SOURCES) $(DISTDIR) ## Builds wasm via tinygo - GOROOT and GOPATH must be set to compatible Go
-	GOOS=js GOARCH=wasm $(TINYGO) build -scheduler=none -o $(DISTDIR)/blueprint_tgo.wasm ./cmd/blueconv/
+	GOOS=js GOARCH=wasm $(TINYGO) build -scheduler=none -o $(DISTDIR)/blueprint_tgo.wasm ./conv/wasm/
 
 .PHONY: run-web-editor-json
 run-web-editor-json: ## show a demo-web editor for the json format

@@ -1,6 +1,3 @@
-//go:build js
-// +build js
-
 package main
 
 import (
@@ -8,10 +5,12 @@ import (
 
 	"github.com/BurntSushi/toml"
 	"github.com/osbuild/blueprint-schema"
+	"github.com/osbuild/blueprint-schema/conv/notes"
 	"github.com/osbuild/blueprint-schema/conv/onprem"
-	onprem_blueprint "github.com/osbuild/blueprint-schema/conv/onprem/blueprint"
 	"github.com/osbuild/blueprint-schema/conv/ptr"
 )
+
+func main() {}
 
 //go:wasmexport BlueprintValidateJSON
 func BlueprintValidateJSON(input string) *string {
@@ -44,15 +43,15 @@ func BlueprintValidateYAML(input string) *string {
 }
 
 //go:wasmexport BlueprintExportTOML
+//export BlueprintValidateJSON
 func BlueprintExportTOML(input string) *string {
 	from, err := blueprint.ReadYAML(strings.NewReader(input))
 	if err != nil {
 		return ptr.To(err.Error())
 	}
 
-	to := onprem_blueprint.Blueprint{}
-	errs := onprem.Errors{}
-	onprem.ExportBlueprint(&to, from, &errs)
+	nts := notes.ConversionNotes{}
+	to := onprem.ExportBlueprint(from, &nts)
 
 	// XXX ignore errors for now
 
