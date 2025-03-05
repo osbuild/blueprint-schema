@@ -6,5 +6,5 @@ properties:
   firewall:
     description: Firewall details - package firewalld must be installed in the
       image.
-    "$ref": "#/$defs/NetworkFirewall"
+    "$ref": "https://github.com/osbuild/blueprint-schema/network_firewall"
 additionalProperties: false

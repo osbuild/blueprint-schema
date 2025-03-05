@@ -10,12 +10,12 @@ properties:
   connector:
     oneOf:
     - description: Red Hat console.redhat.com connector (rhc) details.
-      "$ref": "#/$defs/ConnectorRegistration"
+      "$ref": "https://github.com/osbuild/blueprint-schema/registration_connector"
     - type: 'null'
   insights:
     oneOf:
     - description: Red Hat Insights client details.
-      "$ref": "#/$defs/InsightsRegistration"
+      "$ref": "https://github.com/osbuild/blueprint-schema/registration_insights"
     - type: 'null'
   organization:
     description: Subscription manager organization name to use during registration.
@@ -27,6 +27,6 @@ properties:
         is by default part of the RHEL distribution bootable images. To explicitly
         install the package, add it to the packages section in the blueprint.
         The customization is not supported on Fedora distribution images.
-      "$ref": "#/$defs/SubscriptionManagerRegistration"
+      "$ref": "https://github.com/osbuild/blueprint-schema/registration_rhsm"
     - type: 'null'
 additionalProperties: false

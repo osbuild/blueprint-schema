@@ -152,7 +152,7 @@ func TestFix(t *testing.T) {
 				}
 
 				got := schema.validateMapJSONResult(data)
-				if diff := cmp.Diff(want, got); diff != "" {
+				if diff := cmp.Diff(string(want), string(got)); diff != "" {
 					t.Errorf("validity mismatch (-want +got):\n%s", diff)
 				}
 			}

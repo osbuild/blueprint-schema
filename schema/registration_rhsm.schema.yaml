@@ -1,6 +1,6 @@
 ---
 "$schema": https://json-schema.org/draft/2020-12/schema
-"$id": https://github.com/osbuild/blueprint-schema/registration_subscription_manager
+"$id": https://github.com/osbuild/blueprint-schema/registration_rhsm
 type: object
 required:
 - enabled

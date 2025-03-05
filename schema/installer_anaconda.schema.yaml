@@ -38,7 +38,7 @@ properties:
   kickstart:
     oneOf:
     - description: Kickstart installer configuration.
-      "$ref": "#/$defs/KickstartInstaller"
+      "$ref": "https://github.com/osbuild/blueprint-schema/installer_kickstart"
     - type: 'null'
   sudo_nopasswd:
     description: Sudo users with NOPASSWD option. Adds a snippet to the kickstart

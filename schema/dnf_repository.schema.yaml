@@ -76,6 +76,6 @@ properties:
     oneOf:
     - description: Repository usage. By default, the repository is configured
         on the image but not used for image build.
-      "$ref": "#/$defs/DNFRepositoryUsage"
+      "$ref": "https://github.com/osbuild/blueprint-schema/dnf_repository_usage"
     - type: 'null'
 additionalProperties: false

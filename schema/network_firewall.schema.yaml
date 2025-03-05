@@ -27,7 +27,7 @@ properties:
           - to
         properties:
           enabled:
-            "$ref": "#/$defs/BoolDefaultTrue"
+            "$ref": "https://github.com/osbuild/blueprint-schema/bool_default_true"
           from:
             type: integer
             maximum: 65535

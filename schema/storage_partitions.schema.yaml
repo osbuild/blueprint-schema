@@ -100,7 +100,7 @@ properties:
       Relevant for partition types: lvm.
     type: array
     items:
-      "$ref": "#/$defs/LogicalVolumesStorage"
+      "$ref": "https://github.com/osbuild/blueprint-schema/storage_logical_volumes"
   minsize:
     description: |-
       Minimum size of the volume.
@@ -130,5 +130,5 @@ properties:
       Relevant for partition types: btrfs.
     type: array
     items:
-      "$ref": "#/$defs/SubvolumesStorage"
+      "$ref": "https://github.com/osbuild/blueprint-schema/storage_subvolumes"
 additionalProperties: false

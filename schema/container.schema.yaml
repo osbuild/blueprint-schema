@@ -21,5 +21,5 @@ properties:
     type: string
   tls_verify:
     description: Verify TLS connection, default is true.
-    "$ref": "#/$defs/BoolDefaultTrue"
+    "$ref": "https://github.com/osbuild/blueprint-schema/bool_default_true"
 additionalProperties: false

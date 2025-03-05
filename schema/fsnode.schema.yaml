@@ -26,7 +26,7 @@ properties:
     oneOf:
     - description: Contents is the file system node contents. When not present,
         an empty file is created.
-      "$ref": "#/$defs/FSNodeContents"
+      "$ref": "https://github.com/osbuild/blueprint-schema/fsnode_contents"
     - type: 'null'
   ensure_parents:
     description: EnsureParents is a boolean that determines if the parent directories

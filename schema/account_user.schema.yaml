@@ -1,6 +1,6 @@
 ---
 "$schema": https://json-schema.org/draft/2020-12/schema
-"$id": https://github.com/osbuild/blueprint-schema/user_account
+"$id": https://github.com/osbuild/blueprint-schema/account_user
 type: object
 required:
 - name
@@ -14,7 +14,7 @@ properties:
       The expiration date of the account in the format YYYY-MM-DD.
 
       Only date is taken into account, time allowed but is ignored for JSON/YAML compatibility.
-    "$ref": "#/$defs/Date"
+    "$ref": "https://github.com/osbuild/blueprint-schema/date"
   gid:
     description: The primary group ID (GID) of the user. Value of zero (or ommited
       value) means that the next available UID will be assigned.

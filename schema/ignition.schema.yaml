@@ -15,7 +15,7 @@ properties:
       The embedded Ignition configuration to be used by Ignition. This configuration is embedded in the blueprint.
 
       Cannot be used with firstboot_url.
-    "$ref": "#/$defs/IgnitionEmbedded"
+    "$ref": "https://github.com/osbuild/blueprint-schema/ignition_embedded"
   firstboot_url:
     description: |-
       The URL to the Ignition configuration to be used by Ignition. This configuration is a URL to a remote Ignition configuration. The firstboot_url is used if the embedded configuration is not specified.

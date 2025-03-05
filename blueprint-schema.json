@@ -1,219 +1,400 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/osbuild/blueprint-schema/blueprint",
-  "$defs": {
-    "Accounts": {
-      "properties": {
-        "users": {
-          "oneOf": [
-            {
-              "items": {
-                "$ref": "#/$defs/UserAccount"
-              },
-              "type": "array",
-              "description": "Operating system user accounts to be created on the image.\n"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "groups": {
-          "oneOf": [
-            {
-              "items": {
-                "$ref": "#/$defs/GroupAccount"
-              },
-              "type": "array",
-              "description": "Operating system group accounts to be created on the image.\n"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        }
-      },
-      "additionalProperties": false,
-      "type": "object"
+  "description": "Image Builder new blueprint schema.\n\nTHIS IS WORK IN PROGRESS",
+  "type": "object",
+  "required": [
+    "name"
+  ],
+  "properties": {
+    "description": {
+      "description": "The description attribute is a string that can be a longer description of the blueprint and is only used for display purposes.",
+      "type": "string"
     },
-    "AnacondaInstaller": {
-      "properties": {
-        "unattended": {
-          "type": "boolean",
-          "description": "Unattended installation Anaconda flag. When not set, Anaconda installer will ask for user input.\n"
-        },
-        "sudo_nopasswd": {
-          "items": {
-            "type": "string",
-            "maxLength": 256,
-            "pattern": "^[%a-zA-Z0-9_.][a-zA-Z0-9_.$-]*$"
-          },
-          "type": "array",
-          "description": "Sudo users with NOPASSWD option. Adds a snippet to the kickstart file that, after installation, will create drop-in files in /etc/sudoers.d to allow the specified users and groups to run sudo without a password (groups must be prefixed with %).\n"
-        },
-        "enabled_modules": {
-          "oneOf": [
-            {
-              "items": {
-                "type": "string",
-                "enum": [
-                  "org.fedoraproject.Anaconda.Modules.Localization",
-                  "org.fedoraproject.Anaconda.Modules.Network",
-                  "org.fedoraproject.Anaconda.Modules.Payloads",
-                  "org.fedoraproject.Anaconda.Modules.Runtime",
-                  "org.fedoraproject.Anaconda.Modules.Security",
-                  "org.fedoraproject.Anaconda.Modules.Services",
-                  "org.fedoraproject.Anaconda.Modules.Storage",
-                  "org.fedoraproject.Anaconda.Modules.Subscription",
-                  "org.fedoraproject.Anaconda.Modules.Timezone",
-                  "org.fedoraproject.Anaconda.Modules.User"
-                ]
-              },
-              "type": "array"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "disabled_modules": {
-          "oneOf": [
-            {
-              "items": {
-                "type": "string",
-                "enum": [
-                  "org.fedoraproject.Anaconda.Modules.Localization",
-                  "org.fedoraproject.Anaconda.Modules.Network",
-                  "org.fedoraproject.Anaconda.Modules.Payloads",
-                  "org.fedoraproject.Anaconda.Modules.Runtime",
-                  "org.fedoraproject.Anaconda.Modules.Security",
-                  "org.fedoraproject.Anaconda.Modules.Services",
-                  "org.fedoraproject.Anaconda.Modules.Storage",
-                  "org.fedoraproject.Anaconda.Modules.Subscription",
-                  "org.fedoraproject.Anaconda.Modules.Timezone",
-                  "org.fedoraproject.Anaconda.Modules.User"
-                ]
-              },
-              "type": "array"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "kickstart": {
-          "oneOf": [
-            {
-              "$ref": "#/$defs/KickstartInstaller",
-              "description": "Kickstart installer configuration.\n"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        }
-      },
-      "additionalProperties": false,
-      "type": "object"
-    },
-    "BoolDefaultTrue": {
+    "accounts": {
       "oneOf": [
         {
-          "type": "boolean",
-          "default": true
+          "description": "Users and groups details",
+          "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1account"
         },
         {
           "type": "null"
         }
       ]
     },
-    "CACerts": {
-      "properties": {
-        "cert": {
-          "type": "string",
-          "description": "The PEM-encoded certificate.\n"
+    "cacerts": {
+      "oneOf": [
+        {
+          "description": "The CA certificates to be added to the image. The certificates are added to the system-wide CA trust store. The certificates are added to the /etc/pki/ca-trust/source/anchors/ directory and the update-ca-trust command is run to update the system-wide CA trust store.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1ca_cert"
+          }
+        },
+        {
+          "type": "null"
         }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "required": [
-        "cert"
       ]
     },
-    "ConnectorRegistration": {
-      "properties": {
-        "enabled": {
-          "type": "boolean",
-          "description": "Enables rhc (Red Hat Connector) during boot.\n"
+    "containers": {
+      "oneOf": [
+        {
+          "description": "Containers to be pulled during the image build and stored in the image at the default local container storage location that is appropriate for the image type, so that all supported container tools like podman and cri-o will be able to work with it. The embedded containers are not started, to do so you can create systemd unit files or quadlets with the files customization.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1container"
+          }
+        },
+        {
+          "type": "null"
         }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "required": [
-        "enabled"
       ]
     },
-    "Container": {
-      "properties": {
-        "source": {
-          "type": "string",
-          "description": "Container image URL is a reference to a container image at a registry.\n"
+    "dnf": {
+      "oneOf": [
+        {
+          "description": "DNF package managers details. When using virtual provides as the package name the version glob should be *. And be aware that you will be unable to freeze the blueprint. This is because the provides will expand into multiple packages with their own names and versions.",
+          "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1dnf"
         },
-        "name": {
-          "type": "string",
-          "description": "Container name is an optional string to set the name under which the container image will be saved in the image. If not specified name falls back to the same value as source.\n"
-        },
-        "tls_verify": {
-          "$ref": "#/$defs/BoolDefaultTrue",
-          "description": "Verify TLS connection, default is true.\n"
-        },
-        "local_storage": {
-          "type": "boolean",
-          "description": "Whether to pull the container image from the host's local-storage.\n",
-          "default": false
+        {
+          "type": "null"
         }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "required": [
-        "source",
-        "name"
       ]
     },
-    "CoreOSInstaller": {
-      "properties": {
-        "installation_device": {
-          "type": "string",
-          "description": "Installation device for iot/edge simplified installer image types.\n"
+    "fips": {
+      "oneOf": [
+        {
+          "description": "FIPS details, optional.",
+          "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1fips"
+        },
+        {
+          "type": "null"
         }
-      },
-      "additionalProperties": false,
-      "type": "object"
+      ]
     },
-    "DNF": {
+    "fsnodes": {
+      "oneOf": [
+        {
+          "description": "File system nodes details.\n\nYou can use the customization to create new files or to replace existing ones, if not restricted by the policy specified below. If the target path is an existing symlink to another file, the symlink will be replaced by the custom file.\n\nPlease note that the parent directory of a specified file must exist. If it does not exist, the image build will fail. One can ensure that the parent directory exists by specifying \"ensure_parents\".\n\nIn addition, the following files are not allowed to be created or replaced by policy: /etc/fstab, /etc/shadow, /etc/passwd and /etc/group.\n\nUsing the files customization comes with a high chance of creating an image that doesn't boot. Use this feature only if you know what you are doing. Although the files customization can be used to configure parts of the OS which can also be configured by other blueprint customizations, this use is discouraged. If possible, users should always default to using the specialized blueprint customizations. Note that if you combine the files customizations with other customizations, the other customizations may not work as expected or may be overridden by the files customizations.\n\nYou can create custom directories as well. The existence of a specified directory is handled gracefully only if no explicit mode, user or group is specified. If any of these customizations are specified and the directory already exists in the image, the image build will fail. The intention is to prevent changing the ownership or permissions of existing directories.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1fsnode"
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "hostname": {
+      "description": "Hostname is an optional string that can be used to configure the hostname of the final image.",
+      "type": "string"
+    },
+    "ignition": {
+      "oneOf": [
+        {
+          "description": "Provides Ignition configuration files to be used in edge-raw-image and edge-simplified-installer images. Check the RHEL for Edge butane specification for a description of the supported configuration options.\n\nThe blueprint configuration can be done either by embedding an Ignition configuration file into the image, or providing a provisioning URL that will be fetched at first boot.",
+          "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1ignition"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "installer": {
+      "oneOf": [
+        {
+          "description": "Extra customization for Anaconda installer (ISO) and Edge/IOT simplified installer image types.",
+          "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1installer"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "kernel": {
+      "oneOf": [
+        {
+          "description": "Custom Linux kernel details, optional.",
+          "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1kernel"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "locale": {
+      "oneOf": [
+        {
+          "description": "An optional object that contains the following attributes to customize the locale settings for the system. If the locale is not specified, the default locale and keyboard settings are used: en_US.UTF-8 and us.",
+          "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1locale"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "name": {
+      "description": "The name attribute is a string that contains the name of the blueprint. It can contain spaces, but they may be converted to dash characters during build. It should be short and descriptive.",
+      "type": "string"
+    },
+    "network": {
+      "oneOf": [
+        {
+          "description": "Networking details including firewall configuration.",
+          "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1network"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "openscap": {
+      "oneOf": [
+        {
+          "description": "OpenSCAP policy to be applied on the operating system. Added in RHEL 8.7 & RHEL 9.1. It is possible to either list policy rules (enable or disable) or to provide a full policy file.",
+          "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1openscap"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "registration": {
+      "oneOf": [
+        {
+          "description": "Registration details for various registration types, namely Red Hat Subscription Manager.",
+          "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1registration"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "storage": {
+      "oneOf": [
+        {
+          "description": "Disk partitioning details. Not available for installer-based images.\n\nGeneral principles:\n\n1. All sizes, whether for specific filesystems, partitions, logical volumes, or the image itself, are treated as minimum requirements. This means the full disk image size is always larger than the size of the sum of the partitions, due to requirements for headers and metadata.\n\n2. The partition that contains the root filesystem, whether this is a plain formatted partition, an LVM Volume Group, or a Btrfs partition, is always last in the partition table layout when it is automatically added. For Disk customizations the user-defined order is respected.\n\n3. In the case of raw partitioning (no LVM and no Btrfs), the partition containing the root filesystem is grown to fill any left over space on the partition table. Logical Volumes are not grown to fill the space in the Volume Group since they are trivial to grow on a live system.",
+          "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1storage"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "systemd": {
+      "oneOf": [
+        {
+          "description": "Systemd unit configuration.\n\nThis section can be used to control which services are enabled at boot time. Some image types already have services enabled or disabled in order for the image to work correctly, and cannot be overridden. For example, ami image type requires sshd, chronyd, and cloud-init services. Blueprint services do not replace these services, but add them to the list of services already present in the templates, if any.",
+          "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1systemd"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "timedate": {
+      "oneOf": [
+        {
+          "description": "Time and date details allowing configuration of the timezone and NTP servers. The timezone is set by default to UTC.",
+          "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1time_date"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "https://github.com/osbuild/blueprint-schema/account": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
       "properties": {
-        "packages": {
+        "groups": {
           "oneOf": [
             {
-              "items": {
-                "type": "string"
-              },
+              "description": "Operating system group accounts to be created on the image.",
               "type": "array",
-              "description": "Packages to install. Package name or NVRA is accepted as long as DNF can resolve it. Examples: vim-enhanced, vim-enhanced-9.1.866-1 or vim-enhanced-9.1.866-1.fc41.x86_64. The packages can also be specified as @group_name to install all packages in the group.\n"
+              "items": {
+                "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1account_group"
+              }
             },
             {
               "type": "null"
             }
           ]
         },
+        "users": {
+          "oneOf": [
+            {
+              "description": "Operating system user accounts to be created on the image.",
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1account_user"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "https://github.com/osbuild/blueprint-schema/account_group": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "gid": {
+          "description": "The group ID (GID) of the group.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "name": {
+          "description": "Group name. Accepted characters: lowercase letters, digits, underscores, dollars, and hyphens. Name must not start with a hyphen. Maximum length is 256 characters. The validation pattern is a relaxed version of https://github.com/shadow-maint/shadow/blob/master/lib/chkname.c",
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_.][a-zA-Z0-9_.$-]*$",
+          "maxLength": 256
+        }
+      },
+      "additionalProperties": false
+    },
+    "https://github.com/osbuild/blueprint-schema/account_user": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "description": {
+          "description": "A longer description of the account.",
+          "type": "string",
+          "maxLength": 4096
+        },
+        "expires": {
+          "description": "The expiration date of the account in the format YYYY-MM-DD.\n\nOnly date is taken into account, time allowed but is ignored for JSON/YAML compatibility.",
+          "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1date"
+        },
+        "gid": {
+          "description": "The primary group ID (GID) of the user. Value of zero (or ommited value) means that the next available UID will be assigned.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "groups": {
+          "description": "Additional groups that the user should be a member of.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "home": {
+          "description": "The home directory of the user.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Account name. Accepted characters: lowercase letters, digits, underscores, dollars, and hyphens. Name must not start with a hyphen. Maximum length is 256 characters. The validation pattern is a relaxed version of https://github.com/shadow-maint/shadow/blob/master/lib/chkname.c",
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_.][a-zA-Z0-9_.$-]*$",
+          "maxLength": 256
+        },
+        "password": {
+          "description": "Password either in plain text or encrypted form. If the password is not provided, the account will be locked and the user will not be able to log in with a password. The password can be encrypted using the crypt(3) function. The format of the encrypted password is $id$salt$hashed, where $id is the algorithm used (1, 5, 6, or 2a).",
+          "type": "string"
+        },
+        "shell": {
+          "description": "The shell of the user.",
+          "type": "string"
+        },
+        "ssh_keys": {
+          "description": "SSH keys to be added to the account's authorized_keys file.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "uid": {
+          "description": "The user ID (UID) of the user. Value of zero (or ommited value) means that the next available UID will be assigned.",
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "https://github.com/osbuild/blueprint-schema/bool_default_true": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "oneOf": [
+        {
+          "default": true,
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "https://github.com/osbuild/blueprint-schema/ca_cert": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "required": [
+        "cert"
+      ],
+      "properties": {
+        "cert": {
+          "description": "The PEM-encoded certificate.",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "https://github.com/osbuild/blueprint-schema/container": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "required": [
+        "source",
+        "name"
+      ],
+      "properties": {
+        "local_storage": {
+          "description": "Whether to pull the container image from the host's local-storage.",
+          "default": false,
+          "type": "boolean"
+        },
+        "name": {
+          "description": "Container name is an optional string to set the name under which the container image will be saved in the image. If not specified name falls back to the same value as source.",
+          "type": "string"
+        },
+        "source": {
+          "description": "Container image URL is a reference to a container image at a registry.",
+          "type": "string"
+        },
+        "tls_verify": {
+          "description": "Verify TLS connection, default is true.",
+          "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1bool_default_true"
+        }
+      },
+      "additionalProperties": false
+    },
+    "https://github.com/osbuild/blueprint-schema/date": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "description": "Date type which accepts date (YYYY-MM-DD) or date-time (RFC3339) format and only marshals into date format. This is needed for JSON/YAML compatibility since YAML automatically converts strings which look like dates into time.Time.",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$T?[0-9:Z-]*"
+    },
+    "https://github.com/osbuild/blueprint-schema/dnf": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
         "groups": {
           "oneOf": [
             {
+              "description": "Groups to install, must match exactly. Groups describes groups of packages to be installed into the image. Package groups are defined in the repository metadata. Each group has a descriptive name used primarily for display in user interfaces and an ID more commonly used in kickstart files. Here, the ID is the expected way of listing a group. Groups have three different ways of categorizing their packages: mandatory, default, and optional. For the purposes of blueprints, only mandatory and default packages will be installed. There is no mechanism for selecting optional packages.",
+              "type": "array",
               "items": {
                 "type": "string"
-              },
-              "type": "array",
-              "description": "Groups to install, must match exactly. Groups describes groups of packages to be installed into the image. Package groups are defined in the repository metadata. Each group has a descriptive name used primarily for display in user interfaces and an ID more commonly used in kickstart files. Here, the ID is the expected way of listing a group. Groups have three different ways of categorizing their packages: mandatory, default, and optional. For the purposes of blueprints, only mandatory and default packages will be installed. There is no mechanism for selecting optional packages.\n"
+              }
             },
             {
               "type": "null"
@@ -223,11 +404,11 @@
         "import_keys": {
           "oneOf": [
             {
+              "description": "Additional file paths to the GPG keys to import. The files must be present in the image. Does not support importing from URLs.",
+              "type": "array",
               "items": {
                 "type": "string"
-              },
-              "type": "array",
-              "description": "Additional file paths to the GPG keys to import. The files must be present in the image. Does not support importing from URLs.\n"
+              }
             },
             {
               "type": "null"
@@ -237,11 +418,25 @@
         "modules": {
           "oneOf": [
             {
+              "description": "Modules to enable or disable",
+              "type": "array",
               "items": {
                 "type": "string"
-              },
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "packages": {
+          "oneOf": [
+            {
+              "description": "Packages to install. Package name or NVRA is accepted as long as DNF can resolve it. Examples: vim-enhanced, vim-enhanced-9.1.866-1 or vim-enhanced-9.1.866-1.fc41.x86_64. The packages can also be specified as @group_name to install all packages in the group.",
               "type": "array",
-              "description": "Modules to enable or disable\n"
+              "items": {
+                "type": "string"
+              }
             },
             {
               "type": "null"
@@ -251,11 +446,11 @@
         "repositories": {
           "oneOf": [
             {
-              "items": {
-                "$ref": "#/$defs/DNFRepository"
-              },
+              "description": "Third-party repositories are supported by the blueprint customizations.\n\nAll fields reflect configuration values of dnf, see man dnf.conf(5) for more information.",
               "type": "array",
-              "description": "Third-party repositories are supported by the blueprint customizations.\n\nAll fields reflect configuration values of dnf, see man dnf.conf(5) for more information.\n"
+              "items": {
+                "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1dnf_repository"
+              }
             },
             {
               "type": "null"
@@ -263,99 +458,103 @@
           ]
         }
       },
-      "additionalProperties": false,
-      "type": "object"
+      "additionalProperties": false
     },
-    "DNFRepository": {
+    "https://github.com/osbuild/blueprint-schema/dnf_repository": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
       "oneOf": [
         {
+          "title": "dnf_repo_base_urls",
           "required": [
             "base_urls"
-          ],
-          "title": "dnf_repo_base_urls"
+          ]
         },
         {
+          "title": "dnf_repo_mirrorlist",
           "required": [
             "mirror_list"
-          ],
-          "title": "dnf_repo_mirrorlist"
+          ]
         },
         {
+          "title": "dnf_repo_metalink",
           "required": [
             "metalink"
-          ],
-          "title": "dnf_repo_metalink"
+          ]
         }
+      ],
+      "required": [
+        "id"
       ],
       "properties": {
         "id": {
+          "description": "Repository ID. Required.",
           "type": "string",
-          "maxLength": 256,
           "pattern": "^[a-zA-Z0-9_-]+$",
-          "description": "Repository ID. Required.\n"
-        },
-        "name": {
-          "type": "string",
-          "description": "Repository name.\n"
-        },
-        "filename": {
-          "type": "string",
-          "maxLength": 256,
-          "pattern": "^[a-zA-Z0-9_-]+$",
-          "description": "Repository filename to use for the repository configuration file. If not provided, the ID is used. Filename must be provided without the .repo extension.\n"
+          "maxLength": 256
         },
         "base_urls": {
+          "description": "Base URLs for the repository.",
+          "type": "array",
           "items": {
             "type": "string"
-          },
-          "type": "array",
-          "description": "Base URLs for the repository.\n"
+          }
         },
-        "mirror_list": {
+        "filename": {
+          "description": "Repository filename to use for the repository configuration file. If not provided, the ID is used. Filename must be provided without the .repo extension.",
           "type": "string",
-          "description": "Mirror list for the repository.\n"
-        },
-        "metalink": {
-          "type": "string",
-          "description": "Metalink for the repository.\n"
-        },
-        "gpg_keys": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array",
-          "description": "GPG keys for the repository.\n\nThe blueprint accepts both inline GPG keys and GPG key urls. If an inline GPG key is provided it will be saved to the /etc/pki/rpm-gpg directory and will be referenced accordingly in the repository configuration. GPG keys are not imported to the RPM database and will only be imported when first installing a package from the third-party repository.\n"
+          "pattern": "^[a-zA-Z0-9_-]+$",
+          "maxLength": 256
         },
         "gpg_check": {
-          "type": "boolean",
-          "description": "Enable GPG check for the repository.\n",
-          "default": true
+          "description": "Enable GPG check for the repository.",
+          "default": true,
+          "type": "boolean"
         },
         "gpg_check_repo": {
-          "type": "boolean",
-          "description": "Enable GPG check for the repository metadata.\n",
-          "default": true
+          "description": "Enable GPG check for the repository metadata.",
+          "default": true,
+          "type": "boolean"
         },
-        "priority": {
-          "type": "integer",
-          "description": "Repository priority.\n",
-          "default": 99
+        "gpg_keys": {
+          "description": "GPG keys for the repository.\n\nThe blueprint accepts both inline GPG keys and GPG key urls. If an inline GPG key is provided it will be saved to the /etc/pki/rpm-gpg directory and will be referenced accordingly in the repository configuration. GPG keys are not imported to the RPM database and will only be imported when first installing a package from the third-party repository.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         },
-        "ssl_verify": {
-          "type": "boolean",
-          "description": "Enable SSL verification for the repository.\n",
-          "default": true
+        "metalink": {
+          "description": "Metalink for the repository.",
+          "type": "string"
+        },
+        "mirror_list": {
+          "description": "Mirror list for the repository.",
+          "type": "string"
         },
         "module_hotfixes": {
-          "type": "boolean",
-          "description": "Enable module hotfixes for the repository.\n\nAdds module_hotfixes flag to all repo types so it can be used during osbuild. This enables users to disable modularity filtering on specific repositories.\n",
-          "default": false
+          "description": "Enable module hotfixes for the repository.\n\nAdds module_hotfixes flag to all repo types so it can be used during osbuild. This enables users to disable modularity filtering on specific repositories.",
+          "default": false,
+          "type": "boolean"
+        },
+        "name": {
+          "description": "Repository name.",
+          "type": "string"
+        },
+        "priority": {
+          "description": "Repository priority.",
+          "default": 99,
+          "type": "integer"
+        },
+        "ssl_verify": {
+          "description": "Enable SSL verification for the repository.",
+          "default": true,
+          "type": "boolean"
         },
         "usage": {
           "oneOf": [
             {
-              "$ref": "#/$defs/DNFRepositoryUsage",
-              "description": "Repository usage. By default, the repository is configured on the image but not used for image build.\n"
+              "description": "Repository usage. By default, the repository is configured on the image but not used for image build.",
+              "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1dnf_repository_usage"
             },
             {
               "type": "null"
@@ -363,101 +562,50 @@
           ]
         }
       },
-      "additionalProperties": false,
-      "type": "object",
-      "required": [
-        "id"
-      ]
+      "additionalProperties": false
     },
-    "DNFRepositoryUsage": {
+    "https://github.com/osbuild/blueprint-schema/dnf_repository_usage": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
       "properties": {
-        "install": {
-          "type": "boolean",
-          "description": "Use the repository for image build.\n\nWhen this flag is set, it is possible to install third-party packages during the image build.\n",
-          "default": false
-        },
         "configure": {
-          "type": "boolean",
-          "description": "Configure the repository for dnf.\n\nA repository will be saved to the /etc/yum.repos.d directory in an image. An optional filename argument can be set, otherwise the repository will be saved using the the repository ID, i.e. /etc/yum.repos.d/\u003crepo-id\u003e.repo.\n",
-          "default": true
+          "description": "Configure the repository for dnf.\n\nA repository will be saved to the /etc/yum.repos.d directory in an image. An optional filename argument can be set, otherwise the repository will be saved using the the repository ID, i.e. /etc/yum.repos.d/<repo-id>.repo.",
+          "default": true,
+          "type": "boolean"
+        },
+        "install": {
+          "description": "Use the repository for image build.\n\nWhen this flag is set, it is possible to install third-party packages during the image build.",
+          "default": false,
+          "type": "boolean"
         }
       },
-      "additionalProperties": false,
-      "type": "object"
+      "additionalProperties": false
     },
-    "Date": {
-      "properties": {},
-      "additionalProperties": false,
-      "type": "string",
-      "pattern": "^\\d{4}-\\d{2}-\\d{2}$T?[0-9:Z-]*",
-      "description": "Date type which accepts date (YYYY-MM-DD) or date-time (RFC3339) format and only marshals into date format. This is needed for JSON/YAML compatibility since YAML automatically converts strings which look like dates into time.Time.\n"
-    },
-    "FDORegistration": {
-      "oneOf": [
-        {
-          "required": [
-            "diun_pub_key_hash"
-          ],
-          "title": "fdo_hash"
-        },
-        {
-          "required": [
-            "diun_pub_key_root_certs"
-          ],
-          "title": "fdo_rootcerts"
-        }
-      ],
-      "properties": {
-        "manufacturing_server_url": {
-          "type": "string",
-          "description": "FDO manufacturing server URL.\n"
-        },
-        "diun_pub_key_insecure": {
-          "type": "boolean",
-          "description": "FDO insecure option. When set, both hash or root certs must not be set.\n",
-          "default": false
-        },
-        "diun_pub_key_hash": {
-          "type": "string",
-          "description": "FDO server public key hex-encoded hash. Cannot be used together with insecure option or root certs.\n"
-        },
-        "diun_pub_key_root_certs": {
-          "type": "string",
-          "description": "FDO server public key root certificate path. Cannot be used together with insecure option or hash.\n"
-        },
-        "di_mfg_string_type_mac_iface": {
-          "type": "string",
-          "description": "Optional interface name for the MAC address.\n"
-        }
-      },
-      "additionalProperties": false,
+    "https://github.com/osbuild/blueprint-schema/fips": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
       "type": "object",
-      "required": [
-        "manufacturing_server_url"
-      ]
-    },
-    "FIPS": {
       "properties": {
         "enabled": {
-          "type": "boolean",
-          "description": "Enables the system FIPS mode (disabled by default). Currently only edge-raw-image, edge-installer, edge-simplified-installer, edge-ami and edge-vsphere images support this customization.\n"
+          "description": "Enables the system FIPS mode (disabled by default). Currently only edge-raw-image, edge-installer, edge-simplified-installer, edge-ami and edge-vsphere images support this customization.",
+          "type": "boolean"
         }
       },
-      "additionalProperties": false,
-      "type": "object"
+      "additionalProperties": false
     },
-    "FSNode": {
+    "https://github.com/osbuild/blueprint-schema/fsnode": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
       "allOf": [
         {
           "if": {
+            "required": [
+              "type"
+            ],
             "properties": {
               "type": {
                 "const": "dir"
               }
-            },
-            "required": [
-              "type"
-            ]
+            }
           },
           "then": {
             "not": {
@@ -468,177 +616,146 @@
           }
         }
       ],
+      "required": [
+        "path"
+      ],
       "properties": {
-        "path": {
-          "type": "string",
-          "pattern": "^/",
-          "description": "Path is the absolute path to the file or directory.\n"
-        },
         "type": {
-          "type": "string",
+          "description": "Type is the type of the file system node, one of: file, dir.",
+          "default": "file",
           "enum": [
             "file",
             "dir"
-          ],
-          "description": "Type is the type of the file system node, one of: file, dir.\n",
-          "default": "file"
-        },
-        "state": {
-          "type": "string",
-          "enum": [
-            "present",
-            "absent"
-          ],
-          "description": "State is the state of the file system node, one of: present, absent.\n",
-          "default": "present"
-        },
-        "mode": {
-          "type": "integer",
-          "description": "Mode is the file system node permissions. Defaults to 0644 for files and 0755 for directories.\n"
-        },
-        "user": {
-          "type": "string",
-          "description": "User is the file system node owner. Defaults to root.\n",
-          "default": "root"
-        },
-        "group": {
-          "type": "string",
-          "description": "Group is the file system node group. Defaults to root.\n",
-          "default": "root"
-        },
-        "ensure_parents": {
-          "type": "boolean",
-          "description": "EnsureParents is a boolean that determines if the parent directories should be created if they do not exist.\n",
-          "default": false
+          ]
         },
         "contents": {
           "oneOf": [
             {
-              "$ref": "#/$defs/FSNodeContents",
-              "description": "Contents is the file system node contents. When not present, an empty file is created.\n"
+              "description": "Contents is the file system node contents. When not present, an empty file is created.",
+              "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1fsnode_contents"
             },
             {
               "type": "null"
             }
           ]
+        },
+        "ensure_parents": {
+          "description": "EnsureParents is a boolean that determines if the parent directories should be created if they do not exist.",
+          "default": false,
+          "type": "boolean"
+        },
+        "group": {
+          "description": "Group is the file system node group. Defaults to root.",
+          "default": "root",
+          "type": "string"
+        },
+        "mode": {
+          "description": "Mode is the file system node permissions. Defaults to 0644 for files and 0755 for directories.",
+          "type": "integer"
+        },
+        "path": {
+          "description": "Path is the absolute path to the file or directory.",
+          "type": "string",
+          "pattern": "^/"
+        },
+        "state": {
+          "description": "State is the state of the file system node, one of: present, absent.",
+          "default": "present",
+          "enum": [
+            "present",
+            "absent"
+          ]
+        },
+        "user": {
+          "description": "User is the file system node owner. Defaults to root.",
+          "default": "root",
+          "type": "string"
         }
       },
-      "additionalProperties": false,
-      "type": "object",
-      "required": [
-        "path"
-      ]
+      "additionalProperties": false
     },
-    "FSNodeContents": {
+    "https://github.com/osbuild/blueprint-schema/fsnode_contents": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
       "properties": {
         "base64": {
-          "type": "string",
-          "description": "Base64-encoded file contents. Useful for binaries.\n"
+          "description": "Base64-encoded file contents. Useful for binaries.",
+          "type": "string"
         },
         "text": {
-          "type": "string",
-          "description": "Plain text file contents.\n"
+          "description": "Plain text file contents.",
+          "type": "string"
         }
       },
-      "additionalProperties": false,
-      "type": "object"
+      "additionalProperties": false
     },
-    "GroupAccount": {
-      "properties": {
-        "name": {
-          "type": "string",
-          "maxLength": 256,
-          "pattern": "^[a-zA-Z0-9_.][a-zA-Z0-9_.$-]*$",
-          "description": "Group name. Accepted characters: lowercase letters, digits, underscores, dollars, and hyphens. Name must not start with a hyphen. Maximum length is 256 characters. The validation pattern is a relaxed version of https://github.com/shadow-maint/shadow/blob/master/lib/chkname.c\n"
-        },
-        "gid": {
-          "type": "integer",
-          "minimum": 1,
-          "description": "The group ID (GID) of the group.\n"
-        }
-      },
-      "additionalProperties": false,
+    "https://github.com/osbuild/blueprint-schema/ignition": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
       "type": "object",
-      "required": [
-        "name"
-      ]
-    },
-    "Ignition": {
       "oneOf": [
         {
+          "title": "ignition_url",
           "required": [
             "firstboot_url"
-          ],
-          "title": "ignition_url"
+          ]
         },
         {
+          "title": "ignition_embedded",
           "required": [
             "embedded"
-          ],
-          "title": "ignition_embedded"
+          ]
         }
       ],
       "properties": {
-        "firstboot_url": {
-          "type": "string",
-          "description": "The URL to the Ignition configuration to be used by Ignition. This configuration is a URL to a remote Ignition configuration. The firstboot_url is used if the embedded configuration is not specified.\n\nCannot be used with embedded_base64 or embedded_text.\n"
-        },
         "embedded": {
-          "$ref": "#/$defs/IgnitionEmbedded",
-          "description": "The embedded Ignition configuration to be used by Ignition. This configuration is embedded in the blueprint.\n\nCannot be used with firstboot_url.\n"
+          "description": "The embedded Ignition configuration to be used by Ignition. This configuration is embedded in the blueprint.\n\nCannot be used with firstboot_url.",
+          "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1ignition_embedded"
+        },
+        "firstboot_url": {
+          "description": "The URL to the Ignition configuration to be used by Ignition. This configuration is a URL to a remote Ignition configuration. The firstboot_url is used if the embedded configuration is not specified.\n\nCannot be used with embedded_base64 or embedded_text.",
+          "type": "string"
         }
       },
-      "additionalProperties": false,
-      "type": "object"
+      "additionalProperties": false
     },
-    "IgnitionEmbedded": {
+    "https://github.com/osbuild/blueprint-schema/ignition_embedded": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
       "oneOf": [
         {
+          "title": "ignition_text",
           "required": [
             "text"
-          ],
-          "title": "ignition_text"
+          ]
         },
         {
+          "title": "ignition_base64",
           "required": [
             "base64"
-          ],
-          "title": "ignition_base64"
+          ]
         }
       ],
       "properties": {
-        "text": {
-          "type": "string",
-          "description": "Ignition data formatted in plain text.\n"
-        },
         "base64": {
-          "type": "string",
-          "description": "Ignition data formatted in base64.\n"
+          "description": "Ignition data formatted in base64.",
+          "type": "string"
+        },
+        "text": {
+          "description": "Ignition data formatted in plain text.",
+          "type": "string"
         }
       },
-      "additionalProperties": false,
-      "type": "object"
+      "additionalProperties": false
     },
-    "InsightsRegistration": {
-      "properties": {
-        "enabled": {
-          "type": "boolean",
-          "description": "Enables insights client during boot.\n"
-        }
-      },
-      "additionalProperties": false,
+    "https://github.com/osbuild/blueprint-schema/installer": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
       "type": "object",
-      "required": [
-        "enabled"
-      ]
-    },
-    "Installer": {
       "properties": {
         "anaconda": {
           "oneOf": [
             {
-              "$ref": "#/$defs/AnacondaInstaller",
-              "description": "Extra customizations for Anaconda installer (ISO) image types.\n\nBlueprint customizations that match the kickstart options (languages, keyboard, timezone) will change the value in the kickstart file as well.\n"
+              "description": "Extra customizations for Anaconda installer (ISO) image types.\n\nBlueprint customizations that match the kickstart options (languages, keyboard, timezone) will change the value in the kickstart file as well.",
+              "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1installer_anaconda"
             },
             {
               "type": "null"
@@ -648,8 +765,8 @@
         "coreos": {
           "oneOf": [
             {
-              "$ref": "#/$defs/CoreOSInstaller",
-              "description": "CoreOS installer configuration is required by the edge-simplified-installer image. It allows to define the destination device for the installation.\n"
+              "description": "CoreOS installer configuration is required by the edge-simplified-installer image. It allows to define the destination device for the installation.",
+              "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1installer_coreos"
             },
             {
               "type": "null"
@@ -657,91 +774,184 @@
           ]
         }
       },
-      "additionalProperties": false,
-      "type": "object"
+      "additionalProperties": false
     },
-    "Kernel": {
+    "https://github.com/osbuild/blueprint-schema/installer_anaconda": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
       "properties": {
-        "package": {
-          "type": "string",
-          "description": "Kernel DNF package name to replace the standard kernel with.\n"
-        },
-        "cmdline_append": {
+        "disabled_modules": {
           "oneOf": [
             {
-              "items": {
-                "type": "string"
-              },
               "type": "array",
-              "description": "An optional string to append arguments to the bootloader kernel command line. The list will be concatenated with spaces.\n"
+              "items": {
+                "enum": [
+                  "org.fedoraproject.Anaconda.Modules.Localization",
+                  "org.fedoraproject.Anaconda.Modules.Network",
+                  "org.fedoraproject.Anaconda.Modules.Payloads",
+                  "org.fedoraproject.Anaconda.Modules.Runtime",
+                  "org.fedoraproject.Anaconda.Modules.Security",
+                  "org.fedoraproject.Anaconda.Modules.Services",
+                  "org.fedoraproject.Anaconda.Modules.Storage",
+                  "org.fedoraproject.Anaconda.Modules.Subscription",
+                  "org.fedoraproject.Anaconda.Modules.Timezone",
+                  "org.fedoraproject.Anaconda.Modules.User"
+                ]
+              }
             },
             {
               "type": "null"
             }
           ]
+        },
+        "enabled_modules": {
+          "oneOf": [
+            {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "org.fedoraproject.Anaconda.Modules.Localization",
+                  "org.fedoraproject.Anaconda.Modules.Network",
+                  "org.fedoraproject.Anaconda.Modules.Payloads",
+                  "org.fedoraproject.Anaconda.Modules.Runtime",
+                  "org.fedoraproject.Anaconda.Modules.Security",
+                  "org.fedoraproject.Anaconda.Modules.Services",
+                  "org.fedoraproject.Anaconda.Modules.Storage",
+                  "org.fedoraproject.Anaconda.Modules.Subscription",
+                  "org.fedoraproject.Anaconda.Modules.Timezone",
+                  "org.fedoraproject.Anaconda.Modules.User"
+                ]
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "kickstart": {
+          "oneOf": [
+            {
+              "description": "Kickstart installer configuration.",
+              "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1installer_kickstart"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sudo_nopasswd": {
+          "description": "Sudo users with NOPASSWD option. Adds a snippet to the kickstart file that, after installation, will create drop-in files in /etc/sudoers.d to allow the specified users and groups to run sudo without a password (groups must be prefixed with %).",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[%a-zA-Z0-9_.][a-zA-Z0-9_.$-]*$",
+            "maxLength": 256
+          }
+        },
+        "unattended": {
+          "description": "Unattended installation Anaconda flag. When not set, Anaconda installer will ask for user input.",
+          "type": "boolean"
         }
       },
-      "additionalProperties": false,
-      "type": "object"
+      "additionalProperties": false
     },
-    "KickstartInstaller": {
+    "https://github.com/osbuild/blueprint-schema/installer_coreos": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "installation_device": {
+          "description": "Installation device for iot/edge simplified installer image types.",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "https://github.com/osbuild/blueprint-schema/installer_kickstart": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
       "oneOf": [
         {
+          "title": "kickstart_text",
           "required": [
             "text"
-          ],
-          "title": "kickstart_text"
+          ]
         },
         {
+          "title": "kickstart_base64",
           "required": [
             "base64"
-          ],
-          "title": "kickstart_base64"
+          ]
         }
       ],
       "properties": {
-        "text": {
-          "type": "string",
-          "description": "Kickstart file formatted in plain text.\n"
-        },
         "base64": {
-          "type": "string",
-          "description": "Kickstart file formatted in base64.\n"
+          "description": "Kickstart file formatted in base64.",
+          "type": "string"
+        },
+        "text": {
+          "description": "Kickstart file formatted in plain text.",
+          "type": "string"
         }
       },
-      "additionalProperties": false,
-      "type": "object"
+      "additionalProperties": false
     },
-    "Locale": {
+    "https://github.com/osbuild/blueprint-schema/kernel": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
       "properties": {
-        "languages": {
+        "cmdline_append": {
           "oneOf": [
             {
+              "description": "An optional string to append arguments to the bootloader kernel command line. The list will be concatenated with spaces.",
+              "type": "array",
               "items": {
                 "type": "string"
-              },
-              "type": "array",
-              "description": "The languages attribute is a list of strings that contains the languages to be installed on the image. To list available languages, run: localectl list-locales\n",
-              "default": [
-                "en_US.UTF-8"
-              ]
+              }
             },
             {
               "type": "null"
             }
           ]
         },
+        "package": {
+          "description": "Kernel DNF package name to replace the standard kernel with.",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "https://github.com/osbuild/blueprint-schema/locale": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
         "keyboards": {
           "oneOf": [
             {
-              "items": {
-                "type": "string"
-              },
-              "type": "array",
-              "description": "The keyboards attribute is a list of strings that contains the keyboards to be installed on the image. To list available keyboards, run: localectl list-keymaps\n",
+              "description": "The keyboards attribute is a list of strings that contains the keyboards to be installed on the image. To list available keyboards, run: localectl list-keymaps",
               "default": [
                 "us"
-              ]
+              ],
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "languages": {
+          "oneOf": [
+            {
+              "description": "The languages attribute is a list of strings that contains the languages to be installed on the image. To list available languages, run: localectl list-locales",
+              "default": [
+                "en_US.UTF-8"
+              ],
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
             },
             {
               "type": "null"
@@ -749,119 +959,85 @@
           ]
         }
       },
-      "additionalProperties": false,
-      "type": "object"
+      "additionalProperties": false
     },
-    "LogicalVolumesStorage": {
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "Logical volume name. When not set, will be generated automatically.\n"
-        },
-        "label": {
-          "type": "string",
-          "description": "Label of the logical volume.\n"
-        },
-        "mountpoint": {
-          "type": "string",
-          "pattern": "^/",
-          "description": "Mount point of the logical volume. Required except for swap fs_type.\n"
-        },
-        "fs_type": {
-          "type": "string",
-          "enum": [
-            "ext4",
-            "xfs",
-            "swap",
-            "vfat"
-          ],
-          "description": "File system type: ext4 (default), xfs, swap, or vfat.\n",
-          "default": "ext4"
-        },
-        "minsize": {
-          "type": "string",
-          "pattern": "^\\d+\\s*[BKkMGTPE]i?[BKMGTPE]?$",
-          "description": "Minimum size of the logical volume.\n\nSize must be formatted as an integer followed by whitespace and then either a decimal unit (B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB, TiB, PiB, EiB).\n"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object"
-    },
-    "Network": {
+    "https://github.com/osbuild/blueprint-schema/network": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
       "properties": {
         "firewall": {
-          "$ref": "#/$defs/NetworkFirewall",
-          "description": "Firewall details - package firewalld must be installed in the image.\n"
+          "description": "Firewall details - package firewalld must be installed in the image.",
+          "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1network_firewall"
         }
       },
-      "additionalProperties": false,
-      "type": "object"
+      "additionalProperties": false
     },
-    "NetworkFirewall": {
+    "https://github.com/osbuild/blueprint-schema/network_firewall": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
       "properties": {
         "services": {
           "oneOf": [
             {
+              "description": "Services to enable or disable. The service can be defined via an assigned IANA name, port number or port range.\n\nServices are processed in order, when a service is disabled and then accidentally enabled via a port or a port range, the service will be enabled in the end.\n\nBy default the firewall blocks all access, except for services that enable their ports explicitly such as the sshd.",
+              "type": "array",
               "items": {
+                "type": "object",
                 "oneOf": [
                   {
+                    "title": "firewall_service",
                     "required": [
                       "service"
-                    ],
-                    "title": "firewall_service"
+                    ]
                   },
                   {
+                    "title": "firewall_port",
                     "required": [
                       "port"
-                    ],
-                    "title": "firewall_port"
+                    ]
                   },
                   {
+                    "title": "firewall_from_to",
                     "required": [
                       "from",
                       "to"
-                    ],
-                    "title": "firewall_from_to"
+                    ]
                   }
                 ],
                 "properties": {
-                  "service": {
-                    "type": "string",
-                    "minLength": 2
-                  },
-                  "port": {
-                    "type": "integer",
-                    "maximum": 65535,
-                    "minimum": 1
+                  "enabled": {
+                    "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1bool_default_true"
                   },
                   "from": {
                     "type": "integer",
                     "maximum": 65535,
                     "minimum": 1
                   },
-                  "to": {
+                  "port": {
                     "type": "integer",
                     "maximum": 65535,
                     "minimum": 1
                   },
                   "protocol": {
-                    "type": "string",
+                    "default": "any",
                     "enum": [
                       "tcp",
                       "udp",
                       "any"
-                    ],
-                    "default": "any"
+                    ]
                   },
-                  "enabled": {
-                    "$ref": "#/$defs/BoolDefaultTrue"
+                  "service": {
+                    "type": "string",
+                    "minLength": 2
+                  },
+                  "to": {
+                    "type": "integer",
+                    "maximum": 65535,
+                    "minimum": 1
                   }
                 },
-                "additionalProperties": false,
-                "type": "object"
-              },
-              "type": "array",
-              "description": "Services to enable or disable. The service can be defined via an assigned IANA name, port number or port range.\n\nServices are processed in order, when a service is disabled and then accidentally enabled via a port or a port range, the service will be enabled in the end.\n\nBy default the firewall blocks all access, except for services that enable their ports explicitly such as the sshd.\n"
+                "additionalProperties": false
+              }
             },
             {
               "type": "null"
@@ -869,24 +1045,28 @@
           ]
         }
       },
-      "additionalProperties": false,
-      "type": "object"
+      "additionalProperties": false
     },
-    "OpenSCAP": {
+    "https://github.com/osbuild/blueprint-schema/openscap": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "required": [
+        "profile_id"
+      ],
       "properties": {
-        "profile_id": {
-          "type": "string",
-          "description": "The desired security profile ID.\n"
-        },
         "datastream": {
-          "type": "string",
-          "description": "Datastream to use for the scan. The datastream is the path to the SCAP datastream file to use for the scan. If the datastream parameter is not provided, a sensible default based on the selected distro will be chosen.\n"
+          "description": "Datastream to use for the scan. The datastream is the path to the SCAP datastream file to use for the scan. If the datastream parameter is not provided, a sensible default based on the selected distro will be chosen.",
+          "type": "string"
+        },
+        "profile_id": {
+          "description": "The desired security profile ID.",
+          "type": "string"
         },
         "tailoring": {
           "oneOf": [
             {
-              "$ref": "#/$defs/OpenSCAPTailoring",
-              "description": "An optional OpenSCAP tailoring information. Can be done via profile selection or tailoring JSON file.\n\nIn case of profile selection, a tailoring file with a new tailoring profile ID is created and saved to the image. The new tailoring profile ID is created by appending the _osbuild_tailoring suffix to the base profile. For example, given tailoring options for the cis profile, tailoring profile xccdf_org.ssgproject.content_profile_cis_osbuild_tailoring will be created. The default namespace of the rules is org.ssgproject.content, so the prefix may be omitted for rules under this namespace, i.e. org.ssgproject.content_grub2_password and grub2_password are functionally equivalent. The generated tailoring file is saved to the image as /usr/share/xml/osbuild-oscap-tailoring/tailoring.xml or, for newer releases, in the /oscap_data directory, this is the location used for other OpenSCAP related artifacts.\n\nIt is also possible to use JSON tailoring. In that case, custom JSON file must be provided using the blueprint and used in json_filepath field alongside with json_profile_id field. The generated XML tailoring file is saved to the image as /oscap_data/tailoring.xml.\n"
+              "description": "An optional OpenSCAP tailoring information. Can be done via profile selection or tailoring JSON file.\n\nIn case of profile selection, a tailoring file with a new tailoring profile ID is created and saved to the image. The new tailoring profile ID is created by appending the _osbuild_tailoring suffix to the base profile. For example, given tailoring options for the cis profile, tailoring profile xccdf_org.ssgproject.content_profile_cis_osbuild_tailoring will be created. The default namespace of the rules is org.ssgproject.content, so the prefix may be omitted for rules under this namespace, i.e. org.ssgproject.content_grub2_password and grub2_password are functionally equivalent. The generated tailoring file is saved to the image as /usr/share/xml/osbuild-oscap-tailoring/tailoring.xml or, for newer releases, in the /oscap_data directory, this is the location used for other OpenSCAP related artifacts.\n\nIt is also possible to use JSON tailoring. In that case, custom JSON file must be provided using the blueprint and used in json_filepath field alongside with json_profile_id field. The generated XML tailoring file is saved to the image as /oscap_data/tailoring.xml.",
+              "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1openscap_tailoring"
             },
             {
               "type": "null"
@@ -894,13 +1074,11 @@
           ]
         }
       },
-      "additionalProperties": false,
-      "type": "object",
-      "required": [
-        "profile_id"
-      ]
+      "additionalProperties": false
     },
-    "OpenSCAPTailoring": {
+    "https://github.com/osbuild/blueprint-schema/openscap_tailoring": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
       "oneOf": [
         {
           "anyOf": [
@@ -930,44 +1108,288 @@
         }
       ],
       "properties": {
-        "selected": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array",
-          "description": "Selected rules, cannot be used with json_profile_id and json_filepath.\n"
-        },
-        "unselected": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array",
-          "description": "Unselected rules, cannot be used with json_profile_id and json_filepath.\n"
+        "json_filepath": {
+          "description": "JSON filepath, must be used with json_profile_id and cannot be used with selected and unselected fields.",
+          "type": "string"
         },
         "json_profile_id": {
-          "type": "string",
-          "description": "JSON profile ID, must be used with json_filepath and cannot be used with selected and unselected fields.\n"
+          "description": "JSON profile ID, must be used with json_filepath and cannot be used with selected and unselected fields.",
+          "type": "string"
         },
-        "json_filepath": {
-          "type": "string",
-          "description": "JSON filepath, must be used with json_profile_id and cannot be used with selected and unselected fields.\n"
+        "selected": {
+          "description": "Selected rules, cannot be used with json_profile_id and json_filepath.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "unselected": {
+          "description": "Unselected rules, cannot be used with json_profile_id and json_filepath.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
-      "additionalProperties": false,
-      "type": "object"
+      "additionalProperties": false
     },
-    "PartitionsStorage": {
+    "https://github.com/osbuild/blueprint-schema/registration": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "fdo": {
+          "oneOf": [
+            {
+              "description": "FDO allows users to configure FIDO Device Onboard device initialization parameters. It is only available with the edge-simplified-installer or iot-simplified-installer image types.",
+              "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1registration_fdo"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "redhat": {
+          "description": "Registration details for Red Hat operating system images.",
+          "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1registration_redhat"
+        }
+      },
+      "additionalProperties": false
+    },
+    "https://github.com/osbuild/blueprint-schema/registration_connector": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "required": [
+        "enabled"
+      ],
+      "properties": {
+        "enabled": {
+          "description": "Enables rhc (Red Hat Connector) during boot.",
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "https://github.com/osbuild/blueprint-schema/registration_fdo": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "oneOf": [
+        {
+          "title": "fdo_hash",
+          "required": [
+            "diun_pub_key_hash"
+          ]
+        },
+        {
+          "title": "fdo_rootcerts",
+          "required": [
+            "diun_pub_key_root_certs"
+          ]
+        }
+      ],
+      "required": [
+        "manufacturing_server_url"
+      ],
+      "properties": {
+        "di_mfg_string_type_mac_iface": {
+          "description": "Optional interface name for the MAC address.",
+          "type": "string"
+        },
+        "diun_pub_key_hash": {
+          "description": "FDO server public key hex-encoded hash. Cannot be used together with insecure option or root certs.",
+          "type": "string"
+        },
+        "diun_pub_key_insecure": {
+          "description": "FDO insecure option. When set, both hash or root certs must not be set.",
+          "default": false,
+          "type": "boolean"
+        },
+        "diun_pub_key_root_certs": {
+          "description": "FDO server public key root certificate path. Cannot be used together with insecure option or hash.",
+          "type": "string"
+        },
+        "manufacturing_server_url": {
+          "description": "FDO manufacturing server URL.",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "https://github.com/osbuild/blueprint-schema/registration_insights": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "required": [
+        "enabled"
+      ],
+      "properties": {
+        "enabled": {
+          "description": "Enables insights client during boot.",
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "https://github.com/osbuild/blueprint-schema/registration_redhat": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "activation_key": {
+          "description": "Subscription manager activation key to use during registration. A list of keys to use to redeem or apply specific subscriptions to the system.",
+          "type": "string"
+        },
+        "connector": {
+          "oneOf": [
+            {
+              "description": "Red Hat console.redhat.com connector (rhc) details.",
+              "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1registration_connector"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "insights": {
+          "oneOf": [
+            {
+              "description": "Red Hat Insights client details.",
+              "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1registration_insights"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "organization": {
+          "description": "Subscription manager organization name to use during registration.",
+          "type": "string"
+        },
+        "subscription_manager": {
+          "oneOf": [
+            {
+              "description": "Subscription manager details (internal use only). The customization expects that subscription-manager package is installed in the image, which is by default part of the RHEL distribution bootable images. To explicitly install the package, add it to the packages section in the blueprint. The customization is not supported on Fedora distribution images.",
+              "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1registration_rhsm"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "https://github.com/osbuild/blueprint-schema/registration_rhsm": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "required": [
+        "enabled",
+        "product_plugin_enabled",
+        "repository_management",
+        "auto_registration"
+      ],
+      "properties": {
+        "auto_registration": {
+          "description": "Enabled auto_registration plugin configuration.",
+          "default": true,
+          "type": "boolean"
+        },
+        "enabled": {
+          "description": "Enables the subscription-manager DNF plugin.",
+          "default": true,
+          "type": "boolean"
+        },
+        "product_plugin_enabled": {
+          "description": "Enables the product-id DNF plugin.",
+          "default": true,
+          "type": "boolean"
+        },
+        "repository_management": {
+          "description": "Enabled repository_management plugin configuration.",
+          "default": true,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "https://github.com/osbuild/blueprint-schema/storage": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "required": [
+        "type",
+        "minsize",
+        "partitions"
+      ],
+      "properties": {
+        "type": {
+          "description": "Device partitioning type: gpt (default) or mbr.",
+          "default": "gpt",
+          "enum": [
+            "gpt",
+            "mbr"
+          ]
+        },
+        "minsize": {
+          "description": "Minimum size of the storage device. When not set, the image size is acquired from image request.\n\nSize must be formatted as an integer followed by whitespace and then either a decimal unit (B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB, TiB, PiB, EiB).",
+          "type": "string",
+          "pattern": "^\\d+\\s*[BKkMGTPE]i?[BKMGTPE]?$"
+        },
+        "partitions": {
+          "description": "Partitions of the following types: plain (default), lvm, or btrfs.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1storage_partitions"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "https://github.com/osbuild/blueprint-schema/storage_logical_volumes": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "fs_type": {
+          "description": "File system type: ext4 (default), xfs, swap, or vfat.",
+          "default": "ext4",
+          "enum": [
+            "ext4",
+            "xfs",
+            "swap",
+            "vfat"
+          ]
+        },
+        "label": {
+          "description": "Label of the logical volume.",
+          "type": "string"
+        },
+        "minsize": {
+          "description": "Minimum size of the logical volume.\n\nSize must be formatted as an integer followed by whitespace and then either a decimal unit (B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB, TiB, PiB, EiB).",
+          "type": "string",
+          "pattern": "^\\d+\\s*[BKkMGTPE]i?[BKMGTPE]?$"
+        },
+        "mountpoint": {
+          "description": "Mount point of the logical volume. Required except for swap fs_type.",
+          "type": "string",
+          "pattern": "^/"
+        },
+        "name": {
+          "description": "Logical volume name. When not set, will be generated automatically.",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "https://github.com/osbuild/blueprint-schema/storage_partitions": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
       "allOf": [
         {
           "if": {
+            "required": [
+              "type"
+            ],
             "properties": {
               "type": {
                 "const": "plain"
               }
-            },
-            "required": [
-              "type"
-            ]
+            }
           },
           "then": {
             "not": {
@@ -999,14 +1421,14 @@
         },
         {
           "if": {
+            "required": [
+              "type"
+            ],
             "properties": {
               "type": {
                 "const": "lvm"
               }
-            },
-            "required": [
-              "type"
-            ]
+            }
           },
           "then": {
             "not": {
@@ -1042,14 +1464,14 @@
         },
         {
           "if": {
+            "required": [
+              "type"
+            ],
             "properties": {
               "type": {
                 "const": "btrfs"
               }
-            },
-            "required": [
-              "type"
-            ]
+            }
           },
           "then": {
             "not": {
@@ -1088,238 +1510,106 @@
           }
         }
       ],
+      "required": [
+        "type"
+      ],
       "properties": {
         "type": {
-          "type": "string",
+          "description": "Partition type: plain (default), lvm, or btrfs.",
+          "default": "plain",
           "enum": [
             "plain",
             "lvm",
             "btrfs"
-          ],
-          "description": "Partition type: plain (default), lvm, or btrfs.\n",
-          "default": "plain"
-        },
-        "label": {
-          "type": "string",
-          "description": "Label of the partition.\n\nRelevant for partition types: plain.\n"
-        },
-        "mountpoint": {
-          "type": "string",
-          "pattern": "^/",
-          "description": "Mount point of the partition. Required except for swap fs_type.\n\nRelevant for partition types: plain.\n"
+          ]
         },
         "fs_type": {
-          "type": "string",
+          "description": "File system type: ext4 (default), xfs, swap, or vfat.\n\nRelevant for partition types: plain.",
+          "default": "ext4",
           "enum": [
             "ext4",
             "xfs",
             "swap",
             "vfat"
-          ],
-          "description": "File system type: ext4 (default), xfs, swap, or vfat.\n\nRelevant for partition types: plain.\n",
-          "default": "ext4"
+          ]
         },
-        "minsize": {
-          "type": "string",
-          "pattern": "^\\d+\\s*[BKkMGTPE]i?[BKMGTPE]?$",
-          "description": "Minimum size of the volume.\n\nSize must be formatted as an integer followed by whitespace and then either a decimal unit (B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB, TiB, PiB, EiB).\n\nRelevant for partition types: plain, lvm, btrfs.\n"
-        },
-        "name": {
-          "type": "string",
-          "description": "LVM volume group name. When not set, will be generated automatically.\n\nRelevant for partition types: lvm.\n"
+        "label": {
+          "description": "Label of the partition.\n\nRelevant for partition types: plain.",
+          "type": "string"
         },
         "logical_volumes": {
-          "items": {
-            "$ref": "#/$defs/LogicalVolumesStorage"
-          },
+          "description": "LVM logical volumes to create within the volume group.\n\nRelevant for partition types: lvm.",
           "type": "array",
-          "description": "LVM logical volumes to create within the volume group.\n\nRelevant for partition types: lvm.\n"
-        },
-        "subvolumes": {
           "items": {
-            "$ref": "#/$defs/SubvolumesStorage"
-          },
-          "type": "array",
-          "description": "BTRFS subvolumes to create.\n\nRelevant for partition types: btrfs.\n"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "required": [
-        "type"
-      ]
-    },
-    "RedHatRegistration": {
-      "properties": {
-        "activation_key": {
-          "type": "string",
-          "description": "Subscription manager activation key to use during registration. A list of keys to use to redeem or apply specific subscriptions to the system.\n"
-        },
-        "organization": {
-          "type": "string",
-          "description": "Subscription manager organization name to use during registration.\n"
-        },
-        "subscription_manager": {
-          "oneOf": [
-            {
-              "$ref": "#/$defs/SubscriptionManagerRegistration",
-              "description": "Subscription manager details (internal use only). The customization expects that subscription-manager package is installed in the image, which is by default part of the RHEL distribution bootable images. To explicitly install the package, add it to the packages section in the blueprint. The customization is not supported on Fedora distribution images.\n"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "insights": {
-          "oneOf": [
-            {
-              "$ref": "#/$defs/InsightsRegistration",
-              "description": "Red Hat Insights client details.\n"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "connector": {
-          "oneOf": [
-            {
-              "$ref": "#/$defs/ConnectorRegistration",
-              "description": "Red Hat console.redhat.com connector (rhc) details.\n"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        }
-      },
-      "additionalProperties": false,
-      "type": "object"
-    },
-    "Registration": {
-      "properties": {
-        "redhat": {
-          "$ref": "#/$defs/RedHatRegistration",
-          "description": "Registration details for Red Hat operating system images.\n"
-        },
-        "fdo": {
-          "oneOf": [
-            {
-              "$ref": "#/$defs/FDORegistration",
-              "description": "FDO allows users to configure FIDO Device Onboard device initialization parameters. It is only available with the edge-simplified-installer or iot-simplified-installer image types.\n"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        }
-      },
-      "additionalProperties": false,
-      "type": "object"
-    },
-    "Storage": {
-      "properties": {
-        "type": {
-          "type": "string",
-          "enum": [
-            "gpt",
-            "mbr"
-          ],
-          "description": "Device partitioning type: gpt (default) or mbr.\n",
-          "default": "gpt"
+            "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1storage_logical_volumes"
+          }
         },
         "minsize": {
+          "description": "Minimum size of the volume.\n\nSize must be formatted as an integer followed by whitespace and then either a decimal unit (B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB, TiB, PiB, EiB).\n\nRelevant for partition types: plain, lvm, btrfs.",
           "type": "string",
-          "pattern": "^\\d+\\s*[BKkMGTPE]i?[BKMGTPE]?$",
-          "description": "Minimum size of the storage device. When not set, the image size is acquired from image request.\n\nSize must be formatted as an integer followed by whitespace and then either a decimal unit (B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB, TiB, PiB, EiB).\n"
-        },
-        "partitions": {
-          "items": {
-            "$ref": "#/$defs/PartitionsStorage"
-          },
-          "type": "array",
-          "description": "Partitions of the following types: plain (default), lvm, or btrfs.\n"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "required": [
-        "type",
-        "minsize",
-        "partitions"
-      ]
-    },
-    "SubscriptionManagerRegistration": {
-      "properties": {
-        "enabled": {
-          "type": "boolean",
-          "description": "Enables the subscription-manager DNF plugin.\n",
-          "default": true
-        },
-        "product_plugin_enabled": {
-          "type": "boolean",
-          "description": "Enables the product-id DNF plugin.\n",
-          "default": true
-        },
-        "repository_management": {
-          "type": "boolean",
-          "description": "Enabled repository_management plugin configuration.\n",
-          "default": true
-        },
-        "auto_registration": {
-          "type": "boolean",
-          "description": "Enabled auto_registration plugin configuration.\n",
-          "default": true
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "required": [
-        "enabled",
-        "product_plugin_enabled",
-        "repository_management",
-        "auto_registration"
-      ]
-    },
-    "SubvolumesStorage": {
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "Subvolume name, must also define its parent volume.\n"
+          "pattern": "^\\d+\\s*[BKkMGTPE]i?[BKMGTPE]?$"
         },
         "mountpoint": {
+          "description": "Mount point of the partition. Required except for swap fs_type.\n\nRelevant for partition types: plain.",
           "type": "string",
-          "pattern": "^/",
-          "description": "Mount point of the subvolume. Required. Swap filesystem type is not supported on BTRFS volumes.\n"
+          "pattern": "^/"
+        },
+        "name": {
+          "description": "LVM volume group name. When not set, will be generated automatically.\n\nRelevant for partition types: lvm.",
+          "type": "string"
+        },
+        "subvolumes": {
+          "description": "BTRFS subvolumes to create.\n\nRelevant for partition types: btrfs.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/https%3A~1~1github.com~1osbuild~1blueprint-schema~1storage_subvolumes"
+          }
         }
       },
-      "additionalProperties": false,
-      "type": "object"
+      "additionalProperties": false
     },
-    "Systemd": {
+    "https://github.com/osbuild/blueprint-schema/storage_subvolumes": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
       "properties": {
-        "enabled": {
-          "oneOf": [
-            {
-              "items": {
-                "type": "string"
-              },
-              "type": "array",
-              "description": "The enabled attribute is a list of strings that contains the systemd units to be enabled.\n"
-            },
-            {
-              "type": "null"
-            }
-          ]
+        "mountpoint": {
+          "description": "Mount point of the subvolume. Required. Swap filesystem type is not supported on BTRFS volumes.",
+          "type": "string",
+          "pattern": "^/"
         },
+        "name": {
+          "description": "Subvolume name, must also define its parent volume.",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "https://github.com/osbuild/blueprint-schema/systemd": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
         "disabled": {
           "oneOf": [
             {
+              "description": "The disabled attribute is a list of strings that contains the systemd units to be disabled.",
+              "type": "array",
               "items": {
                 "type": "string"
-              },
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "enabled": {
+          "oneOf": [
+            {
+              "description": "The enabled attribute is a list of strings that contains the systemd units to be enabled.",
               "type": "array",
-              "description": "The disabled attribute is a list of strings that contains the systemd units to be disabled.\n"
+              "items": {
+                "type": "string"
+              }
             },
             {
               "type": "null"
@@ -1329,11 +1619,11 @@
         "masked": {
           "oneOf": [
             {
+              "description": "The masked attribute is a list of strings that contains the systemd units to be masked.",
+              "type": "array",
               "items": {
                 "type": "string"
-              },
-              "type": "array",
-              "description": "The masked attribute is a list of strings that contains the systemd units to be masked.\n"
+              }
             },
             {
               "type": "null"
@@ -1341,294 +1631,29 @@
           ]
         }
       },
-      "additionalProperties": false,
-      "type": "object"
+      "additionalProperties": false
     },
-    "TimeDate": {
-      "properties": {
-        "timezone": {
-          "type": "string",
-          "description": "System time zone. Defaults to UTC. To list available time zones run: timedatectl list-timezones\n",
-          "default": "UTC"
-        },
-        "ntp_servers": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array",
-          "description": "An optional list of strings containing NTP servers to use. If not provided the distribution defaults are used\n"
-        }
-      },
-      "additionalProperties": false,
+    "https://github.com/osbuild/blueprint-schema/time_date": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
       "type": "object",
       "required": [
         "timezone"
-      ]
-    },
-    "UserAccount": {
+      ],
       "properties": {
-        "name": {
-          "type": "string",
-          "maxLength": 256,
-          "pattern": "^[a-zA-Z0-9_.][a-zA-Z0-9_.$-]*$",
-          "description": "Account name. Accepted characters: lowercase letters, digits, underscores, dollars, and hyphens. Name must not start with a hyphen. Maximum length is 256 characters. The validation pattern is a relaxed version of https://github.com/shadow-maint/shadow/blob/master/lib/chkname.c\n"
-        },
-        "description": {
-          "type": "string",
-          "maxLength": 4096,
-          "description": "A longer description of the account.\n"
-        },
-        "password": {
-          "type": "string",
-          "description": "Password either in plain text or encrypted form. If the password is not provided, the account will be locked and the user will not be able to log in with a password. The password can be encrypted using the crypt(3) function. The format of the encrypted password is $id$salt$hashed, where $id is the algorithm used (1, 5, 6, or 2a).\n"
-        },
-        "ssh_keys": {
+        "ntp_servers": {
+          "description": "An optional list of strings containing NTP servers to use. If not provided the distribution defaults are used",
+          "type": "array",
           "items": {
             "type": "string"
-          },
-          "type": "array",
-          "description": "SSH keys to be added to the account's authorized_keys file.\n"
+          }
         },
-        "home": {
-          "type": "string",
-          "description": "The home directory of the user.\n"
-        },
-        "shell": {
-          "type": "string",
-          "description": "The shell of the user.\n"
-        },
-        "uid": {
-          "type": "integer",
-          "minimum": 1,
-          "description": "The user ID (UID) of the user. Value of zero (or ommited value) means that the next available UID will be assigned.\n"
-        },
-        "gid": {
-          "type": "integer",
-          "minimum": 1,
-          "description": "The primary group ID (GID) of the user. Value of zero (or ommited value) means that the next available UID will be assigned.\n"
-        },
-        "groups": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array",
-          "description": "Additional groups that the user should be a member of.\n"
-        },
-        "expires": {
-          "$ref": "#/$defs/Date",
-          "description": "The expiration date of the account in the format YYYY-MM-DD.\n\nOnly date is taken into account, time allowed but is ignored for JSON/YAML compatibility.\n"
+        "timezone": {
+          "description": "System time zone. Defaults to UTC. To list available time zones run: timedatectl list-timezones",
+          "default": "UTC",
+          "type": "string"
         }
       },
-      "additionalProperties": false,
-      "type": "object",
-      "required": [
-        "name"
-      ]
+      "additionalProperties": false
     }
-  },
-  "properties": {
-    "name": {
-      "type": "string",
-      "description": "The name attribute is a string that contains the name of the blueprint. It can contain spaces, but they may be converted to dash characters during build. It should be short and descriptive.\n"
-    },
-    "description": {
-      "type": "string",
-      "description": "The description attribute is a string that can be a longer description of the blueprint and is only used for display purposes.\n"
-    },
-    "hostname": {
-      "type": "string",
-      "description": "Hostname is an optional string that can be used to configure the hostname of the final image.\n"
-    },
-    "kernel": {
-      "oneOf": [
-        {
-          "$ref": "#/$defs/Kernel",
-          "description": "Custom Linux kernel details, optional.\n"
-        },
-        {
-          "type": "null"
-        }
-      ]
-    },
-    "fips": {
-      "oneOf": [
-        {
-          "$ref": "#/$defs/FIPS",
-          "description": "FIPS details, optional.\n"
-        },
-        {
-          "type": "null"
-        }
-      ]
-    },
-    "dnf": {
-      "oneOf": [
-        {
-          "$ref": "#/$defs/DNF",
-          "description": "DNF package managers details. When using virtual provides as the package name the version glob should be *. And be aware that you will be unable to freeze the blueprint. This is because the provides will expand into multiple packages with their own names and versions.\n"
-        },
-        {
-          "type": "null"
-        }
-      ]
-    },
-    "containers": {
-      "oneOf": [
-        {
-          "items": {
-            "$ref": "#/$defs/Container"
-          },
-          "type": "array",
-          "description": "Containers to be pulled during the image build and stored in the image at the default local container storage location that is appropriate for the image type, so that all supported container tools like podman and cri-o will be able to work with it. The embedded containers are not started, to do so you can create systemd unit files or quadlets with the files customization.\n"
-        },
-        {
-          "type": "null"
-        }
-      ]
-    },
-    "registration": {
-      "oneOf": [
-        {
-          "$ref": "#/$defs/Registration",
-          "description": "Registration details for various registration types, namely Red Hat Subscription Manager.\n"
-        },
-        {
-          "type": "null"
-        }
-      ]
-    },
-    "accounts": {
-      "oneOf": [
-        {
-          "$ref": "#/$defs/Accounts",
-          "description": "Users and groups details\n"
-        },
-        {
-          "type": "null"
-        }
-      ]
-    },
-    "timedate": {
-      "oneOf": [
-        {
-          "$ref": "#/$defs/TimeDate",
-          "description": "Time and date details allowing configuration of the timezone and NTP servers. The timezone is set by default to UTC.\n"
-        },
-        {
-          "type": "null"
-        }
-      ]
-    },
-    "locale": {
-      "oneOf": [
-        {
-          "$ref": "#/$defs/Locale",
-          "description": "An optional object that contains the following attributes to customize the locale settings for the system. If the locale is not specified, the default locale and keyboard settings are used: en_US.UTF-8 and us.\n"
-        },
-        {
-          "type": "null"
-        }
-      ]
-    },
-    "network": {
-      "oneOf": [
-        {
-          "$ref": "#/$defs/Network",
-          "description": "Networking details including firewall configuration.\n"
-        },
-        {
-          "type": "null"
-        }
-      ]
-    },
-    "openscap": {
-      "oneOf": [
-        {
-          "$ref": "#/$defs/OpenSCAP",
-          "description": "OpenSCAP policy to be applied on the operating system. Added in RHEL 8.7 \u0026 RHEL 9.1. It is possible to either list policy rules (enable or disable) or to provide a full policy file.\n"
-        },
-        {
-          "type": "null"
-        }
-      ]
-    },
-    "systemd": {
-      "oneOf": [
-        {
-          "$ref": "#/$defs/Systemd",
-          "description": "Systemd unit configuration.\n\nThis section can be used to control which services are enabled at boot time. Some image types already have services enabled or disabled in order for the image to work correctly, and cannot be overridden. For example, ami image type requires sshd, chronyd, and cloud-init services. Blueprint services do not replace these services, but add them to the list of services already present in the templates, if any.\n"
-        },
-        {
-          "type": "null"
-        }
-      ]
-    },
-    "fsnodes": {
-      "oneOf": [
-        {
-          "items": {
-            "$ref": "#/$defs/FSNode"
-          },
-          "type": "array",
-          "description": "File system nodes details.\n\nYou can use the customization to create new files or to replace existing ones, if not restricted by the policy specified below. If the target path is an existing symlink to another file, the symlink will be replaced by the custom file.\n\nPlease note that the parent directory of a specified file must exist. If it does not exist, the image build will fail. One can ensure that the parent directory exists by specifying \"ensure_parents\".\n\nIn addition, the following files are not allowed to be created or replaced by policy: /etc/fstab, /etc/shadow, /etc/passwd and /etc/group.\n\nUsing the files customization comes with a high chance of creating an image that doesn't boot. Use this feature only if you know what you are doing. Although the files customization can be used to configure parts of the OS which can also be configured by other blueprint customizations, this use is discouraged. If possible, users should always default to using the specialized blueprint customizations. Note that if you combine the files customizations with other customizations, the other customizations may not work as expected or may be overridden by the files customizations.\n\nYou can create custom directories as well. The existence of a specified directory is handled gracefully only if no explicit mode, user or group is specified. If any of these customizations are specified and the directory already exists in the image, the image build will fail. The intention is to prevent changing the ownership or permissions of existing directories.\n"
-        },
-        {
-          "type": "null"
-        }
-      ]
-    },
-    "ignition": {
-      "oneOf": [
-        {
-          "$ref": "#/$defs/Ignition",
-          "description": "Provides Ignition configuration files to be used in edge-raw-image and edge-simplified-installer images. Check the RHEL for Edge butane specification for a description of the supported configuration options.\n\nThe blueprint configuration can be done either by embedding an Ignition configuration file into the image, or providing a provisioning URL that will be fetched at first boot.\n"
-        },
-        {
-          "type": "null"
-        }
-      ]
-    },
-    "installer": {
-      "oneOf": [
-        {
-          "$ref": "#/$defs/Installer",
-          "description": "Extra customization for Anaconda installer (ISO) and Edge/IOT simplified installer image types.\n"
-        },
-        {
-          "type": "null"
-        }
-      ]
-    },
-    "cacerts": {
-      "oneOf": [
-        {
-          "items": {
-            "$ref": "#/$defs/CACerts"
-          },
-          "type": "array",
-          "description": "The CA certificates to be added to the image. The certificates are added to the system-wide CA trust store. The certificates are added to the /etc/pki/ca-trust/source/anchors/ directory and the update-ca-trust command is run to update the system-wide CA trust store.\n"
-        },
-        {
-          "type": "null"
-        }
-      ]
-    },
-    "storage": {
-      "oneOf": [
-        {
-          "$ref": "#/$defs/Storage",
-          "description": "Disk partitioning details. Not available for installer-based images.\n\nGeneral principles:\n\n1. All sizes, whether for specific filesystems, partitions, logical volumes, or the image itself, are treated as minimum requirements. This means the full disk image size is always larger than the size of the sum of the partitions, due to requirements for headers and metadata.\n\n2. The partition that contains the root filesystem, whether this is a plain formatted partition, an LVM Volume Group, or a Btrfs partition, is always last in the partition table layout when it is automatically added. For Disk customizations the user-defined order is respected.\n\n3. In the case of raw partitioning (no LVM and no Btrfs), the partition containing the root filesystem is grown to fill any left over space on the partition table. Logical Volumes are not grown to fill the space in the Volume Group since they are trivial to grow on a live system.\n"
-        },
-        {
-          "type": "null"
-        }
-      ]
-    }
-  },
-  "additionalProperties": false,
-  "type": "object",
-  "required": [
-    "name"
-  ],
-  "description": "Image Builder new blueprint schema.\n\nTHIS IS WORK IN PROGRESS\n"
+  }
 }

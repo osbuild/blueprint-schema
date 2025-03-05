@@ -8,13 +8,13 @@ properties:
     - description: Operating system group accounts to be created on the image.
       type: array
       items:
-        "$ref": "#/$defs/GroupAccount"
+        "$ref": "https://github.com/osbuild/blueprint-schema/account_group"
     - type: 'null'
   users:
     oneOf:
     - description: Operating system user accounts to be created on the image.
       type: array
       items:
-        "$ref": "#/$defs/UserAccount"
+        "$ref": "https://github.com/osbuild/blueprint-schema/account_user"
     - type: 'null'
 additionalProperties: false

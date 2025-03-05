@@ -16,7 +16,7 @@ properties:
   accounts:
     oneOf:
     - description: Users and groups details
-      "$ref": "#/$defs/Accounts"
+      "$ref": "https://github.com/osbuild/blueprint-schema/account"
     - type: 'null'
   cacerts:
     oneOf:
@@ -26,7 +26,7 @@ properties:
         is run to update the system-wide CA trust store.
       type: array
       items:
-        "$ref": "#/$defs/CACerts"
+        "$ref": "https://github.com/osbuild/blueprint-schema/ca_cert"
     - type: 'null'
   containers:
     oneOf:
@@ -37,7 +37,7 @@ properties:
         to do so you can create systemd unit files or quadlets with the files customization.
       type: array
       items:
-        "$ref": "#/$defs/Container"
+        "$ref": "https://github.com/osbuild/blueprint-schema/container"
     - type: 'null'
   dnf:
     oneOf:
@@ -45,12 +45,12 @@ properties:
         package name the version glob should be *. And be aware that you will be unable
         to freeze the blueprint. This is because the provides will expand into multiple
         packages with their own names and versions.
-      "$ref": "#/$defs/DNF"
+      "$ref": "https://github.com/osbuild/blueprint-schema/dnf"
     - type: 'null'
   fips:
     oneOf:
     - description: FIPS details, optional.
-      "$ref": "#/$defs/FIPS"
+      "$ref": "https://github.com/osbuild/blueprint-schema/fips"
     - type: 'null'
   fsnodes:
     oneOf:
@@ -68,7 +68,7 @@ properties:
         You can create custom directories as well. The existence of a specified directory is handled gracefully only if no explicit mode, user or group is specified. If any of these customizations are specified and the directory already exists in the image, the image build will fail. The intention is to prevent changing the ownership or permissions of existing directories.
       type: array
       items:
-        "$ref": "#/$defs/FSNode"
+        "$ref": "https://github.com/osbuild/blueprint-schema/fsnode"
     - type: 'null'
   hostname:
     description: Hostname is an optional string that can be used to configure the
@@ -80,25 +80,25 @@ properties:
         Provides Ignition configuration files to be used in edge-raw-image and edge-simplified-installer images. Check the RHEL for Edge butane specification for a description of the supported configuration options.
 
         The blueprint configuration can be done either by embedding an Ignition configuration file into the image, or providing a provisioning URL that will be fetched at first boot.
-      "$ref": "#/$defs/Ignition"
+      "$ref": "https://github.com/osbuild/blueprint-schema/ignition"
     - type: 'null'
   installer:
     oneOf:
     - description: Extra customization for Anaconda installer (ISO) and Edge/IOT simplified
         installer image types.
-      "$ref": "#/$defs/Installer"
+      "$ref": "https://github.com/osbuild/blueprint-schema/installer"
     - type: 'null'
   kernel:
     oneOf:
     - description: Custom Linux kernel details, optional.
-      "$ref": "#/$defs/Kernel"
+      "$ref": "https://github.com/osbuild/blueprint-schema/kernel"
     - type: 'null'
   locale:
     oneOf:
     - description: 'An optional object that contains the following attributes to customize
         the locale settings for the system. If the locale is not specified, the default
         locale and keyboard settings are used: en_US.UTF-8 and us.'
-      "$ref": "#/$defs/Locale"
+      "$ref": "https://github.com/osbuild/blueprint-schema/locale"
     - type: 'null'
   name:
     description: The name attribute is a string that contains the name of the blueprint.
@@ -108,20 +108,20 @@ properties:
   network:
     oneOf:
     - description: Networking details including firewall configuration.
-      "$ref": "#/$defs/Network"
+      "$ref": "https://github.com/osbuild/blueprint-schema/network"
     - type: 'null'
   openscap:
     oneOf:
     - description: OpenSCAP policy to be applied on the operating system. Added in
         RHEL 8.7 & RHEL 9.1. It is possible to either list policy rules (enable or
         disable) or to provide a full policy file.
-      "$ref": "#/$defs/OpenSCAP"
+      "$ref": "https://github.com/osbuild/blueprint-schema/openscap"
     - type: 'null'
   registration:
     oneOf:
     - description: Registration details for various registration types, namely Red
         Hat Subscription Manager.
-      "$ref": "#/$defs/Registration"
+      "$ref": "https://github.com/osbuild/blueprint-schema/registration"
     - type: 'null'
   storage:
     oneOf:
@@ -135,7 +135,7 @@ properties:
         2. The partition that contains the root filesystem, whether this is a plain formatted partition, an LVM Volume Group, or a Btrfs partition, is always last in the partition table layout when it is automatically added. For Disk customizations the user-defined order is respected.
 
         3. In the case of raw partitioning (no LVM and no Btrfs), the partition containing the root filesystem is grown to fill any left over space on the partition table. Logical Volumes are not grown to fill the space in the Volume Group since they are trivial to grow on a live system.
-      "$ref": "#/$defs/Storage"
+      "$ref": "https://github.com/osbuild/blueprint-schema/storage"
     - type: 'null'
   systemd:
     oneOf:
@@ -143,12 +143,12 @@ properties:
         Systemd unit configuration.
 
         This section can be used to control which services are enabled at boot time. Some image types already have services enabled or disabled in order for the image to work correctly, and cannot be overridden. For example, ami image type requires sshd, chronyd, and cloud-init services. Blueprint services do not replace these services, but add them to the list of services already present in the templates, if any.
-      "$ref": "#/$defs/Systemd"
+      "$ref": "https://github.com/osbuild/blueprint-schema/systemd"
     - type: 'null'
   timedate:
     oneOf:
     - description: Time and date details allowing configuration of the timezone and
         NTP servers. The timezone is set by default to UTC.
-      "$ref": "#/$defs/TimeDate"
+      "$ref": "https://github.com/osbuild/blueprint-schema/time_date"
     - type: 'null'
 additionalProperties: false

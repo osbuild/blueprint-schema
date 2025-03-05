@@ -25,5 +25,5 @@ properties:
       btrfs.'
     type: array
     items:
-      "$ref": "#/$defs/PartitionsStorage"
+      "$ref": "https://github.com/osbuild/blueprint-schema/storage_partitions"
 additionalProperties: false

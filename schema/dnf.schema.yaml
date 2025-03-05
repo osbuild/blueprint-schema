@@ -51,6 +51,6 @@ properties:
         All fields reflect configuration values of dnf, see man dnf.conf(5) for more information.
       type: array
       items:
-        "$ref": "#/$defs/DNFRepository"
+        "$ref": "https://github.com/osbuild/blueprint-schema/dnf_repository"
     - type: 'null'
 additionalProperties: false
