@@ -31,6 +31,7 @@ pkg-go-dev-update: ## Schedule https://pkg.go.dev/github.com/osbuild/blueprint-s
 test: ## Run all tests
 	@go test -count=1 .
 
+# Option --without-id is a workaround for VSCode: https://github.com/sourcemeta/jsonschema/blob/main/docs/bundle.markdown
 $(SCHEMA_DST): $(SCHEMA_SRC) Makefile ## Build the schema from schema/*.schema.yaml files
 	jsonschema bundle schema/blueprint.schema.yaml --verbose --resolve schema/ --extension schema.yaml --without-id > $@
 
@@ -65,8 +66,8 @@ build-cli: $(PLATFORMS) ## Builds cli binaries
 
 .PHONY: build-wasm
 build-wasm: $(DISTDIR)/blueprint_go.wasm $(DISTDIR)/blueprint_tgo.wasm ## Builds wasm binaries
-	@wasm-objdump -j Export -x dist/blueprint_go.wasm
-	@wasm-objdump -j Export -x dist/blueprint_tgo.wasm
+	@type "wasm-objdump" > /dev/null && wasm-objdump -j Export -x dist/blueprint_go.wasm
+	@type "wasm-objdump" > /dev/null && wasm-objdump -j Export -x dist/blueprint_tgo.wasm
 
 .PHONY: $(PLATFORMS)
 $(PLATFORMS):
