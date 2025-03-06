@@ -367,8 +367,19 @@ description = "A complete example of a blueprint with all possible fields"
 # ...
 ```
 
+### Validators used
+
+Schema specification in use is 2020-12.
+
+* https://bowtie.report/#/implementations/ts-vscode-json-languageservice - Monaco Editor (not fully compliant)
+* https://bowtie.report/#/implementations/go-jsonschema - Go validation (fully compliant)
+
 ### Links
+
+Some of the tools will get dropped depending on which approach we will take going forward.
 
 * https://github.com/invopop/yaml - library to convert YAML to JSON and vice versa
 * https://github.com/invopop/jsonschema - library to generate JSON Schema from Go types
 * https://github.com/santhosh-tekuri/jsonschema - library to validate JSON Schema
+* https://github.com/sourcemeta/jsonschema - CLI tool for bundling schema from separate files, validations and linter
+* https://github.com/microsoft/monaco-editor - editor UI used at https://osbuild.org/blueprint-schema/

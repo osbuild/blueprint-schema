@@ -66,15 +66,13 @@ build-cli: $(PLATFORMS) ## Builds cli binaries
 
 .PHONY: build-wasm
 build-wasm: $(DISTDIR)/blueprint_go.wasm $(DISTDIR)/blueprint_tgo.wasm ## Builds wasm binaries
-	@type "wasm-objdump" > /dev/null && wasm-objdump -j Export -x dist/blueprint_go.wasm
-	@type "wasm-objdump" > /dev/null && wasm-objdump -j Export -x dist/blueprint_tgo.wasm
+	@(type "wasm-objdump" &> /dev/null && wasm-objdump -j Export -x dist/blueprint_go.wasm dist/blueprint_tgo.wasm) || true
 
 .PHONY: $(PLATFORMS)
 $(PLATFORMS):
 	GOOS=$(os) GOARCH=$(arch) go build -o $(DISTDIR)/blueconv_$(os)_$(arch) ./cmd/blueconv/
 
-.PHONY: $(DISTDIR)/blueprint_go.wasm
-$(DISTDIR)/blueprint_go.wasm: $(DISTDIR) ## Builds wasm via go
+$(DISTDIR)/blueprint_go.wasm: $(SOURCES) $(DISTDIR) ## Builds wasm via go
 	GOOS=js GOARCH=wasm go build -o $(DISTDIR)/blueprint_go.wasm ./conv/wasm/
 
 $(DISTDIR)/blueprint_tgo.wasm: $(SOURCES) $(DISTDIR) ## Builds wasm via tinygo - GOROOT and GOPATH must be set to compatible Go
