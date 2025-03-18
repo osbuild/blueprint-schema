@@ -3,10 +3,10 @@ package onprem
 import (
 	"strings"
 
-	int "github.com/osbuild/blueprint-schema"
-	"github.com/osbuild/blueprint-schema/conv/notes"
-	ext "github.com/osbuild/blueprint-schema/conv/onprem/blueprint"
-	ptr "github.com/osbuild/blueprint-schema/conv/ptr"
+	int "github.com/osbuild/blueprint-schema/pkg/blueprint"
+	"github.com/osbuild/blueprint-schema/pkg/conv/notes"
+	ext "github.com/osbuild/blueprint-schema/pkg/conv/onprem/blueprint"
+	ptr "github.com/osbuild/blueprint-schema/pkg/conv/ptr"
 )
 
 func ExportBlueprint(from *int.Blueprint, nts *notes.ConversionNotes) *ext.Blueprint {

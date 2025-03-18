@@ -1,7 +1,0 @@
-name: Firewall example - missing to
-network:
-    firewall:
-        services:
-            - enabled: null
-              from: 60000
-              protocol: udp

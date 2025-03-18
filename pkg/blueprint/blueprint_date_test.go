@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/osbuild/blueprint-schema"
+	"github.com/osbuild/blueprint-schema/pkg/blueprint"
 )
 
 func TestDateDaysFrom1970(t *testing.T) {

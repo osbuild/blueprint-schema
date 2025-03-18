@@ -1,8 +1,0 @@
-name: 'Blueprint example: registration'
-registration:
-    fdo:
-        diun_pub_key_root_certs: /etc/pki
-        manufacturing_server_url: http://192.168.122.122:8080
-    redhat:
-        activation_key: "123456789"
-        organization: "123456"

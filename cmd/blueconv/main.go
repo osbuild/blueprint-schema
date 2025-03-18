@@ -8,9 +8,9 @@ import (
 	"os"
 
 	"github.com/BurntSushi/toml"
-	"github.com/osbuild/blueprint-schema"
-	"github.com/osbuild/blueprint-schema/conv/notes"
-	"github.com/osbuild/blueprint-schema/conv/onprem"
+	"github.com/osbuild/blueprint-schema/pkg/blueprint"
+	"github.com/osbuild/blueprint-schema/pkg/conv/notes"
+	"github.com/osbuild/blueprint-schema/pkg/conv/onprem"
 )
 
 func main() {

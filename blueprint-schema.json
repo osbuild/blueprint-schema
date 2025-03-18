@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/osbuild/blueprint-schema/blueprint",
+  "$id": "https://github.com/osbuild/blueprint-schema/pkg/blueprint/blueprint",
   "$defs": {
     "Accounts": {
       "properties": {
@@ -523,7 +523,11 @@
           ]
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "path"
+      ]
     },
     "FSNodeContents": {
       "properties": {

@@ -1,8 +1,0 @@
-name: Firewall example - port and range specified
-network:
-    firewall:
-        services:
-            - enabled: null
-              from: 1302
-              port: 1301
-              to: 1303

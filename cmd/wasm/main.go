@@ -4,10 +4,10 @@ import (
 	"strings"
 
 	"github.com/BurntSushi/toml"
-	"github.com/osbuild/blueprint-schema"
-	"github.com/osbuild/blueprint-schema/conv/notes"
-	"github.com/osbuild/blueprint-schema/conv/onprem"
-	"github.com/osbuild/blueprint-schema/conv/ptr"
+	"github.com/osbuild/blueprint-schema/pkg/blueprint"
+	"github.com/osbuild/blueprint-schema/pkg/conv/notes"
+	"github.com/osbuild/blueprint-schema/pkg/conv/onprem"
+	"github.com/osbuild/blueprint-schema/pkg/conv/ptr"
 )
 
 func main() {}

@@ -3,8 +3,8 @@ package onprem
 import (
 	"errors"
 
-	int "github.com/osbuild/blueprint-schema"
-	ext "github.com/osbuild/blueprint-schema/conv/onprem/blueprint"
+	int "github.com/osbuild/blueprint-schema/pkg/blueprint"
+	ext "github.com/osbuild/blueprint-schema/pkg/conv/onprem/blueprint"
 )
 
 func ImportBlueprint(to *int.Blueprint, from *ext.Blueprint) error {

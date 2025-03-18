@@ -73,7 +73,7 @@ $(PLATFORMS):
 	GOOS=$(os) GOARCH=$(arch) go build -o $(DISTDIR)/blueconv_$(os)_$(arch) ./cmd/blueconv/
 
 $(DISTDIR)/blueprint_go.wasm: $(SOURCES) $(DISTDIR) ## Builds wasm via go
-	GOOS=js GOARCH=wasm go build -o $(DISTDIR)/blueprint_go.wasm ./conv/wasm/
+	GOOS=js GOARCH=wasm go build -o $(DISTDIR)/blueprint_go.wasm ./cmd/wasm/
 
 $(DISTDIR)/blueprint_tgo.wasm: $(SOURCES) $(DISTDIR) ## Builds wasm via tinygo - GOROOT and GOPATH must be set to compatible Go
 	GOOS=js GOARCH=wasm $(TINYGO) build -scheduler=none -o $(DISTDIR)/blueprint_tgo.wasm ./conv/wasm/

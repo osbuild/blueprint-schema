@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	blueprint "github.com/osbuild/blueprint-schema"
+	"github.com/osbuild/blueprint-schema/pkg/blueprint"
 )
 
 func TestReadYAMLWriteJSON(t *testing.T) {

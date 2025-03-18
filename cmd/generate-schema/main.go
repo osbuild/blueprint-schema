@@ -13,7 +13,7 @@ import (
 	"strings"
 
 	"github.com/invopop/jsonschema"
-	blueprint "github.com/osbuild/blueprint-schema"
+	"github.com/osbuild/blueprint-schema/pkg/blueprint"
 	strcase "github.com/stoewer/go-strcase"
 )
 
@@ -57,7 +57,7 @@ func rewrapText(text string) string {
 }
 
 func main() {
-	pkgPath := flag.String("src-path", ".", "path to Go source package with structs to reflect")
+	pkgPath := flag.String("src-path", "./pkg/blueprint", "path to Go source package with structs to reflect")
 
 	flag.Parse()
 

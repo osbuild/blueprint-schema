@@ -12,6 +12,7 @@ import (
 	"strings"
 	"text/scanner"
 
+	blueprintschema "github.com/osbuild/blueprint-schema"
 	"github.com/invopop/yaml"
 	"github.com/santhosh-tekuri/jsonschema/v6"
 	"golang.org/x/text/message"
@@ -34,7 +35,7 @@ var ErrValidateFailed = errors.New("validation failed")
 // available as blueprint.SchemaJSON. Returns the compiled schema or
 // an error if the schema cannot be compiled.
 func CompileSchema() (*Schema, error) {
-	jsonSchema, err := jsonschema.UnmarshalJSON(bytes.NewBuffer(SchemaJSON))
+	jsonSchema, err := jsonschema.UnmarshalJSON(bytes.NewBuffer(blueprintschema.SchemaJSON))
 	if err != nil {
 		return nil, fmt.Errorf("%w: %v", ErrUnmarshal, err)
 	}

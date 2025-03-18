@@ -367,7 +367,7 @@ description = "A complete example of a blueprint with all possible fields"
 # ...
 ```
 
-### Validators used
+### Validators used
 
 Schema specification in use is 2020-12.
 
