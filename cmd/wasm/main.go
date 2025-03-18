@@ -2,6 +2,7 @@ package main
 
 import (
 	"strings"
+	"unsafe"
 
 	"github.com/BurntSushi/toml"
 	"github.com/osbuild/blueprint-schema/pkg/blueprint"
@@ -12,8 +13,19 @@ import (
 
 func main() {}
 
+func getJsString(pointer, length int) string {
+	// Convert memory pointer and length to Go string
+	bytes := make([]byte, length)
+	for i := 0; i < length; i++ {
+		bytes[i] = byte(*(*uint8)(unsafe.Pointer(uintptr(pointer + i))))
+	}
+	return string(bytes)
+}
+
 //go:wasmexport BlueprintValidateJSON
-func BlueprintValidateJSON(input string) *string {
+func BlueprintValidateJSON(pointer, length int) *string {
+	input := getJsString(pointer, length)
+
 	schema, err := blueprint.CompileSchema()
 	if err != nil {
 		return ptr.To(err.Error())
@@ -43,7 +55,7 @@ func BlueprintValidateYAML(input string) *string {
 }
 
 //go:wasmexport BlueprintExportTOML
-//export BlueprintValidateJSON
+//export BlueprintExportTOML
 func BlueprintExportTOML(input string) *string {
 	from, err := blueprint.ReadYAML(strings.NewReader(input))
 	if err != nil {
