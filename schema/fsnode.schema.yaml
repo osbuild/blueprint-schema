@@ -1,18 +1,29 @@
 ---
+#"$schema": http://json-schema.org/draft-04/schema#
 "$schema": https://json-schema.org/draft/2020-12/schema
 "$id": https://github.com/osbuild/blueprint-schema/fsnode
 type: object
+# - if:
+#     required:
+#     - type
+#     properties:
+#       type:
+#         const: dir
+#   then:
+#     not:
+#       required:
+#       - contents
 allOf:
-- if:
-    required:
-    - type
-    properties:
-      type:
-        const: dir
-  then:
-    not:
+- anyOf:
+  - not:
+      properties:
+        type:
+          enum: ["dir"]
       required:
-      - contents
+        - type
+  - not:
+      required:
+      - contents   
 required:
 - path
 properties:

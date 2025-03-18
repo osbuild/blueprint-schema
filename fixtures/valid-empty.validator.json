@@ -1,0 +1,13 @@
+{
+  "valid": false,
+  "keywordLocation": "",
+  "instanceLocation": "",
+  "errors": [
+    {
+      "valid": false,
+      "keywordLocation": "/required",
+      "instanceLocation": "",
+      "error": "missing property 'name'"
+    }
+  ]
+}

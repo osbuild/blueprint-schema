@@ -1,0 +1,83 @@
+{
+  "valid": false,
+  "keywordLocation": "",
+  "instanceLocation": "",
+  "errors": [
+    {
+      "valid": false,
+      "keywordLocation": "/properties/accounts/oneOf",
+      "instanceLocation": "/accounts",
+      "errors": [
+        {
+          "valid": false,
+          "keywordLocation": "/properties/accounts/oneOf/1/type",
+          "instanceLocation": "/accounts",
+          "error": "got object, want null"
+        },
+        {
+          "valid": false,
+          "keywordLocation": "/properties/accounts/oneOf/0/$ref/properties/users/oneOf",
+          "instanceLocation": "/accounts/users",
+          "errors": [
+            {
+              "valid": false,
+              "keywordLocation": "/properties/accounts/oneOf/0/$ref/properties/users/oneOf/0",
+              "instanceLocation": "/accounts/users",
+              "errors": [
+                {
+                  "valid": false,
+                  "keywordLocation": "/properties/accounts/oneOf/0/$ref/properties/users/oneOf/0/items/$ref/properties/name/pattern",
+                  "instanceLocation": "/accounts/users/0/name",
+                  "error": "'-names-starting-with-dash' does not match pattern '^[a-zA-Z0-9_.][a-zA-Z0-9_.$-]*$'"
+                },
+                {
+                  "valid": false,
+                  "keywordLocation": "/properties/accounts/oneOf/0/$ref/properties/users/oneOf/0/items/$ref",
+                  "instanceLocation": "/accounts/users/1",
+                  "errors": [
+                    {
+                      "valid": false,
+                      "keywordLocation": "/properties/accounts/oneOf/0/$ref/properties/users/oneOf/0/items/$ref/properties/name/maxLength",
+                      "instanceLocation": "/accounts/users/1/name",
+                      "error": "maxLength: got 299, want 256"
+                    },
+                    {
+                      "valid": false,
+                      "keywordLocation": "/properties/accounts/oneOf/0/$ref/properties/users/oneOf/0/items/$ref/properties/name/pattern",
+                      "instanceLocation": "/accounts/users/1/name",
+                      "error": "'^[a-zA-Z0-9_.][a-zA-Z0-9_.$-]*$' does not match pattern 'all-names-longer-than-256-characters-------------------------------------- -------------------------------------------------------------------------- -------------------------------------------------------------------------- --------------------------------------------------------------------------'"
+                    }
+                  ]
+                },
+                {
+                  "valid": false,
+                  "keywordLocation": "/properties/accounts/oneOf/0/$ref/properties/users/oneOf/0/items/$ref/properties/name/pattern",
+                  "instanceLocation": "/accounts/users/2/name",
+                  "error": "'^[a-zA-Z0-9_.][a-zA-Z0-9_.$-]*$' does not match pattern 'names-with-diakritics-žluťoučký-kůň'"
+                },
+                {
+                  "valid": false,
+                  "keywordLocation": "/properties/accounts/oneOf/0/$ref/properties/users/oneOf/0/items/$ref/properties/name/pattern",
+                  "instanceLocation": "/accounts/users/3/name",
+                  "error": "'^[a-zA-Z0-9_.][a-zA-Z0-9_.$-]*$' does not match pattern 'names with spaces'"
+                },
+                {
+                  "valid": false,
+                  "keywordLocation": "/properties/accounts/oneOf/0/$ref/properties/users/oneOf/0/items/$ref/properties/uid/minimum",
+                  "instanceLocation": "/accounts/users/4/uid",
+                  "error": "minimum: got 0, want 1"
+                }
+              ]
+            },
+            {
+              "valid": false,
+              "keywordLocation": "/properties/accounts/oneOf/0/$ref/properties/users/oneOf/1/type",
+              "instanceLocation": "/accounts/users",
+              "error": "got array, want null"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+name: 'Blueprint example: valid storage'
+storage:
+    minsize: 550 GiB
+    partitions:
+        - fs_type: ext4
+          label: boot
+          minsize: 800 MiB
+          mountpoint: /boot
+          type: plain
+        - fs_type: xfs
+          label: root
+          minsize: 40 GiB
+          mountpoint: /
+          type: plain
+        - logical_volumes:
+            - fs_type: xfs
+              label: vg_data_var
+              minsize: 50 GiB
+              mountpoint: /var
+              name: lv_name
+          minsize: 90 GiB
+          name: vg_data
+          type: lvm
+        - minsize: 50 GiB
+          subvolumes:
+            - mountpoint: /var/backups
+              name: root
+          type: btrfs
+    type: gpt

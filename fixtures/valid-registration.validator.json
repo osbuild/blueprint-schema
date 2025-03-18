@@ -1,0 +1,52 @@
+{
+  "valid": false,
+  "keywordLocation": "",
+  "instanceLocation": "",
+  "errors": [
+    {
+      "valid": false,
+      "keywordLocation": "/properties/registration/oneOf",
+      "instanceLocation": "/registration",
+      "errors": [
+        {
+          "valid": false,
+          "keywordLocation": "/properties/registration/oneOf/1/type",
+          "instanceLocation": "/registration",
+          "error": "got object, want null"
+        },
+        {
+          "valid": false,
+          "keywordLocation": "/properties/registration/oneOf/0/$ref/properties/fdo/oneOf",
+          "instanceLocation": "/registration/fdo",
+          "errors": [
+            {
+              "valid": false,
+              "keywordLocation": "/properties/registration/oneOf/0/$ref/properties/fdo/oneOf/0/$ref/oneOf",
+              "instanceLocation": "/registration/fdo",
+              "errors": [
+                {
+                  "valid": false,
+                  "keywordLocation": "/properties/registration/oneOf/0/$ref/properties/fdo/oneOf/0/$ref/oneOf/0/required",
+                  "instanceLocation": "/registration/fdo",
+                  "error": "missing property 'diun_pub_key_hash'"
+                },
+                {
+                  "valid": false,
+                  "keywordLocation": "/properties/registration/oneOf/0/$ref/properties/fdo/oneOf/0/$ref/oneOf/1/required",
+                  "instanceLocation": "/registration/fdo",
+                  "error": "missing property 'diun_pub_key_root_certs'"
+                }
+              ]
+            },
+            {
+              "valid": false,
+              "keywordLocation": "/properties/registration/oneOf/0/$ref/properties/fdo/oneOf/1/type",
+              "instanceLocation": "/registration/fdo",
+              "error": "got object, want null"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

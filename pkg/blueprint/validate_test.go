@@ -159,7 +159,7 @@ func TestFix(t *testing.T) {
 		})
 	}
 
-	files, err := filepath.Glob("fixtures/*.in.*")
+	files, err := filepath.Glob("../../fixtures/*.in.*")
 	if err != nil {
 		t.Fatal(err)
 	}

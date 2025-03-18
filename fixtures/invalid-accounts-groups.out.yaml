@@ -1,0 +1,8 @@
+accounts:
+    groups:
+        - name: -names-starting-with-dash
+        - name: all-names-longer-than-256-characters-------------------------------------- -------------------------------------------------------------------------- -------------------------------------------------------------------------- --------------------------------------------------------------------------
+        - name: names-with-diakritics-žluťoučký-kůň
+        - name: names with spaces
+        - name: gid-0
+name: 'Blueprint example: accounts'

@@ -1,0 +1,3 @@
+ignition:
+    embedded: {}
+name: 'Blueprint example: ingition invalid'

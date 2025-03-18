@@ -1,0 +1,26 @@
+{
+  "valid": false,
+  "keywordLocation": "",
+  "instanceLocation": "",
+  "errors": [
+    {
+      "valid": false,
+      "keywordLocation": "/properties/ignition/oneOf",
+      "instanceLocation": "/ignition",
+      "errors": [
+        {
+          "valid": false,
+          "keywordLocation": "/properties/ignition/oneOf/0/$ref/oneOf",
+          "instanceLocation": "/ignition",
+          "error": "oneOf failed, subschemas 0, 1 matched"
+        },
+        {
+          "valid": false,
+          "keywordLocation": "/properties/ignition/oneOf/1/type",
+          "instanceLocation": "/ignition",
+          "error": "got object, want null"
+        }
+      ]
+    }
+  ]
+}

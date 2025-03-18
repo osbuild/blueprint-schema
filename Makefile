@@ -21,7 +21,7 @@ generate-schema: ## Generate schema
 .PHONY: write-fixtures
 write-fixtures: ## Write new test fixtures
 	@rm -f ./fixtures/*.out.yaml ./fixtures/*.validator.json
-	@WRITE_FIXTURES=1 go test -count=1 .
+	@WRITE_FIXTURES=1 go test -count=1 ./pkg/blueprint/
 
 .PHONY: pkg-go-dev-update
 pkg-go-dev-update: ## Schedule https://pkg.go.dev/github.com/osbuild/blueprint-schema for update
@@ -29,14 +29,18 @@ pkg-go-dev-update: ## Schedule https://pkg.go.dev/github.com/osbuild/blueprint-s
 
 .PHONY: test
 test: ## Run all tests
-	@go test -count=1 .
+	@go test -count=1 ./...
 
 # Option --without-id is a workaround for VSCode: https://github.com/sourcemeta/jsonschema/blob/main/docs/bundle.markdown
 $(SCHEMA_DST): $(SCHEMA_SRC) Makefile ## Build the schema from schema/*.schema.yaml files
 	jsonschema bundle schema/blueprint.schema.yaml --verbose --resolve schema/ --extension schema.yaml --without-id > $@
 
+.PHONY: schema-check
+schema-check: ## Check input schema files against JSON Metaschema
+	jsonschema metaschema -e schema.yaml schema/
+
 .PHONY: schema-fmt
-schema-fmt: $(SCHEMA_DST) ## Format the schema against JSON Metaschema
+schema-fmt: $(SCHEMA_DST) ## Lint and format the bundled schema
 	jsonschema lint --fix $(SCHEMA_DST)
 	jsonschema fmt $(SCHEMA_DST)
 
