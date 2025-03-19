@@ -1,0 +1,9 @@
+---
+type: object
+required:
+- cert
+properties:
+  cert:
+    description: The PEM-encoded certificate.
+    type: string
+additionalProperties: false

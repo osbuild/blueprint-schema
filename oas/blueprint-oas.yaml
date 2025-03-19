@@ -1,0 +1,26 @@
+openapi: '3.0.0'
+
+info:
+  title: Blueprint schema
+  version: '1.0'
+  description: |
+    Image Builder Blueprint
+    
+    WORK IN PROGRESS
+  license:
+    name: Apache 2.0
+    url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
+  contact:
+    name: Red Hat Image Builder Team
+    url: 'https://osbuild.org'
+
+components:
+  schemas:
+    blueprint:
+      $ref: "schemas/blueprint.yaml"
+
+paths:
+
+servers:
+  - url: https://osbuild.org/wip/api/v1
+    description: Production server

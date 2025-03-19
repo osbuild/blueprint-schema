@@ -1,0 +1,24 @@
+---
+type: object
+properties:
+  keyboards:
+    description: 'The keyboards attribute is a list of strings that contains
+        the keyboards to be installed on the image. To list available keyboards,
+        run: localectl list-keymaps'
+    default:
+    - us
+    type: array
+    items:
+      type: string
+    nullable: true
+  languages:
+    description: 'The languages attribute is a list of strings that contains
+        the languages to be installed on the image. To list available languages,
+        run: localectl list-locales'
+    default:
+    - en_US.UTF-8
+    type: array
+    items:
+      type: string
+    nullable: true
+additionalProperties: false

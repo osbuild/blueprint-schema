@@ -1,0 +1,25 @@
+---
+type: object
+required:
+- enabled
+- product_plugin_enabled
+- repository_management
+- auto_registration
+properties:
+  auto_registration:
+    description: Enabled auto_registration plugin configuration.
+    default: true
+    type: boolean
+  enabled:
+    description: Enables the subscription-manager DNF plugin.
+    default: true
+    type: boolean
+  product_plugin_enabled:
+    description: Enables the product-id DNF plugin.
+    default: true
+    type: boolean
+  repository_management:
+    description: Enabled repository_management plugin configuration.
+    default: true
+    type: boolean
+additionalProperties: false

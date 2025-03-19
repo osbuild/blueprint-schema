@@ -1,0 +1,56 @@
+---
+type: object
+allOf:
+- anyOf:
+  - not:
+      properties:
+        type:
+          enum: ["dir"]
+      required:
+        - type
+  - not:
+      required:
+      - contents   
+required:
+- path
+properties:
+  type:
+    description: 'Type is the type of the file system node, one of: file, dir.'
+    default: file
+    enum:
+    - file
+    - dir
+  contents:
+    description: Contents is the file system node contents. When not present,
+      an empty file is created.
+    "$ref": "fsnode_contents.yaml"
+    nullable: true
+  ensure_parents:
+    description: EnsureParents is a boolean that determines if the parent directories
+      should be created if they do not exist.
+    default: false
+    type: boolean
+  group:
+    description: Group is the file system node group. Defaults to root.
+    default: root
+    type: string
+  mode:
+    description: Mode is the file system node permissions. Defaults to 0644 for
+      files and 0755 for directories.
+    type: integer
+  path:
+    description: Path is the absolute path to the file or directory.
+    type: string
+    pattern: "^/"
+  state:
+    description: 'State is the state of the file system node, one of: present,
+      absent.'
+    default: present
+    enum:
+    - present
+    - absent
+  user:
+    description: User is the file system node owner. Defaults to root.
+    default: root
+    type: string
+additionalProperties: false

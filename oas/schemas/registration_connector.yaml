@@ -1,0 +1,9 @@
+---
+type: object
+required:
+- enabled
+properties:
+  enabled:
+    description: Enables rhc (Red Hat Connector) during boot.
+    type: boolean
+additionalProperties: false

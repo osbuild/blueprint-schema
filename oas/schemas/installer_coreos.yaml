@@ -1,0 +1,7 @@
+---
+type: object
+properties:
+  installation_device:
+    description: Installation device for iot/edge simplified installer image types.
+    type: string
+additionalProperties: false

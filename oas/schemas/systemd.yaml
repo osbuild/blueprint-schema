@@ -1,0 +1,25 @@
+---
+type: object
+properties:
+  disabled:
+    description: The disabled attribute is a list of strings that contains the
+      systemd units to be disabled.
+    type: array
+    items:
+      type: string
+    nullable: true
+  enabled:
+    description: The enabled attribute is a list of strings that contains the
+      systemd units to be enabled.
+    type: array
+    items:
+      type: string
+    nullable: true
+  masked:
+    description: The masked attribute is a list of strings that contains the
+      systemd units to be masked.
+    type: array
+    items:
+      type: string
+    nullable: true
+additionalProperties: false

@@ -1,0 +1,52 @@
+---
+type: object
+properties:
+  disabled_modules:
+    type: array
+    items:
+      enum:
+      - org.fedoraproject.Anaconda.Modules.Localization
+      - org.fedoraproject.Anaconda.Modules.Network
+      - org.fedoraproject.Anaconda.Modules.Payloads
+      - org.fedoraproject.Anaconda.Modules.Runtime
+      - org.fedoraproject.Anaconda.Modules.Security
+      - org.fedoraproject.Anaconda.Modules.Services
+      - org.fedoraproject.Anaconda.Modules.Storage
+      - org.fedoraproject.Anaconda.Modules.Subscription
+      - org.fedoraproject.Anaconda.Modules.Timezone
+      - org.fedoraproject.Anaconda.Modules.User
+    nullable: true
+  enabled_modules:
+    type: array
+    items:
+      enum:
+      - org.fedoraproject.Anaconda.Modules.Localization
+      - org.fedoraproject.Anaconda.Modules.Network
+      - org.fedoraproject.Anaconda.Modules.Payloads
+      - org.fedoraproject.Anaconda.Modules.Runtime
+      - org.fedoraproject.Anaconda.Modules.Security
+      - org.fedoraproject.Anaconda.Modules.Services
+      - org.fedoraproject.Anaconda.Modules.Storage
+      - org.fedoraproject.Anaconda.Modules.Subscription
+      - org.fedoraproject.Anaconda.Modules.Timezone
+      - org.fedoraproject.Anaconda.Modules.User
+    nullable: true
+  kickstart:
+    description: Kickstart installer configuration.
+    "$ref": "installer_kickstart.yaml"
+    nullable: true
+  sudo_nopasswd:
+    description: Sudo users with NOPASSWD option. Adds a snippet to the kickstart
+      file that, after installation, will create drop-in files in /etc/sudoers.d
+      to allow the specified users and groups to run sudo without a password (groups
+      must be prefixed with %).
+    type: array
+    items:
+      type: string
+      pattern: "^[%a-zA-Z0-9_.][a-zA-Z0-9_.$-]*$"
+      maxLength: 256
+  unattended:
+    description: Unattended installation Anaconda flag. When not set, Anaconda
+      installer will ask for user input.
+    type: boolean
+additionalProperties: false

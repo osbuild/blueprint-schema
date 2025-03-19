@@ -20,7 +20,7 @@ generate-schema: ## Generate schema
 
 .PHONY: write-fixtures
 write-fixtures: ## Write new test fixtures
-	@rm -f ./fixtures/*.out.yaml ./fixtures/*.validator.json
+	@rm -f ./fixtures/*.out.yaml ./fixtures/*.validator.out ./fixtures/*.validator.json
 	@WRITE_FIXTURES=1 go test -count=1 ./pkg/blueprint/
 
 .PHONY: pkg-go-dev-update
@@ -29,15 +29,32 @@ pkg-go-dev-update: ## Schedule https://pkg.go.dev/github.com/osbuild/blueprint-s
 
 .PHONY: test
 test: ## Run all tests
-	@go test -count=1 ./...
+	@go test -count=1 . ./pkg/blueprint
+
+.PHONY: schema-oas-build
+schema-oas-build: ## Generate OpenAPI schemas
+	@go run ./cmd/oas-bundler
+	@python ./cmd/oas2js.py
+
+.PHONY: schema-oas-validate
+schema-oas-validate: ## Validate generated OpenAPI schemas
+	@go run ./cmd/meta-validator/ -schema oas3 -input blueprint-oas.json
+	@go run ./cmd/meta-validator/ -schema draft5 -input blueprint-schema.json
+
+.PHONY: schema-oas-lint
+schema-oas-lint: ## Run OpenAPI schema linter
+	@go run github.com/daveshanley/vacuum@latest lint -d blueprint-oas.yaml
+
+.PHONY: schema-oas
+schema-oas: schema-oas-build schema-oas-validate ## Generate and validate OpenAPI schemas
 
 # Option --without-id is a workaround for VSCode: https://github.com/sourcemeta/jsonschema/blob/main/docs/bundle.markdown
 $(SCHEMA_DST): $(SCHEMA_SRC) Makefile ## Build the schema from schema/*.schema.yaml files
-	jsonschema bundle schema/blueprint.schema.yaml --verbose --resolve schema/ --extension schema.yaml --without-id > $@
+	jsonschema bundle schema/blueprint.schema.yaml --http --verbose --resolve schema/ --extension schema.yaml --without-id > $@
 
 .PHONY: schema-check
 schema-check: ## Check input schema files against JSON Metaschema
-	jsonschema metaschema -e schema.yaml schema/
+	jsonschema metaschema --http -e schema.yaml schema/
 
 .PHONY: schema-fmt
 schema-fmt: $(SCHEMA_DST) ## Lint and format the bundled schema

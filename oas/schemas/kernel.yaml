@@ -1,0 +1,14 @@
+---
+type: object
+properties:
+  cmdline_append:
+    description: An optional string to append arguments to the bootloader kernel
+        command line. The list will be concatenated with spaces.
+    type: array
+    items:
+      type: string
+    nullable: true
+  package:
+    description: Kernel DNF package name to replace the standard kernel with.
+    type: string
+additionalProperties: false

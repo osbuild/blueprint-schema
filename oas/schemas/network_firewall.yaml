@@ -1,0 +1,51 @@
+---
+type: object
+properties:
+  services:
+    description: |-
+      Services to enable or disable. The service can be defined via an assigned IANA name, port number or port range.
+
+      Services are processed in order, when a service is disabled and then accidentally enabled via a port or a port range, the service will be enabled in the end.
+
+      By default the firewall blocks all access, except for services that enable their ports explicitly such as the sshd.
+    type: array
+    items:
+      type: object
+      oneOf:
+      - title: firewall_service
+        required:
+        - service
+      - title: firewall_port
+        required:
+        - port
+      - title: firewall_from_to
+        required:
+        - from
+        - to
+      properties:
+        enabled:
+          "$ref": "bool_default_true.yaml"
+        from:
+          type: integer
+          maximum: 65535
+          minimum: 1
+        port:
+          type: integer
+          maximum: 65535
+          minimum: 1
+        protocol:
+          default: any
+          enum:
+          - tcp
+          - udp
+          - any
+        service:
+          type: string
+          minLength: 2
+        to:
+          type: integer
+          maximum: 65535
+          minimum: 1
+      additionalProperties: false
+    nullable: true
+additionalProperties: false

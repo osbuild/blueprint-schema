@@ -1,0 +1,8 @@
+---
+type: object
+properties:
+  firewall:
+    description: Firewall details - package firewalld must be installed in the
+      image.
+    "$ref": "network_firewall.yaml"
+additionalProperties: false
