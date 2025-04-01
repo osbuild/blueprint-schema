@@ -35,6 +35,7 @@ properties:
           minimum: 1
         protocol:
           default: any
+          type: string
           enum:
           - tcp
           - udp

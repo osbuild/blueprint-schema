@@ -507,7 +507,8 @@
                   "org.fedoraproject.Anaconda.Modules.Subscription",
                   "org.fedoraproject.Anaconda.Modules.Timezone",
                   "org.fedoraproject.Anaconda.Modules.User"
-                ]
+                ],
+                "type": "string"
               },
               "type": [
                 "array",
@@ -527,7 +528,8 @@
                   "org.fedoraproject.Anaconda.Modules.Subscription",
                   "org.fedoraproject.Anaconda.Modules.Timezone",
                   "org.fedoraproject.Anaconda.Modules.User"
-                ]
+                ],
+                "type": "string"
               },
               "type": [
                 "array",
@@ -701,7 +703,8 @@
                       "tcp",
                       "udp",
                       "any"
-                    ]
+                    ],
+                    "type": "string"
                   },
                   "service": {
                     "minLength": 2,

@@ -18,8 +18,36 @@ components:
   schemas:
     blueprint:
       $ref: "schemas/blueprint.yaml"
+    error:
+      type: object
+      properties:
+        error:
+          type: string
 
 paths:
+  /validate_blueprint:
+    post:
+      summary: Validate blueprint
+      operationId: validateBlueprint
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/blueprint"
+      responses:
+        '201':
+          description: The blueprint is valid
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/blueprint"
+        '500':
+          description: An error occurred
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
 
 servers:
   - url: https://osbuild.org/wip/api/v1

@@ -4,6 +4,14 @@ Source files for the blueprint OAS and JSON Schema.
 
 The target draft for the schema is OpenAPI 3.0 Schema (OAS 3.0) so make sure to only use features available in this schema draft.
 
+## TODO
+
+Some things must be fixed:
+
+* Descriptions are missing for referenced schemas, must be moved into the destination
+* Some properties are missing types, thus empty interfaces are generated
+* Some enums are not supported by the oapi-codegen
+
 ## Bundling
 
 The bundling process is done via `make schema-oas` command.

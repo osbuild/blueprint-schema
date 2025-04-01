@@ -4,6 +4,7 @@ properties:
   disabled_modules:
     type: array
     items:
+      type: string
       enum:
       - org.fedoraproject.Anaconda.Modules.Localization
       - org.fedoraproject.Anaconda.Modules.Network
@@ -19,6 +20,7 @@ properties:
   enabled_modules:
     type: array
     items:
+      type: string
       enum:
       - org.fedoraproject.Anaconda.Modules.Localization
       - org.fedoraproject.Anaconda.Modules.Network

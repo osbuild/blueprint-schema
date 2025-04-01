@@ -48,6 +48,11 @@ schema-oas-lint: ## Run OpenAPI schema linter
 .PHONY: schema-oas
 schema-oas: schema-oas-build schema-oas-validate ## Generate and validate OpenAPI schemas
 
+.PHONY: schema-codegen
+schema-codegen: schema-oas ## Generate Go code from schema
+	@oapi-codegen -generate types -package blueprint2 -o pkg/blueprint2/types.gen.go blueprint-oas.json
+	@oapi-codegen -generate std-http -package blueprint2 -o pkg/blueprint2/http.gen.go blueprint-oas.json
+
 # Option --without-id is a workaround for VSCode: https://github.com/sourcemeta/jsonschema/blob/main/docs/bundle.markdown
 $(SCHEMA_DST): $(SCHEMA_SRC) Makefile ## Build the schema from schema/*.schema.yaml files
 	jsonschema bundle schema/blueprint.schema.yaml --http --verbose --resolve schema/ --extension schema.yaml --without-id > $@

@@ -494,6 +494,7 @@
          "disabled_modules": {
           "type": "array",
           "items": {
+           "type": "string",
            "enum": [
             "org.fedoraproject.Anaconda.Modules.Localization",
             "org.fedoraproject.Anaconda.Modules.Network",
@@ -512,6 +513,7 @@
          "enabled_modules": {
           "type": "array",
           "items": {
+           "type": "string",
            "enum": [
             "org.fedoraproject.Anaconda.Modules.Localization",
             "org.fedoraproject.Anaconda.Modules.Network",
@@ -683,6 +685,7 @@
             },
             "protocol": {
              "default": "any",
+             "type": "string",
              "enum": [
               "tcp",
               "udp",
@@ -1237,10 +1240,57 @@
      }
     },
     "additionalProperties": false
+   },
+   "error": {
+    "type": "object",
+    "properties": {
+     "error": {
+      "type": "string"
+     }
+    }
    }
   }
  },
- "paths": {},
+ "paths": {
+  "/validate_blueprint": {
+   "post": {
+    "summary": "Validate blueprint",
+    "operationId": "validateBlueprint",
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/blueprint"
+       }
+      }
+     }
+    },
+    "responses": {
+     "201": {
+      "description": "The blueprint is valid",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/blueprint"
+        }
+       }
+      }
+     },
+     "500": {
+      "description": "An error occurred",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/error"
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ },
  "servers": [
   {
    "url": "https://osbuild.org/wip/api/v1",
