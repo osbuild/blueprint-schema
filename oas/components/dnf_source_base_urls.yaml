@@ -1,0 +1,13 @@
+---
+type: object
+required:
+- cert
+properties:
+  urls:
+    description: Base URLs for the repository.
+    type: array
+    items:
+      type: string
+    x-go-type-skip-optional-pointer: true
+additionalProperties: false
+x-go-type-name: DNFSourceBaseURLs

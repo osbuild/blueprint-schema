@@ -1,0 +1,11 @@
+---
+type: object
+required:
+- cert
+properties:
+  pem:
+    description: The PEM-encoded certificate.
+    type: string
+    x-go-name: PEM
+additionalProperties: false
+x-go-name: CACert

@@ -1,0 +1,17 @@
+---
+type: object
+description: Users and groups details
+properties:
+  groups:
+    type: array
+    items:
+      "$ref": "accounts_groups.yaml"
+    nullable: true
+    x-go-type-skip-optional-pointer: true
+  users:
+    type: array
+    items:
+      "$ref": "accounts_users.yaml"
+    nullable: true
+    x-go-type-skip-optional-pointer: true
+additionalProperties: false

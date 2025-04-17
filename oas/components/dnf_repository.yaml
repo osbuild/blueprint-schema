@@ -1,0 +1,81 @@
+---
+type: object
+x-go-name: DNFRepository
+required:
+- id
+properties:
+  id:
+    description: Repository ID. Required.
+    type: string
+    pattern: "^[a-zA-Z0-9_-]+$"
+    maxLength: 256
+    x-go-type-skip-optional-pointer: true
+    x-go-name: ID
+  name:
+    description: Repository name.
+    type: string
+    x-go-type-skip-optional-pointer: true
+  source:
+    description: Repository source.
+    oneOf:
+      - "$ref": "dnf_source_base_urls.yaml"
+      - "$ref": "dnf_source_metalink.yaml"
+      - "$ref": "dnf_source_mirrorlist.yaml"
+    x-go-type-name: DNFSource
+  filename:
+    description: |
+      Repository filename to use for the repository configuration file.
+      If not provided, the ID is used. Filename must be provided without the .repo
+      extension.
+    type: string
+    pattern: "^[a-zA-Z0-9_-]+$"
+    maxLength: 256
+    x-go-type-skip-optional-pointer: true
+  gpg_check:
+    description: Enable GPG check for the repository.
+    default: true
+    type: boolean
+    x-go-type-skip-optional-pointer: true
+    x-go-name: GPGCheck
+  gpg_check_repo:
+    description: Enable GPG check for the repository metadata.
+    default: true
+    type: boolean
+    x-go-type-skip-optional-pointer: true
+    x-go-name: GPGCheckRepo
+  gpg_keys:
+    description: |
+      GPG keys for the repository.
+
+      The blueprint accepts both inline GPG keys and GPG key urls. If an inline GPG key is provided it will be saved to the /etc/pki/rpm-gpg directory and will be referenced accordingly in the repository configuration. GPG keys are not imported to the RPM database and will only be imported when first installing a package from the third-party repository.
+    type: array
+    items:
+      type: string
+    x-go-type-skip-optional-pointer: true
+    x-go-name: GPGKeys
+  module_hotfixes:
+    description: |
+      Enable module hotfixes for the repository.
+
+      Adds module_hotfixes flag to all repo types so it can be used during osbuild. This enables users to disable modularity filtering on specific repositories.
+    default: false
+    type: boolean
+    x-go-type-skip-optional-pointer: true
+  priority:
+    description: Repository priority.
+    default: 99
+    type: integer
+    x-go-type-skip-optional-pointer: true
+  ssl_verify:
+    description: Enable SSL verification for the repository.
+    default: true
+    type: boolean
+    x-go-type-skip-optional-pointer: true
+    x-go-name: SSLVerify
+  usage:
+    description: |
+      Repository usage. By default, the repository is configured
+      on the image but not used for image build.
+    nullable: true
+    "$ref": "dnf_repository_usage.yaml"
+additionalProperties: false

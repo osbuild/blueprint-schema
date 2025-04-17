@@ -1,6 +1,6 @@
 TINYGO?=tinygo
 SOURCES=$(shell find . -name '*.go' -name 'blueprint-schema.json' -name 'go.mod' -name 'go.sum' -name 'Makefile')
-SCHEMA_SRC=$(shell find ./schema -name '*schema.yaml')
+SCHEMA_SRC=$(shell find ./oas -name '*.yaml')
 DISTDIR=dist
 SCHEMA_DST=blueprint-schema.json
 
@@ -13,10 +13,6 @@ help: ## print this help
 
 $(DISTDIR):
 	mkdir -p $(DISTDIR)
-
-.PHONY: generate-schema
-generate-schema: ## Generate schema
-	@go run ./cmd/generate-schema > blueprint-schema.json
 
 .PHONY: write-fixtures
 write-fixtures: ## Write new test fixtures
@@ -31,78 +27,19 @@ pkg-go-dev-update: ## Schedule https://pkg.go.dev/github.com/osbuild/blueprint-s
 test: ## Run all tests
 	@go test -count=1 . ./pkg/blueprint
 
-.PHONY: schema-oas-build
-schema-oas-build: ## Generate OpenAPI schemas
-	@go run ./cmd/oas-bundler
-	@python ./cmd/oas2js.py
+blueprint-oas3.yaml: $(SCHEMA_SRC)
+	go run ./cmd/image-builder-validate -print-yaml-schema > blueprint-oas3.yaml
 
-.PHONY: schema-oas-validate
-schema-oas-validate: ## Validate generated OpenAPI schemas
-	@go run ./cmd/meta-validator/ -schema oas3 -input blueprint-oas.json
-	@go run ./cmd/meta-validator/ -schema draft5 -input blueprint-schema.json
-
-.PHONY: schema-oas-lint
-schema-oas-lint: ## Run OpenAPI schema linter
-	@go run github.com/daveshanley/vacuum@latest lint -d blueprint-oas.yaml
-
-.PHONY: schema-oas
-schema-oas: schema-oas-build schema-oas-validate ## Generate and validate OpenAPI schemas
-
-.PHONY: schema-codegen
-schema-codegen: schema-oas ## Generate Go code from schema
-	@oapi-codegen -generate types -package blueprint2 -o pkg/blueprint2/types.gen.go blueprint-oas.json
-	@oapi-codegen -generate std-http -package blueprint2 -o pkg/blueprint2/http.gen.go blueprint-oas.json
-
-# Option --without-id is a workaround for VSCode: https://github.com/sourcemeta/jsonschema/blob/main/docs/bundle.markdown
-$(SCHEMA_DST): $(SCHEMA_SRC) Makefile ## Build the schema from schema/*.schema.yaml files
-	jsonschema bundle schema/blueprint.schema.yaml --http --verbose --resolve schema/ --extension schema.yaml --without-id > $@
-
-.PHONY: schema-check
-schema-check: ## Check input schema files against JSON Metaschema
-	jsonschema metaschema --http -e schema.yaml schema/
-
-.PHONY: schema-fmt
-schema-fmt: $(SCHEMA_DST) ## Lint and format the bundled schema
-	jsonschema lint --fix $(SCHEMA_DST)
-	jsonschema fmt $(SCHEMA_DST)
-
-.PHONY: schema-meta
-schema-meta: $(SCHEMA_DST) ## Validate the schema against JSON Metaschema
-	jsonschema metaschema $(SCHEMA_DST)
+blueprint-oas3.json: $(SCHEMA_SRC)
+	go run ./cmd/image-builder-validate -print-json-schema > blueprint-oas3.json
 
 .PHONY: schema
-schema: $(SCHEMA_DST) schema-meta schema-fmt ## Build, format, lint and validate the JSON schema
+schema: blueprint-oas3.yaml blueprint-oas3.json ## Bundle OpenAPI schema
 
-PLATFORMS:=$(DISTDIR)/blueconv_linux_amd64 \
-	$(DISTDIR)/blueconv_linux_arm64 \
-	$(DISTDIR)/blueconv_windows_amd64 \
-	$(DISTDIR)/blueconv_windows_arm64 \
-	$(DISTDIR)/blueconv_darwin_amd64 \
-	$(DISTDIR)/blueconv_darwin_arm64
-
-temp = $(subst _, ,$@)
-os = $(word 2, $(temp))
-arch = $(word 3, $(temp))
-
-.PHONY: build
-build: build-cli build-wasm ## Builds all binaries
-
-.PHONY: build-cli
-build-cli: $(PLATFORMS) ## Builds cli binaries
-
-.PHONY: build-wasm
-build-wasm: $(DISTDIR)/blueprint_go.wasm $(DISTDIR)/blueprint_tgo.wasm ## Builds wasm binaries
-	@(type "wasm-objdump" &> /dev/null && wasm-objdump -j Export -x dist/blueprint_go.wasm dist/blueprint_tgo.wasm) || true
-
-.PHONY: $(PLATFORMS)
-$(PLATFORMS):
-	GOOS=$(os) GOARCH=$(arch) go build -o $(DISTDIR)/blueconv_$(os)_$(arch) ./cmd/blueconv/
-
-$(DISTDIR)/blueprint_go.wasm: $(SOURCES) $(DISTDIR) ## Builds wasm via go
-	GOOS=js GOARCH=wasm go build -o $(DISTDIR)/blueprint_go.wasm ./cmd/wasm/
-
-$(DISTDIR)/blueprint_tgo.wasm: $(SOURCES) $(DISTDIR) ## Builds wasm via tinygo - GOROOT and GOPATH must be set to compatible Go
-	GOOS=js GOARCH=wasm $(TINYGO) build -scheduler=none -o $(DISTDIR)/blueprint_tgo.wasm ./conv/wasm/
+.PHONY: schema-codegen
+schema-codegen: schema ## Generate Go code from schema
+	oapi-codegen -generate types -package blueprint -o pkg/blueprint/types.gen.go blueprint-oas3.json
+	oapi-codegen -generate std-http -package blueprint -o pkg/blueprint/http.gen.go blueprint-oas3.json
 
 .PHONY: run-web-editor-json
 run-web-editor-json: ## show a demo-web editor for the json format

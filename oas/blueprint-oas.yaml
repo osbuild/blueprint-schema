@@ -16,8 +16,8 @@ info:
 
 components:
   schemas:
-    blueprint:
-      $ref: "schemas/blueprint.yaml"
+    Blueprint:
+      $ref: ./components/blueprint.yaml
     error:
       type: object
       properties:
@@ -34,14 +34,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/blueprint"
+              $ref: "#/components/schemas/Blueprint"
       responses:
         '201':
           description: The blueprint is valid
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/blueprint"
         '500':
           description: An error occurred
           content:

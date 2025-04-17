@@ -1,0 +1,29 @@
+---
+type: object
+required:
+- name
+- source
+properties:
+  local_storage:
+    description: Whether to pull the container image from the host's local-storage.
+    default: false
+    type: boolean
+    x-go-type-skip-optional-pointer: true
+  name:
+    description: Container name is an optional string to set the name under which
+      the container image will be saved in the image. If not specified name falls
+      back to the same value as source.
+    type: string
+    x-go-type-skip-optional-pointer: true
+  source:
+    description: Container image URL is a reference to a container image at a
+      registry.
+    type: string
+    x-go-type-skip-optional-pointer: true
+  tls_verify:
+    description: Verify TLS connection, default is true.
+    default: true
+    type: boolean
+    x-go-type-skip-optional-pointer: true
+    x-go-name: TLSVerify
+additionalProperties: false

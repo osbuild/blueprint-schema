@@ -1,5 +1,0 @@
-This package is a copy of
-
-https://github.com/osbuild/images/tree/main/pkg/blueprint
-
-to prevent a dependency and keep the schema and the CLI tools lightweight.

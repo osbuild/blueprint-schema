@@ -1,0 +1,11 @@
+---
+type: object
+required:
+- cert
+properties:
+  urls:
+    description: Metalink for the repository.
+    type: string
+    x-go-type-skip-optional-pointer: true
+additionalProperties: false
+x-go-type-name: DNFSourceMetalink

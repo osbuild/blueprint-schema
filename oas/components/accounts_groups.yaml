@@ -1,0 +1,22 @@
+---
+type: object
+description: Operating system group accounts to be created on the image.
+required:
+- name
+properties:
+  gid:
+    description: The group ID (GID) of the group. Must be non-zero.
+    type: integer
+    minimum: 1
+    x-go-type-skip-optional-pointer: true
+    x-go-name: GID
+  name:
+    description: |
+      Group name. Accepted characters: lowercase letters, digits,
+      underscores, dollars, and hyphens. Name must not start with a hyphen. Maximum
+      length is 256 characters. The validation pattern is a relaxed version of
+      https://github.com/shadow-maint/shadow/blob/master/lib/chkname.c
+    type: string
+    pattern: "^[a-zA-Z0-9_.][a-zA-Z0-9_.$-]*$"
+    maxLength: 256
+additionalProperties: false

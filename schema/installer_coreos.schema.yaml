@@ -1,9 +1,0 @@
----
-"$schema": https://json-schema.org/draft/2020-12/schema
-"$id": https://github.com/osbuild/blueprint-schema/installer_coreos
-type: object
-properties:
-  installation_device:
-    description: Installation device for iot/edge simplified installer image types.
-    type: string
-additionalProperties: false

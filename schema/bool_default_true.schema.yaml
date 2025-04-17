@@ -1,8 +1,0 @@
----
-"$schema": https://json-schema.org/draft/2020-12/schema
-"$id": https://github.com/osbuild/blueprint-schema/bool_default_true
-# TODO: this is just an experiment, will be replaced by a better solution
-oneOf:
-- default: true
-  type: boolean
-- type: 'null'
