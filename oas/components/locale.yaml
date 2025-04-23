@@ -1,24 +1,34 @@
 ---
 type: object
+description: |
+  An optional object that contains the following attributes to customize
+  the locale settings for the system. If the locale is not specified, the default
+  locale and keyboard settings are used: en_US.UTF-8 and us.
 properties:
   keyboards:
-    description: 'The keyboards attribute is a list of strings that contains
-        the keyboards to be installed on the image. To list available keyboards,
-        run: localectl list-keymaps'
+    description: |
+      The keyboards attribute is a list of strings that contains
+      the keyboards to be installed on the image. To list available keyboards,
+      run: localectl list-keymaps
     default:
     - us
     type: array
     items:
       type: string
     nullable: true
+    x-go-type-skip-optional-pointer: true
+    x-omitempty: true
   languages:
-    description: 'The languages attribute is a list of strings that contains
-        the languages to be installed on the image. To list available languages,
-        run: localectl list-locales'
+    description: |
+      The languages attribute is a list of strings that contains
+      the languages to be installed on the image. To list available languages,
+      run: localectl list-locales
     default:
     - en_US.UTF-8
     type: array
     items:
       type: string
     nullable: true
+    x-go-type-skip-optional-pointer: true
+    x-omitempty: true
 additionalProperties: false

@@ -841,36 +841,58 @@ components:
             x-go-type-name: InstallerCoreOS
         kernel:
             additionalProperties: false
+            description: Custom Linux kernel details, optional.
             properties:
                 cmdline_append:
-                    description: An optional string to append arguments to the bootloader kernel command line. The list will be concatenated with spaces.
+                    description: |
+                        An optional string to append arguments to the bootloader kernel
+                        command line. The list will be concatenated with spaces.
                     items:
                         type: string
                     nullable: true
                     type: array
+                    x-go-type-skip-optional-pointer: true
+                    x-omitempty: true
                 package:
-                    description: Kernel DNF package name to replace the standard kernel with.
+                    description: Kernel package name to be installed.
+                    nullable: true
                     type: string
+                    x-go-type-skip-optional-pointer: true
+                    x-omitempty: true
             type: object
         locale:
             additionalProperties: false
+            description: |
+                An optional object that contains the following attributes to customize
+                the locale settings for the system. If the locale is not specified, the default
+                locale and keyboard settings are used: en_US.UTF-8 and us.
             properties:
                 keyboards:
                     default:
                         - us
-                    description: 'The keyboards attribute is a list of strings that contains the keyboards to be installed on the image. To list available keyboards, run: localectl list-keymaps'
+                    description: |
+                        The keyboards attribute is a list of strings that contains
+                        the keyboards to be installed on the image. To list available keyboards,
+                        run: localectl list-keymaps
                     items:
                         type: string
                     nullable: true
                     type: array
+                    x-go-type-skip-optional-pointer: true
+                    x-omitempty: true
                 languages:
                     default:
                         - en_US.UTF-8
-                    description: 'The languages attribute is a list of strings that contains the languages to be installed on the image. To list available languages, run: localectl list-locales'
+                    description: |
+                        The languages attribute is a list of strings that contains
+                        the languages to be installed on the image. To list available languages,
+                        run: localectl list-locales
                     items:
                         type: string
                     nullable: true
                     type: array
+                    x-go-type-skip-optional-pointer: true
+                    x-omitempty: true
             type: object
         network:
             additionalProperties: false

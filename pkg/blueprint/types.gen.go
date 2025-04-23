@@ -120,8 +120,14 @@ type Blueprint struct {
 	// Installer Extra customization for Anaconda installer (ISO) and Edge/IOT simplified
 	// installer image types.
 	Installer *Installer `json:"installer,omitempty"`
-	Kernel    *Kernel    `json:"kernel,omitempty"`
-	Locale    *Locale    `json:"locale,omitempty"`
+
+	// Kernel Custom Linux kernel details, optional.
+	Kernel *Kernel `json:"kernel,omitempty"`
+
+	// Locale An optional object that contains the following attributes to customize
+	// the locale settings for the system. If the locale is not specified, the default
+	// locale and keyboard settings are used: en_US.UTF-8 and us.
+	Locale *Locale `json:"locale,omitempty"`
 
 	// Name The name attribute is a string that contains the name of the blueprint.
 	// It can contain spaces, but they may be converted to dash characters during build.
@@ -500,22 +506,29 @@ type InstallerCoreOS struct {
 	InstallationDevice string `json:"installation_device,omitempty"`
 }
 
-// Kernel defines model for kernel.
+// Kernel Custom Linux kernel details, optional.
 type Kernel struct {
-	// CmdlineAppend An optional string to append arguments to the bootloader kernel command line. The list will be concatenated with spaces.
-	CmdlineAppend *[]string `json:"cmdline_append"`
+	// CmdlineAppend An optional string to append arguments to the bootloader kernel
+	// command line. The list will be concatenated with spaces.
+	CmdlineAppend []string `json:"cmdline_append,omitempty"`
 
-	// Package Kernel DNF package name to replace the standard kernel with.
-	Package *string `json:"package,omitempty"`
+	// Package Kernel package name to be installed.
+	Package string `json:"package,omitempty"`
 }
 
-// Locale defines model for locale.
+// Locale An optional object that contains the following attributes to customize
+// the locale settings for the system. If the locale is not specified, the default
+// locale and keyboard settings are used: en_US.UTF-8 and us.
 type Locale struct {
-	// Keyboards The keyboards attribute is a list of strings that contains the keyboards to be installed on the image. To list available keyboards, run: localectl list-keymaps
-	Keyboards *[]string `json:"keyboards"`
+	// Keyboards The keyboards attribute is a list of strings that contains
+	// the keyboards to be installed on the image. To list available keyboards,
+	// run: localectl list-keymaps
+	Keyboards []string `json:"keyboards,omitempty"`
 
-	// Languages The languages attribute is a list of strings that contains the languages to be installed on the image. To list available languages, run: localectl list-locales
-	Languages *[]string `json:"languages"`
+	// Languages The languages attribute is a list of strings that contains
+	// the languages to be installed on the image. To list available languages,
+	// run: localectl list-locales
+	Languages []string `json:"languages,omitempty"`
 }
 
 // Network defines model for network.

@@ -1,14 +1,21 @@
 ---
 type: object
+description: Custom Linux kernel details, optional.
 properties:
   cmdline_append:
-    description: An optional string to append arguments to the bootloader kernel
-        command line. The list will be concatenated with spaces.
+    description: |
+      An optional string to append arguments to the bootloader kernel
+      command line. The list will be concatenated with spaces.
     type: array
     items:
       type: string
     nullable: true
+    x-go-type-skip-optional-pointer: true
+    x-omitempty: true
   package:
-    description: Kernel DNF package name to replace the standard kernel with.
+    description: Kernel package name to be installed.
     type: string
+    nullable: true
+    x-go-type-skip-optional-pointer: true
+    x-omitempty: true
 additionalProperties: false
