@@ -24,6 +24,7 @@ properties:
       type: string
     nullable: true
     x-go-type-skip-optional-pointer: true
+    x-omitempty: true
   import_keys:
     description: |
       Additional file paths to the GPG keys to import. The files
@@ -33,6 +34,7 @@ properties:
       type: string
     nullable: true
     x-go-type-skip-optional-pointer: true
+    x-omitempty: true
   modules:
     description: Modules to enable or disable
     type: array
@@ -40,6 +42,7 @@ properties:
       type: string
     nullable: true
     x-go-type-skip-optional-pointer: true
+    x-omitempty: true
   packages:
     description: |
       Packages to install. Package name or NVRA is accepted as long
@@ -51,6 +54,7 @@ properties:
       type: string
     nullable: true
     x-go-type-skip-optional-pointer: true
+    x-omitempty: true
   repositories:
     description: |
       Third-party repositories are supported by the blueprint customizations.
@@ -61,4 +65,5 @@ properties:
       "$ref": "dnf_repository.yaml"
     nullable: true
     x-go-type-skip-optional-pointer: true
+    x-omitempty: true
 additionalProperties: false

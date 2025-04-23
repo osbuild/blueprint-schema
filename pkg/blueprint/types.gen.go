@@ -10,6 +10,20 @@ import (
 	"github.com/oapi-codegen/runtime"
 )
 
+// Defines values for AnacondaModules.
+const (
+	AnacondaModLocalization AnacondaModules = "org.fedoraproject.Anaconda.Modules.Localization"
+	AnacondaModNetwork      AnacondaModules = "org.fedoraproject.Anaconda.Modules.Network"
+	AnacondaModPayloads     AnacondaModules = "org.fedoraproject.Anaconda.Modules.Payloads"
+	AnacondaModRuntime      AnacondaModules = "org.fedoraproject.Anaconda.Modules.Runtime"
+	AnacondaModSecurity     AnacondaModules = "org.fedoraproject.Anaconda.Modules.Security"
+	AnacondaModServices     AnacondaModules = "org.fedoraproject.Anaconda.Modules.Services"
+	AnacondaModStorage      AnacondaModules = "org.fedoraproject.Anaconda.Modules.Storage"
+	AnacondaModSubscription AnacondaModules = "org.fedoraproject.Anaconda.Modules.Subscription"
+	AnacondaModTimezone     AnacondaModules = "org.fedoraproject.Anaconda.Modules.Timezone"
+	AnacondaModUser         AnacondaModules = "org.fedoraproject.Anaconda.Modules.User"
+)
+
 // Defines values for FSNodeState.
 const (
 	Absent  FSNodeState = "absent"
@@ -20,34 +34,6 @@ const (
 const (
 	Dir  FSNodeType = "dir"
 	File FSNodeType = "file"
-)
-
-// Defines values for InstallerAnacondaDisabledModules.
-const (
-	InstallerAnacondaDisabledModulesOrgFedoraprojectAnacondaModulesLocalization InstallerAnacondaDisabledModules = "org.fedoraproject.Anaconda.Modules.Localization"
-	InstallerAnacondaDisabledModulesOrgFedoraprojectAnacondaModulesNetwork      InstallerAnacondaDisabledModules = "org.fedoraproject.Anaconda.Modules.Network"
-	InstallerAnacondaDisabledModulesOrgFedoraprojectAnacondaModulesPayloads     InstallerAnacondaDisabledModules = "org.fedoraproject.Anaconda.Modules.Payloads"
-	InstallerAnacondaDisabledModulesOrgFedoraprojectAnacondaModulesRuntime      InstallerAnacondaDisabledModules = "org.fedoraproject.Anaconda.Modules.Runtime"
-	InstallerAnacondaDisabledModulesOrgFedoraprojectAnacondaModulesSecurity     InstallerAnacondaDisabledModules = "org.fedoraproject.Anaconda.Modules.Security"
-	InstallerAnacondaDisabledModulesOrgFedoraprojectAnacondaModulesServices     InstallerAnacondaDisabledModules = "org.fedoraproject.Anaconda.Modules.Services"
-	InstallerAnacondaDisabledModulesOrgFedoraprojectAnacondaModulesStorage      InstallerAnacondaDisabledModules = "org.fedoraproject.Anaconda.Modules.Storage"
-	InstallerAnacondaDisabledModulesOrgFedoraprojectAnacondaModulesSubscription InstallerAnacondaDisabledModules = "org.fedoraproject.Anaconda.Modules.Subscription"
-	InstallerAnacondaDisabledModulesOrgFedoraprojectAnacondaModulesTimezone     InstallerAnacondaDisabledModules = "org.fedoraproject.Anaconda.Modules.Timezone"
-	InstallerAnacondaDisabledModulesOrgFedoraprojectAnacondaModulesUser         InstallerAnacondaDisabledModules = "org.fedoraproject.Anaconda.Modules.User"
-)
-
-// Defines values for InstallerAnacondaEnabledModules.
-const (
-	InstallerAnacondaEnabledModulesOrgFedoraprojectAnacondaModulesLocalization InstallerAnacondaEnabledModules = "org.fedoraproject.Anaconda.Modules.Localization"
-	InstallerAnacondaEnabledModulesOrgFedoraprojectAnacondaModulesNetwork      InstallerAnacondaEnabledModules = "org.fedoraproject.Anaconda.Modules.Network"
-	InstallerAnacondaEnabledModulesOrgFedoraprojectAnacondaModulesPayloads     InstallerAnacondaEnabledModules = "org.fedoraproject.Anaconda.Modules.Payloads"
-	InstallerAnacondaEnabledModulesOrgFedoraprojectAnacondaModulesRuntime      InstallerAnacondaEnabledModules = "org.fedoraproject.Anaconda.Modules.Runtime"
-	InstallerAnacondaEnabledModulesOrgFedoraprojectAnacondaModulesSecurity     InstallerAnacondaEnabledModules = "org.fedoraproject.Anaconda.Modules.Security"
-	InstallerAnacondaEnabledModulesOrgFedoraprojectAnacondaModulesServices     InstallerAnacondaEnabledModules = "org.fedoraproject.Anaconda.Modules.Services"
-	InstallerAnacondaEnabledModulesOrgFedoraprojectAnacondaModulesStorage      InstallerAnacondaEnabledModules = "org.fedoraproject.Anaconda.Modules.Storage"
-	InstallerAnacondaEnabledModulesOrgFedoraprojectAnacondaModulesSubscription InstallerAnacondaEnabledModules = "org.fedoraproject.Anaconda.Modules.Subscription"
-	InstallerAnacondaEnabledModulesOrgFedoraprojectAnacondaModulesTimezone     InstallerAnacondaEnabledModules = "org.fedoraproject.Anaconda.Modules.Timezone"
-	InstallerAnacondaEnabledModulesOrgFedoraprojectAnacondaModulesUser         InstallerAnacondaEnabledModules = "org.fedoraproject.Anaconda.Modules.User"
 )
 
 // Defines values for NetworkFirewallServicesProtocol.
@@ -119,9 +105,20 @@ type Blueprint struct {
 	// ownership or permissions of existing directories.
 	FSNodes []FSNode `json:"fsnodes,omitempty"`
 
-	// Hostname Hostname is an optional string that can be used to configure the hostname of the final image.
-	Hostname  *string    `json:"hostname,omitempty"`
-	Ignition  *Ignition  `json:"ignition,omitempty"`
+	// Hostname Hostname is an optional string that can be used to configure the
+	// hostname of the final image.
+	Hostname string `json:"hostname,omitempty"`
+
+	// Ignition Provides Ignition configuration files to be used in edge-raw-image and
+	// edge-simplified-installer images. Check the RHEL for Edge butane specification for
+	// a description of the supported configuration options.
+	//
+	// The blueprint configuration can be done either by embedding an Ignition configuration
+	// file into the image, or providing a provisioning URL that will be fetched at first boot.
+	Ignition *Ignition `json:"ignition"`
+
+	// Installer Extra customization for Anaconda installer (ISO) and Edge/IOT simplified
+	// installer image types.
 	Installer *Installer `json:"installer,omitempty"`
 	Kernel    *Kernel    `json:"kernel,omitempty"`
 	Locale    *Locale    `json:"locale,omitempty"`
@@ -136,6 +133,16 @@ type Blueprint struct {
 	Storage      *Storage      `json:"storage,omitempty"`
 	Systemd      *Systemd      `json:"systemd,omitempty"`
 	Timedate     *TimeDate     `json:"timedate,omitempty"`
+}
+
+// Ignition Provides Ignition configuration files to be used in edge-raw-image and
+// edge-simplified-installer images. Check the RHEL for Edge butane specification for
+// a description of the supported configuration options.
+//
+// The blueprint configuration can be done either by embedding an Ignition configuration
+// file into the image, or providing a provisioning URL that will be fetched at first boot.
+type Ignition struct {
+	union json.RawMessage
 }
 
 // Accounts Operating system user and group accounts to be created on the image.
@@ -196,6 +203,9 @@ type AccountsUsers struct {
 	UID int `json:"uid,omitempty"`
 }
 
+// AnacondaModules defines model for anaconda_modules.
+type AnacondaModules string
+
 // BoolDefaultTrue defines model for bool_default_true.
 type BoolDefaultTrue = bool
 
@@ -237,25 +247,25 @@ type DNF struct {
 	// and optional. For the purposes of blueprints, only mandatory and default
 	// packages will be installed. There is no mechanism for selecting optional
 	// packages.
-	Groups []string `json:"groups"`
+	Groups []string `json:"groups,omitempty"`
 
 	// ImportKeys Additional file paths to the GPG keys to import. The files
 	// must be present in the image. Does not support importing from URLs.
-	ImportKeys []string `json:"import_keys"`
+	ImportKeys []string `json:"import_keys,omitempty"`
 
 	// Modules Modules to enable or disable
-	Modules []string `json:"modules"`
+	Modules []string `json:"modules,omitempty"`
 
 	// Packages Packages to install. Package name or NVRA is accepted as long
 	// as DNF can resolve it. Examples: vim-enhanced, vim-enhanced-9.1.866-1
 	// or vim-enhanced-9.1.866-1.fc41.x86_64. The packages can also be specified
 	// as @group_name to install all packages in the group.
-	Packages []string `json:"packages"`
+	Packages []string `json:"packages,omitempty"`
 
 	// Repositories Third-party repositories are supported by the blueprint customizations.
 	//
 	// All fields reflect configuration values of dnf, see man dnf.conf(5) for more information.
-	Repositories []DNFRepository `json:"repositories"`
+	Repositories []DNFRepository `json:"repositories,omitempty"`
 }
 
 // DNFRepository defines model for dnf_repository.
@@ -365,7 +375,7 @@ type FIPS struct {
 type FSNode struct {
 	// Contents Contents is the file system node contents. When not present,
 	// an empty file is created.
-	Contents *FSNodeContents `json:"contents"`
+	Contents *FSNodeContents `json:"contents,omitempty"`
 
 	// EnsureParents EnsureParents is a boolean that determines if the parent directories
 	// should be created if they do not exist.
@@ -421,85 +431,74 @@ type FSNodeContentsText struct {
 	Text string `json:"text"`
 }
 
-// Ignition defines model for ignition.
-type Ignition struct {
-	Embedded *IgnitionEmbedded `json:"embedded,omitempty"`
-
-	// FirstbootUrl The URL to the Ignition configuration to be used by Ignition. This configuration is a URL to a remote Ignition configuration. The firstboot_url is used if the embedded configuration is not specified.
-	//
-	// Cannot be used with embedded_base64 or embedded_text.
-	FirstbootUrl *string `json:"firstboot_url,omitempty"`
-	union        json.RawMessage
-}
-
-// Ignition0 defines model for .
-type Ignition0 = interface{}
-
-// Ignition1 defines model for .
-type Ignition1 = interface{}
-
-// IgnitionEmbedded defines model for ignition_embedded.
-type IgnitionEmbedded struct {
-	// Base64 Ignition data formatted in base64.
-	Base64 *string `json:"base64,omitempty"`
-
+// IgnitionText defines model for ignition_text.
+type IgnitionText struct {
 	// Text Ignition data formatted in plain text.
-	Text  *string `json:"text,omitempty"`
-	union json.RawMessage
+	Text string `json:"text"`
 }
 
-// IgnitionEmbedded0 defines model for .
-type IgnitionEmbedded0 = interface{}
+// IgnitionUrl defines model for ignition_url.
+type IgnitionUrl struct {
+	// Url The URL to the Ignition configuration to be used by Ignition. This configuration
+	// is a URL to a remote Ignition configuration.
+	Url string `json:"url"`
+}
 
-// IgnitionEmbedded1 defines model for .
-type IgnitionEmbedded1 = interface{}
-
-// Installer defines model for installer.
+// Installer Extra customization for Anaconda installer (ISO) and Edge/IOT simplified
+// installer image types.
 type Installer struct {
+	// Anaconda Extra customizations for Anaconda installer (ISO) image types.
+	//
+	// Blueprint customizations that match the kickstart options (languages, keyboard,
+	// timezone) will change the value in the kickstart file as well.
 	Anaconda *InstallerAnaconda `json:"anaconda,omitempty"`
-	Coreos   *InstallerCoreos   `json:"coreos,omitempty"`
+
+	// Coreos CoreOS installer configuration is required by the edge-simplified-installer
+	// image. It allows to define the destination device for the installation.
+	Coreos *InstallerCoreos `json:"coreos,omitempty"`
 }
 
-// InstallerAnaconda defines model for installer_anaconda.
+// InstallerAnaconda Extra customizations for Anaconda installer (ISO) image types.
+//
+// Blueprint customizations that match the kickstart options (languages, keyboard,
+// timezone) will change the value in the kickstart file as well.
 type InstallerAnaconda struct {
-	DisabledModules *[]InstallerAnacondaDisabledModules `json:"disabled_modules"`
-	EnabledModules  *[]InstallerAnacondaEnabledModules  `json:"enabled_modules"`
-	Kickstart       *InstallerKickstart                 `json:"kickstart,omitempty"`
+	// DisabledModules Anaconda modules to be disabled. The list of modules that
+	// can be disabled is limited to the modules that are not required for the
+	// installation. The list of modules that can be disabled is limited to the
+	// modules that are not required for the installation.
+	DisabledModules []AnacondaModules `json:"disabled_modules,omitempty"`
 
-	// SudoNopasswd Sudo users with NOPASSWD option. Adds a snippet to the kickstart file that, after installation, will create drop-in files in /etc/sudoers.d to allow the specified users and groups to run sudo without a password (groups must be prefixed with %).
-	SudoNopasswd *[]string `json:"sudo_nopasswd,omitempty"`
+	// EnabledModules Anaconda modules to be enabled. The list of modules that
+	// can be enabled is limited to the modules that are not required for the
+	// installation. The list of modules that can be enabled is limited to the
+	// modules that are not required for the installation.
+	EnabledModules []AnacondaModules `json:"enabled_modules,omitempty"`
 
-	// Unattended Unattended installation Anaconda flag. When not set, Anaconda installer will ask for user input.
-	Unattended *bool `json:"unattended,omitempty"`
+	// Kickstart Kickstart installer configuration.
+	Kickstart string `json:"kickstart,omitempty"`
+
+	// SudoNOPASSWD Sudo users with NOPASSWD option. Adds a snippet to the kickstart
+	// file that, after installation, will create drop-in files in /etc/sudoers.d
+	// to allow the specified users and groups to run sudo without a password (groups
+	// must be prefixed with %).
+	SudoNOPASSWD []string `json:"sudo_nopasswd,omitempty"`
+
+	// Unattended Unattended installation Anaconda flag. When not set, Anaconda
+	// installer will ask for user input.
+	Unattended bool `json:"unattended,omitempty"`
 }
 
-// InstallerAnacondaDisabledModules defines model for InstallerAnaconda.DisabledModules.
-type InstallerAnacondaDisabledModules string
+// InstallerCoreos CoreOS installer configuration is required by the edge-simplified-installer
+// image. It allows to define the destination device for the installation.
+type InstallerCoreos = InstallerCoreOS
 
-// InstallerAnacondaEnabledModules defines model for InstallerAnaconda.EnabledModules.
-type InstallerAnacondaEnabledModules string
-
-// InstallerCoreos defines model for installer_coreos.
-type InstallerCoreos struct {
+// InstallerCoreOS CoreOS installer configuration is required by the edge-simplified-installer
+// image. It allows to define the destination device for the installation.
+type InstallerCoreOS struct {
 	// InstallationDevice Installation device for iot/edge simplified installer image types.
-	InstallationDevice *string `json:"installation_device,omitempty"`
+	InstallationDevice string `json:"installation_device,omitempty"`
 }
-
-// InstallerKickstart defines model for installer_kickstart.
-type InstallerKickstart struct {
-	// Base64 Kickstart file formatted in base64.
-	Base64 *string `json:"base64,omitempty"`
-
-	// Text Kickstart file formatted in plain text.
-	Text  *string `json:"text,omitempty"`
-	union json.RawMessage
-}
-
-// InstallerKickstart0 defines model for .
-type InstallerKickstart0 = interface{}
-
-// InstallerKickstart1 defines model for .
-type InstallerKickstart1 = interface{}
 
 // Kernel defines model for kernel.
 type Kernel struct {
@@ -740,6 +739,68 @@ type TimeDate struct {
 // ValidateBlueprintJSONRequestBody defines body for ValidateBlueprint for application/json ContentType.
 type ValidateBlueprintJSONRequestBody = Blueprint
 
+// AsIgnitionUrl returns the union data inside the Ignition as a IgnitionUrl
+func (t Ignition) AsIgnitionUrl() (IgnitionUrl, error) {
+	var body IgnitionUrl
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromIgnitionUrl overwrites any union data inside the Ignition as the provided IgnitionUrl
+func (t *Ignition) FromIgnitionUrl(v IgnitionUrl) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeIgnitionUrl performs a merge with any union data inside the Ignition, using the provided IgnitionUrl
+func (t *Ignition) MergeIgnitionUrl(v IgnitionUrl) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsIgnitionText returns the union data inside the Ignition as a IgnitionText
+func (t Ignition) AsIgnitionText() (IgnitionText, error) {
+	var body IgnitionText
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromIgnitionText overwrites any union data inside the Ignition as the provided IgnitionText
+func (t *Ignition) FromIgnitionText(v IgnitionText) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeIgnitionText performs a merge with any union data inside the Ignition, using the provided IgnitionText
+func (t *Ignition) MergeIgnitionText(v IgnitionText) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+func (t Ignition) MarshalJSON() ([]byte, error) {
+	b, err := t.union.MarshalJSON()
+	return b, err
+}
+
+func (t *Ignition) UnmarshalJSON(b []byte) error {
+	err := t.union.UnmarshalJSON(b)
+	return err
+}
+
 // AsDnfSourceBaseUrls returns the union data inside the DNFSource as a DnfSourceBaseUrls
 func (t DNFSource) AsDnfSourceBaseUrls() (DnfSourceBaseUrls, error) {
 	var body DnfSourceBaseUrls
@@ -887,336 +948,6 @@ func (t FSNodeContents) MarshalJSON() ([]byte, error) {
 
 func (t *FSNodeContents) UnmarshalJSON(b []byte) error {
 	err := t.union.UnmarshalJSON(b)
-	return err
-}
-
-// AsIgnition0 returns the union data inside the Ignition as a Ignition0
-func (t Ignition) AsIgnition0() (Ignition0, error) {
-	var body Ignition0
-	err := json.Unmarshal(t.union, &body)
-	return body, err
-}
-
-// FromIgnition0 overwrites any union data inside the Ignition as the provided Ignition0
-func (t *Ignition) FromIgnition0(v Ignition0) error {
-	b, err := json.Marshal(v)
-	t.union = b
-	return err
-}
-
-// MergeIgnition0 performs a merge with any union data inside the Ignition, using the provided Ignition0
-func (t *Ignition) MergeIgnition0(v Ignition0) error {
-	b, err := json.Marshal(v)
-	if err != nil {
-		return err
-	}
-
-	merged, err := runtime.JSONMerge(t.union, b)
-	t.union = merged
-	return err
-}
-
-// AsIgnition1 returns the union data inside the Ignition as a Ignition1
-func (t Ignition) AsIgnition1() (Ignition1, error) {
-	var body Ignition1
-	err := json.Unmarshal(t.union, &body)
-	return body, err
-}
-
-// FromIgnition1 overwrites any union data inside the Ignition as the provided Ignition1
-func (t *Ignition) FromIgnition1(v Ignition1) error {
-	b, err := json.Marshal(v)
-	t.union = b
-	return err
-}
-
-// MergeIgnition1 performs a merge with any union data inside the Ignition, using the provided Ignition1
-func (t *Ignition) MergeIgnition1(v Ignition1) error {
-	b, err := json.Marshal(v)
-	if err != nil {
-		return err
-	}
-
-	merged, err := runtime.JSONMerge(t.union, b)
-	t.union = merged
-	return err
-}
-
-func (t Ignition) MarshalJSON() ([]byte, error) {
-	b, err := t.union.MarshalJSON()
-	if err != nil {
-		return nil, err
-	}
-	object := make(map[string]json.RawMessage)
-	if t.union != nil {
-		err = json.Unmarshal(b, &object)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	if t.Embedded != nil {
-		object["embedded"], err = json.Marshal(t.Embedded)
-		if err != nil {
-			return nil, fmt.Errorf("error marshaling 'embedded': %w", err)
-		}
-	}
-
-	if t.FirstbootUrl != nil {
-		object["firstboot_url"], err = json.Marshal(t.FirstbootUrl)
-		if err != nil {
-			return nil, fmt.Errorf("error marshaling 'firstboot_url': %w", err)
-		}
-	}
-	b, err = json.Marshal(object)
-	return b, err
-}
-
-func (t *Ignition) UnmarshalJSON(b []byte) error {
-	err := t.union.UnmarshalJSON(b)
-	if err != nil {
-		return err
-	}
-	object := make(map[string]json.RawMessage)
-	err = json.Unmarshal(b, &object)
-	if err != nil {
-		return err
-	}
-
-	if raw, found := object["embedded"]; found {
-		err = json.Unmarshal(raw, &t.Embedded)
-		if err != nil {
-			return fmt.Errorf("error reading 'embedded': %w", err)
-		}
-	}
-
-	if raw, found := object["firstboot_url"]; found {
-		err = json.Unmarshal(raw, &t.FirstbootUrl)
-		if err != nil {
-			return fmt.Errorf("error reading 'firstboot_url': %w", err)
-		}
-	}
-
-	return err
-}
-
-// AsIgnitionEmbedded0 returns the union data inside the IgnitionEmbedded as a IgnitionEmbedded0
-func (t IgnitionEmbedded) AsIgnitionEmbedded0() (IgnitionEmbedded0, error) {
-	var body IgnitionEmbedded0
-	err := json.Unmarshal(t.union, &body)
-	return body, err
-}
-
-// FromIgnitionEmbedded0 overwrites any union data inside the IgnitionEmbedded as the provided IgnitionEmbedded0
-func (t *IgnitionEmbedded) FromIgnitionEmbedded0(v IgnitionEmbedded0) error {
-	b, err := json.Marshal(v)
-	t.union = b
-	return err
-}
-
-// MergeIgnitionEmbedded0 performs a merge with any union data inside the IgnitionEmbedded, using the provided IgnitionEmbedded0
-func (t *IgnitionEmbedded) MergeIgnitionEmbedded0(v IgnitionEmbedded0) error {
-	b, err := json.Marshal(v)
-	if err != nil {
-		return err
-	}
-
-	merged, err := runtime.JSONMerge(t.union, b)
-	t.union = merged
-	return err
-}
-
-// AsIgnitionEmbedded1 returns the union data inside the IgnitionEmbedded as a IgnitionEmbedded1
-func (t IgnitionEmbedded) AsIgnitionEmbedded1() (IgnitionEmbedded1, error) {
-	var body IgnitionEmbedded1
-	err := json.Unmarshal(t.union, &body)
-	return body, err
-}
-
-// FromIgnitionEmbedded1 overwrites any union data inside the IgnitionEmbedded as the provided IgnitionEmbedded1
-func (t *IgnitionEmbedded) FromIgnitionEmbedded1(v IgnitionEmbedded1) error {
-	b, err := json.Marshal(v)
-	t.union = b
-	return err
-}
-
-// MergeIgnitionEmbedded1 performs a merge with any union data inside the IgnitionEmbedded, using the provided IgnitionEmbedded1
-func (t *IgnitionEmbedded) MergeIgnitionEmbedded1(v IgnitionEmbedded1) error {
-	b, err := json.Marshal(v)
-	if err != nil {
-		return err
-	}
-
-	merged, err := runtime.JSONMerge(t.union, b)
-	t.union = merged
-	return err
-}
-
-func (t IgnitionEmbedded) MarshalJSON() ([]byte, error) {
-	b, err := t.union.MarshalJSON()
-	if err != nil {
-		return nil, err
-	}
-	object := make(map[string]json.RawMessage)
-	if t.union != nil {
-		err = json.Unmarshal(b, &object)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	if t.Base64 != nil {
-		object["base64"], err = json.Marshal(t.Base64)
-		if err != nil {
-			return nil, fmt.Errorf("error marshaling 'base64': %w", err)
-		}
-	}
-
-	if t.Text != nil {
-		object["text"], err = json.Marshal(t.Text)
-		if err != nil {
-			return nil, fmt.Errorf("error marshaling 'text': %w", err)
-		}
-	}
-	b, err = json.Marshal(object)
-	return b, err
-}
-
-func (t *IgnitionEmbedded) UnmarshalJSON(b []byte) error {
-	err := t.union.UnmarshalJSON(b)
-	if err != nil {
-		return err
-	}
-	object := make(map[string]json.RawMessage)
-	err = json.Unmarshal(b, &object)
-	if err != nil {
-		return err
-	}
-
-	if raw, found := object["base64"]; found {
-		err = json.Unmarshal(raw, &t.Base64)
-		if err != nil {
-			return fmt.Errorf("error reading 'base64': %w", err)
-		}
-	}
-
-	if raw, found := object["text"]; found {
-		err = json.Unmarshal(raw, &t.Text)
-		if err != nil {
-			return fmt.Errorf("error reading 'text': %w", err)
-		}
-	}
-
-	return err
-}
-
-// AsInstallerKickstart0 returns the union data inside the InstallerKickstart as a InstallerKickstart0
-func (t InstallerKickstart) AsInstallerKickstart0() (InstallerKickstart0, error) {
-	var body InstallerKickstart0
-	err := json.Unmarshal(t.union, &body)
-	return body, err
-}
-
-// FromInstallerKickstart0 overwrites any union data inside the InstallerKickstart as the provided InstallerKickstart0
-func (t *InstallerKickstart) FromInstallerKickstart0(v InstallerKickstart0) error {
-	b, err := json.Marshal(v)
-	t.union = b
-	return err
-}
-
-// MergeInstallerKickstart0 performs a merge with any union data inside the InstallerKickstart, using the provided InstallerKickstart0
-func (t *InstallerKickstart) MergeInstallerKickstart0(v InstallerKickstart0) error {
-	b, err := json.Marshal(v)
-	if err != nil {
-		return err
-	}
-
-	merged, err := runtime.JSONMerge(t.union, b)
-	t.union = merged
-	return err
-}
-
-// AsInstallerKickstart1 returns the union data inside the InstallerKickstart as a InstallerKickstart1
-func (t InstallerKickstart) AsInstallerKickstart1() (InstallerKickstart1, error) {
-	var body InstallerKickstart1
-	err := json.Unmarshal(t.union, &body)
-	return body, err
-}
-
-// FromInstallerKickstart1 overwrites any union data inside the InstallerKickstart as the provided InstallerKickstart1
-func (t *InstallerKickstart) FromInstallerKickstart1(v InstallerKickstart1) error {
-	b, err := json.Marshal(v)
-	t.union = b
-	return err
-}
-
-// MergeInstallerKickstart1 performs a merge with any union data inside the InstallerKickstart, using the provided InstallerKickstart1
-func (t *InstallerKickstart) MergeInstallerKickstart1(v InstallerKickstart1) error {
-	b, err := json.Marshal(v)
-	if err != nil {
-		return err
-	}
-
-	merged, err := runtime.JSONMerge(t.union, b)
-	t.union = merged
-	return err
-}
-
-func (t InstallerKickstart) MarshalJSON() ([]byte, error) {
-	b, err := t.union.MarshalJSON()
-	if err != nil {
-		return nil, err
-	}
-	object := make(map[string]json.RawMessage)
-	if t.union != nil {
-		err = json.Unmarshal(b, &object)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	if t.Base64 != nil {
-		object["base64"], err = json.Marshal(t.Base64)
-		if err != nil {
-			return nil, fmt.Errorf("error marshaling 'base64': %w", err)
-		}
-	}
-
-	if t.Text != nil {
-		object["text"], err = json.Marshal(t.Text)
-		if err != nil {
-			return nil, fmt.Errorf("error marshaling 'text': %w", err)
-		}
-	}
-	b, err = json.Marshal(object)
-	return b, err
-}
-
-func (t *InstallerKickstart) UnmarshalJSON(b []byte) error {
-	err := t.union.UnmarshalJSON(b)
-	if err != nil {
-		return err
-	}
-	object := make(map[string]json.RawMessage)
-	err = json.Unmarshal(b, &object)
-	if err != nil {
-		return err
-	}
-
-	if raw, found := object["base64"]; found {
-		err = json.Unmarshal(raw, &t.Base64)
-		if err != nil {
-			return fmt.Errorf("error reading 'base64': %w", err)
-		}
-	}
-
-	if raw, found := object["text"]; found {
-		err = json.Unmarshal(raw, &t.Text)
-		if err != nil {
-			return fmt.Errorf("error reading 'text': %w", err)
-		}
-	}
-
 	return err
 }
 

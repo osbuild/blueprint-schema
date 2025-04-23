@@ -1,7 +1,12 @@
 ---
 type: object
+x-go-type-name: InstallerCoreOS
+description: |
+  CoreOS installer configuration is required by the edge-simplified-installer
+  image. It allows to define the destination device for the installation.
 properties:
   installation_device:
     description: Installation device for iot/edge simplified installer image types.
     type: string
+    x-go-type-skip-optional-pointer: true
 additionalProperties: false

@@ -78,10 +78,25 @@ components:
                     x-go-name: FSNodes
                     x-go-type-skip-optional-pointer: true
                 hostname:
-                    description: Hostname is an optional string that can be used to configure the hostname of the final image.
+                    description: |
+                        Hostname is an optional string that can be used to configure the
+                        hostname of the final image.
                     type: string
+                    x-go-type-skip-optional-pointer: true
                 ignition:
-                    $ref: '#/components/schemas/ignition'
+                    description: |
+                        Provides Ignition configuration files to be used in edge-raw-image and
+                        edge-simplified-installer images. Check the RHEL for Edge butane specification for
+                        a description of the supported configuration options.
+
+                        The blueprint configuration can be done either by embedding an Ignition configuration
+                        file into the image, or providing a provisioning URL that will be fetched at first boot.
+                    nullable: true
+                    oneOf:
+                        - $ref: '#/components/schemas/ignition_url'
+                        - $ref: '#/components/schemas/ignition_text'
+                    x-go-name: Ignition
+                    x-go-type-name: Ignition
                 installer:
                     $ref: '#/components/schemas/installer'
                 kernel:
@@ -186,10 +201,25 @@ components:
                     x-go-name: FSNodes
                     x-go-type-skip-optional-pointer: true
                 hostname:
-                    description: Hostname is an optional string that can be used to configure the hostname of the final image.
+                    description: |
+                        Hostname is an optional string that can be used to configure the
+                        hostname of the final image.
                     type: string
+                    x-go-type-skip-optional-pointer: true
                 ignition:
-                    $ref: '#/components/schemas/ignition'
+                    description: |
+                        Provides Ignition configuration files to be used in edge-raw-image and
+                        edge-simplified-installer images. Check the RHEL for Edge butane specification for
+                        a description of the supported configuration options.
+
+                        The blueprint configuration can be done either by embedding an Ignition configuration
+                        file into the image, or providing a provisioning URL that will be fetched at first boot.
+                    nullable: true
+                    oneOf:
+                        - $ref: '#/components/schemas/ignition_url'
+                        - $ref: '#/components/schemas/ignition_text'
+                    x-go-name: Ignition
+                    x-go-type-name: Ignition
                 installer:
                     $ref: '#/components/schemas/installer'
                 kernel:
@@ -323,6 +353,32 @@ components:
             required:
                 - name
             type: object
+        anaconda_modules:
+            enum:
+                - org.fedoraproject.Anaconda.Modules.Localization
+                - org.fedoraproject.Anaconda.Modules.Network
+                - org.fedoraproject.Anaconda.Modules.Payloads
+                - org.fedoraproject.Anaconda.Modules.Runtime
+                - org.fedoraproject.Anaconda.Modules.Security
+                - org.fedoraproject.Anaconda.Modules.Services
+                - org.fedoraproject.Anaconda.Modules.Storage
+                - org.fedoraproject.Anaconda.Modules.Subscription
+                - org.fedoraproject.Anaconda.Modules.Timezone
+                - org.fedoraproject.Anaconda.Modules.User
+            type: string
+            x-enum-varnames:
+                - AnacondaModLocalization
+                - AnacondaModNetwork
+                - AnacondaModPayloads
+                - AnacondaModRuntime
+                - AnacondaModSecurity
+                - AnacondaModServices
+                - AnacondaModStorage
+                - AnacondaModSubscription
+                - AnacondaModTimezone
+                - AnacondaModUser
+            x-go-type-name: AnacondaModule
+            x-go-type-skip-optional-pointer: true
         bool_default_true:
             nullable: true
             type: boolean
@@ -393,6 +449,7 @@ components:
                     nullable: true
                     type: array
                     x-go-type-skip-optional-pointer: true
+                    x-omitempty: true
                 import_keys:
                     description: |
                         Additional file paths to the GPG keys to import. The files
@@ -402,6 +459,7 @@ components:
                     nullable: true
                     type: array
                     x-go-type-skip-optional-pointer: true
+                    x-omitempty: true
                 modules:
                     description: Modules to enable or disable
                     items:
@@ -409,6 +467,7 @@ components:
                     nullable: true
                     type: array
                     x-go-type-skip-optional-pointer: true
+                    x-omitempty: true
                 packages:
                     description: |
                         Packages to install. Package name or NVRA is accepted as long
@@ -420,6 +479,7 @@ components:
                     nullable: true
                     type: array
                     x-go-type-skip-optional-pointer: true
+                    x-omitempty: true
                 repositories:
                     description: |
                         Third-party repositories are supported by the blueprint customizations.
@@ -430,6 +490,7 @@ components:
                     nullable: true
                     type: array
                     x-go-type-skip-optional-pointer: true
+                    x-omitempty: true
             type: object
             x-go-name: DNF
         dnf_repository:
@@ -597,6 +658,7 @@ components:
                         - $ref: '#/components/schemas/fsnode_contents_text'
                         - $ref: '#/components/schemas/fsnode_contents_base64'
                     x-go-type-name: FSNodeContents
+                    x-omitempty: true
                 ensure_parents:
                     default: false
                     description: |
@@ -669,44 +731,33 @@ components:
                 - text
             type: object
             x-go-type-name: FSNodeContentsText
-        ignition:
+        ignition_text:
             additionalProperties: false
-            oneOf:
-                - required:
-                    - firstboot_url
-                  title: ignition_url
-                - required:
-                    - embedded
-                  title: ignition_embedded
             properties:
-                embedded:
-                    $ref: '#/components/schemas/ignition_embedded'
-                firstboot_url:
-                    description: |-
-                        The URL to the Ignition configuration to be used by Ignition. This configuration is a URL to a remote Ignition configuration. The firstboot_url is used if the embedded configuration is not specified.
-
-                        Cannot be used with embedded_base64 or embedded_text.
-                    type: string
-            type: object
-        ignition_embedded:
-            additionalProperties: false
-            oneOf:
-                - required:
-                    - text
-                  title: ignition_text
-                - required:
-                    - base64
-                  title: ignition_base64
-            properties:
-                base64:
-                    description: Ignition data formatted in base64.
-                    type: string
                 text:
                     description: Ignition data formatted in plain text.
                     type: string
+                    x-go-type-skip-optional-pointer: true
+            required:
+                - text
+            type: object
+        ignition_url:
+            additionalProperties: false
+            properties:
+                url:
+                    description: |
+                        The URL to the Ignition configuration to be used by Ignition. This configuration
+                        is a URL to a remote Ignition configuration.
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+            required:
+                - url
             type: object
         installer:
             additionalProperties: false
+            description: |
+                Extra customization for Anaconda installer (ISO) and Edge/IOT simplified
+                installer image types.
             properties:
                 anaconda:
                     $ref: '#/components/schemas/installer_anaconda'
@@ -715,76 +766,79 @@ components:
             type: object
         installer_anaconda:
             additionalProperties: false
+            description: |
+                Extra customizations for Anaconda installer (ISO) image types.
+
+                Blueprint customizations that match the kickstart options (languages, keyboard,
+                timezone) will change the value in the kickstart file as well.
             properties:
                 disabled_modules:
+                    description: |
+                        Anaconda modules to be disabled. The list of modules that
+                        can be disabled is limited to the modules that are not required for the
+                        installation. The list of modules that can be disabled is limited to the
+                        modules that are not required for the installation.
                     items:
-                        enum:
-                            - org.fedoraproject.Anaconda.Modules.Localization
-                            - org.fedoraproject.Anaconda.Modules.Network
-                            - org.fedoraproject.Anaconda.Modules.Payloads
-                            - org.fedoraproject.Anaconda.Modules.Runtime
-                            - org.fedoraproject.Anaconda.Modules.Security
-                            - org.fedoraproject.Anaconda.Modules.Services
-                            - org.fedoraproject.Anaconda.Modules.Storage
-                            - org.fedoraproject.Anaconda.Modules.Subscription
-                            - org.fedoraproject.Anaconda.Modules.Timezone
-                            - org.fedoraproject.Anaconda.Modules.User
-                        type: string
+                        $ref: '#/components/schemas/anaconda_modules'
                     nullable: true
                     type: array
+                    x-go-type-skip-optional-pointer: true
+                    x-omitempty: true
                 enabled_modules:
+                    description: |
+                        Anaconda modules to be enabled. The list of modules that
+                        can be enabled is limited to the modules that are not required for the
+                        installation. The list of modules that can be enabled is limited to the
+                        modules that are not required for the installation.
                     items:
-                        enum:
-                            - org.fedoraproject.Anaconda.Modules.Localization
-                            - org.fedoraproject.Anaconda.Modules.Network
-                            - org.fedoraproject.Anaconda.Modules.Payloads
-                            - org.fedoraproject.Anaconda.Modules.Runtime
-                            - org.fedoraproject.Anaconda.Modules.Security
-                            - org.fedoraproject.Anaconda.Modules.Services
-                            - org.fedoraproject.Anaconda.Modules.Storage
-                            - org.fedoraproject.Anaconda.Modules.Subscription
-                            - org.fedoraproject.Anaconda.Modules.Timezone
-                            - org.fedoraproject.Anaconda.Modules.User
-                        type: string
+                        $ref: '#/components/schemas/anaconda_modules'
                     nullable: true
                     type: array
+                    x-go-type-skip-optional-pointer: true
+                    x-omitempty: true
                 kickstart:
-                    $ref: '#/components/schemas/installer_kickstart'
+                    description: Kickstart installer configuration.
+                    nullable: true
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                    x-omitempty: true
                 sudo_nopasswd:
-                    description: Sudo users with NOPASSWD option. Adds a snippet to the kickstart file that, after installation, will create drop-in files in /etc/sudoers.d to allow the specified users and groups to run sudo without a password (groups must be prefixed with %).
+                    description: |
+                        Sudo users with NOPASSWD option. Adds a snippet to the kickstart
+                        file that, after installation, will create drop-in files in /etc/sudoers.d
+                        to allow the specified users and groups to run sudo without a password (groups
+                        must be prefixed with %).
                     items:
                         maxLength: 256
                         pattern: ^[%a-zA-Z0-9_.][a-zA-Z0-9_.$-]*$
                         type: string
+                    nullable: true
                     type: array
+                    x-go-name: SudoNOPASSWD
+                    x-go-type-skip-optional-pointer: true
+                    x-omitempty: true
                 unattended:
-                    description: Unattended installation Anaconda flag. When not set, Anaconda installer will ask for user input.
+                    default: false
+                    description: |
+                        Unattended installation Anaconda flag. When not set, Anaconda
+                        installer will ask for user input.
+                    nullable: true
                     type: boolean
+                    x-go-type-skip-optional-pointer: true
+                    x-omitempty: true
             type: object
         installer_coreos:
             additionalProperties: false
+            description: |
+                CoreOS installer configuration is required by the edge-simplified-installer
+                image. It allows to define the destination device for the installation.
             properties:
                 installation_device:
                     description: Installation device for iot/edge simplified installer image types.
                     type: string
+                    x-go-type-skip-optional-pointer: true
             type: object
-        installer_kickstart:
-            additionalProperties: false
-            oneOf:
-                - required:
-                    - text
-                  title: kickstart_text
-                - required:
-                    - base64
-                  title: kickstart_base64
-            properties:
-                base64:
-                    description: Kickstart file formatted in base64.
-                    type: string
-                text:
-                    description: Kickstart file formatted in plain text.
-                    type: string
-            type: object
+            x-go-type-name: InstallerCoreOS
         kernel:
             additionalProperties: false
             properties:

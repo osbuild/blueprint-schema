@@ -1,0 +1,26 @@
+---
+type: string
+enum:
+- org.fedoraproject.Anaconda.Modules.Localization
+- org.fedoraproject.Anaconda.Modules.Network
+- org.fedoraproject.Anaconda.Modules.Payloads
+- org.fedoraproject.Anaconda.Modules.Runtime
+- org.fedoraproject.Anaconda.Modules.Security
+- org.fedoraproject.Anaconda.Modules.Services
+- org.fedoraproject.Anaconda.Modules.Storage
+- org.fedoraproject.Anaconda.Modules.Subscription
+- org.fedoraproject.Anaconda.Modules.Timezone
+- org.fedoraproject.Anaconda.Modules.User
+x-enum-varnames:
+- AnacondaModLocalization
+- AnacondaModNetwork
+- AnacondaModPayloads
+- AnacondaModRuntime
+- AnacondaModSecurity
+- AnacondaModServices
+- AnacondaModStorage
+- AnacondaModSubscription
+- AnacondaModTimezone
+- AnacondaModUser
+x-go-type-skip-optional-pointer: true
+x-go-type-name: AnacondaModule

@@ -88,19 +88,26 @@ properties:
     x-go-name: FSNodes
     x-go-type-skip-optional-pointer: true
   hostname:
-    description: Hostname is an optional string that can be used to configure the
+    description: |
+      Hostname is an optional string that can be used to configure the
       hostname of the final image.
     type: string
+    x-go-type-skip-optional-pointer: true
   ignition:
-    description: |-
-      Provides Ignition configuration files to be used in edge-raw-image and edge-simplified-installer images. Check the RHEL for Edge butane specification for a description of the supported configuration options.
+    description: |
+      Provides Ignition configuration files to be used in edge-raw-image and
+      edge-simplified-installer images. Check the RHEL for Edge butane specification for
+      a description of the supported configuration options.
 
-      The blueprint configuration can be done either by embedding an Ignition configuration file into the image, or providing a provisioning URL that will be fetched at first boot.
-    "$ref": "ignition.yaml"
+      The blueprint configuration can be done either by embedding an Ignition configuration
+      file into the image, or providing a provisioning URL that will be fetched at first boot.
+    oneOf:
+      - "$ref": "ignition_url.yaml"
+      - "$ref": "ignition_text.yaml"
+    x-go-name: Ignition
+    x-go-type-name: Ignition
     nullable: true
   installer:
-    description: Extra customization for Anaconda installer (ISO) and Edge/IOT simplified
-      installer image types.
     "$ref": "installer.yaml"
     nullable: true
   kernel:

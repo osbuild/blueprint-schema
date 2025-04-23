@@ -1,0 +1,12 @@
+---
+type: object
+required:
+  - url
+properties:
+  url:
+    description: |
+      The URL to the Ignition configuration to be used by Ignition. This configuration
+      is a URL to a remote Ignition configuration.
+    type: string
+    x-go-type-skip-optional-pointer: true
+additionalProperties: false

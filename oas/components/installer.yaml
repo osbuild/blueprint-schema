@@ -1,16 +1,13 @@
 ---
 type: object
+description: |
+  Extra customization for Anaconda installer (ISO) and Edge/IOT simplified
+  installer image types.
 properties:
   anaconda:
-    description: |-
-      Extra customizations for Anaconda installer (ISO) image types.
-
-      Blueprint customizations that match the kickstart options (languages, keyboard, timezone) will change the value in the kickstart file as well.
     "$ref": "installer_anaconda.yaml"
     nullable: true
   coreos:
-    description: CoreOS installer configuration is required by the edge-simplified-installer
-      image. It allows to define the destination device for the installation.
     "$ref": "installer_coreos.yaml"
     nullable: true
 additionalProperties: false

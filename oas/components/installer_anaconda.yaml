@@ -1,44 +1,44 @@
 ---
 type: object
+description: |
+  Extra customizations for Anaconda installer (ISO) image types.
+
+  Blueprint customizations that match the kickstart options (languages, keyboard,
+  timezone) will change the value in the kickstart file as well.
 properties:
   disabled_modules:
+    description: |
+      Anaconda modules to be disabled. The list of modules that
+      can be disabled is limited to the modules that are not required for the
+      installation. The list of modules that can be disabled is limited to the
+      modules that are not required for the installation.
     type: array
     items:
-      type: string
-      enum:
-      - org.fedoraproject.Anaconda.Modules.Localization
-      - org.fedoraproject.Anaconda.Modules.Network
-      - org.fedoraproject.Anaconda.Modules.Payloads
-      - org.fedoraproject.Anaconda.Modules.Runtime
-      - org.fedoraproject.Anaconda.Modules.Security
-      - org.fedoraproject.Anaconda.Modules.Services
-      - org.fedoraproject.Anaconda.Modules.Storage
-      - org.fedoraproject.Anaconda.Modules.Subscription
-      - org.fedoraproject.Anaconda.Modules.Timezone
-      - org.fedoraproject.Anaconda.Modules.User
+      "$ref": "anaconda_modules.yaml"
     nullable: true
+    x-go-type-skip-optional-pointer: true
+    x-omitempty: true
   enabled_modules:
+    description: |
+      Anaconda modules to be enabled. The list of modules that
+      can be enabled is limited to the modules that are not required for the
+      installation. The list of modules that can be enabled is limited to the
+      modules that are not required for the installation.
     type: array
     items:
-      type: string
-      enum:
-      - org.fedoraproject.Anaconda.Modules.Localization
-      - org.fedoraproject.Anaconda.Modules.Network
-      - org.fedoraproject.Anaconda.Modules.Payloads
-      - org.fedoraproject.Anaconda.Modules.Runtime
-      - org.fedoraproject.Anaconda.Modules.Security
-      - org.fedoraproject.Anaconda.Modules.Services
-      - org.fedoraproject.Anaconda.Modules.Storage
-      - org.fedoraproject.Anaconda.Modules.Subscription
-      - org.fedoraproject.Anaconda.Modules.Timezone
-      - org.fedoraproject.Anaconda.Modules.User
+      "$ref": "anaconda_modules.yaml"
     nullable: true
+    x-go-type-skip-optional-pointer: true
+    x-omitempty: true
   kickstart:
     description: Kickstart installer configuration.
-    "$ref": "installer_kickstart.yaml"
+    type: string
     nullable: true
+    x-go-type-skip-optional-pointer: true
+    x-omitempty: true
   sudo_nopasswd:
-    description: Sudo users with NOPASSWD option. Adds a snippet to the kickstart
+    description: |
+      Sudo users with NOPASSWD option. Adds a snippet to the kickstart
       file that, after installation, will create drop-in files in /etc/sudoers.d
       to allow the specified users and groups to run sudo without a password (groups
       must be prefixed with %).
@@ -47,8 +47,17 @@ properties:
       type: string
       pattern: "^[%a-zA-Z0-9_.][a-zA-Z0-9_.$-]*$"
       maxLength: 256
+    nullable: true
+    x-go-name: SudoNOPASSWD
+    x-go-type-skip-optional-pointer: true
+    x-omitempty: true
   unattended:
-    description: Unattended installation Anaconda flag. When not set, Anaconda
+    description: |
+      Unattended installation Anaconda flag. When not set, Anaconda
       installer will ask for user input.
     type: boolean
+    default: false
+    nullable: true
+    x-go-type-skip-optional-pointer: true
+    x-omitempty: true
 additionalProperties: false
