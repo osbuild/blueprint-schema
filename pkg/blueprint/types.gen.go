@@ -10,6 +10,13 @@ import (
 	"github.com/oapi-codegen/runtime"
 )
 
+// Defines values for NetworkProtocol.
+const (
+	Any NetworkProtocol = "any"
+	TCP NetworkProtocol = "tcp"
+	UDP NetworkProtocol = "udp"
+)
+
 // Defines values for AnacondaModules.
 const (
 	AnacondaModLocalization AnacondaModules = "org.fedoraproject.Anaconda.Modules.Localization"
@@ -36,12 +43,11 @@ const (
 	File FSNodeType = "file"
 )
 
-// Defines values for NetworkFirewallServicesProtocol.
-const (
-	Any NetworkFirewallServicesProtocol = "any"
-	Tcp NetworkFirewallServicesProtocol = "tcp"
-	Udp NetworkFirewallServicesProtocol = "udp"
-)
+// NetworkProtocol The network protocol used for the connection. This can be either TCP, UDP, or any protocol.
+type NetworkProtocol string
+
+// FirewallEnabled Whether the firewall rule is enabled or not. Defaults to true.
+type FirewallEnabled = bool
 
 // Blueprint Image Builder new blueprint schema.
 //
@@ -132,7 +138,9 @@ type Blueprint struct {
 	// Name The name attribute is a string that contains the name of the blueprint.
 	// It can contain spaces, but they may be converted to dash characters during build.
 	// It should be short and descriptive.
-	Name         string        `json:"name,omitempty"`
+	Name string `json:"name,omitempty"`
+
+	// Network Networking details including firewall configuration.
 	Network      *Network      `json:"network,omitempty"`
 	Openscap     *Openscap     `json:"openscap,omitempty"`
 	Registration *Registration `json:"registration,omitempty"`
@@ -211,9 +219,6 @@ type AccountsUsers struct {
 
 // AnacondaModules defines model for anaconda_modules.
 type AnacondaModules string
-
-// BoolDefaultTrue defines model for bool_default_true.
-type BoolDefaultTrue = bool
 
 // CACert The CA certificates to be added to the image.
 type CACert struct {
@@ -377,6 +382,46 @@ type FIPS struct {
 	Enabled bool `json:"enabled,omitempty"`
 }
 
+// FirewallFromTo defines model for firewall_from_to.
+type FirewallFromTo struct {
+	// Protocol The network protocol used for the connection. This can be either TCP, UDP, or any protocol.
+	Protocol NetworkProtocol `json:"protocol,omitempty"`
+
+	// Enabled Whether the firewall rule is enabled or not. Defaults to true.
+	Enabled FirewallEnabled `json:"enabled,omitempty"`
+
+	// From The from port number, must be between 1 and 65535.
+	From int `json:"from,omitempty"`
+
+	// To The to port number, must be between 1 and 65535.
+	To int `json:"to,omitempty"`
+}
+
+// FirewallPort defines model for firewall_port.
+type FirewallPort struct {
+	// Protocol The network protocol used for the connection. This can be either TCP, UDP, or any protocol.
+	Protocol NetworkProtocol `json:"protocol,omitempty"`
+
+	// Enabled Whether the firewall rule is enabled or not. Defaults to true.
+	Enabled FirewallEnabled `json:"enabled,omitempty"`
+
+	// Port The port number, must be between 1 and 65535.
+	Port int `json:"port,omitempty"`
+}
+
+// FirewallService defines model for firewall_service.
+type FirewallService struct {
+	// Protocol The network protocol used for the connection. This can be either TCP, UDP, or any protocol.
+	Protocol NetworkProtocol `json:"protocol,omitempty"`
+
+	// Enabled Whether the firewall rule is enabled or not. Defaults to true.
+	Enabled FirewallEnabled `json:"enabled,omitempty"`
+
+	// Service The name of the IANA service name. This is the name of the service as defined in
+	// the /etc/services file.
+	Service string `json:"service,omitempty"`
+}
+
 // FSNode defines model for fsnode.
 type FSNode struct {
 	// Contents Contents is the file system node contents. When not present,
@@ -531,42 +576,28 @@ type Locale struct {
 	Languages []string `json:"languages,omitempty"`
 }
 
-// Network defines model for network.
+// Network Networking details including firewall configuration.
 type Network struct {
+	// Firewall Firewall details - package firewalld must be installed in the image.
 	Firewall *NetworkFirewall `json:"firewall,omitempty"`
 }
 
-// NetworkFirewall defines model for network_firewall.
+// NetworkFirewall Firewall details - package firewalld must be installed in the image.
 type NetworkFirewall struct {
-	// Services Services to enable or disable. The service can be defined via an assigned IANA name, port number or port range.
+	// Services Services to enable or disable. The service can be defined via an assigned
+	// IANA name, port number or port range.
 	//
-	// Services are processed in order, when a service is disabled and then accidentally enabled via a port or a port range, the service will be enabled in the end.
+	// Services are processed in order, when a service is disabled and then accidentally
+	// enabled via a port or a port range, the service will be enabled in the end.
 	//
-	// By default the firewall blocks all access, except for services that enable their ports explicitly such as the sshd.
-	Services *[]NetworkFirewall_Services_Item `json:"services"`
+	// By default the firewall blocks all access, except for services that enable their
+	// ports explicitly such as the sshd.
+	Services []NetworkService `json:"services,omitempty"`
 }
 
-// NetworkFirewallServicesProtocol defines model for NetworkFirewall.Services.Protocol.
-type NetworkFirewallServicesProtocol string
-
-// NetworkFirewallServices0 defines model for .
-type NetworkFirewallServices0 = interface{}
-
-// NetworkFirewallServices1 defines model for .
-type NetworkFirewallServices1 = interface{}
-
-// NetworkFirewallServices2 defines model for .
-type NetworkFirewallServices2 = interface{}
-
-// NetworkFirewall_Services_Item defines model for network_firewall.services.Item.
-type NetworkFirewall_Services_Item struct {
-	Enabled  *BoolDefaultTrue                 `json:"enabled"`
-	From     *int                             `json:"from,omitempty"`
-	Port     *int                             `json:"port,omitempty"`
-	Protocol *NetworkFirewallServicesProtocol `json:"protocol,omitempty"`
-	Service  *string                          `json:"service,omitempty"`
-	To       *int                             `json:"to,omitempty"`
-	union    json.RawMessage
+// NetworkService defines model for .
+type NetworkService struct {
+	union json.RawMessage
 }
 
 // Openscap defines model for openscap.
@@ -964,22 +995,22 @@ func (t *FSNodeContents) UnmarshalJSON(b []byte) error {
 	return err
 }
 
-// AsNetworkFirewallServices0 returns the union data inside the NetworkFirewall_Services_Item as a NetworkFirewallServices0
-func (t NetworkFirewall_Services_Item) AsNetworkFirewallServices0() (NetworkFirewallServices0, error) {
-	var body NetworkFirewallServices0
+// AsFirewallService returns the union data inside the NetworkService as a FirewallService
+func (t NetworkService) AsFirewallService() (FirewallService, error) {
+	var body FirewallService
 	err := json.Unmarshal(t.union, &body)
 	return body, err
 }
 
-// FromNetworkFirewallServices0 overwrites any union data inside the NetworkFirewall_Services_Item as the provided NetworkFirewallServices0
-func (t *NetworkFirewall_Services_Item) FromNetworkFirewallServices0(v NetworkFirewallServices0) error {
+// FromFirewallService overwrites any union data inside the NetworkService as the provided FirewallService
+func (t *NetworkService) FromFirewallService(v FirewallService) error {
 	b, err := json.Marshal(v)
 	t.union = b
 	return err
 }
 
-// MergeNetworkFirewallServices0 performs a merge with any union data inside the NetworkFirewall_Services_Item, using the provided NetworkFirewallServices0
-func (t *NetworkFirewall_Services_Item) MergeNetworkFirewallServices0(v NetworkFirewallServices0) error {
+// MergeFirewallService performs a merge with any union data inside the NetworkService, using the provided FirewallService
+func (t *NetworkService) MergeFirewallService(v FirewallService) error {
 	b, err := json.Marshal(v)
 	if err != nil {
 		return err
@@ -990,22 +1021,22 @@ func (t *NetworkFirewall_Services_Item) MergeNetworkFirewallServices0(v NetworkF
 	return err
 }
 
-// AsNetworkFirewallServices1 returns the union data inside the NetworkFirewall_Services_Item as a NetworkFirewallServices1
-func (t NetworkFirewall_Services_Item) AsNetworkFirewallServices1() (NetworkFirewallServices1, error) {
-	var body NetworkFirewallServices1
+// AsFirewallPort returns the union data inside the NetworkService as a FirewallPort
+func (t NetworkService) AsFirewallPort() (FirewallPort, error) {
+	var body FirewallPort
 	err := json.Unmarshal(t.union, &body)
 	return body, err
 }
 
-// FromNetworkFirewallServices1 overwrites any union data inside the NetworkFirewall_Services_Item as the provided NetworkFirewallServices1
-func (t *NetworkFirewall_Services_Item) FromNetworkFirewallServices1(v NetworkFirewallServices1) error {
+// FromFirewallPort overwrites any union data inside the NetworkService as the provided FirewallPort
+func (t *NetworkService) FromFirewallPort(v FirewallPort) error {
 	b, err := json.Marshal(v)
 	t.union = b
 	return err
 }
 
-// MergeNetworkFirewallServices1 performs a merge with any union data inside the NetworkFirewall_Services_Item, using the provided NetworkFirewallServices1
-func (t *NetworkFirewall_Services_Item) MergeNetworkFirewallServices1(v NetworkFirewallServices1) error {
+// MergeFirewallPort performs a merge with any union data inside the NetworkService, using the provided FirewallPort
+func (t *NetworkService) MergeFirewallPort(v FirewallPort) error {
 	b, err := json.Marshal(v)
 	if err != nil {
 		return err
@@ -1016,22 +1047,22 @@ func (t *NetworkFirewall_Services_Item) MergeNetworkFirewallServices1(v NetworkF
 	return err
 }
 
-// AsNetworkFirewallServices2 returns the union data inside the NetworkFirewall_Services_Item as a NetworkFirewallServices2
-func (t NetworkFirewall_Services_Item) AsNetworkFirewallServices2() (NetworkFirewallServices2, error) {
-	var body NetworkFirewallServices2
+// AsFirewallFromTo returns the union data inside the NetworkService as a FirewallFromTo
+func (t NetworkService) AsFirewallFromTo() (FirewallFromTo, error) {
+	var body FirewallFromTo
 	err := json.Unmarshal(t.union, &body)
 	return body, err
 }
 
-// FromNetworkFirewallServices2 overwrites any union data inside the NetworkFirewall_Services_Item as the provided NetworkFirewallServices2
-func (t *NetworkFirewall_Services_Item) FromNetworkFirewallServices2(v NetworkFirewallServices2) error {
+// FromFirewallFromTo overwrites any union data inside the NetworkService as the provided FirewallFromTo
+func (t *NetworkService) FromFirewallFromTo(v FirewallFromTo) error {
 	b, err := json.Marshal(v)
 	t.union = b
 	return err
 }
 
-// MergeNetworkFirewallServices2 performs a merge with any union data inside the NetworkFirewall_Services_Item, using the provided NetworkFirewallServices2
-func (t *NetworkFirewall_Services_Item) MergeNetworkFirewallServices2(v NetworkFirewallServices2) error {
+// MergeFirewallFromTo performs a merge with any union data inside the NetworkService, using the provided FirewallFromTo
+func (t *NetworkService) MergeFirewallFromTo(v FirewallFromTo) error {
 	b, err := json.Marshal(v)
 	if err != nil {
 		return err
@@ -1042,117 +1073,13 @@ func (t *NetworkFirewall_Services_Item) MergeNetworkFirewallServices2(v NetworkF
 	return err
 }
 
-func (t NetworkFirewall_Services_Item) MarshalJSON() ([]byte, error) {
+func (t NetworkService) MarshalJSON() ([]byte, error) {
 	b, err := t.union.MarshalJSON()
-	if err != nil {
-		return nil, err
-	}
-	object := make(map[string]json.RawMessage)
-	if t.union != nil {
-		err = json.Unmarshal(b, &object)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	if t.Enabled != nil {
-		object["enabled"], err = json.Marshal(t.Enabled)
-		if err != nil {
-			return nil, fmt.Errorf("error marshaling 'enabled': %w", err)
-		}
-	}
-
-	if t.From != nil {
-		object["from"], err = json.Marshal(t.From)
-		if err != nil {
-			return nil, fmt.Errorf("error marshaling 'from': %w", err)
-		}
-	}
-
-	if t.Port != nil {
-		object["port"], err = json.Marshal(t.Port)
-		if err != nil {
-			return nil, fmt.Errorf("error marshaling 'port': %w", err)
-		}
-	}
-
-	if t.Protocol != nil {
-		object["protocol"], err = json.Marshal(t.Protocol)
-		if err != nil {
-			return nil, fmt.Errorf("error marshaling 'protocol': %w", err)
-		}
-	}
-
-	if t.Service != nil {
-		object["service"], err = json.Marshal(t.Service)
-		if err != nil {
-			return nil, fmt.Errorf("error marshaling 'service': %w", err)
-		}
-	}
-
-	if t.To != nil {
-		object["to"], err = json.Marshal(t.To)
-		if err != nil {
-			return nil, fmt.Errorf("error marshaling 'to': %w", err)
-		}
-	}
-	b, err = json.Marshal(object)
 	return b, err
 }
 
-func (t *NetworkFirewall_Services_Item) UnmarshalJSON(b []byte) error {
+func (t *NetworkService) UnmarshalJSON(b []byte) error {
 	err := t.union.UnmarshalJSON(b)
-	if err != nil {
-		return err
-	}
-	object := make(map[string]json.RawMessage)
-	err = json.Unmarshal(b, &object)
-	if err != nil {
-		return err
-	}
-
-	if raw, found := object["enabled"]; found {
-		err = json.Unmarshal(raw, &t.Enabled)
-		if err != nil {
-			return fmt.Errorf("error reading 'enabled': %w", err)
-		}
-	}
-
-	if raw, found := object["from"]; found {
-		err = json.Unmarshal(raw, &t.From)
-		if err != nil {
-			return fmt.Errorf("error reading 'from': %w", err)
-		}
-	}
-
-	if raw, found := object["port"]; found {
-		err = json.Unmarshal(raw, &t.Port)
-		if err != nil {
-			return fmt.Errorf("error reading 'port': %w", err)
-		}
-	}
-
-	if raw, found := object["protocol"]; found {
-		err = json.Unmarshal(raw, &t.Protocol)
-		if err != nil {
-			return fmt.Errorf("error reading 'protocol': %w", err)
-		}
-	}
-
-	if raw, found := object["service"]; found {
-		err = json.Unmarshal(raw, &t.Service)
-		if err != nil {
-			return fmt.Errorf("error reading 'service': %w", err)
-		}
-	}
-
-	if raw, found := object["to"]; found {
-		err = json.Unmarshal(raw, &t.To)
-		if err != nil {
-			return fmt.Errorf("error reading 'to': %w", err)
-		}
-	}
-
 	return err
 }
 

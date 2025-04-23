@@ -1,0 +1,8 @@
+---
+description: Whether the firewall rule is enabled or not. Defaults to true.
+type: boolean
+default: true
+x-go-type-skip-optional-pointer: true
+x-omitempty: true
+x-order: 2
+additionalProperties: false

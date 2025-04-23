@@ -1,52 +1,27 @@
 ---
 type: object
+description: Firewall details - package firewalld must be installed in the image.
 properties:
   services:
-    description: |-
-      Services to enable or disable. The service can be defined via an assigned IANA name, port number or port range.
+    description: |
+      Services to enable or disable. The service can be defined via an assigned
+      IANA name, port number or port range.
 
-      Services are processed in order, when a service is disabled and then accidentally enabled via a port or a port range, the service will be enabled in the end.
+      Services are processed in order, when a service is disabled and then accidentally
+      enabled via a port or a port range, the service will be enabled in the end.
 
-      By default the firewall blocks all access, except for services that enable their ports explicitly such as the sshd.
+      By default the firewall blocks all access, except for services that enable their
+      ports explicitly such as the sshd.
     type: array
     items:
       type: object
       oneOf:
-      - title: firewall_service
-        required:
-        - service
-      - title: firewall_port
-        required:
-        - port
-      - title: firewall_from_to
-        required:
-        - from
-        - to
-      properties:
-        enabled:
-          "$ref": "bool_default_true.yaml"
-        from:
-          type: integer
-          maximum: 65535
-          minimum: 1
-        port:
-          type: integer
-          maximum: 65535
-          minimum: 1
-        protocol:
-          default: any
-          type: string
-          enum:
-          - tcp
-          - udp
-          - any
-        service:
-          type: string
-          minLength: 2
-        to:
-          type: integer
-          maximum: 65535
-          minimum: 1
-      additionalProperties: false
+        - "$ref": "firewall_service.yaml"
+        - "$ref": "firewall_port.yaml"
+        - "$ref": "firewall_from_to.yaml"
+      x-go-name: NetworkService
+      x-go-type-name: NetworkService
+    x-go-type-skip-optional-pointer: true
+    x-omitempty: true
     nullable: true
 additionalProperties: false

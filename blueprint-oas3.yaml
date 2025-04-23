@@ -379,9 +379,6 @@ components:
                 - AnacondaModUser
             x-go-type-name: AnacondaModule
             x-go-type-skip-optional-pointer: true
-        bool_default_true:
-            nullable: true
-            type: boolean
         ca_cert:
             additionalProperties: false
             description: |
@@ -646,6 +643,70 @@ components:
                     x-go-type-skip-optional-pointer: true
             type: object
             x-go-name: FIPS
+        firewall_enabled:
+            additionalProperties: false
+            default: true
+            description: Whether the firewall rule is enabled or not. Defaults to true.
+            type: boolean
+            x-go-type-skip-optional-pointer: true
+            x-omitempty: true
+            x-order: 2
+        firewall_from_to:
+            additionalProperties: false
+            properties:
+                enabled:
+                    $ref: '#/components/schemas/firewall_enabled'
+                from:
+                    description: |
+                        The from port number, must be between 1 and 65535.
+                    maximum: 65535
+                    minimum: 1
+                    type: integer
+                    x-go-type-skip-optional-pointer: true
+                    x-omitempty: true
+                protocol:
+                    $ref: '#/components/schemas/network_protocol'
+                to:
+                    description: |
+                        The to port number, must be between 1 and 65535.
+                    maximum: 65535
+                    minimum: 1
+                    type: integer
+                    x-go-type-skip-optional-pointer: true
+                    x-omitempty: true
+            type: object
+        firewall_port:
+            additionalProperties: false
+            properties:
+                enabled:
+                    $ref: '#/components/schemas/firewall_enabled'
+                port:
+                    description: |
+                        The port number, must be between 1 and 65535.
+                    maximum: 65535
+                    minimum: 1
+                    type: integer
+                    x-go-type-skip-optional-pointer: true
+                    x-omitempty: true
+                protocol:
+                    $ref: '#/components/schemas/network_protocol'
+            type: object
+        firewall_service:
+            additionalProperties: false
+            properties:
+                enabled:
+                    $ref: '#/components/schemas/firewall_enabled'
+                protocol:
+                    $ref: '#/components/schemas/network_protocol'
+                service:
+                    description: |
+                        The name of the IANA service name. This is the name of the service as defined in
+                        the /etc/services file.
+                    minLength: 2
+                    type: string
+                    x-go-type-skip-optional-pointer: true
+                    x-omitempty: true
+            type: object
         fsnode:
             additionalProperties: false
             properties:
@@ -896,62 +957,56 @@ components:
             type: object
         network:
             additionalProperties: false
+            description: Networking details including firewall configuration.
             properties:
                 firewall:
                     $ref: '#/components/schemas/network_firewall'
             type: object
         network_firewall:
             additionalProperties: false
+            description: Firewall details - package firewalld must be installed in the image.
             properties:
                 services:
-                    description: |-
-                        Services to enable or disable. The service can be defined via an assigned IANA name, port number or port range.
+                    description: |
+                        Services to enable or disable. The service can be defined via an assigned
+                        IANA name, port number or port range.
 
-                        Services are processed in order, when a service is disabled and then accidentally enabled via a port or a port range, the service will be enabled in the end.
+                        Services are processed in order, when a service is disabled and then accidentally
+                        enabled via a port or a port range, the service will be enabled in the end.
 
-                        By default the firewall blocks all access, except for services that enable their ports explicitly such as the sshd.
+                        By default the firewall blocks all access, except for services that enable their
+                        ports explicitly such as the sshd.
                     items:
-                        additionalProperties: false
                         oneOf:
-                            - required:
-                                - service
-                              title: firewall_service
-                            - required:
-                                - port
-                              title: firewall_port
-                            - required:
-                                - from
-                                - to
-                              title: firewall_from_to
-                        properties:
-                            enabled:
-                                $ref: '#/components/schemas/bool_default_true'
-                            from:
-                                maximum: 65535
-                                minimum: 1
-                                type: integer
-                            port:
-                                maximum: 65535
-                                minimum: 1
-                                type: integer
-                            protocol:
-                                default: any
-                                enum:
-                                    - tcp
-                                    - udp
-                                    - any
-                                type: string
-                            service:
-                                minLength: 2
-                                type: string
-                            to:
-                                maximum: 65535
-                                minimum: 1
-                                type: integer
+                            - $ref: '#/components/schemas/firewall_service'
+                            - $ref: '#/components/schemas/firewall_port'
+                            - $ref: '#/components/schemas/firewall_from_to'
                         type: object
+                        x-go-name: NetworkService
+                        x-go-type-name: NetworkService
                     nullable: true
                     type: array
+                    x-go-type-skip-optional-pointer: true
+                    x-omitempty: true
             type: object
+        network_protocol:
+            additionalProperties: false
+            default: any
+            description: |
+                The network protocol used for the connection. This can be either TCP, UDP, or any protocol.
+            enum:
+                - tcp
+                - udp
+                - any
+            type: string
+            x-enum-varnames:
+                - TCP
+                - UDP
+                - Any
+            x-go-type-name: NetworkProtocol
+            x-go-type-skip-optional-pointer: true
+            x-omitempty: true
+            x-order: 1
         openscap:
             additionalProperties: false
             properties:

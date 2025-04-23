@@ -1,0 +1,18 @@
+---
+description: |
+  The network protocol used for the connection. This can be either TCP, UDP, or any protocol.
+type: string
+default: any
+enum:
+  - tcp
+  - udp
+  - any
+x-enum-varnames:
+  - TCP
+  - UDP
+  - Any
+x-go-type-skip-optional-pointer: true
+x-omitempty: true
+x-go-type-name: NetworkProtocol
+x-order: 1
+additionalProperties: false

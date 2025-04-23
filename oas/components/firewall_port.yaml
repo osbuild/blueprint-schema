@@ -1,0 +1,16 @@
+---
+type: object
+properties:
+  protocol:
+    "$ref": "network_protocol.yaml"
+  port:
+    description: |
+      The port number, must be between 1 and 65535.
+    type: integer
+    maximum: 65535
+    minimum: 1
+    x-go-type-skip-optional-pointer: true
+    x-omitempty: true
+  enabled:
+    "$ref": "firewall_enabled.yaml"
+additionalProperties: false
