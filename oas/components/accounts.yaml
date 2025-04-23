@@ -1,6 +1,6 @@
 ---
 type: object
-description: Users and groups details
+description: Operating system user and group accounts to be created on the image.
 properties:
   groups:
     type: array

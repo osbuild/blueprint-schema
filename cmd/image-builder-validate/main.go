@@ -17,6 +17,7 @@ import (
 func main() {
 	input := flag.String("input", "", "input file (defaults to standard input)")
 	printJSONSchema := flag.Bool("print-json-schema", false, "print embedded schema to standard output and exit")
+	printJSONExtendedSchema := flag.Bool("print-json-extended-schema", false, "print embedded schema to standard output and exit")
 	printYAMLSchema := flag.Bool("print-yaml-schema", false, "print embedded schema to standard output and exit")
 	//validateJSON := flag.Bool("validate-json", false, "validate JSON standard input")
 	//validateYAML := flag.Bool("validate-yaml", false, "validate YAML standard input (default behavior)")
@@ -34,7 +35,7 @@ func main() {
 		defer in.Close()
 	}
 
-	if !*printJSONSchema && !*printYAMLSchema {
+	if !*printJSONSchema && !*printYAMLSchema && !*printJSONExtendedSchema {
 		inBuf, err = io.ReadAll(in)
 		if err != nil {
 			panic(err)
@@ -57,7 +58,7 @@ func main() {
 		panic(err)
 	}
 
-	if *printJSONSchema || *printYAMLSchema {
+	if *printJSONSchema || *printYAMLSchema || *printJSONExtendedSchema {
 		doc.InternalizeRefs(context.Background(), func(s *openapi3.T, c openapi3.ComponentRef) string {
 			return strings.TrimSuffix(c.RefString(), ".yaml")
 		})
@@ -69,6 +70,52 @@ func main() {
 			}
 			os.Stdout.Write(buf)
 		} else if *printJSONSchema {
+			buf, err := doc.MarshalJSON()
+			if err != nil {
+				panic(err)
+			}
+			os.Stdout.Write(buf)
+		} else if *printJSONExtendedSchema {
+			// fsnodes: if type is "dir", contents must not be present
+			//
+			// anyOf:
+			//   - not:
+			//       properties:
+			//         type:
+			//           enum: ["dir"]
+			//       required:
+			//         - type
+			//   - not:
+			//       required:
+			//       - contents
+			doc.Components.Schemas["fsnode"].Value.AnyOf = []*openapi3.SchemaRef{
+				{
+					Value: &openapi3.Schema{
+						Not: &openapi3.SchemaRef{
+							Value: &openapi3.Schema{
+								Properties: openapi3.Schemas{
+									"type": &openapi3.SchemaRef{
+										Value: &openapi3.Schema{
+											Enum: []any{"dir"},
+										},
+									},
+								},
+								Required: []string{"type"},
+							},
+						},
+					},
+				},
+				{
+					Value: &openapi3.Schema{
+						Not: &openapi3.SchemaRef{
+							Value: &openapi3.Schema{
+								Required: []string{"contents"},
+							},
+						},
+					},
+				},
+			}
+
 			buf, err := doc.MarshalJSON()
 			if err != nil {
 				panic(err)

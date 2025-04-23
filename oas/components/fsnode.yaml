@@ -1,56 +1,64 @@
 ---
 type: object
-allOf:
-- anyOf:
-  - not:
-      properties:
-        type:
-          enum: ["dir"]
-      required:
-        - type
-  - not:
-      required:
-      - contents   
 required:
 - path
+x-go-name: FSNode
 properties:
   type:
-    description: 'Type is the type of the file system node, one of: file, dir.'
+    description: |
+      Type is the type of the file system node, one of: file, dir.
+    type: string
     default: file
     enum:
     - file
     - dir
-  contents:
-    description: Contents is the file system node contents. When not present,
-      an empty file is created.
-    "$ref": "fsnode_contents.yaml"
-    nullable: true
-  ensure_parents:
-    description: EnsureParents is a boolean that determines if the parent directories
-      should be created if they do not exist.
-    default: false
-    type: boolean
-  group:
-    description: Group is the file system node group. Defaults to root.
-    default: root
-    type: string
-  mode:
-    description: Mode is the file system node permissions. Defaults to 0644 for
-      files and 0755 for directories.
-    type: integer
-  path:
-    description: Path is the absolute path to the file or directory.
-    type: string
-    pattern: "^/"
+    x-go-type-skip-optional-pointer: true
+    x-go-type-name: FSNodeType
   state:
-    description: 'State is the state of the file system node, one of: present,
-      absent.'
+    description: |
+      State is the state of the file system node, one of: present, absent.
+    type: string
     default: present
     enum:
     - present
     - absent
+    x-go-type-skip-optional-pointer: true
+    x-go-type-name: FSNodeState
+  ensure_parents:
+    description: |
+      EnsureParents is a boolean that determines if the parent directories
+      should be created if they do not exist.
+    default: false
+    type: boolean
+    x-go-type-skip-optional-pointer: true
   user:
     description: User is the file system node owner. Defaults to root.
     default: root
     type: string
+    x-go-type-skip-optional-pointer: true
+  group:
+    description: Group is the file system node group. Defaults to root.
+    default: root
+    type: string
+    x-go-type-skip-optional-pointer: true
+  mode:
+    description: |
+      Mode is the file system node permissions. Defaults to 0644 for
+      files and 0755 for directories.
+    type: integer
+    x-go-type-skip-optional-pointer: true
+  path:
+    description: Path is the absolute path to the file or directory.
+    type: string
+    pattern: "^/"
+    x-go-type-skip-optional-pointer: true
+  contents:
+    description: |
+      Contents is the file system node contents. When not present,
+      an empty file is created.
+    oneOf:
+      - "$ref": "fsnode_contents_text.yaml"
+      - "$ref": "fsnode_contents_base64.yaml"
+    x-go-type-name: FSNodeContents
+    nullable: true
 additionalProperties: false

@@ -10,6 +10,18 @@ import (
 	"github.com/oapi-codegen/runtime"
 )
 
+// Defines values for FSNodeState.
+const (
+	Absent  FSNodeState = "absent"
+	Present FSNodeState = "present"
+)
+
+// Defines values for FSNodeType.
+const (
+	Dir  FSNodeType = "dir"
+	File FSNodeType = "file"
+)
+
 // Defines values for InstallerAnacondaDisabledModules.
 const (
 	InstallerAnacondaDisabledModulesOrgFedoraprojectAnacondaModulesLocalization InstallerAnacondaDisabledModules = "org.fedoraproject.Anaconda.Modules.Localization"
@@ -49,7 +61,7 @@ const (
 //
 // THIS IS WORK IN PROGRESS
 type Blueprint struct {
-	// Accounts Users and groups details
+	// Accounts Operating system user and group accounts to be created on the image.
 	Accounts *Accounts `json:"accounts,omitempty"`
 
 	// CACerts The CA certificates to be added to the image. The certificates
@@ -73,21 +85,39 @@ type Blueprint struct {
 	// package name the version glob should be *. And be aware that you will be unable
 	// to freeze the blueprint. This is because the provides will expand into multiple
 	// packages with their own names and versions.
-	DNF  *DNF  `json:"dnf,omitempty"`
-	Fips *Fips `json:"fips,omitempty"`
+	DNF *DNF `json:"dnf,omitempty"`
 
-	// Fsnodes File system nodes details.
+	// FIPS FIPS details, optional.
+	FIPS *FIPS `json:"fips,omitempty"`
+
+	// FSNodes File system nodes details.
 	//
-	// You can use the customization to create new files or to replace existing ones, if not restricted by the policy specified below. If the target path is an existing symlink to another file, the symlink will be replaced by the custom file.
+	// You can use the customization to create new files or to replace existing ones,
+	// if not restricted by the policy specified below. If the target path is an existing
+	// symlink to another file, the symlink will be replaced by the custom file.
 	//
-	// Please note that the parent directory of a specified file must exist. If it does not exist, the image build will fail. One can ensure that the parent directory exists by specifying "ensure_parents".
+	// Please note that the parent directory of a specified file must exist. If it does
+	// not exist, the image build will fail. One can ensure that the parent directory
+	// exists by specifying "ensure_parents".
 	//
-	// In addition, the following files are not allowed to be created or replaced by policy: /etc/fstab, /etc/shadow, /etc/passwd and /etc/group.
+	// In addition, the following files are not allowed to be created or replaced by
+	// policy: /etc/fstab, /etc/shadow, /etc/passwd and /etc/group.
 	//
-	// Using the files customization comes with a high chance of creating an image that doesn't boot. Use this feature only if you know what you are doing. Although the files customization can be used to configure parts of the OS which can also be configured by other blueprint customizations, this use is discouraged. If possible, users should always default to using the specialized blueprint customizations. Note that if you combine the files customizations with other customizations, the other customizations may not work as expected or may be overridden by the files customizations.
+	// Using the files customization comes with a high chance of creating an image that
+	// doesn't boot. Use this feature only if you know what you are doing. Although the
+	// files customization can be used to configure parts of the OS which can also be
+	// configured by other blueprint customizations, this use is discouraged. If possible,
+	// users should always default to using the specialized blueprint customizations.
+	// Note that if you combine the files customizations with other customizations, the
+	// other customizations may not work as expected or may be overridden by the files
+	// customizations.
 	//
-	// You can create custom directories as well. The existence of a specified directory is handled gracefully only if no explicit mode, user or group is specified. If any of these customizations are specified and the directory already exists in the image, the image build will fail. The intention is to prevent changing the ownership or permissions of existing directories.
-	Fsnodes *[]Fsnode `json:"fsnodes"`
+	// You can create custom directories as well. The existence of a specified directory
+	// is handled gracefully only if no explicit mode, user or group is specified. If any
+	// of these customizations are specified and the directory already exists in the
+	// image, the image build will fail. The intention is to prevent changing the
+	// ownership or permissions of existing directories.
+	FSNodes []FSNode `json:"fsnodes,omitempty"`
 
 	// Hostname Hostname is an optional string that can be used to configure the hostname of the final image.
 	Hostname  *string    `json:"hostname,omitempty"`
@@ -108,7 +138,7 @@ type Blueprint struct {
 	Timedate     *TimeDate     `json:"timedate,omitempty"`
 }
 
-// Accounts Users and groups details
+// Accounts Operating system user and group accounts to be created on the image.
 type Accounts struct {
 	Groups []AccountsGroups `json:"groups"`
 	Users  []AccountsUsers  `json:"users"`
@@ -169,7 +199,7 @@ type AccountsUsers struct {
 // BoolDefaultTrue defines model for bool_default_true.
 type BoolDefaultTrue = bool
 
-// CACert defines model for ca_cert.
+// CACert The CA certificates to be added to the image.
 type CACert struct {
 	// PEM The PEM-encoded certificate.
 	PEM *string `json:"pem,omitempty"`
@@ -323,30 +353,72 @@ type Error struct {
 	Error *string `json:"error,omitempty"`
 }
 
-// Fips defines model for fips.
-type Fips struct {
-	// Enabled Enables the system FIPS mode (disabled by default). Currently only edge-raw-image, edge-installer, edge-simplified-installer, edge-ami and edge-vsphere images support this customization.
-	Enabled *bool `json:"enabled,omitempty"`
+// FIPS FIPS details, optional.
+type FIPS struct {
+	// Enabled Enables the system FIPS mode (disabled by default). Currently
+	// only edge-raw-image, edge-installer, edge-simplified-installer, edge-ami
+	// and edge-vsphere images support this customization.
+	Enabled bool `json:"enabled,omitempty"`
 }
 
-// Fsnode defines model for fsnode.
-type Fsnode struct {
+// FSNode defines model for fsnode.
+type FSNode struct {
+	// Contents Contents is the file system node contents. When not present,
+	// an empty file is created.
+	Contents *FSNodeContents `json:"contents"`
+
+	// EnsureParents EnsureParents is a boolean that determines if the parent directories
+	// should be created if they do not exist.
+	EnsureParents bool `json:"ensure_parents,omitempty"`
+
+	// Group Group is the file system node group. Defaults to root.
+	Group string `json:"group,omitempty"`
+
+	// Mode Mode is the file system node permissions. Defaults to 0644 for
+	// files and 0755 for directories.
+	Mode int `json:"mode,omitempty"`
+
+	// Path Path is the absolute path to the file or directory.
+	Path string `json:"path"`
+
+	// State State is the state of the file system node, one of: present, absent.
+	State FSNodeState `json:"state,omitempty"`
+
+	// Type Type is the type of the file system node, one of: file, dir.
+	Type FSNodeType `json:"type,omitempty"`
+
+	// User User is the file system node owner. Defaults to root.
+	User string `json:"user,omitempty"`
+}
+
+// FSNodeContents Contents is the file system node contents. When not present,
+// an empty file is created.
+type FSNodeContents struct {
 	union json.RawMessage
 }
 
-// Fsnode0 defines model for .
-type Fsnode0 = interface{}
+// FSNodeState State is the state of the file system node, one of: present, absent.
+type FSNodeState string
 
-// Fsnode1 defines model for .
-type Fsnode1 = interface{}
+// FSNodeType Type is the type of the file system node, one of: file, dir.
+type FSNodeType string
 
-// FsnodeContents defines model for fsnode_contents.
-type FsnodeContents struct {
+// FsnodeContentsBase64 defines model for fsnode_contents_base64.
+type FsnodeContentsBase64 = FSNodeContentsBase64
+
+// FSNodeContentsBase64 defines model for .
+type FSNodeContentsBase64 struct {
 	// Base64 Base64-encoded file contents. Useful for binaries.
-	Base64 *string `json:"base64,omitempty"`
+	Base64 string `json:"base64"`
+}
 
+// FsnodeContentsText defines model for fsnode_contents_text.
+type FsnodeContentsText = FSNodeContentsText
+
+// FSNodeContentsText defines model for .
+type FSNodeContentsText struct {
 	// Text Plain text file contents.
-	Text *string `json:"text,omitempty"`
+	Text string `json:"text"`
 }
 
 // Ignition defines model for ignition.
@@ -756,22 +828,22 @@ func (t *DNFSource) UnmarshalJSON(b []byte) error {
 	return err
 }
 
-// AsFsnode0 returns the union data inside the Fsnode as a Fsnode0
-func (t Fsnode) AsFsnode0() (Fsnode0, error) {
-	var body Fsnode0
+// AsFsnodeContentsText returns the union data inside the FSNodeContents as a FsnodeContentsText
+func (t FSNodeContents) AsFsnodeContentsText() (FsnodeContentsText, error) {
+	var body FsnodeContentsText
 	err := json.Unmarshal(t.union, &body)
 	return body, err
 }
 
-// FromFsnode0 overwrites any union data inside the Fsnode as the provided Fsnode0
-func (t *Fsnode) FromFsnode0(v Fsnode0) error {
+// FromFsnodeContentsText overwrites any union data inside the FSNodeContents as the provided FsnodeContentsText
+func (t *FSNodeContents) FromFsnodeContentsText(v FsnodeContentsText) error {
 	b, err := json.Marshal(v)
 	t.union = b
 	return err
 }
 
-// MergeFsnode0 performs a merge with any union data inside the Fsnode, using the provided Fsnode0
-func (t *Fsnode) MergeFsnode0(v Fsnode0) error {
+// MergeFsnodeContentsText performs a merge with any union data inside the FSNodeContents, using the provided FsnodeContentsText
+func (t *FSNodeContents) MergeFsnodeContentsText(v FsnodeContentsText) error {
 	b, err := json.Marshal(v)
 	if err != nil {
 		return err
@@ -782,22 +854,22 @@ func (t *Fsnode) MergeFsnode0(v Fsnode0) error {
 	return err
 }
 
-// AsFsnode1 returns the union data inside the Fsnode as a Fsnode1
-func (t Fsnode) AsFsnode1() (Fsnode1, error) {
-	var body Fsnode1
+// AsFsnodeContentsBase64 returns the union data inside the FSNodeContents as a FsnodeContentsBase64
+func (t FSNodeContents) AsFsnodeContentsBase64() (FsnodeContentsBase64, error) {
+	var body FsnodeContentsBase64
 	err := json.Unmarshal(t.union, &body)
 	return body, err
 }
 
-// FromFsnode1 overwrites any union data inside the Fsnode as the provided Fsnode1
-func (t *Fsnode) FromFsnode1(v Fsnode1) error {
+// FromFsnodeContentsBase64 overwrites any union data inside the FSNodeContents as the provided FsnodeContentsBase64
+func (t *FSNodeContents) FromFsnodeContentsBase64(v FsnodeContentsBase64) error {
 	b, err := json.Marshal(v)
 	t.union = b
 	return err
 }
 
-// MergeFsnode1 performs a merge with any union data inside the Fsnode, using the provided Fsnode1
-func (t *Fsnode) MergeFsnode1(v Fsnode1) error {
+// MergeFsnodeContentsBase64 performs a merge with any union data inside the FSNodeContents, using the provided FsnodeContentsBase64
+func (t *FSNodeContents) MergeFsnodeContentsBase64(v FsnodeContentsBase64) error {
 	b, err := json.Marshal(v)
 	if err != nil {
 		return err
@@ -808,12 +880,12 @@ func (t *Fsnode) MergeFsnode1(v Fsnode1) error {
 	return err
 }
 
-func (t Fsnode) MarshalJSON() ([]byte, error) {
+func (t FSNodeContents) MarshalJSON() ([]byte, error) {
 	b, err := t.union.MarshalJSON()
 	return b, err
 }
 
-func (t *Fsnode) UnmarshalJSON(b []byte) error {
+func (t *FSNodeContents) UnmarshalJSON(b []byte) error {
 	err := t.union.UnmarshalJSON(b)
 	return err
 }

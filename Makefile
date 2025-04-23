@@ -1,5 +1,5 @@
 TINYGO?=tinygo
-SOURCES=$(shell find . -name '*.go' -name 'blueprint-schema.json' -name 'go.mod' -name 'go.sum' -name 'Makefile')
+SOURCES=$(shell find . -name '*.go' -name 'go.mod' -name 'go.sum' -name 'Makefile')
 SCHEMA_SRC=$(shell find ./oas -name '*.yaml')
 DISTDIR=dist
 SCHEMA_DST=blueprint-schema.json
@@ -27,14 +27,17 @@ pkg-go-dev-update: ## Schedule https://pkg.go.dev/github.com/osbuild/blueprint-s
 test: ## Run all tests
 	@go test -count=1 . ./pkg/blueprint
 
-blueprint-oas3.yaml: $(SCHEMA_SRC)
+blueprint-oas3.yaml: $(SCHEMA_SRC) $(SOURCES)
 	go run ./cmd/image-builder-validate -print-yaml-schema > blueprint-oas3.yaml
 
-blueprint-oas3.json: $(SCHEMA_SRC)
+blueprint-oas3.json: $(SCHEMA_SRC) $(SOURCES)
 	go run ./cmd/image-builder-validate -print-json-schema > blueprint-oas3.json
 
+blueprint-oas3-ext.json: $(SCHEMA_SRC) $(SOURCES)
+	go run ./cmd/image-builder-validate -print-json-extended-schema > blueprint-oas3-ext.json
+
 .PHONY: schema
-schema: blueprint-oas3.yaml blueprint-oas3.json ## Bundle OpenAPI schema
+schema: blueprint-oas3.yaml blueprint-oas3.json blueprint-oas3-ext.json ## Bundle OpenAPI schema
 
 .PHONY: schema-codegen
 schema-codegen: schema ## Generate Go code from schema
@@ -61,6 +64,5 @@ build-editor: ## Build the demo-web editor
 
 .PHONY: clean
 clean: ## Clean up all build artifacts
-	rm -rf $(DISTDIR)
-	rm -rf web/node_modules
-	rm -rf web/dist
+	rm -rf $(DISTDIR) blueprint-oas3*.{yaml,json}
+	rm -rf web/node_modules web/dist

@@ -1,9 +1,13 @@
 ---
 type: object
+description: FIPS details, optional.
+x-go-name: FIPS
 properties:
   enabled:
-    description: Enables the system FIPS mode (disabled by default). Currently
+    description: |
+      Enables the system FIPS mode (disabled by default). Currently
       only edge-raw-image, edge-installer, edge-simplified-installer, edge-ami
       and edge-vsphere images support this customization.
     type: boolean
+    x-go-type-skip-optional-pointer: true
 additionalProperties: false
