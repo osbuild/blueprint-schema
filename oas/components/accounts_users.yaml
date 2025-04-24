@@ -19,13 +19,7 @@ properties:
     maxLength: 4096
     x-go-type-skip-optional-pointer: true
   expires:
-    description: |
-      The expiration date of the account in the format YYYY-MM-DD.
-
-      String-based type which accepts date (YYYY-MM-DD) or date-time (RFC3339)
-      format and only marshals into date format. This is needed for JSON/YAML compatibility
-      since YAML automatically converts strings which look like dates into time.Time.
-    "$ref": "date.yaml"
+    "$ref": "expire_date.yaml"
   gid:
     description: |
       The primary group ID (GID) of the user. Value of zero (or ommited
@@ -43,6 +37,7 @@ properties:
   home:
     description: The home directory of the user.
     type: string
+    pattern: "^/"
     x-go-type-skip-optional-pointer: true
   password:
     description: |
@@ -55,6 +50,7 @@ properties:
   shell:
     description: The shell of the user.
     type: string
+    pattern: "^/"
     x-go-type-skip-optional-pointer: true
   ssh_keys:
     description: SSH keys to be added to the account's authorized_keys file.

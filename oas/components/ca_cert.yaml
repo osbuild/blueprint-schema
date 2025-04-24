@@ -9,5 +9,6 @@ properties:
     description: The PEM-encoded certificate.
     type: string
     x-go-name: PEM
+    x-go-type-skip-optional-pointer: true
 additionalProperties: false
 x-go-name: CACert

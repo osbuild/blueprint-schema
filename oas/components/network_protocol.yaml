@@ -8,9 +8,9 @@ enum:
   - udp
   - any
 x-enum-varnames:
-  - TCP
-  - UDP
-  - Any
+  - ProtocolTCP
+  - ProtocolUDP
+  - ProtocolAny
 x-go-type-skip-optional-pointer: true
 x-omitempty: true
 x-go-type-name: NetworkProtocol

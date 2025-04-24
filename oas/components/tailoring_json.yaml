@@ -9,6 +9,7 @@ properties:
     description: JSON filepath, must be used with json_profile_id and cannot be
       used with selected and unselected fields.
     type: string
+    pattern: "^/"
     x-go-type-skip-optional-pointer: true
     x-go-name: JSONFilePath
   json_profile_id:

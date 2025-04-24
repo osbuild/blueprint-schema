@@ -10,8 +10,11 @@ properties:
     type: string
     default: file
     enum:
-    - file
-    - dir
+      - file
+      - dir
+    x-enum-varnames:
+      - FSNodeFile
+      - FSNodeDir
     x-go-type-skip-optional-pointer: true
     x-go-type-name: FSNodeType
   state:
@@ -20,8 +23,11 @@ properties:
     type: string
     default: present
     enum:
-    - present
-    - absent
+      - present
+      - absent
+    x-enum-varnames:
+      - FSStatePresent
+      - FSStateAbsent
     x-go-type-skip-optional-pointer: true
     x-go-type-name: FSNodeState
   ensure_parents:

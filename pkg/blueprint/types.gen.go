@@ -11,35 +11,35 @@ import (
 
 // Defines values for NetworkProtocol.
 const (
-	Any NetworkProtocol = "any"
-	TCP NetworkProtocol = "tcp"
-	UDP NetworkProtocol = "udp"
+	ProtocolAny NetworkProtocol = "any"
+	ProtocolTCP NetworkProtocol = "tcp"
+	ProtocolUDP NetworkProtocol = "udp"
 )
 
 // Defines values for AnacondaModules.
 const (
-	AnacondaModLocalization AnacondaModules = "org.fedoraproject.Anaconda.Modules.Localization"
-	AnacondaModNetwork      AnacondaModules = "org.fedoraproject.Anaconda.Modules.Network"
-	AnacondaModPayloads     AnacondaModules = "org.fedoraproject.Anaconda.Modules.Payloads"
-	AnacondaModRuntime      AnacondaModules = "org.fedoraproject.Anaconda.Modules.Runtime"
-	AnacondaModSecurity     AnacondaModules = "org.fedoraproject.Anaconda.Modules.Security"
-	AnacondaModServices     AnacondaModules = "org.fedoraproject.Anaconda.Modules.Services"
-	AnacondaModStorage      AnacondaModules = "org.fedoraproject.Anaconda.Modules.Storage"
-	AnacondaModSubscription AnacondaModules = "org.fedoraproject.Anaconda.Modules.Subscription"
-	AnacondaModTimezone     AnacondaModules = "org.fedoraproject.Anaconda.Modules.Timezone"
-	AnacondaModUser         AnacondaModules = "org.fedoraproject.Anaconda.Modules.User"
+	AnacondaLocalization AnacondaModules = "org.fedoraproject.Anaconda.Modules.Localization"
+	AnacondaNetwork      AnacondaModules = "org.fedoraproject.Anaconda.Modules.Network"
+	AnacondaPayloads     AnacondaModules = "org.fedoraproject.Anaconda.Modules.Payloads"
+	AnacondaRuntime      AnacondaModules = "org.fedoraproject.Anaconda.Modules.Runtime"
+	AnacondaSecurity     AnacondaModules = "org.fedoraproject.Anaconda.Modules.Security"
+	AnacondaServices     AnacondaModules = "org.fedoraproject.Anaconda.Modules.Services"
+	AnacondaStorage      AnacondaModules = "org.fedoraproject.Anaconda.Modules.Storage"
+	AnacondaSubscription AnacondaModules = "org.fedoraproject.Anaconda.Modules.Subscription"
+	AnacondaTimezone     AnacondaModules = "org.fedoraproject.Anaconda.Modules.Timezone"
+	AnacondaUser         AnacondaModules = "org.fedoraproject.Anaconda.Modules.User"
 )
 
 // Defines values for FSNodeState.
 const (
-	Absent  FSNodeState = "absent"
-	Present FSNodeState = "present"
+	FSStateAbsent  FSNodeState = "absent"
+	FSStatePresent FSNodeState = "present"
 )
 
 // Defines values for FSNodeType.
 const (
-	Dir  FSNodeType = "dir"
-	File FSNodeType = "file"
+	FSNodeDir  FSNodeType = "dir"
+	FSNodeFile FSNodeType = "file"
 )
 
 // Defines values for PartitionType.
@@ -239,7 +239,13 @@ type AccountsGroups struct {
 type AccountsUsers struct {
 	// Description A longer description of the account.
 	Description string `json:"description,omitempty"`
-	Expires     *Date  `json:"expires,omitempty"`
+
+	// Expires The expiration date in the format YYYY-MM-DD. Leave empty to never expire.
+	//
+	// String-based type which accepts date (YYYY-MM-DD) or date-time (RFC3339)
+	// format and only marshals into date format. This is needed for JSON/YAML compatibility
+	// since YAML automatically converts strings which look like dates into time.Time.
+	Expires *ExpireDate `json:"expires,omitempty"`
 
 	// GID The primary group ID (GID) of the user. Value of zero (or ommited
 	// value) means that the next available UID will be assigned.
@@ -281,7 +287,7 @@ type AnacondaModules string
 // CACert The CA certificates to be added to the image.
 type CACert struct {
 	// PEM The PEM-encoded certificate.
-	PEM *string `json:"pem,omitempty"`
+	PEM string `json:"pem,omitempty"`
 }
 
 // Container defines model for container.
@@ -298,9 +304,6 @@ type Container struct {
 	// TLSVerify Verify TLS connection, default is true.
 	TLSVerify bool `json:"tls_verify,omitempty"`
 }
-
-// Date defines model for date.
-type Date = string
 
 // DNF DNF package managers details. When using virtual provides as the
 // package name the version glob should be *. And be aware that you will be unable
@@ -431,6 +434,13 @@ type DNFSourceMirrorlist struct {
 type Error struct {
 	Error *string `json:"error,omitempty"`
 }
+
+// ExpireDate The expiration date in the format YYYY-MM-DD. Leave empty to never expire.
+//
+// String-based type which accepts date (YYYY-MM-DD) or date-time (RFC3339)
+// format and only marshals into date format. This is needed for JSON/YAML compatibility
+// since YAML automatically converts strings which look like dates into time.Time.
+type ExpireDate = string
 
 // FIPS FIPS details, optional.
 type FIPS struct {
