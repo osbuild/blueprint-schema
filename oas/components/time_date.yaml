@@ -1,17 +1,25 @@
 ---
 type: object
+description: |
+  Time and date details allowing configuration of the timezone and
+  NTP servers. The timezone is set by default to UTC.
 required:
 - timezone
 properties:
+  timezone:
+    description: |
+      System time zone. Defaults to UTC. To list available time zones run:
+      
+      timedatectl list-timezones
+    default: UTC
+    type: string
+    x-go-type-skip-optional-pointer: true
   ntp_servers:
-    description: An optional list of strings containing NTP servers to use. If
-      not provided the distribution defaults are used
+    description: |
+      An optional list of strings containing NTP servers to use. If
+      not provided the distribution defaults are used.
     type: array
     items:
       type: string
-  timezone:
-    description: 'System time zone. Defaults to UTC. To list available time zones
-      run: timedatectl list-timezones'
-    default: UTC
-    type: string
+    x-go-type-skip-optional-pointer: true
 additionalProperties: false

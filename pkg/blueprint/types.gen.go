@@ -190,8 +190,20 @@ type Blueprint struct {
 	// containing the root filesystem is grown to fill any left over space on the
 	// partition table. Logical Volumes are not grown to fill the space in the Volume
 	// Group since they are trivial to grow on a live system.
-	Storage  *Storage  `json:"storage,omitempty"`
-	Systemd  *Systemd  `json:"systemd,omitempty"`
+	Storage *Storage `json:"storage,omitempty"`
+
+	// Systemd Systemd unit configuration.
+	//
+	// This section can be used to control which services are enabled at boot time.
+	// Some image types already have services enabled or disabled in order for the image
+	// to work correctly, and cannot be overridden. For example, ami image type requires
+	// sshd, chronyd, and cloud-init services. Blueprint services do not replace these
+	// services, but add them to the list of services already present in the templates,
+	// if any.
+	Systemd *Systemd `json:"systemd,omitempty"`
+
+	// Timedate Time and date details allowing configuration of the timezone and
+	// NTP servers. The timezone is set by default to UTC.
 	Timedate *TimeDate `json:"timedate,omitempty"`
 }
 
@@ -952,16 +964,23 @@ type StoragePartition struct {
 // StorageType Device partitioning type: gpt (default) or mbr.
 type StorageType string
 
-// Systemd defines model for systemd.
+// Systemd Systemd unit configuration.
+//
+// This section can be used to control which services are enabled at boot time.
+// Some image types already have services enabled or disabled in order for the image
+// to work correctly, and cannot be overridden. For example, ami image type requires
+// sshd, chronyd, and cloud-init services. Blueprint services do not replace these
+// services, but add them to the list of services already present in the templates,
+// if any.
 type Systemd struct {
 	// Disabled The disabled attribute is a list of strings that contains the systemd units to be disabled.
-	Disabled *[]string `json:"disabled"`
+	Disabled []string `json:"disabled,omitempty"`
 
 	// Enabled The enabled attribute is a list of strings that contains the systemd units to be enabled.
-	Enabled *[]string `json:"enabled"`
+	Enabled []string `json:"enabled,omitempty"`
 
 	// Masked The masked attribute is a list of strings that contains the systemd units to be masked.
-	Masked *[]string `json:"masked"`
+	Masked []string `json:"masked,omitempty"`
 }
 
 // TailoringJSON defines model for tailoring_json.
@@ -982,12 +1001,16 @@ type TailoringProfiles struct {
 	Unselected []string `json:"unselected,omitempty"`
 }
 
-// TimeDate defines model for time_date.
+// TimeDate Time and date details allowing configuration of the timezone and
+// NTP servers. The timezone is set by default to UTC.
 type TimeDate struct {
-	// NtpServers An optional list of strings containing NTP servers to use. If not provided the distribution defaults are used
-	NtpServers *[]string `json:"ntp_servers,omitempty"`
+	// NtpServers An optional list of strings containing NTP servers to use. If
+	// not provided the distribution defaults are used.
+	NtpServers []string `json:"ntp_servers,omitempty"`
 
-	// Timezone System time zone. Defaults to UTC. To list available time zones run: timedatectl list-timezones
+	// Timezone System time zone. Defaults to UTC. To list available time zones run:
+	//
+	// timedatectl list-timezones
 	Timezone string `json:"timezone"`
 }
 
