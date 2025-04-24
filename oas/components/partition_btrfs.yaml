@@ -1,0 +1,20 @@
+---
+type: object
+x-go-type-name: PartitionBTRFS
+required:
+- type
+properties:
+  type:
+    "$ref": "partition_type.yaml"
+  minsize:
+    "$ref": "storage_minsize.yaml"
+  subvolumes:
+    description: |-
+      BTRFS subvolumes to create.
+
+      Relevant for partition types: btrfs.
+    type: array
+    items:
+      "$ref": "partition_subvolumes.yaml"
+    x-go-type-skip-optional-pointer: true
+additionalProperties: false

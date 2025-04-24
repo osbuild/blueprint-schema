@@ -1,0 +1,18 @@
+---
+type: object
+required:
+- type
+properties:
+  type:
+    "$ref": "partition_type.yaml"
+  fs_type:
+    "$ref": "storage_fstype.yaml"
+  label:
+    description: Optional label of the partition.
+    type: string
+    x-go-type-skip-optional-pointer: true
+  minsize:
+    "$ref": "storage_minsize.yaml"
+  mountpoint:
+    "$ref": "storage_mountpoint.yaml"
+additionalProperties: false

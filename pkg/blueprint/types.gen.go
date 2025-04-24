@@ -42,6 +42,27 @@ const (
 	File FSNodeType = "file"
 )
 
+// Defines values for PartitionType.
+const (
+	PartTypeBTRFS PartitionType = "btrfs"
+	PartTypeLVM   PartitionType = "lvm"
+	PartTypePlain PartitionType = "plain"
+)
+
+// Defines values for FSType.
+const (
+	FSTypeExt4 FSType = "ext4"
+	FSTypeSwap FSType = "swap"
+	FSTypeVFAT FSType = "vfat"
+	FSTypeXFS  FSType = "xfs"
+)
+
+// Defines values for StorageType.
+const (
+	StorageTypeGPT StorageType = "gpt"
+	StorageTypeMBR StorageType = "mbr"
+)
+
 // NetworkProtocol The network protocol used for the connection. This can be either TCP, UDP, or any protocol.
 type NetworkProtocol string
 
@@ -150,9 +171,28 @@ type Blueprint struct {
 	// Registration Registration details for various registration types, namely Red Hat
 	// Subscription Manager.
 	Registration *Registration `json:"registration,omitempty"`
-	Storage      *Storage      `json:"storage,omitempty"`
-	Systemd      *Systemd      `json:"systemd,omitempty"`
-	Timedate     *TimeDate     `json:"timedate,omitempty"`
+
+	// Storage Disk partitioning details. Not available for installer-based images.
+	//
+	// General principles:
+	//
+	// 1. All sizes, whether for specific filesystems, partitions, logical volumes,
+	// or the image itself, are treated as minimum requirements. This means the full
+	// disk image size is always larger than the size of the sum of the partitions,
+	// due to requirements for headers and metadata.
+	//
+	// 2. The partition that contains the root filesystem, whether this is a plain
+	// formatted partition, an LVM Volume Group, or a Btrfs partition, is always last
+	// in the partition table layout when it is automatically added. For Disk
+	// customizations the user-defined order is respected.
+	//
+	// 3. In the case of raw partitioning (no LVM and no Btrfs), the partition
+	// containing the root filesystem is grown to fill any left over space on the
+	// partition table. Logical Volumes are not grown to fill the space in the Volume
+	// Group since they are trivial to grow on a live system.
+	Storage  *Storage  `json:"storage,omitempty"`
+	Systemd  *Systemd  `json:"systemd,omitempty"`
+	Timedate *TimeDate `json:"timedate,omitempty"`
 }
 
 // Ignition Provides Ignition configuration files to be used in edge-raw-image and
@@ -666,6 +706,109 @@ type OpenSCAPTailoring struct {
 	union json.RawMessage
 }
 
+// PartitionBtrfs defines model for partition_btrfs.
+type PartitionBtrfs = PartitionBTRFS
+
+// PartitionBTRFS defines model for .
+type PartitionBTRFS struct {
+	// Minsize Minimum size of the volume.
+	//
+	// Size must be formatted as an integer followed by whitespace and then either a
+	// decimal unit (B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB,
+	// TiB, PiB, EiB).
+	Minsize StorageMinsize `json:"minsize,omitempty"`
+
+	// Subvolumes BTRFS subvolumes to create.
+	//
+	// Relevant for partition types: btrfs.
+	Subvolumes []PartitionSubvolumes `json:"subvolumes,omitempty"`
+
+	// Type Partition type: plain (default), lvm, or btrfs.
+	Type PartitionType `json:"type"`
+}
+
+// PartitionLv defines model for partition_lv.
+type PartitionLv = PartitionLV
+
+// PartitionLV defines model for .
+type PartitionLV struct {
+	// FSType File system type: ext4 (default), xfs, swap, or vfat.
+	//
+	// Relevant for partition types: plain.
+	FSType FSType `json:"fs_type,omitempty"`
+
+	// Label Optional label of the partition.
+	Label string `json:"label,omitempty"`
+
+	// Minsize Minimum size of the volume.
+	//
+	// Size must be formatted as an integer followed by whitespace and then either a
+	// decimal unit (B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB,
+	// TiB, PiB, EiB).
+	Minsize StorageMinsize `json:"minsize,omitempty"`
+
+	// Mountpoint Mount point of the partition. Must start with a slash.
+	Mountpoint StorageMountpoint `json:"mountpoint,omitempty"`
+
+	// Name Logical volume name. When not set, will be generated automatically.
+	Name string `json:"name,omitempty"`
+}
+
+// PartitionLvm defines model for partition_lvm.
+type PartitionLvm = PartitionLVM
+
+// PartitionLVM defines model for .
+type PartitionLVM struct {
+	// FSType File system type: ext4 (default), xfs, swap, or vfat.
+	//
+	// Relevant for partition types: plain.
+	FSType FSType `json:"fs_type,omitempty"`
+
+	// LogicalVolumes LVM logical volumes to create within the volume group.
+	//
+	// Relevant for partition types: lvm.
+	LogicalVolumes []PartitionLv `json:"logical_volumes,omitempty"`
+
+	// Type Partition type: plain (default), lvm, or btrfs.
+	Type PartitionType `json:"type"`
+}
+
+// PartitionPlain defines model for partition_plain.
+type PartitionPlain struct {
+	// FSType File system type: ext4 (default), xfs, swap, or vfat.
+	//
+	// Relevant for partition types: plain.
+	FSType FSType `json:"fs_type,omitempty"`
+
+	// Label Optional label of the partition.
+	Label string `json:"label,omitempty"`
+
+	// Minsize Minimum size of the volume.
+	//
+	// Size must be formatted as an integer followed by whitespace and then either a
+	// decimal unit (B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB,
+	// TiB, PiB, EiB).
+	Minsize StorageMinsize `json:"minsize,omitempty"`
+
+	// Mountpoint Mount point of the partition. Must start with a slash.
+	Mountpoint StorageMountpoint `json:"mountpoint,omitempty"`
+
+	// Type Partition type: plain (default), lvm, or btrfs.
+	Type PartitionType `json:"type"`
+}
+
+// PartitionSubvolumes defines model for partition_subvolumes.
+type PartitionSubvolumes struct {
+	// Mountpoint Mount point of the partition. Must start with a slash.
+	Mountpoint StorageMountpoint `json:"mountpoint,omitempty"`
+
+	// Name Subvolume name, must also define its parent volume.
+	Name string `json:"name,omitempty"`
+}
+
+// PartitionType Partition type: plain (default), lvm, or btrfs.
+type PartitionType string
+
 // Registration Registration details for various registration types, namely Red Hat
 // Subscription Manager.
 type Registration struct {
@@ -752,51 +895,62 @@ type RegistrationRHSM struct {
 	RepositoryManagement bool `json:"repository_management"`
 }
 
-// Storage defines model for storage.
+// Storage Disk partitioning details. Not available for installer-based images.
+//
+// General principles:
+//
+// 1. All sizes, whether for specific filesystems, partitions, logical volumes,
+// or the image itself, are treated as minimum requirements. This means the full
+// disk image size is always larger than the size of the sum of the partitions,
+// due to requirements for headers and metadata.
+//
+// 2. The partition that contains the root filesystem, whether this is a plain
+// formatted partition, an LVM Volume Group, or a Btrfs partition, is always last
+// in the partition table layout when it is automatically added. For Disk
+// customizations the user-defined order is respected.
+//
+// 3. In the case of raw partitioning (no LVM and no Btrfs), the partition
+// containing the root filesystem is grown to fill any left over space on the
+// partition table. Logical Volumes are not grown to fill the space in the Volume
+// Group since they are trivial to grow on a live system.
 type Storage struct {
-	// Minsize Minimum size of the storage device. When not set, the image size is acquired from image request.
+	// Minsize Minimum size of the storage device. When not set, the image size is acquired
+	// from image request.
 	//
-	// Size must be formatted as an integer followed by whitespace and then either a decimal unit (B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB, TiB, PiB, EiB).
+	// Size must be formatted as an integer followed by whitespace and then either
+	// a decimal unit (B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB,
+	// TiB, PiB, EiB).
 	Minsize string `json:"minsize"`
 
 	// Partitions Partitions of the following types: plain (default), lvm, or btrfs.
-	Partitions []StoragePartitions `json:"partitions"`
+	Partitions []StoragePartition `json:"partitions"`
 
 	// Type Device partitioning type: gpt (default) or mbr.
-	Type interface{} `json:"type"`
+	Type StorageType `json:"type"`
 }
 
-// StorageLogicalVolumes defines model for storage_logical_volumes.
-type StorageLogicalVolumes struct {
-	// FsType File system type: ext4 (default), xfs, swap, or vfat.
-	FsType *interface{} `json:"fs_type,omitempty"`
+// FSType File system type: ext4 (default), xfs, swap, or vfat.
+//
+// Relevant for partition types: plain.
+type FSType string
 
-	// Label Label of the logical volume.
-	Label *string `json:"label,omitempty"`
+// StorageMinsize Minimum size of the volume.
+//
+// Size must be formatted as an integer followed by whitespace and then either a
+// decimal unit (B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB,
+// TiB, PiB, EiB).
+type StorageMinsize = string
 
-	// Minsize Minimum size of the logical volume.
-	//
-	// Size must be formatted as an integer followed by whitespace and then either a decimal unit (B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB, TiB, PiB, EiB).
-	Minsize *string `json:"minsize,omitempty"`
+// StorageMountpoint Mount point of the partition. Must start with a slash.
+type StorageMountpoint = string
 
-	// Mountpoint Mount point of the logical volume. Required except for swap fs_type.
-	Mountpoint *string `json:"mountpoint,omitempty"`
-
-	// Name Logical volume name. When not set, will be generated automatically.
-	Name *string `json:"name,omitempty"`
+// StoragePartition Partitions of the following types: plain (default), lvm, or btrfs.
+type StoragePartition struct {
+	union json.RawMessage
 }
 
-// StoragePartitions defines model for storage_partitions.
-type StoragePartitions = interface{}
-
-// StorageSubvolumes defines model for storage_subvolumes.
-type StorageSubvolumes struct {
-	// Mountpoint Mount point of the subvolume. Required. Swap filesystem type is not supported on BTRFS volumes.
-	Mountpoint *string `json:"mountpoint,omitempty"`
-
-	// Name Subvolume name, must also define its parent volume.
-	Name *string `json:"name,omitempty"`
-}
+// StorageType Device partitioning type: gpt (default) or mbr.
+type StorageType string
 
 // Systemd defines model for systemd.
 type Systemd struct {
@@ -1198,6 +1352,94 @@ func (t OpenSCAPTailoring) MarshalJSON() ([]byte, error) {
 }
 
 func (t *OpenSCAPTailoring) UnmarshalJSON(b []byte) error {
+	err := t.union.UnmarshalJSON(b)
+	return err
+}
+
+// AsPartitionPlain returns the union data inside the StoragePartition as a PartitionPlain
+func (t StoragePartition) AsPartitionPlain() (PartitionPlain, error) {
+	var body PartitionPlain
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromPartitionPlain overwrites any union data inside the StoragePartition as the provided PartitionPlain
+func (t *StoragePartition) FromPartitionPlain(v PartitionPlain) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergePartitionPlain performs a merge with any union data inside the StoragePartition, using the provided PartitionPlain
+func (t *StoragePartition) MergePartitionPlain(v PartitionPlain) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsPartitionLvm returns the union data inside the StoragePartition as a PartitionLvm
+func (t StoragePartition) AsPartitionLvm() (PartitionLvm, error) {
+	var body PartitionLvm
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromPartitionLvm overwrites any union data inside the StoragePartition as the provided PartitionLvm
+func (t *StoragePartition) FromPartitionLvm(v PartitionLvm) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergePartitionLvm performs a merge with any union data inside the StoragePartition, using the provided PartitionLvm
+func (t *StoragePartition) MergePartitionLvm(v PartitionLvm) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsPartitionBtrfs returns the union data inside the StoragePartition as a PartitionBtrfs
+func (t StoragePartition) AsPartitionBtrfs() (PartitionBtrfs, error) {
+	var body PartitionBtrfs
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromPartitionBtrfs overwrites any union data inside the StoragePartition as the provided PartitionBtrfs
+func (t *StoragePartition) FromPartitionBtrfs(v PartitionBtrfs) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergePartitionBtrfs performs a merge with any union data inside the StoragePartition, using the provided PartitionBtrfs
+func (t *StoragePartition) MergePartitionBtrfs(v PartitionBtrfs) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+func (t StoragePartition) MarshalJSON() ([]byte, error) {
+	b, err := t.union.MarshalJSON()
+	return b, err
+}
+
+func (t *StoragePartition) UnmarshalJSON(b []byte) error {
 	err := t.union.UnmarshalJSON(b)
 	return err
 }

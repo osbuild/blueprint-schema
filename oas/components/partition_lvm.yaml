@@ -1,0 +1,20 @@
+---
+type: object
+x-go-type-name: PartitionLVM
+required:
+- type
+properties:
+  type:
+    "$ref": "partition_type.yaml"
+  fs_type:
+    "$ref": "storage_fstype.yaml"
+  logical_volumes:
+    description: |-
+      LVM logical volumes to create within the volume group.
+
+      Relevant for partition types: lvm.
+    type: array
+    items:
+      "$ref": "partition_lv.yaml"
+    x-go-type-skip-optional-pointer: true
+additionalProperties: false

@@ -1,0 +1,11 @@
+---
+type: string
+description: 'Device partitioning type: gpt (default) or mbr.'
+x-go-type-skip-optional-pointer: true
+default: gpt
+enum:
+  - gpt
+  - mbr
+x-enum-varnames:
+  - StorageTypeGPT
+  - StorageTypeMBR
