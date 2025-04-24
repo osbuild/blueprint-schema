@@ -1,27 +1,25 @@
 ---
 type: object
+description: Registration details for Red Hat operating system images.
+x-go-name: RegistrationRedHat
 properties:
   activation_key:
-    description: Subscription manager activation key to use during registration.
+    description: |
+      Subscription manager activation key to use during registration.
       A list of keys to use to redeem or apply specific subscriptions to the system.
     type: string
+    x-go-type-skip-optional-pointer: true
   connector:
-    description: Red Hat console.redhat.com connector (rhc) details.
     "$ref": "registration_connector.yaml"
     nullable: true
   insights:
-    description: Red Hat Insights client details.
     "$ref": "registration_insights.yaml"
     nullable: true
   organization:
     description: Subscription manager organization name to use during registration.
     type: string
+    x-go-type-skip-optional-pointer: true
   subscription_manager:
-    description: Subscription manager details (internal use only). The customization
-      expects that subscription-manager package is installed in the image, which
-      is by default part of the RHEL distribution bootable images. To explicitly
-      install the package, add it to the packages section in the blueprint.
-      The customization is not supported on Fedora distribution images.
     "$ref": "registration_rhsm.yaml"
     nullable: true
 additionalProperties: false

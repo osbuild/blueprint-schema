@@ -120,14 +120,9 @@ properties:
     "$ref": "network.yaml"
     nullable: true
   openscap:
-    description: OpenSCAP policy to be applied on the operating system. Added in
-      RHEL 8.7 & RHEL 9.1. It is possible to either list policy rules (enable or
-      disable) or to provide a full policy file.
     "$ref": "openscap.yaml"
     nullable: true
   registration:
-    description: Registration details for various registration types, namely Red
-      Hat Subscription Manager.
     "$ref": "registration.yaml"
     nullable: true
   storage:

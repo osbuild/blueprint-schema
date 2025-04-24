@@ -1,13 +1,12 @@
 ---
 type: object
+description: |
+  Registration details for various registration types, namely Red Hat
+  Subscription Manager.
 properties:
   fdo:
-    description: FDO allows users to configure FIDO Device Onboard device initialization
-        parameters. It is only available with the edge-simplified-installer or
-        iot-simplified-installer image types.
     "$ref": "registration_fdo.yaml"
     nullable: true
   redhat:
-    description: Registration details for Red Hat operating system images.
     "$ref": "registration_redhat.yaml"
 additionalProperties: false

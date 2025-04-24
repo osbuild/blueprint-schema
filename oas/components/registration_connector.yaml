@@ -1,9 +1,11 @@
 ---
 type: object
+description: Red Hat console.redhat.com connector (rhc) details.
 required:
 - enabled
 properties:
   enabled:
     description: Enables rhc (Red Hat Connector) during boot.
     type: boolean
+    x-go-type-skip-optional-pointer: true
 additionalProperties: false

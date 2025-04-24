@@ -5,7 +5,6 @@ package blueprint
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/oapi-codegen/runtime"
 )
@@ -141,8 +140,15 @@ type Blueprint struct {
 	Name string `json:"name,omitempty"`
 
 	// Network Networking details including firewall configuration.
-	Network      *Network      `json:"network,omitempty"`
-	Openscap     *Openscap     `json:"openscap,omitempty"`
+	Network *Network `json:"network,omitempty"`
+
+	// OpenSCAP OpenSCAP policy to be applied on the operating system. Added in
+	// RHEL 8.7 & RHEL 9.1. It is possible to either list policy rules (enable or
+	// disable) or to provide a full policy file.
+	OpenSCAP *OpenSCAP `json:"openscap,omitempty"`
+
+	// Registration Registration details for various registration types, namely Red Hat
+	// Subscription Manager.
 	Registration *Registration `json:"registration,omitempty"`
 	Storage      *Storage      `json:"storage,omitempty"`
 	Systemd      *Systemd      `json:"systemd,omitempty"`
@@ -600,106 +606,139 @@ type NetworkService struct {
 	union json.RawMessage
 }
 
-// Openscap defines model for openscap.
-type Openscap struct {
-	// Datastream Datastream to use for the scan. The datastream is the path to the SCAP datastream file to use for the scan. If the datastream parameter is not provided, a sensible default based on the selected distro will be chosen.
-	Datastream *string `json:"datastream,omitempty"`
+// OpenSCAP OpenSCAP policy to be applied on the operating system. Added in
+// RHEL 8.7 & RHEL 9.1. It is possible to either list policy rules (enable or
+// disable) or to provide a full policy file.
+type OpenSCAP struct {
+	// Datastream Datastream to use for the scan. The datastream is the path to
+	// the SCAP datastream file to use for the scan. If the datastream parameter
+	// is not provided, a sensible default based on the selected distro will be
+	// chosen.
+	Datastream string `json:"datastream,omitempty"`
 
-	// ProfileId The desired security profile ID.
-	ProfileId string             `json:"profile_id"`
-	Tailoring *OpenscapTailoring `json:"tailoring,omitempty"`
+	// ProfileID The desired security profile ID.
+	ProfileID string `json:"profile_id"`
+
+	// Tailoring An optional OpenSCAP tailoring information. Can be done via profile
+	// selection or tailoring JSON file.
+	//
+	// In case of profile selection, a tailoring file with a new tailoring profile
+	// ID is created and saved to the image. The new tailoring profile ID is
+	// created by appending the _osbuild_tailoring suffix to the base profile.
+	// For example, given tailoring options for the cis profile, tailoring profile
+	// xccdf_org.ssgproject.content_profile_cis_osbuild_tailoring will be created.
+	// The default namespace of the rules is org.ssgproject.content, so the prefix
+	// may be omitted for rules under this namespace, i.e.
+	// org.ssgproject.content_grub2_password and grub2_password are functionally
+	// equivalent. The generated tailoring file is saved to the image as
+	// /usr/share/xml/osbuild-oscap-tailoring/tailoring.xml or, for newer releases,
+	// in the /oscap_data directory, this is the location used for other OpenSCAP
+	// related artifacts.
+	//
+	// It is also possible to use JSON tailoring. In that case, custom JSON file
+	// must be provided using the blueprint and used in json_filepath field
+	// alongside with json_profile_id field. The generated XML tailoring file
+	// is saved to the image as /oscap_data/tailoring.xml.
+	Tailoring *OpenSCAPTailoring `json:"tailoring,omitempty"`
 }
 
-// OpenscapTailoring defines model for openscap_tailoring.
-type OpenscapTailoring struct {
-	// JsonFilepath JSON filepath, must be used with json_profile_id and cannot be used with selected and unselected fields.
-	JsonFilepath *string `json:"json_filepath,omitempty"`
-
-	// JsonProfileId JSON profile ID, must be used with json_filepath and cannot be used with selected and unselected fields.
-	JsonProfileId *string `json:"json_profile_id,omitempty"`
-
-	// Selected Selected rules, cannot be used with json_profile_id and json_filepath.
-	Selected *[]string `json:"selected,omitempty"`
-
-	// Unselected Unselected rules, cannot be used with json_profile_id and json_filepath.
-	Unselected *[]string `json:"unselected,omitempty"`
-	union      json.RawMessage
-}
-
-// OpenscapTailoring0 defines model for .
-type OpenscapTailoring0 struct {
+// OpenSCAPTailoring An optional OpenSCAP tailoring information. Can be done via profile
+// selection or tailoring JSON file.
+//
+// In case of profile selection, a tailoring file with a new tailoring profile
+// ID is created and saved to the image. The new tailoring profile ID is
+// created by appending the _osbuild_tailoring suffix to the base profile.
+// For example, given tailoring options for the cis profile, tailoring profile
+// xccdf_org.ssgproject.content_profile_cis_osbuild_tailoring will be created.
+// The default namespace of the rules is org.ssgproject.content, so the prefix
+// may be omitted for rules under this namespace, i.e.
+// org.ssgproject.content_grub2_password and grub2_password are functionally
+// equivalent. The generated tailoring file is saved to the image as
+// /usr/share/xml/osbuild-oscap-tailoring/tailoring.xml or, for newer releases,
+// in the /oscap_data directory, this is the location used for other OpenSCAP
+// related artifacts.
+//
+// It is also possible to use JSON tailoring. In that case, custom JSON file
+// must be provided using the blueprint and used in json_filepath field
+// alongside with json_profile_id field. The generated XML tailoring file
+// is saved to the image as /oscap_data/tailoring.xml.
+type OpenSCAPTailoring struct {
 	union json.RawMessage
 }
 
-// OpenscapTailoring00 defines model for .
-type OpenscapTailoring00 = interface{}
-
-// OpenscapTailoring01 defines model for .
-type OpenscapTailoring01 = interface{}
-
-// OpenscapTailoring02 defines model for .
-type OpenscapTailoring02 = interface{}
-
-// OpenscapTailoring1 defines model for .
-type OpenscapTailoring1 = interface{}
-
-// Registration defines model for registration.
+// Registration Registration details for various registration types, namely Red Hat
+// Subscription Manager.
 type Registration struct {
-	Fdo    *RegistrationFdo    `json:"fdo,omitempty"`
-	Redhat *RegistrationRedhat `json:"redhat,omitempty"`
+	// RegistrationFDO FDO allows users to configure FIDO Device Onboard device initialization
+	// parameters. It is only available with the edge-simplified-installer or
+	// iot-simplified-installer image types.
+	RegistrationFDO *RegistrationFDO `json:"fdo,omitempty"`
+
+	// RegistrationRedHat Registration details for Red Hat operating system images.
+	RegistrationRedHat *RegistrationRedHat `json:"redhat,omitempty"`
 }
 
-// RegistrationConnector defines model for registration_connector.
+// RegistrationConnector Red Hat console.redhat.com connector (rhc) details.
 type RegistrationConnector struct {
 	// Enabled Enables rhc (Red Hat Connector) during boot.
 	Enabled bool `json:"enabled"`
 }
 
-// RegistrationFdo defines model for registration_fdo.
-type RegistrationFdo struct {
+// RegistrationFDO FDO allows users to configure FIDO Device Onboard device initialization
+// parameters. It is only available with the edge-simplified-installer or
+// iot-simplified-installer image types.
+type RegistrationFDO struct {
 	// DiMfgStringTypeMacIface Optional interface name for the MAC address.
-	DiMfgStringTypeMacIface *string `json:"di_mfg_string_type_mac_iface,omitempty"`
+	DiMfgStringTypeMacIface string `json:"di_mfg_string_type_mac_iface,omitempty"`
 
 	// DiunPubKeyHash FDO server public key hex-encoded hash. Cannot be used together with insecure option or root certs.
-	DiunPubKeyHash *string `json:"diun_pub_key_hash,omitempty"`
+	DiunPubKeyHash string `json:"diun_pub_key_hash,omitempty"`
 
 	// DiunPubKeyInsecure FDO insecure option. When set, both hash or root certs must not be set.
-	DiunPubKeyInsecure *bool `json:"diun_pub_key_insecure,omitempty"`
+	DiunPubKeyInsecure bool `json:"diun_pub_key_insecure,omitempty"`
 
 	// DiunPubKeyRootCerts FDO server public key root certificate path. Cannot be used together with insecure option or hash.
-	DiunPubKeyRootCerts *string `json:"diun_pub_key_root_certs,omitempty"`
+	DiunPubKeyRootCerts string `json:"diun_pub_key_root_certs,omitempty"`
 
 	// ManufacturingServerUrl FDO manufacturing server URL.
 	ManufacturingServerUrl string `json:"manufacturing_server_url"`
-	union                  json.RawMessage
 }
 
-// RegistrationFdo0 defines model for .
-type RegistrationFdo0 = interface{}
-
-// RegistrationFdo1 defines model for .
-type RegistrationFdo1 = interface{}
-
-// RegistrationInsights defines model for registration_insights.
+// RegistrationInsights Red Hat Insights client details.
 type RegistrationInsights struct {
 	// Enabled Enables insights client during boot.
 	Enabled bool `json:"enabled"`
 }
 
-// RegistrationRedhat defines model for registration_redhat.
-type RegistrationRedhat struct {
-	// ActivationKey Subscription manager activation key to use during registration. A list of keys to use to redeem or apply specific subscriptions to the system.
-	ActivationKey *string                `json:"activation_key,omitempty"`
-	Connector     *RegistrationConnector `json:"connector,omitempty"`
-	Insights      *RegistrationInsights  `json:"insights,omitempty"`
+// RegistrationRedHat Registration details for Red Hat operating system images.
+type RegistrationRedHat struct {
+	// ActivationKey Subscription manager activation key to use during registration.
+	// A list of keys to use to redeem or apply specific subscriptions to the system.
+	ActivationKey string `json:"activation_key,omitempty"`
+
+	// Connector Red Hat console.redhat.com connector (rhc) details.
+	Connector *RegistrationConnector `json:"connector,omitempty"`
+
+	// Insights Red Hat Insights client details.
+	Insights *RegistrationInsights `json:"insights,omitempty"`
 
 	// Organization Subscription manager organization name to use during registration.
-	Organization        *string           `json:"organization,omitempty"`
-	SubscriptionManager *RegistrationRhsm `json:"subscription_manager,omitempty"`
+	Organization string `json:"organization,omitempty"`
+
+	// RegistrationRHSM Subscription manager details (internal use only). The customization
+	// expects that subscription-manager package is installed in the image, which
+	// is by default part of the RHEL distribution bootable images. To explicitly
+	// install the package, add it to the packages section in the blueprint.
+	// The customization is not supported on Fedora distribution images.
+	RegistrationRHSM *RegistrationRHSM `json:"subscription_manager,omitempty"`
 }
 
-// RegistrationRhsm defines model for registration_rhsm.
-type RegistrationRhsm struct {
+// RegistrationRHSM Subscription manager details (internal use only). The customization
+// expects that subscription-manager package is installed in the image, which
+// is by default part of the RHEL distribution bootable images. To explicitly
+// install the package, add it to the packages section in the blueprint.
+// The customization is not supported on Fedora distribution images.
+type RegistrationRHSM struct {
 	// AutoRegistration Enabled auto_registration plugin configuration.
 	AutoRegistration bool `json:"auto_registration"`
 
@@ -769,6 +808,24 @@ type Systemd struct {
 
 	// Masked The masked attribute is a list of strings that contains the systemd units to be masked.
 	Masked *[]string `json:"masked"`
+}
+
+// TailoringJSON defines model for tailoring_json.
+type TailoringJSON struct {
+	// JSONFilePath JSON filepath, must be used with json_profile_id and cannot be used with selected and unselected fields.
+	JSONFilePath string `json:"json_filepath"`
+
+	// JSONProfileID JSON profile ID, must be used with json_filepath and cannot be used with selected and unselected fields.
+	JSONProfileID string `json:"json_profile_id"`
+}
+
+// TailoringProfiles defines model for tailoring_profiles.
+type TailoringProfiles struct {
+	// Selected Selected rules, cannot be used with json_profile_id and json_filepath.
+	Selected []string `json:"selected,omitempty"`
+
+	// Unselected Unselected rules, cannot be used with json_profile_id and json_filepath.
+	Unselected []string `json:"unselected,omitempty"`
 }
 
 // TimeDate defines model for time_date.
@@ -1083,22 +1140,22 @@ func (t *NetworkService) UnmarshalJSON(b []byte) error {
 	return err
 }
 
-// AsOpenscapTailoring0 returns the union data inside the OpenscapTailoring as a OpenscapTailoring0
-func (t OpenscapTailoring) AsOpenscapTailoring0() (OpenscapTailoring0, error) {
-	var body OpenscapTailoring0
+// AsTailoringJSON returns the union data inside the OpenSCAPTailoring as a TailoringJSON
+func (t OpenSCAPTailoring) AsTailoringJSON() (TailoringJSON, error) {
+	var body TailoringJSON
 	err := json.Unmarshal(t.union, &body)
 	return body, err
 }
 
-// FromOpenscapTailoring0 overwrites any union data inside the OpenscapTailoring as the provided OpenscapTailoring0
-func (t *OpenscapTailoring) FromOpenscapTailoring0(v OpenscapTailoring0) error {
+// FromTailoringJSON overwrites any union data inside the OpenSCAPTailoring as the provided TailoringJSON
+func (t *OpenSCAPTailoring) FromTailoringJSON(v TailoringJSON) error {
 	b, err := json.Marshal(v)
 	t.union = b
 	return err
 }
 
-// MergeOpenscapTailoring0 performs a merge with any union data inside the OpenscapTailoring, using the provided OpenscapTailoring0
-func (t *OpenscapTailoring) MergeOpenscapTailoring0(v OpenscapTailoring0) error {
+// MergeTailoringJSON performs a merge with any union data inside the OpenSCAPTailoring, using the provided TailoringJSON
+func (t *OpenSCAPTailoring) MergeTailoringJSON(v TailoringJSON) error {
 	b, err := json.Marshal(v)
 	if err != nil {
 		return err
@@ -1109,22 +1166,22 @@ func (t *OpenscapTailoring) MergeOpenscapTailoring0(v OpenscapTailoring0) error 
 	return err
 }
 
-// AsOpenscapTailoring1 returns the union data inside the OpenscapTailoring as a OpenscapTailoring1
-func (t OpenscapTailoring) AsOpenscapTailoring1() (OpenscapTailoring1, error) {
-	var body OpenscapTailoring1
+// AsTailoringProfiles returns the union data inside the OpenSCAPTailoring as a TailoringProfiles
+func (t OpenSCAPTailoring) AsTailoringProfiles() (TailoringProfiles, error) {
+	var body TailoringProfiles
 	err := json.Unmarshal(t.union, &body)
 	return body, err
 }
 
-// FromOpenscapTailoring1 overwrites any union data inside the OpenscapTailoring as the provided OpenscapTailoring1
-func (t *OpenscapTailoring) FromOpenscapTailoring1(v OpenscapTailoring1) error {
+// FromTailoringProfiles overwrites any union data inside the OpenSCAPTailoring as the provided TailoringProfiles
+func (t *OpenSCAPTailoring) FromTailoringProfiles(v TailoringProfiles) error {
 	b, err := json.Marshal(v)
 	t.union = b
 	return err
 }
 
-// MergeOpenscapTailoring1 performs a merge with any union data inside the OpenscapTailoring, using the provided OpenscapTailoring1
-func (t *OpenscapTailoring) MergeOpenscapTailoring1(v OpenscapTailoring1) error {
+// MergeTailoringProfiles performs a merge with any union data inside the OpenSCAPTailoring, using the provided TailoringProfiles
+func (t *OpenSCAPTailoring) MergeTailoringProfiles(v TailoringProfiles) error {
 	b, err := json.Marshal(v)
 	if err != nil {
 		return err
@@ -1135,327 +1192,12 @@ func (t *OpenscapTailoring) MergeOpenscapTailoring1(v OpenscapTailoring1) error 
 	return err
 }
 
-func (t OpenscapTailoring) MarshalJSON() ([]byte, error) {
-	b, err := t.union.MarshalJSON()
-	if err != nil {
-		return nil, err
-	}
-	object := make(map[string]json.RawMessage)
-	if t.union != nil {
-		err = json.Unmarshal(b, &object)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	if t.JsonFilepath != nil {
-		object["json_filepath"], err = json.Marshal(t.JsonFilepath)
-		if err != nil {
-			return nil, fmt.Errorf("error marshaling 'json_filepath': %w", err)
-		}
-	}
-
-	if t.JsonProfileId != nil {
-		object["json_profile_id"], err = json.Marshal(t.JsonProfileId)
-		if err != nil {
-			return nil, fmt.Errorf("error marshaling 'json_profile_id': %w", err)
-		}
-	}
-
-	if t.Selected != nil {
-		object["selected"], err = json.Marshal(t.Selected)
-		if err != nil {
-			return nil, fmt.Errorf("error marshaling 'selected': %w", err)
-		}
-	}
-
-	if t.Unselected != nil {
-		object["unselected"], err = json.Marshal(t.Unselected)
-		if err != nil {
-			return nil, fmt.Errorf("error marshaling 'unselected': %w", err)
-		}
-	}
-	b, err = json.Marshal(object)
-	return b, err
-}
-
-func (t *OpenscapTailoring) UnmarshalJSON(b []byte) error {
-	err := t.union.UnmarshalJSON(b)
-	if err != nil {
-		return err
-	}
-	object := make(map[string]json.RawMessage)
-	err = json.Unmarshal(b, &object)
-	if err != nil {
-		return err
-	}
-
-	if raw, found := object["json_filepath"]; found {
-		err = json.Unmarshal(raw, &t.JsonFilepath)
-		if err != nil {
-			return fmt.Errorf("error reading 'json_filepath': %w", err)
-		}
-	}
-
-	if raw, found := object["json_profile_id"]; found {
-		err = json.Unmarshal(raw, &t.JsonProfileId)
-		if err != nil {
-			return fmt.Errorf("error reading 'json_profile_id': %w", err)
-		}
-	}
-
-	if raw, found := object["selected"]; found {
-		err = json.Unmarshal(raw, &t.Selected)
-		if err != nil {
-			return fmt.Errorf("error reading 'selected': %w", err)
-		}
-	}
-
-	if raw, found := object["unselected"]; found {
-		err = json.Unmarshal(raw, &t.Unselected)
-		if err != nil {
-			return fmt.Errorf("error reading 'unselected': %w", err)
-		}
-	}
-
-	return err
-}
-
-// AsOpenscapTailoring00 returns the union data inside the OpenscapTailoring0 as a OpenscapTailoring00
-func (t OpenscapTailoring0) AsOpenscapTailoring00() (OpenscapTailoring00, error) {
-	var body OpenscapTailoring00
-	err := json.Unmarshal(t.union, &body)
-	return body, err
-}
-
-// FromOpenscapTailoring00 overwrites any union data inside the OpenscapTailoring0 as the provided OpenscapTailoring00
-func (t *OpenscapTailoring0) FromOpenscapTailoring00(v OpenscapTailoring00) error {
-	b, err := json.Marshal(v)
-	t.union = b
-	return err
-}
-
-// MergeOpenscapTailoring00 performs a merge with any union data inside the OpenscapTailoring0, using the provided OpenscapTailoring00
-func (t *OpenscapTailoring0) MergeOpenscapTailoring00(v OpenscapTailoring00) error {
-	b, err := json.Marshal(v)
-	if err != nil {
-		return err
-	}
-
-	merged, err := runtime.JSONMerge(t.union, b)
-	t.union = merged
-	return err
-}
-
-// AsOpenscapTailoring01 returns the union data inside the OpenscapTailoring0 as a OpenscapTailoring01
-func (t OpenscapTailoring0) AsOpenscapTailoring01() (OpenscapTailoring01, error) {
-	var body OpenscapTailoring01
-	err := json.Unmarshal(t.union, &body)
-	return body, err
-}
-
-// FromOpenscapTailoring01 overwrites any union data inside the OpenscapTailoring0 as the provided OpenscapTailoring01
-func (t *OpenscapTailoring0) FromOpenscapTailoring01(v OpenscapTailoring01) error {
-	b, err := json.Marshal(v)
-	t.union = b
-	return err
-}
-
-// MergeOpenscapTailoring01 performs a merge with any union data inside the OpenscapTailoring0, using the provided OpenscapTailoring01
-func (t *OpenscapTailoring0) MergeOpenscapTailoring01(v OpenscapTailoring01) error {
-	b, err := json.Marshal(v)
-	if err != nil {
-		return err
-	}
-
-	merged, err := runtime.JSONMerge(t.union, b)
-	t.union = merged
-	return err
-}
-
-// AsOpenscapTailoring02 returns the union data inside the OpenscapTailoring0 as a OpenscapTailoring02
-func (t OpenscapTailoring0) AsOpenscapTailoring02() (OpenscapTailoring02, error) {
-	var body OpenscapTailoring02
-	err := json.Unmarshal(t.union, &body)
-	return body, err
-}
-
-// FromOpenscapTailoring02 overwrites any union data inside the OpenscapTailoring0 as the provided OpenscapTailoring02
-func (t *OpenscapTailoring0) FromOpenscapTailoring02(v OpenscapTailoring02) error {
-	b, err := json.Marshal(v)
-	t.union = b
-	return err
-}
-
-// MergeOpenscapTailoring02 performs a merge with any union data inside the OpenscapTailoring0, using the provided OpenscapTailoring02
-func (t *OpenscapTailoring0) MergeOpenscapTailoring02(v OpenscapTailoring02) error {
-	b, err := json.Marshal(v)
-	if err != nil {
-		return err
-	}
-
-	merged, err := runtime.JSONMerge(t.union, b)
-	t.union = merged
-	return err
-}
-
-func (t OpenscapTailoring0) MarshalJSON() ([]byte, error) {
+func (t OpenSCAPTailoring) MarshalJSON() ([]byte, error) {
 	b, err := t.union.MarshalJSON()
 	return b, err
 }
 
-func (t *OpenscapTailoring0) UnmarshalJSON(b []byte) error {
+func (t *OpenSCAPTailoring) UnmarshalJSON(b []byte) error {
 	err := t.union.UnmarshalJSON(b)
-	return err
-}
-
-// AsRegistrationFdo0 returns the union data inside the RegistrationFdo as a RegistrationFdo0
-func (t RegistrationFdo) AsRegistrationFdo0() (RegistrationFdo0, error) {
-	var body RegistrationFdo0
-	err := json.Unmarshal(t.union, &body)
-	return body, err
-}
-
-// FromRegistrationFdo0 overwrites any union data inside the RegistrationFdo as the provided RegistrationFdo0
-func (t *RegistrationFdo) FromRegistrationFdo0(v RegistrationFdo0) error {
-	b, err := json.Marshal(v)
-	t.union = b
-	return err
-}
-
-// MergeRegistrationFdo0 performs a merge with any union data inside the RegistrationFdo, using the provided RegistrationFdo0
-func (t *RegistrationFdo) MergeRegistrationFdo0(v RegistrationFdo0) error {
-	b, err := json.Marshal(v)
-	if err != nil {
-		return err
-	}
-
-	merged, err := runtime.JSONMerge(t.union, b)
-	t.union = merged
-	return err
-}
-
-// AsRegistrationFdo1 returns the union data inside the RegistrationFdo as a RegistrationFdo1
-func (t RegistrationFdo) AsRegistrationFdo1() (RegistrationFdo1, error) {
-	var body RegistrationFdo1
-	err := json.Unmarshal(t.union, &body)
-	return body, err
-}
-
-// FromRegistrationFdo1 overwrites any union data inside the RegistrationFdo as the provided RegistrationFdo1
-func (t *RegistrationFdo) FromRegistrationFdo1(v RegistrationFdo1) error {
-	b, err := json.Marshal(v)
-	t.union = b
-	return err
-}
-
-// MergeRegistrationFdo1 performs a merge with any union data inside the RegistrationFdo, using the provided RegistrationFdo1
-func (t *RegistrationFdo) MergeRegistrationFdo1(v RegistrationFdo1) error {
-	b, err := json.Marshal(v)
-	if err != nil {
-		return err
-	}
-
-	merged, err := runtime.JSONMerge(t.union, b)
-	t.union = merged
-	return err
-}
-
-func (t RegistrationFdo) MarshalJSON() ([]byte, error) {
-	b, err := t.union.MarshalJSON()
-	if err != nil {
-		return nil, err
-	}
-	object := make(map[string]json.RawMessage)
-	if t.union != nil {
-		err = json.Unmarshal(b, &object)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	if t.DiMfgStringTypeMacIface != nil {
-		object["di_mfg_string_type_mac_iface"], err = json.Marshal(t.DiMfgStringTypeMacIface)
-		if err != nil {
-			return nil, fmt.Errorf("error marshaling 'di_mfg_string_type_mac_iface': %w", err)
-		}
-	}
-
-	if t.DiunPubKeyHash != nil {
-		object["diun_pub_key_hash"], err = json.Marshal(t.DiunPubKeyHash)
-		if err != nil {
-			return nil, fmt.Errorf("error marshaling 'diun_pub_key_hash': %w", err)
-		}
-	}
-
-	if t.DiunPubKeyInsecure != nil {
-		object["diun_pub_key_insecure"], err = json.Marshal(t.DiunPubKeyInsecure)
-		if err != nil {
-			return nil, fmt.Errorf("error marshaling 'diun_pub_key_insecure': %w", err)
-		}
-	}
-
-	if t.DiunPubKeyRootCerts != nil {
-		object["diun_pub_key_root_certs"], err = json.Marshal(t.DiunPubKeyRootCerts)
-		if err != nil {
-			return nil, fmt.Errorf("error marshaling 'diun_pub_key_root_certs': %w", err)
-		}
-	}
-
-	object["manufacturing_server_url"], err = json.Marshal(t.ManufacturingServerUrl)
-	if err != nil {
-		return nil, fmt.Errorf("error marshaling 'manufacturing_server_url': %w", err)
-	}
-
-	b, err = json.Marshal(object)
-	return b, err
-}
-
-func (t *RegistrationFdo) UnmarshalJSON(b []byte) error {
-	err := t.union.UnmarshalJSON(b)
-	if err != nil {
-		return err
-	}
-	object := make(map[string]json.RawMessage)
-	err = json.Unmarshal(b, &object)
-	if err != nil {
-		return err
-	}
-
-	if raw, found := object["di_mfg_string_type_mac_iface"]; found {
-		err = json.Unmarshal(raw, &t.DiMfgStringTypeMacIface)
-		if err != nil {
-			return fmt.Errorf("error reading 'di_mfg_string_type_mac_iface': %w", err)
-		}
-	}
-
-	if raw, found := object["diun_pub_key_hash"]; found {
-		err = json.Unmarshal(raw, &t.DiunPubKeyHash)
-		if err != nil {
-			return fmt.Errorf("error reading 'diun_pub_key_hash': %w", err)
-		}
-	}
-
-	if raw, found := object["diun_pub_key_insecure"]; found {
-		err = json.Unmarshal(raw, &t.DiunPubKeyInsecure)
-		if err != nil {
-			return fmt.Errorf("error reading 'diun_pub_key_insecure': %w", err)
-		}
-	}
-
-	if raw, found := object["diun_pub_key_root_certs"]; found {
-		err = json.Unmarshal(raw, &t.DiunPubKeyRootCerts)
-		if err != nil {
-			return fmt.Errorf("error reading 'diun_pub_key_root_certs': %w", err)
-		}
-	}
-
-	if raw, found := object["manufacturing_server_url"]; found {
-		err = json.Unmarshal(raw, &t.ManufacturingServerUrl)
-		if err != nil {
-			return fmt.Errorf("error reading 'manufacturing_server_url': %w", err)
-		}
-	}
-
 	return err
 }

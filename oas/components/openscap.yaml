@@ -1,24 +1,52 @@
 ---
 type: object
+description: |
+  OpenSCAP policy to be applied on the operating system. Added in
+  RHEL 8.7 & RHEL 9.1. It is possible to either list policy rules (enable or
+  disable) or to provide a full policy file.
+x-go-name: OpenSCAP
 required:
-- profile_id
+  - profile_id
 properties:
   datastream:
-    description: Datastream to use for the scan. The datastream is the path to
+    description: |
+      Datastream to use for the scan. The datastream is the path to
       the SCAP datastream file to use for the scan. If the datastream parameter
       is not provided, a sensible default based on the selected distro will be
       chosen.
     type: string
+    x-go-type-skip-optional-pointer: true
   profile_id:
     description: The desired security profile ID.
     type: string
+    x-go-type-skip-optional-pointer: true
+    x-go-name: ProfileID
   tailoring:
-    description: |-
-      An optional OpenSCAP tailoring information. Can be done via profile selection or tailoring JSON file.
+    description: |
+      An optional OpenSCAP tailoring information. Can be done via profile
+      selection or tailoring JSON file.
 
-      In case of profile selection, a tailoring file with a new tailoring profile ID is created and saved to the image. The new tailoring profile ID is created by appending the _osbuild_tailoring suffix to the base profile. For example, given tailoring options for the cis profile, tailoring profile xccdf_org.ssgproject.content_profile_cis_osbuild_tailoring will be created. The default namespace of the rules is org.ssgproject.content, so the prefix may be omitted for rules under this namespace, i.e. org.ssgproject.content_grub2_password and grub2_password are functionally equivalent. The generated tailoring file is saved to the image as /usr/share/xml/osbuild-oscap-tailoring/tailoring.xml or, for newer releases, in the /oscap_data directory, this is the location used for other OpenSCAP related artifacts.
+      In case of profile selection, a tailoring file with a new tailoring profile
+      ID is created and saved to the image. The new tailoring profile ID is
+      created by appending the _osbuild_tailoring suffix to the base profile.
+      For example, given tailoring options for the cis profile, tailoring profile
+      xccdf_org.ssgproject.content_profile_cis_osbuild_tailoring will be created.
+      The default namespace of the rules is org.ssgproject.content, so the prefix
+      may be omitted for rules under this namespace, i.e.
+      org.ssgproject.content_grub2_password and grub2_password are functionally
+      equivalent. The generated tailoring file is saved to the image as
+      /usr/share/xml/osbuild-oscap-tailoring/tailoring.xml or, for newer releases,
+      in the /oscap_data directory, this is the location used for other OpenSCAP
+      related artifacts.
 
-      It is also possible to use JSON tailoring. In that case, custom JSON file must be provided using the blueprint and used in json_filepath field alongside with json_profile_id field. The generated XML tailoring file is saved to the image as /oscap_data/tailoring.xml.
-    "$ref": "openscap_tailoring.yaml"
+      It is also possible to use JSON tailoring. In that case, custom JSON file
+      must be provided using the blueprint and used in json_filepath field
+      alongside with json_profile_id field. The generated XML tailoring file
+      is saved to the image as /oscap_data/tailoring.xml.
+    oneOf:
+      - "$ref": "tailoring_json.yaml"
+      - "$ref": "tailoring_profiles.yaml"
+    x-go-type-name: OpenSCAPTailoring
     nullable: true
+    x-omitempty: true
 additionalProperties: false

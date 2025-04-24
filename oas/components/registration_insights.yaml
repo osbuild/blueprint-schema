@@ -1,9 +1,11 @@
 ---
 type: object
+description: Red Hat Insights client details.
 required:
 - enabled
 properties:
   enabled:
     description: Enables insights client during boot.
     type: boolean
+    x-go-type-skip-optional-pointer: true
 additionalProperties: false

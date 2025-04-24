@@ -1,31 +1,33 @@
 ---
 type: object
-oneOf:
-- title: fdo_hash
-  required:
-  - diun_pub_key_hash
-- title: fdo_rootcerts
-  required:
-  - diun_pub_key_root_certs
+description: |
+  FDO allows users to configure FIDO Device Onboard device initialization
+  parameters. It is only available with the edge-simplified-installer or
+  iot-simplified-installer image types.
+x-go-name: RegistrationFDO
 required:
 - manufacturing_server_url
 properties:
   di_mfg_string_type_mac_iface:
     description: Optional interface name for the MAC address.
     type: string
+    x-go-type-skip-optional-pointer: true
   diun_pub_key_hash:
     description: FDO server public key hex-encoded hash. Cannot be used together
       with insecure option or root certs.
     type: string
+    x-go-type-skip-optional-pointer: true
   diun_pub_key_insecure:
     description: FDO insecure option. When set, both hash or root certs must not
       be set.
     default: false
     type: boolean
+    x-go-type-skip-optional-pointer: true
   diun_pub_key_root_certs:
     description: FDO server public key root certificate path. Cannot be used together
       with insecure option or hash.
     type: string
+    x-go-type-skip-optional-pointer: true
   manufacturing_server_url:
     description: FDO manufacturing server URL.
     type: string

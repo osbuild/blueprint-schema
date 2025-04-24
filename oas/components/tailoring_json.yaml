@@ -1,0 +1,20 @@
+---
+type: object
+x-go-name: TailoringJSON
+required:
+  - json_profile_id
+  - json_filepath
+properties:
+  json_filepath:
+    description: JSON filepath, must be used with json_profile_id and cannot be
+      used with selected and unselected fields.
+    type: string
+    x-go-type-skip-optional-pointer: true
+    x-go-name: JSONFilePath
+  json_profile_id:
+    description: JSON profile ID, must be used with json_filepath and cannot be
+      used with selected and unselected fields.
+    type: string
+    x-go-type-skip-optional-pointer: true
+    x-go-name: JSONProfileID
+additionalProperties: false
