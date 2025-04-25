@@ -21,6 +21,8 @@ require (
 )
 
 require (
+	github.com/google/go-cmp v0.7.0
+	github.com/invopop/yaml v0.3.1
 	github.com/oapi-codegen/runtime v1.1.1
 	gopkg.in/yaml.v3 v3.0.1
 )

@@ -80,14 +80,14 @@ type Blueprint struct {
 	// are added to the system-wide CA trust store. The certificates are added to
 	// the /etc/pki/ca-trust/source/anchors/ directory and the update-ca-trust command
 	// is run to update the system-wide CA trust store.
-	CACerts []CACert `json:"cacerts"`
+	CACerts []CACert `json:"cacerts,omitempty"`
 
 	// Containers Containers to be pulled during the image build and stored in the
 	// image at the default local container storage location that is appropriate
 	// for the image type, so that all supported container tools like podman and
 	// cri-o will be able to work with it. The embedded containers are not started,
 	// to do so you can create systemd unit files or quadlets with the files customization.
-	Containers []Container `json:"containers"`
+	Containers []Container `json:"containers,omitempty"`
 
 	// Description The description attribute is a string that can be a longer description
 	// of the blueprint and is only used for display purposes.
@@ -141,7 +141,7 @@ type Blueprint struct {
 	//
 	// The blueprint configuration can be done either by embedding an Ignition configuration
 	// file into the image, or providing a provisioning URL that will be fetched at first boot.
-	Ignition *Ignition `json:"ignition"`
+	Ignition *Ignition `json:"ignition,omitempty"`
 
 	// Installer Extra customization for Anaconda installer (ISO) and Edge/IOT simplified
 	// installer image types.

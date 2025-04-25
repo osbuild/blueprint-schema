@@ -17,10 +17,10 @@ components:
                         is run to update the system-wide CA trust store.
                     items:
                         $ref: '#/components/schemas/ca_cert'
-                    nullable: true
                     type: array
                     x-go-name: CACerts
                     x-go-type-skip-optional-pointer: true
+                    x-omitempty: true
                 containers:
                     description: |
                         Containers to be pulled during the image build and stored in the
@@ -30,9 +30,9 @@ components:
                         to do so you can create systemd unit files or quadlets with the files customization.
                     items:
                         $ref: '#/components/schemas/container'
-                    nullable: true
                     type: array
                     x-go-type-skip-optional-pointer: true
+                    x-omitempty: true
                 description:
                     description: |
                         The description attribute is a string that can be a longer description
@@ -91,12 +91,12 @@ components:
 
                         The blueprint configuration can be done either by embedding an Ignition configuration
                         file into the image, or providing a provisioning URL that will be fetched at first boot.
-                    nullable: true
                     oneOf:
                         - $ref: '#/components/schemas/ignition_url'
                         - $ref: '#/components/schemas/ignition_text'
                     x-go-name: Ignition
                     x-go-type-name: Ignition
+                    x-omitempty: true
                 installer:
                     $ref: '#/components/schemas/installer'
                 kernel:
@@ -110,6 +110,7 @@ components:
                         It should be short and descriptive.
                     type: string
                     x-go-type-skip-optional-pointer: true
+                    x-omitempty: true
                 network:
                     $ref: '#/components/schemas/network'
                 openscap:
@@ -140,10 +141,10 @@ components:
                         is run to update the system-wide CA trust store.
                     items:
                         $ref: '#/components/schemas/ca_cert'
-                    nullable: true
                     type: array
                     x-go-name: CACerts
                     x-go-type-skip-optional-pointer: true
+                    x-omitempty: true
                 containers:
                     description: |
                         Containers to be pulled during the image build and stored in the
@@ -153,9 +154,9 @@ components:
                         to do so you can create systemd unit files or quadlets with the files customization.
                     items:
                         $ref: '#/components/schemas/container'
-                    nullable: true
                     type: array
                     x-go-type-skip-optional-pointer: true
+                    x-omitempty: true
                 description:
                     description: |
                         The description attribute is a string that can be a longer description
@@ -214,12 +215,12 @@ components:
 
                         The blueprint configuration can be done either by embedding an Ignition configuration
                         file into the image, or providing a provisioning URL that will be fetched at first boot.
-                    nullable: true
                     oneOf:
                         - $ref: '#/components/schemas/ignition_url'
                         - $ref: '#/components/schemas/ignition_text'
                     x-go-name: Ignition
                     x-go-type-name: Ignition
+                    x-omitempty: true
                 installer:
                     $ref: '#/components/schemas/installer'
                 kernel:
@@ -233,6 +234,7 @@ components:
                         It should be short and descriptive.
                     type: string
                     x-go-type-skip-optional-pointer: true
+                    x-omitempty: true
                 network:
                     $ref: '#/components/schemas/network'
                 openscap:
@@ -392,7 +394,7 @@ components:
                     x-go-name: PEM
                     x-go-type-skip-optional-pointer: true
             required:
-                - cert
+                - pem
             type: object
             x-go-name: CACert
         container:
@@ -599,29 +601,29 @@ components:
                     type: array
                     x-go-type-skip-optional-pointer: true
             required:
-                - cert
+                - urls
             type: object
             x-go-type-name: DNFSourceBaseURLs
         dnf_source_metalink:
             additionalProperties: false
             properties:
-                urls:
+                metalink:
                     description: Metalink for the repository.
                     type: string
                     x-go-type-skip-optional-pointer: true
             required:
-                - cert
+                - metalink
             type: object
             x-go-type-name: DNFSourceMetalink
         dnf_source_mirrorlist:
             additionalProperties: false
             properties:
-                urls:
+                mirrorlist:
                     description: Mirror list for the repository.
                     type: string
                     x-go-type-skip-optional-pointer: true
             required:
-                - cert
+                - mirrorlist
             type: object
             x-go-type-name: DNFSourceMirrorlist
         error:
@@ -1080,10 +1082,8 @@ components:
                 minsize:
                     $ref: '#/components/schemas/storage_minsize'
                 subvolumes:
-                    description: |-
+                    description: |
                         BTRFS subvolumes to create.
-
-                        Relevant for partition types: btrfs.
                     items:
                         $ref: '#/components/schemas/partition_subvolumes'
                     type: array
@@ -1092,6 +1092,7 @@ components:
                     $ref: '#/components/schemas/partition_type'
             required:
                 - type
+                - subvolumes
             type: object
             x-go-type-name: PartitionBTRFS
         partition_lv:
@@ -1116,21 +1117,24 @@ components:
         partition_lvm:
             additionalProperties: false
             properties:
-                fs_type:
-                    $ref: '#/components/schemas/storage_fstype'
                 logical_volumes:
-                    description: |-
+                    description: |
                         LVM logical volumes to create within the volume group.
-
-                        Relevant for partition types: lvm.
                     items:
                         $ref: '#/components/schemas/partition_lv'
                     type: array
+                    x-go-type-skip-optional-pointer: true
+                minsize:
+                    $ref: '#/components/schemas/storage_minsize'
+                name:
+                    description: Optional name of the volume group. Will be generated automatically if not specified.
+                    type: string
                     x-go-type-skip-optional-pointer: true
                 type:
                     $ref: '#/components/schemas/partition_type'
             required:
                 - type
+                - logical_volumes
             type: object
             x-go-type-name: PartitionLVM
         partition_plain:
@@ -1381,13 +1385,13 @@ components:
             type: string
             x-go-type-skip-optional-pointer: true
         storage_partition:
-            description: |
-                Partitions of the following types: plain (default), lvm, or btrfs.
-            nullable: true
-            oneOf:
+            anyOf:
                 - $ref: '#/components/schemas/partition_plain'
                 - $ref: '#/components/schemas/partition_lvm'
                 - $ref: '#/components/schemas/partition_btrfs'
+            description: |
+                Partitions of the following types: plain (default), lvm, or btrfs.
+            nullable: true
             type: object
             x-go-type-skip-optional-pointer: true
         storage_type:

@@ -3,16 +3,20 @@ type: object
 x-go-type-name: PartitionLVM
 required:
 - type
+- logical_volumes
 properties:
   type:
     "$ref": "partition_type.yaml"
-  fs_type:
-    "$ref": "storage_fstype.yaml"
+  name:
+    description: Optional name of the volume group. Will be generated
+      automatically if not specified.
+    type: string
+    x-go-type-skip-optional-pointer: true
+  minsize:
+    "$ref": "storage_minsize.yaml"
   logical_volumes:
-    description: |-
+    description: |
       LVM logical volumes to create within the volume group.
-
-      Relevant for partition types: lvm.
     type: array
     items:
       "$ref": "partition_lv.yaml"

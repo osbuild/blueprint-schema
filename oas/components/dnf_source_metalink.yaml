@@ -1,9 +1,9 @@
 ---
 type: object
 required:
-- cert
+- metalink
 properties:
-  urls:
+  metalink:
     description: Metalink for the repository.
     type: string
     x-go-type-skip-optional-pointer: true

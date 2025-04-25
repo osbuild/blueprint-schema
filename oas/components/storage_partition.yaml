@@ -2,7 +2,7 @@
 description: |
   Partitions of the following types: plain (default), lvm, or btrfs.
 type: object
-oneOf:
+anyOf:
   - "$ref": "partition_plain.yaml"
   - "$ref": "partition_lvm.yaml"
   - "$ref": "partition_btrfs.yaml"

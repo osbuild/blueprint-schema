@@ -1,9 +1,9 @@
 ---
 type: object
 required:
-- cert
+- mirrorlist
 properties:
-  urls:
+  mirrorlist:
     description: Mirror list for the repository.
     type: string
     x-go-type-skip-optional-pointer: true

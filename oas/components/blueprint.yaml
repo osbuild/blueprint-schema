@@ -12,6 +12,7 @@ properties:
       It should be short and descriptive.
     type: string
     x-go-type-skip-optional-pointer: true
+    x-omitempty: true
   description:
     description: |
       The description attribute is a string that can be a longer description
@@ -30,9 +31,9 @@ properties:
     type: array
     items:
       "$ref": "ca_cert.yaml"
-    nullable: true
     x-go-type-skip-optional-pointer: true
     x-go-name: CACerts
+    x-omitempty: true
   containers:
     description: |
       Containers to be pulled during the image build and stored in the
@@ -43,8 +44,8 @@ properties:
     type: array
     items:
       "$ref": "container.yaml"
-    nullable: true
     x-go-type-skip-optional-pointer: true
+    x-omitempty: true
   dnf:
     "$ref": "dnf.yaml"
     nullable: true
@@ -106,7 +107,7 @@ properties:
       - "$ref": "ignition_text.yaml"
     x-go-name: Ignition
     x-go-type-name: Ignition
-    nullable: true
+    x-omitempty: true
   installer:
     "$ref": "installer.yaml"
     nullable: true

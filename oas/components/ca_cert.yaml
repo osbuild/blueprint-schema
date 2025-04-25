@@ -3,7 +3,7 @@ type: object
 description: |
   The CA certificates to be added to the image.
 required:
-- cert
+- pem
 properties:
   pem:
     description: The PEM-encoded certificate.
