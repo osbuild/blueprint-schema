@@ -4,6 +4,14 @@ Source files for the blueprint OAS and JSON Schema.
 
 The target draft for the schema is OpenAPI 3.0 Schema (OAS 3.0) so make sure to only use features available in this schema draft.
 
+## Recommendations
+
+* Rename ugly types and fields via `x-go-name` or `x-go-type-name`.
+* Remove pointers where they do not need to be (primitive types, slices, maps) using `x-go-type-skip-optional-pointer` property.
+* Add `omitempty` to places where code generator does not put it via `x-omitempty`.
+* Rename enum constants, they are almost always wrong and do not have type prefix which is important since all the generated code lives in the same package.
+* The code generator does hot have sorted maps at the moment so the fields are in random order. There is a way to enforce order via numbers, but this is hard to maintain and currently unused.
+
 ## Bundling
 
 The bundling process is done via `make schema` command.

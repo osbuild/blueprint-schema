@@ -14,9 +14,30 @@ This repository contains the common blueprint JSON Schema and Go types for Image
 
 All the mentioned files are generated using `make schema`
 
+### Schema source
+
+All schema source files are in `oas/` directory, each component resides in its own YAML file in `oas/components`. Make sure to create component for each object that is supposed to be a Go type (`struct`). There is a README in the `oas/` directory with some tips on how to write OAS3 schemas.
+
 ### Go code
 
-All the code resides in `pkg/blueprint` except embedded schemas from above which are in the top-level directory for technical reasons (Go embedding limitations). Direct access to schema files is not required for any scenario, so only import the former package:
+Go code is generated from `blueprint-oas3.json` via `oapi-codegen` using `make schema`.
+
+All the code resides in `pkg/blueprint` except embedded schemas from above which are in the top-level directory for technical reasons (Go embedding limitations). Direct access to schema files is not required for any scenario, so only import the former package.
+
+### Parsing blueprints
+
+Blueprint types have only JSON Go struct tags because mixing them with other tags like YAML will create inconsistencies, specifically for some Go types (date, time). To prevent that, loading from YAML is done via converting to JSON first. There are several helper functions available in the package which take/return the `Blueprint` type:
+
+* ReadYAML
+* WriteYAML
+* ReadJSON
+* WriteJSON
+* MarshalYAML
+* UnmarshalYAML
+* MarshalJSON
+* UnmarshalJSON
+
+Example:
 
 ```go
 package main
@@ -24,19 +45,25 @@ package main
 import "github.com/osbuild/blueprint-schema/pkg/blueprint"
 
 func main() {
-    var b Blueprint
+    blueprint, err := schema.ReadYAML(os.Stdin)
 }
 ```
 
-### WIP remarks
+### Validation
 
-* We have decided to utilize OAS3 schema instead of JSON Schema to keep OpenAPI 3.0 compatibility
-* The validation library `kin-openapi` does not guarantee order of hash keys therefore all outputs have random property order
-* Additional checks can be done via `ext` schema
+To validate JSON or YAML buffers, use `CompileBundledSchema` function:
 
-### TODO
+```go
+package main
 
-* Import/export
-* Review documentation, fix godoc rendering and prefix
-* TinyGO WASM validator
-* https://github.com/osbuild/blueprint-schema/tree/3e99c4560011c30ca75ef6e2df3636404147f667
+import "github.com/osbuild/blueprint-schema/pkg/blueprint"
+
+func main() {
+    schema = blueprint.CompileBundledSchema()
+    err = schema.ValidateYAML(context.Background(), buffer)
+}
+```
+
+### Extensions
+
+Various advanced validation rules do not work well with Go code generator, therefore these are kept separate in `oas/extensions` directory and are only applied to `blueprint-oas3-ext.json` bundled schema. This schema must be only used for validation purposes and not for code generation.
