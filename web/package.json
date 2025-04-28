@@ -8,7 +8,9 @@
     "build": "webpack --mode production"
   },
   "dependencies": {
+    "@apidevtools/json-schema-ref-parser": "^12.0.1",
     "@fortawesome/fontawesome-free": "^6.0.0",
+    "@openapi-contrib/openapi-schema-to-json-schema": "^5.1.0",
     "@schemastore/schema-catalog": "^0.0.6",
     "css-loader": "^7.0.0",
     "css-minimizer-webpack-plugin": "^7.0.0",
@@ -16,7 +18,9 @@
     "mini-css-extract-plugin": "^2.0.0",
     "monaco-editor": "^0.52.0",
     "monaco-yaml": "^5.3.1",
+    "path-browserify": "^1.0.1",
     "ts-loader": "^9.0.0",
+    "util": "^0.12.5",
     "webpack": "^5.0.0",
     "webpack-cli": "^6.0.0",
     "webpack-dev-server": "^5.0.0"

@@ -7,7 +7,7 @@ import { StandaloneServices } from 'monaco-editor/esm/vs/editor/standalone/brows
 import { configureMonacoYaml, type SchemasSettings } from 'monaco-yaml'
 
 import './index.css'
-import schema from '../../blueprint-schema.json'
+import schema from '../../blueprint-oas3.json' // monaco only supports json schema (not oas3)
 
 window.MonacoEnvironment = {
   getWorker(moduleId, label) {
@@ -33,7 +33,7 @@ const monacoYaml = configureMonacoYaml(monaco, {
   schemas: [defaultSchema]
 })
 
-var defaultValue = await fetch('https://raw.githubusercontent.com/osbuild/blueprint-schema/refs/heads/main/fixtures/valid-000-all-fields.in.yaml')
+var defaultValue = await fetch('https://raw.githubusercontent.com/osbuild/blueprint-schema/refs/heads/main/testdata/editor-starting-doc.yaml')
   .then((response) => {
   return response.text()
 })

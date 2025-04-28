@@ -6,6 +6,7 @@ components:
                 Image Builder new blueprint schema.
 
                 THIS IS WORK IN PROGRESS
+            nullable: true
             properties:
                 accounts:
                     $ref: '#/components/schemas/accounts'
@@ -30,6 +31,7 @@ components:
                         to do so you can create systemd unit files or quadlets with the files customization.
                     items:
                         $ref: '#/components/schemas/container'
+                    nullable: true
                     type: array
                     x-go-type-skip-optional-pointer: true
                     x-omitempty: true
@@ -133,6 +135,7 @@ components:
                 Image Builder new blueprint schema.
 
                 THIS IS WORK IN PROGRESS
+            nullable: true
             properties:
                 accounts:
                     $ref: '#/components/schemas/accounts'
@@ -157,6 +160,7 @@ components:
                         to do so you can create systemd unit files or quadlets with the files customization.
                     items:
                         $ref: '#/components/schemas/container'
+                    nullable: true
                     type: array
                     x-go-type-skip-optional-pointer: true
                     x-omitempty: true
@@ -257,6 +261,7 @@ components:
         accounts:
             additionalProperties: false
             description: Operating system user and group accounts to be created on the image.
+            nullable: true
             properties:
                 groups:
                     items:
@@ -436,6 +441,7 @@ components:
                 package name the version glob should be *. And be aware that you will be unable
                 to freeze the blueprint. This is because the provides will expand into multiple
                 packages with their own names and versions.
+            nullable: true
             properties:
                 groups:
                     description: |
@@ -650,6 +656,7 @@ components:
         fips:
             additionalProperties: false
             description: FIPS details, optional.
+            nullable: true
             properties:
                 enabled:
                     description: |
@@ -842,6 +849,7 @@ components:
             description: |
                 Extra customization for Anaconda installer (ISO) and Edge/IOT simplified
                 installer image types.
+            nullable: true
             properties:
                 anaconda:
                     $ref: '#/components/schemas/installer_anaconda'
@@ -926,6 +934,7 @@ components:
         kernel:
             additionalProperties: false
             description: Custom Linux kernel details, optional.
+            nullable: true
             properties:
                 cmdline_append:
                     description: |
@@ -950,6 +959,7 @@ components:
                 An optional object that contains the following attributes to customize
                 the locale settings for the system. If the locale is not specified, the default
                 locale and keyboard settings are used: en_US.UTF-8 and us.
+            nullable: true
             properties:
                 keyboards:
                     default:
@@ -981,6 +991,7 @@ components:
         network:
             additionalProperties: false
             description: Networking details including firewall configuration.
+            nullable: true
             properties:
                 firewall:
                     $ref: '#/components/schemas/network_firewall'
@@ -1036,6 +1047,7 @@ components:
                 OpenSCAP policy to be applied on the operating system. Added in
                 RHEL 8.7 & RHEL 9.1. It is possible to either list policy rules (enable or
                 disable) or to provide a full policy file.
+            nullable: true
             properties:
                 datastream:
                     description: |
@@ -1189,6 +1201,7 @@ components:
             description: |
                 Registration details for various registration types, namely Red Hat
                 Subscription Manager.
+            nullable: true
             properties:
                 fdo:
                     $ref: '#/components/schemas/registration_fdo'
@@ -1327,6 +1340,7 @@ components:
                 containing the root filesystem is grown to fill any left over space on the
                 partition table. Logical Volumes are not grown to fill the space in the Volume
                 Group since they are trivial to grow on a live system.
+            nullable: true
             properties:
                 minsize:
                     description: |
@@ -1422,6 +1436,7 @@ components:
                 sshd, chronyd, and cloud-init services. Blueprint services do not replace these
                 services, but add them to the list of services already present in the templates,
                 if any.
+            nullable: true
             properties:
                 disabled:
                     description: The disabled attribute is a list of strings that contains the systemd units to be disabled.
@@ -1482,6 +1497,7 @@ components:
             description: |
                 Time and date details allowing configuration of the timezone and
                 NTP servers. The timezone is set by default to UTC.
+            nullable: true
             properties:
                 ntp_servers:
                     description: |
@@ -1525,7 +1541,6 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/Blueprint'
-                required: true
             responses:
                 "201":
                     description: The blueprint is valid

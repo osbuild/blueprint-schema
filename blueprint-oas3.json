@@ -4,6 +4,7 @@
       "./components/blueprint": {
         "additionalProperties": false,
         "description": "Image Builder new blueprint schema.\n\nTHIS IS WORK IN PROGRESS",
+        "nullable": true,
         "properties": {
           "accounts": {
             "$ref": "#/components/schemas/accounts"
@@ -23,6 +24,7 @@
             "items": {
               "$ref": "#/components/schemas/container"
             },
+            "nullable": true,
             "type": "array",
             "x-go-type-skip-optional-pointer": true,
             "x-omitempty": true
@@ -108,6 +110,7 @@
       "Blueprint": {
         "additionalProperties": false,
         "description": "Image Builder new blueprint schema.\n\nTHIS IS WORK IN PROGRESS",
+        "nullable": true,
         "properties": {
           "accounts": {
             "$ref": "#/components/schemas/accounts"
@@ -127,6 +130,7 @@
             "items": {
               "$ref": "#/components/schemas/container"
             },
+            "nullable": true,
             "type": "array",
             "x-go-type-skip-optional-pointer": true,
             "x-omitempty": true
@@ -212,6 +216,7 @@
       "accounts": {
         "additionalProperties": false,
         "description": "Operating system user and group accounts to be created on the image.",
+        "nullable": true,
         "properties": {
           "groups": {
             "items": {
@@ -409,6 +414,7 @@
       "dnf": {
         "additionalProperties": false,
         "description": "DNF package managers details. When using virtual provides as the\npackage name the version glob should be *. And be aware that you will be unable\nto freeze the blueprint. This is because the provides will expand into multiple\npackages with their own names and versions.\n",
+        "nullable": true,
         "properties": {
           "groups": {
             "description": "Groups to install, must match exactly. Groups describes groups\nof packages to be installed into the image. Package groups are defined\nin the repository metadata. Each group has a descriptive name used primarily\nfor display in user interfaces and an ID more commonly used in kickstart\nfiles. Here, the ID is the expected way of listing a group. Groups have\nthree different ways of categorizing their packages: mandatory, default,\nand optional. For the purposes of blueprints, only mandatory and default\npackages will be installed. There is no mechanism for selecting optional\npackages.\n",
@@ -638,6 +644,7 @@
       "fips": {
         "additionalProperties": false,
         "description": "FIPS details, optional.",
+        "nullable": true,
         "properties": {
           "enabled": {
             "description": "Enables the system FIPS mode (disabled by default). Currently\nonly edge-raw-image, edge-installer, edge-simplified-installer, edge-ami\nand edge-vsphere images support this customization.\n",
@@ -866,6 +873,7 @@
       "installer": {
         "additionalProperties": false,
         "description": "Extra customization for Anaconda installer (ISO) and Edge/IOT simplified\ninstaller image types.\n",
+        "nullable": true,
         "properties": {
           "anaconda": {
             "$ref": "#/components/schemas/installer_anaconda"
@@ -947,6 +955,7 @@
       "kernel": {
         "additionalProperties": false,
         "description": "Custom Linux kernel details, optional.",
+        "nullable": true,
         "properties": {
           "cmdline_append": {
             "description": "An optional string to append arguments to the bootloader kernel\ncommand line. The list will be concatenated with spaces.\n",
@@ -971,6 +980,7 @@
       "locale": {
         "additionalProperties": false,
         "description": "An optional object that contains the following attributes to customize\nthe locale settings for the system. If the locale is not specified, the default\nlocale and keyboard settings are used: en_US.UTF-8 and us.\n",
+        "nullable": true,
         "properties": {
           "keyboards": {
             "default": [
@@ -1004,6 +1014,7 @@
       "network": {
         "additionalProperties": false,
         "description": "Networking details including firewall configuration.",
+        "nullable": true,
         "properties": {
           "firewall": {
             "$ref": "#/components/schemas/network_firewall"
@@ -1064,6 +1075,7 @@
       "openscap": {
         "additionalProperties": false,
         "description": "OpenSCAP policy to be applied on the operating system. Added in\nRHEL 8.7 \u0026 RHEL 9.1. It is possible to either list policy rules (enable or\ndisable) or to provide a full policy file.\n",
+        "nullable": true,
         "properties": {
           "datastream": {
             "description": "Datastream to use for the scan. The datastream is the path to\nthe SCAP datastream file to use for the scan. If the datastream parameter\nis not provided, a sensible default based on the selected distro will be\nchosen.\n",
@@ -1237,6 +1249,7 @@
       "registration": {
         "additionalProperties": false,
         "description": "Registration details for various registration types, namely Red Hat\nSubscription Manager.\n",
+        "nullable": true,
         "properties": {
           "fdo": {
             "$ref": "#/components/schemas/registration_fdo"
@@ -1381,6 +1394,7 @@
       "storage": {
         "additionalProperties": false,
         "description": "Disk partitioning details. Not available for installer-based images.\n\nGeneral principles:\n\n1. All sizes, whether for specific filesystems, partitions, logical volumes,\nor the image itself, are treated as minimum requirements. This means the full\ndisk image size is always larger than the size of the sum of the partitions,\ndue to requirements for headers and metadata.\n\n2. The partition that contains the root filesystem, whether this is a plain\nformatted partition, an LVM Volume Group, or a Btrfs partition, is always last\nin the partition table layout when it is automatically added. For Disk\ncustomizations the user-defined order is respected.\n\n3. In the case of raw partitioning (no LVM and no Btrfs), the partition\ncontaining the root filesystem is grown to fill any left over space on the\npartition table. Logical Volumes are not grown to fill the space in the Volume\nGroup since they are trivial to grow on a live system.\n",
+        "nullable": true,
         "properties": {
           "minsize": {
             "description": "Minimum size of the storage device. When not set, the image size is acquired\nfrom image request.\n\nSize must be formatted as an integer followed by whitespace and then either\na decimal unit (B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB,\nTiB, PiB, EiB).\n",
@@ -1475,6 +1489,7 @@
       "systemd": {
         "additionalProperties": false,
         "description": "Systemd unit configuration.\n\nThis section can be used to control which services are enabled at boot time.\nSome image types already have services enabled or disabled in order for the image\nto work correctly, and cannot be overridden. For example, ami image type requires\nsshd, chronyd, and cloud-init services. Blueprint services do not replace these\nservices, but add them to the list of services already present in the templates,\nif any.\n",
+        "nullable": true,
         "properties": {
           "disabled": {
             "description": "The disabled attribute is a list of strings that contains the systemd units to be disabled.",
@@ -1552,6 +1567,7 @@
       "time_date": {
         "additionalProperties": false,
         "description": "Time and date details allowing configuration of the timezone and\nNTP servers. The timezone is set by default to UTC.\n",
+        "nullable": true,
         "properties": {
           "ntp_servers": {
             "description": "An optional list of strings containing NTP servers to use. If\nnot provided the distribution defaults are used.\n",
@@ -1600,8 +1616,7 @@
                 "$ref": "#/components/schemas/Blueprint"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "201": {
