@@ -18,11 +18,11 @@ require (
 	github.com/oasdiff/yaml3 v0.0.0-20250309153720-d2182401db90 // indirect
 	github.com/perimeterx/marshmallow v1.1.5 // indirect
 	github.com/stretchr/testify v1.10.0 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
 require (
 	github.com/google/go-cmp v0.7.0
 	github.com/invopop/yaml v0.3.1
 	github.com/oapi-codegen/runtime v1.1.1
-	gopkg.in/yaml.v3 v3.0.1
 )
