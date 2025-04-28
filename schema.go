@@ -8,7 +8,11 @@ import (
 //go:embed oas
 var SchemaFS embed.FS
 
-func Schema() []byte {
+//go:embed blueprint-oas3*
+var BundledSchemaFS embed.FS
+
+// SchemaSource returns the schema source schema as defined in oas/ directory.
+func SchemaSource() []byte {
 	buf, err := SchemaFS.Open("oas/blueprint-oas.yaml")
 	if err != nil {
 		panic(err)
@@ -19,5 +23,21 @@ func Schema() []byte {
 	if err != nil {
 		panic(err)
 	}
+
+	return schema
+}
+
+func BundledSchema() []byte {
+	buf, err := BundledSchemaFS.Open("blueprint-oas3-ext.yaml")
+	if err != nil {
+		panic(err)
+	}
+	defer buf.Close()
+
+	schema, err := io.ReadAll(buf)
+	if err != nil {
+		panic(err)
+	}
+
 	return schema
 }

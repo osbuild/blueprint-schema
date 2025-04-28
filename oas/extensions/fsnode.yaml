@@ -1,0 +1,11 @@
+---
+anyOf:
+  - not:
+      properties:
+        type:
+          enum: ["dir"]
+      required:
+        - type
+  - not:
+      required:
+      - contents

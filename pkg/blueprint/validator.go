@@ -31,10 +31,22 @@ var ErrCannotCompileSchema = errors.New("cannot compile schema")
 // ErrValidateFailed is returned when the validation fails.
 var ErrValidateFailed = errors.New("validation failed")
 
-// CompileSchema compiles the JSON schema. Uses the embedded schema
-// available as blueprint.SchemaJSON. Returns the compiled schema or
+// CompileSourceSchema compiles the JSON schema. Uses the embedded schema
+// from the oas/ directory. Returns the compiled schema or
 // an error if the schema cannot be compiled.
-func CompileSchema() (*Schema, error) {
+//
+// Do not use this schema for validation, use bundled schema instead.
+func CompileSourceSchema() (*Schema, error) {
+	return compileSchema(blueprint.SchemaSource())
+}
+
+// CompileBundledSchema compiles the JSON schema. Uses the bundled schema
+// with extensions. Use this schema for validation.
+func CompileBundledSchema() (*Schema, error) {
+	return compileSchema(blueprint.BundledSchema())
+}
+
+func compileSchema(buf []byte) (*Schema, error) {
 	loader := openapi3.NewLoader()
 	loader.IsExternalRefsAllowed = true
 	loader.ReadFromURIFunc = func(loader *openapi3.Loader, uri *url.URL) ([]byte, error) {
@@ -42,7 +54,7 @@ func CompileSchema() (*Schema, error) {
 	}
 
 	location, _ := url.Parse(".")
-	doc, err := loader.LoadFromDataWithPath(blueprint.Schema(), location)
+	doc, err := loader.LoadFromDataWithPath(buf, location)
 	if err != nil {
 		panic(err)
 	}
@@ -132,4 +144,50 @@ func (s *Schema) ReadAndValidateYAML(ctx context.Context, reader io.Reader) erro
 	}
 
 	return s.ValidateYAML(ctx, buf.Bytes())
+}
+
+func (s *Schema) ApplyExtensions(ctx context.Context) error {
+	dir, err := blueprint.SchemaFS.ReadDir("oas/extensions/*.yaml")
+	if err != nil {
+		return err
+	}
+
+	for _, file := range dir {
+		if file.IsDir() {
+			continue
+		}
+
+		f, err := blueprint.SchemaFS.Open(filepath.Join("oas/extensions", file.Name()))
+		if err != nil {
+			return err
+		}
+
+		b, err := io.ReadAll(f)
+		f.Close()
+		if err != nil {
+			return err
+		}
+
+		j, err := ConvertYAMLtoJSON(b)
+		if err != nil {
+			return err
+		}
+
+		var ts openapi3.Schema
+		ts.UnmarshalJSON(j)
+
+		schemaName := filepath.Base(file.Name())
+		if ts.AnyOf != nil {
+			s.doc.Components.Schemas[schemaName].Value.AnyOf = ts.AnyOf
+		}
+
+		if ts.AllOf != nil {
+			s.doc.Components.Schemas[schemaName].Value.AllOf = ts.AllOf
+		}
+
+		if ts.OneOf != nil {
+			s.doc.Components.Schemas[schemaName].Value.OneOf = ts.OneOf
+		}
+	}
+	return s.ValidateSchema(ctx)
 }

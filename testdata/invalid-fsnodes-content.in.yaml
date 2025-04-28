@@ -1,4 +1,3 @@
-# XXX: this is currently not enforced
 name: "Blueprint example: fsnodes"
 fsnodes:
   - path: "/var/tmp/dir"

@@ -29,7 +29,7 @@ func TestFix(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			schema, err := CompileSchema()
+			schema, err := CompileSourceSchema()
 			if err != nil {
 				t.Fatal(err)
 			}

@@ -6,7 +6,6 @@ import (
 	"io"
 	"os"
 
-	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/osbuild/blueprint-schema/pkg/blueprint"
 )
 
@@ -39,7 +38,7 @@ func main() {
 		}
 	}
 
-	schema, err := blueprint.CompileSchema()
+	schema, err := blueprint.CompileSourceSchema()
 	if err != nil {
 		panic(err)
 	}
@@ -70,44 +69,9 @@ func main() {
 
 			os.Stdout.Write(buf)
 		} else if *printJSONExtendedSchema {
-			// fsnodes: if type is "dir", contents must not be present
-			//
-			// anyOf:
-			//   - not:
-			//       properties:
-			//         type:
-			//           enum: ["dir"]
-			//       required:
-			//         - type
-			//   - not:
-			//       required:
-			//       - contents
-			schema.Document().Components.Schemas["fsnode"].Value.AnyOf = []*openapi3.SchemaRef{
-				{
-					Value: &openapi3.Schema{
-						Not: &openapi3.SchemaRef{
-							Value: &openapi3.Schema{
-								Properties: openapi3.Schemas{
-									"type": &openapi3.SchemaRef{
-										Value: &openapi3.Schema{
-											Enum: []any{"dir"},
-										},
-									},
-								},
-								Required: []string{"type"},
-							},
-						},
-					},
-				},
-				{
-					Value: &openapi3.Schema{
-						Not: &openapi3.SchemaRef{
-							Value: &openapi3.Schema{
-								Required: []string{"contents"},
-							},
-						},
-					},
-				},
+			err := schema.ApplyExtensions(ctx)
+			if err != nil {
+				panic(err)
 			}
 
 			buf, err := schema.MarshalJSON()
@@ -120,11 +84,21 @@ func main() {
 
 		return
 	} else if *validateJSON {
+		schema, err = blueprint.CompileBundledSchema()
+		if err != nil {
+			panic(err)
+		}
+
 		err = schema.ValidateJSON(ctx, inBuf)
 		if err != nil {
 			panic(err)
 		}
 	} else if *validateYAML {
+		schema, err = blueprint.CompileBundledSchema()
+		if err != nil {
+			panic(err)
+		}
+
 		err = schema.ValidateYAML(ctx, inBuf)
 		if err != nil {
 			panic(err)
