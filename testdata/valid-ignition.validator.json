@@ -1,0 +1,46 @@
+request body has an error: doesn't match schema #/components/schemas/Blueprint: Error at "/ignition": doesn't match schema due to: property "embedded" is unsupported
+Schema:
+  {
+    "additionalProperties": false,
+    "properties": {
+      "url": {
+        "description": "The URL to the Ignition configuration to be used by Ignition. This configuration\nis a URL to a remote Ignition configuration.\n",
+        "type": "string",
+        "x-go-type-skip-optional-pointer": true
+      }
+    },
+    "required": [
+      "url"
+    ],
+    "type": "object"
+  }
+
+Value:
+  {
+    "embedded": {
+      "text": "{\n  \"ignition\": {\n    \"version\": \"3.1.0\"\n  },\n  \"storage\": {\n    \"files\": [\n      {\n        \"path\": \"/etc/hostname\",\n        \"mode\": 420,\n        \"contents\": {\n          \"source\": \"data:,myhostname\"\n        }\n      }\n    ]\n  }\n}\n"
+    }
+  }
+ Or property "embedded" is unsupported
+Schema:
+  {
+    "additionalProperties": false,
+    "properties": {
+      "text": {
+        "description": "Ignition data formatted in plain text.",
+        "type": "string",
+        "x-go-type-skip-optional-pointer": true
+      }
+    },
+    "required": [
+      "text"
+    ],
+    "type": "object"
+  }
+
+Value:
+  {
+    "embedded": {
+      "text": "{\n  \"ignition\": {\n    \"version\": \"3.1.0\"\n  },\n  \"storage\": {\n    \"files\": [\n      {\n        \"path\": \"/etc/hostname\",\n        \"mode\": 420,\n        \"contents\": {\n          \"source\": \"data:,myhostname\"\n        }\n      }\n    ]\n  }\n}\n"
+    }
+  }

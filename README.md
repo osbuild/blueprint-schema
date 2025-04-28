@@ -6,21 +6,11 @@ This repository contains the common blueprint JSON Schema and Go types for Image
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/osbuild/blueprint-schema.svg)](https://pkg.go.dev/github.com/osbuild/blueprint-schema)
 
-### Why
+### WIP remarks
 
-Users of Image Builder must work with several blueprint customization formats:
-
-* composer uses TOML format also known as "on-prem" blueprint
-* image-builder-cli accept TOML and JSON "on-prem" blueprint
-* bootc-image-builder accept a subset of the composer TOML schema
-* console.redhat.com API has a modified subset of the same but as JSON (and different from the cli JSON)
-* there are few more intermediate/technical blueprint formats but you get the idea
-
-At the end of 2024 we held a series of meetings where the core team agreed on a common blueprint schema which is based on OAS3 specification (OpenAPI 3.0) with generated Go code.
-
-### WIP
-
-This is work in progress, more documentation will follow.
+* We have decided to utilize OAS3 schema instead of JSON Schema to keep OpenAPI 3.0 compatibility
+* The validation library `kin-openapi` does not guarantee order of hash keys therefore all outputs have random property order
+* Additional checks can be done via `ext` schema
 
 ### TODO
 

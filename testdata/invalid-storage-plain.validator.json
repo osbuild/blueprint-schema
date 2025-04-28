@@ -1,0 +1,38 @@
+request body has an error: doesn't match schema #/components/schemas/Blueprint: Error at "/storage/partitions/0": doesn't match any schema from "anyOf"
+Schema:
+  {
+    "anyOf": [
+      {
+        "$ref": "partition_plain.yaml"
+      },
+      {
+        "$ref": "partition_lvm.yaml"
+      },
+      {
+        "$ref": "partition_btrfs.yaml"
+      }
+    ],
+    "description": "Partitions of the following types: plain (default), lvm, or btrfs.\n",
+    "nullable": true,
+    "type": "object",
+    "x-go-type-skip-optional-pointer": true
+  }
+
+Value:
+  {
+    "fs_type": "ext4",
+    "label": "boot",
+    "logical_volumes": [
+      {
+        "fs_type": "xfs",
+        "label": "vg_data_var",
+        "minsize": "50 GiB",
+        "mountpoint": "/var",
+        "name": "lv_name"
+      }
+    ],
+    "minsize": "800 MiB",
+    "mountpoint": "/boot",
+    "name": "vg_data",
+    "type": "plain"
+  }

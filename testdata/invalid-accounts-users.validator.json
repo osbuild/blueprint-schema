@@ -1,0 +1,11 @@
+request body has an error: doesn't match schema #/components/schemas/Blueprint: Error at "/accounts/users/0/name": string doesn't match the regular expression "^[a-zA-Z0-9_.][a-zA-Z0-9_.$-]*$"
+Schema:
+  {
+    "description": "Account name. Accepted characters: lowercase letters, digits,\nunderscores, dollars, and hyphens. Name must not start with a hyphen. Maximum\nlength is 256 characters. The validation pattern is a relaxed version of\nhttps://github.com/shadow-maint/shadow/blob/master/lib/chkname.c\n",
+    "maxLength": 256,
+    "pattern": "^[a-zA-Z0-9_.][a-zA-Z0-9_.$-]*$",
+    "type": "string"
+  }
+
+Value:
+  "-names-starting-with-dash"

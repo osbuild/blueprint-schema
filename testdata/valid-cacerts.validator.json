@@ -1,0 +1,24 @@
+request body has an error: doesn't match schema #/components/schemas/Blueprint: Error at "/cacerts/0": property "cert" is unsupported
+Schema:
+  {
+    "additionalProperties": false,
+    "description": "The CA certificates to be added to the image.\n",
+    "properties": {
+      "pem": {
+        "description": "The PEM-encoded certificate.",
+        "type": "string",
+        "x-go-name": "PEM",
+        "x-go-type-skip-optional-pointer": true
+      }
+    },
+    "required": [
+      "pem"
+    ],
+    "type": "object",
+    "x-go-name": "CACert"
+  }
+
+Value:
+  {
+    "cert": "pem encoded cert"
+  }
