@@ -147,13 +147,13 @@ func (s *Schema) ReadAndValidateYAML(ctx context.Context, reader io.Reader) erro
 }
 
 func (s *Schema) ApplyExtensions(ctx context.Context) error {
-	dir, err := blueprint.SchemaFS.ReadDir("oas/extensions/*.yaml")
+	dir, err := blueprint.SchemaFS.ReadDir("oas/extensions")
 	if err != nil {
 		return err
 	}
 
 	for _, file := range dir {
-		if file.IsDir() {
+		if file.IsDir() || strings.HasPrefix(file.Name(), "README") {
 			continue
 		}
 
@@ -176,17 +176,19 @@ func (s *Schema) ApplyExtensions(ctx context.Context) error {
 		var ts openapi3.Schema
 		ts.UnmarshalJSON(j)
 
-		schemaName := filepath.Base(file.Name())
-		if ts.AnyOf != nil {
-			s.doc.Components.Schemas[schemaName].Value.AnyOf = ts.AnyOf
-		}
+		schemaName := strings.TrimSuffix(filepath.Base(file.Name()), ".yaml")
+		if _, ok := s.doc.Components.Schemas[schemaName]; ok {
+			if ts.AnyOf != nil {
+				s.doc.Components.Schemas[schemaName].Value.AnyOf = ts.AnyOf
+			}
 
-		if ts.AllOf != nil {
-			s.doc.Components.Schemas[schemaName].Value.AllOf = ts.AllOf
-		}
+			if ts.AllOf != nil {
+				s.doc.Components.Schemas[schemaName].Value.AllOf = ts.AllOf
+			}
 
-		if ts.OneOf != nil {
-			s.doc.Components.Schemas[schemaName].Value.OneOf = ts.OneOf
+			if ts.OneOf != nil {
+				s.doc.Components.Schemas[schemaName].Value.OneOf = ts.OneOf
+			}
 		}
 	}
 	return s.ValidateSchema(ctx)
