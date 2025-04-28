@@ -14,12 +14,14 @@ properties:
     type: string
     x-go-type-skip-optional-pointer: true
     nullable: true
+    x-omitempty: true
   description:
     description: |
       The description attribute is a string that can be a longer description
       of the blueprint and is only used for display purposes.
     type: string
     x-go-type-skip-optional-pointer: true
+    x-omitempty: true
     nullable: true
   accounts:
     "$ref": "accounts.yaml"
@@ -34,6 +36,7 @@ properties:
       "$ref": "ca_cert.yaml"
     x-go-type-skip-optional-pointer: true
     nullable: true
+    x-omitempty: true
     x-go-name: CACerts
   containers:
     description: |
@@ -86,6 +89,7 @@ properties:
       "$ref": "fsnode.yaml"
     x-go-name: FSNodes
     x-go-type-skip-optional-pointer: true
+    x-omitempty: true
     nullable: true
   hostname:
     description: |
@@ -93,6 +97,7 @@ properties:
       hostname of the final image.
     type: string
     x-go-type-skip-optional-pointer: true
+    x-omitempty: true
     nullable: true
   ignition:
     description: |
@@ -107,6 +112,7 @@ properties:
       - "$ref": "ignition_text.yaml"
     x-go-name: Ignition
     x-go-type-name: Ignition
+    x-omitempty: true
     nullable: true
   installer:
     "$ref": "installer.yaml"

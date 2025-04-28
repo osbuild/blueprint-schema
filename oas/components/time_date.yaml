@@ -4,6 +4,7 @@ description: |
   Time and date details allowing configuration of the timezone and
   NTP servers. The timezone is set by default to UTC.
 nullable: true
+x-omitempty: true
 required:
 - timezone
 properties:

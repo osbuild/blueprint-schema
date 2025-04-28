@@ -12,6 +12,7 @@ properties:
       automatically if not specified.
     type: string
     x-go-type-skip-optional-pointer: true
+    x-omitempty: true
   minsize:
     "$ref": "storage_minsize.yaml"
   logical_volumes:
@@ -21,4 +22,5 @@ properties:
     items:
       "$ref": "partition_lv.yaml"
     x-go-type-skip-optional-pointer: true
+    x-omitempty: true
 additionalProperties: false

@@ -2,6 +2,7 @@
 type: object
 description: Custom Linux kernel details, optional.
 nullable: true
+x-omitempty: true
 properties:
   cmdline_append:
     description: |

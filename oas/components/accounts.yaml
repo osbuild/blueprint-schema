@@ -2,6 +2,7 @@
 type: object
 description: Operating system user and group accounts to be created on the image.
 nullable: true
+x-omitempty: true
 properties:
   groups:
     type: array

@@ -1,5 +1,6 @@
 ---
 type: object
+x-omitempty: true
 required:
 - name
 - source

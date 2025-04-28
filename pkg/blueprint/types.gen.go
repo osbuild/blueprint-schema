@@ -69,6 +69,73 @@ type NetworkProtocol string
 // FirewallEnabled Whether the firewall rule is enabled or not. Defaults to true.
 type FirewallEnabled = bool
 
+// Accounts Operating system user and group accounts to be created on the image.
+type Accounts struct {
+	Groups []AccountsGroups `json:"groups"`
+	Users  []AccountsUsers  `json:"users"`
+}
+
+// AccountsGroups Operating system group accounts to be created on the image.
+type AccountsGroups struct {
+	// GID The group ID (GID) of the group. Must be non-zero.
+	GID int `json:"gid,omitempty"`
+
+	// Name Group name. Accepted characters: lowercase letters, digits,
+	// underscores, dollars, and hyphens. Name must not start with a hyphen. Maximum
+	// length is 256 characters. The validation pattern is a relaxed version of
+	// https://github.com/shadow-maint/shadow/blob/master/lib/chkname.c
+	Name string `json:"name"`
+}
+
+// AccountsUsers Operating system user accounts to be created on the image.
+type AccountsUsers struct {
+	// Description A longer description of the account.
+	Description string `json:"description,omitempty"`
+
+	// Expires The expiration date in the format YYYY-MM-DD. Leave empty to never expire.
+	//
+	// String-based type which accepts date (YYYY-MM-DD) or date-time (RFC3339)
+	// format and only marshals into date format. This is needed for JSON/YAML compatibility
+	// since YAML automatically converts strings which look like dates into time.Time.
+	Expires *ExpireDate `json:"expires,omitempty"`
+
+	// GID The primary group ID (GID) of the user. Value of zero (or ommited
+	// value) means that the next available UID will be assigned.
+	GID int `json:"gid,omitempty"`
+
+	// Groups Additional groups that the user should be a member of.
+	Groups []string `json:"groups,omitempty"`
+
+	// Home The home directory of the user.
+	Home string `json:"home,omitempty"`
+
+	// Name Account name. Accepted characters: lowercase letters, digits,
+	// underscores, dollars, and hyphens. Name must not start with a hyphen. Maximum
+	// length is 256 characters. The validation pattern is a relaxed version of
+	// https://github.com/shadow-maint/shadow/blob/master/lib/chkname.c
+	Name string `json:"name"`
+
+	// Password Password either in plain text or encrypted form. If the password
+	// is not provided, the account will be locked and the user will not be able
+	// to log in with a password. The password can be encrypted using the crypt(3)
+	// function. The format of the encrypted password is $id$salt$hashed, where
+	// $id is the algorithm used (1, 5, 6, or 2a).
+	Password *string `json:"password,omitempty"`
+
+	// Shell The shell of the user.
+	Shell string `json:"shell,omitempty"`
+
+	// SSHKeys SSH keys to be added to the account's authorized_keys file.
+	SSHKeys []string `json:"ssh_keys,omitempty"`
+
+	// UID The user ID (UID) of the user. Value of zero (or ommited value)
+	// means that the next available UID will be assigned.
+	UID int `json:"uid,omitempty"`
+}
+
+// AnacondaModules defines model for anaconda_modules.
+type AnacondaModules string
+
 // Blueprint Image Builder new blueprint schema.
 //
 // THIS IS WORK IN PROGRESS
@@ -217,73 +284,6 @@ type Ignition struct {
 	union json.RawMessage
 }
 
-// Accounts Operating system user and group accounts to be created on the image.
-type Accounts struct {
-	Groups []AccountsGroups `json:"groups"`
-	Users  []AccountsUsers  `json:"users"`
-}
-
-// AccountsGroups Operating system group accounts to be created on the image.
-type AccountsGroups struct {
-	// GID The group ID (GID) of the group. Must be non-zero.
-	GID int `json:"gid,omitempty"`
-
-	// Name Group name. Accepted characters: lowercase letters, digits,
-	// underscores, dollars, and hyphens. Name must not start with a hyphen. Maximum
-	// length is 256 characters. The validation pattern is a relaxed version of
-	// https://github.com/shadow-maint/shadow/blob/master/lib/chkname.c
-	Name string `json:"name"`
-}
-
-// AccountsUsers Operating system user accounts to be created on the image.
-type AccountsUsers struct {
-	// Description A longer description of the account.
-	Description string `json:"description,omitempty"`
-
-	// Expires The expiration date in the format YYYY-MM-DD. Leave empty to never expire.
-	//
-	// String-based type which accepts date (YYYY-MM-DD) or date-time (RFC3339)
-	// format and only marshals into date format. This is needed for JSON/YAML compatibility
-	// since YAML automatically converts strings which look like dates into time.Time.
-	Expires *ExpireDate `json:"expires,omitempty"`
-
-	// GID The primary group ID (GID) of the user. Value of zero (or ommited
-	// value) means that the next available UID will be assigned.
-	GID int `json:"gid,omitempty"`
-
-	// Groups Additional groups that the user should be a member of.
-	Groups []string `json:"groups,omitempty"`
-
-	// Home The home directory of the user.
-	Home string `json:"home,omitempty"`
-
-	// Name Account name. Accepted characters: lowercase letters, digits,
-	// underscores, dollars, and hyphens. Name must not start with a hyphen. Maximum
-	// length is 256 characters. The validation pattern is a relaxed version of
-	// https://github.com/shadow-maint/shadow/blob/master/lib/chkname.c
-	Name string `json:"name"`
-
-	// Password Password either in plain text or encrypted form. If the password
-	// is not provided, the account will be locked and the user will not be able
-	// to log in with a password. The password can be encrypted using the crypt(3)
-	// function. The format of the encrypted password is $id$salt$hashed, where
-	// $id is the algorithm used (1, 5, 6, or 2a).
-	Password *string `json:"password,omitempty"`
-
-	// Shell The shell of the user.
-	Shell string `json:"shell,omitempty"`
-
-	// SSHKeys SSH keys to be added to the account's authorized_keys file.
-	SSHKeys []string `json:"ssh_keys,omitempty"`
-
-	// UID The user ID (UID) of the user. Value of zero (or ommited value)
-	// means that the next available UID will be assigned.
-	UID int `json:"uid,omitempty"`
-}
-
-// AnacondaModules defines model for anaconda_modules.
-type AnacondaModules string
-
 // CACert The CA certificates to be added to the image.
 type CACert struct {
 	// PEM The PEM-encoded certificate.
@@ -409,7 +409,7 @@ type DnfSourceBaseUrls = DNFSourceBaseURLs
 // DNFSourceBaseURLs defines model for .
 type DNFSourceBaseURLs struct {
 	// Urls Base URLs for the repository.
-	Urls []string `json:"urls,omitempty"`
+	Urls []string `json:"urls"`
 }
 
 // DnfSourceMetalink defines model for dnf_source_metalink.
@@ -417,8 +417,8 @@ type DnfSourceMetalink = DNFSourceMetalink
 
 // DNFSourceMetalink defines model for .
 type DNFSourceMetalink struct {
-	// Urls Metalink for the repository.
-	Urls string `json:"urls,omitempty"`
+	// Metalink Metalink for the repository.
+	Metalink string `json:"metalink"`
 }
 
 // DnfSourceMirrorlist defines model for dnf_source_mirrorlist.
@@ -426,8 +426,8 @@ type DnfSourceMirrorlist = DNFSourceMirrorlist
 
 // DNFSourceMirrorlist defines model for .
 type DNFSourceMirrorlist struct {
-	// Urls Mirror list for the repository.
-	Urls string `json:"urls,omitempty"`
+	// Mirrorlist Mirror list for the repository.
+	Mirrorlist string `json:"mirrorlist"`
 }
 
 // Error defines model for error.
@@ -741,8 +741,6 @@ type PartitionBTRFS struct {
 	Minsize StorageMinsize `json:"minsize,omitempty"`
 
 	// Subvolumes BTRFS subvolumes to create.
-	//
-	// Relevant for partition types: btrfs.
 	Subvolumes []PartitionSubvolumes `json:"subvolumes,omitempty"`
 
 	// Type Partition type: plain (default), lvm, or btrfs.
@@ -781,15 +779,18 @@ type PartitionLvm = PartitionLVM
 
 // PartitionLVM defines model for .
 type PartitionLVM struct {
-	// FSType File system type: ext4 (default), xfs, swap, or vfat.
-	//
-	// Relevant for partition types: plain.
-	FSType FSType `json:"fs_type,omitempty"`
-
 	// LogicalVolumes LVM logical volumes to create within the volume group.
-	//
-	// Relevant for partition types: lvm.
 	LogicalVolumes []PartitionLv `json:"logical_volumes,omitempty"`
+
+	// Minsize Minimum size of the volume.
+	//
+	// Size must be formatted as an integer followed by whitespace and then either a
+	// decimal unit (B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB,
+	// TiB, PiB, EiB).
+	Minsize StorageMinsize `json:"minsize,omitempty"`
+
+	// Name Optional name of the volume group. Will be generated automatically if not specified.
+	Name string `json:"name,omitempty"`
 
 	// Type Partition type: plain (default), lvm, or btrfs.
 	Type PartitionType `json:"type"`

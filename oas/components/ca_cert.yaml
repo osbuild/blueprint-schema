@@ -2,6 +2,8 @@
 type: object
 description: |
   The CA certificates to be added to the image.
+x-go-name: CACert
+x-omitempty: true
 required:
 - pem
 properties:
@@ -10,5 +12,5 @@ properties:
     type: string
     x-go-name: PEM
     x-go-type-skip-optional-pointer: true
+    x-omitempty: true
 additionalProperties: false
-x-go-name: CACert

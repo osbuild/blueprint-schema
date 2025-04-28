@@ -3,6 +3,7 @@ type: object
 description: |
   Registration details for various registration types, namely Red Hat
   Subscription Manager.
+x-omitempty: true
 nullable: true
 properties:
   fdo:

@@ -4,6 +4,7 @@ description: |
   An optional object that contains the following attributes to customize
   the locale settings for the system. If the locale is not specified, the default
   locale and keyboard settings are used: en_US.UTF-8 and us.
+x-omitempty: true
 nullable: true
 properties:
   keyboards:

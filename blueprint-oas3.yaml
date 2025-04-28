@@ -18,6 +18,7 @@ components:
                     type: array
                     x-go-type-skip-optional-pointer: true
             type: object
+            x-omitempty: true
         accounts_groups:
             additionalProperties: false
             description: Operating system group accounts to be created on the image.
@@ -158,6 +159,7 @@ components:
                     type: array
                     x-go-name: CACerts
                     x-go-type-skip-optional-pointer: true
+                    x-omitempty: true
                 containers:
                     description: |
                         Containers to be pulled during the image build and stored in the
@@ -178,6 +180,7 @@ components:
                     nullable: true
                     type: string
                     x-go-type-skip-optional-pointer: true
+                    x-omitempty: true
                 dnf:
                     $ref: '#/components/schemas/dnf'
                 fips:
@@ -217,6 +220,7 @@ components:
                     type: array
                     x-go-name: FSNodes
                     x-go-type-skip-optional-pointer: true
+                    x-omitempty: true
                 hostname:
                     description: |
                         Hostname is an optional string that can be used to configure the
@@ -224,6 +228,7 @@ components:
                     nullable: true
                     type: string
                     x-go-type-skip-optional-pointer: true
+                    x-omitempty: true
                 ignition:
                     description: |
                         Provides Ignition configuration files to be used in edge-raw-image and
@@ -238,6 +243,7 @@ components:
                         - $ref: '#/components/schemas/ignition_text'
                     x-go-name: Ignition
                     x-go-type-name: Ignition
+                    x-omitempty: true
                 installer:
                     $ref: '#/components/schemas/installer'
                 kernel:
@@ -252,6 +258,7 @@ components:
                     nullable: true
                     type: string
                     x-go-type-skip-optional-pointer: true
+                    x-omitempty: true
                 network:
                     $ref: '#/components/schemas/network'
                 openscap:
@@ -275,10 +282,12 @@ components:
                     type: string
                     x-go-name: PEM
                     x-go-type-skip-optional-pointer: true
+                    x-omitempty: true
             required:
                 - pem
             type: object
             x-go-name: CACert
+            x-omitempty: true
         container:
             additionalProperties: false
             properties:
@@ -305,6 +314,7 @@ components:
                 - name
                 - source
             type: object
+            x-omitempty: true
         dnf:
             additionalProperties: false
             description: |
@@ -374,6 +384,7 @@ components:
                     x-omitempty: true
             type: object
             x-go-name: DNF
+            x-omitempty: true
         dnf_repository:
             additionalProperties: false
             properties:
@@ -538,6 +549,7 @@ components:
                     x-go-type-skip-optional-pointer: true
             type: object
             x-go-name: FIPS
+            x-omitempty: true
         firewall_enabled:
             additionalProperties: false
             default: true
@@ -673,6 +685,7 @@ components:
                 - path
             type: object
             x-go-name: FSNode
+            x-omitempty: true
         fsnode_contents_base64:
             additionalProperties: false
             properties:
@@ -727,6 +740,7 @@ components:
                 coreos:
                     $ref: '#/components/schemas/installer_coreos'
             type: object
+            x-omitempty: true
         installer_anaconda:
             additionalProperties: false
             description: |
@@ -824,6 +838,7 @@ components:
                     x-go-type-skip-optional-pointer: true
                     x-omitempty: true
             type: object
+            x-omitempty: true
         locale:
             additionalProperties: false
             description: |
@@ -859,6 +874,7 @@ components:
                     x-go-type-skip-optional-pointer: true
                     x-omitempty: true
             type: object
+            x-omitempty: true
         network:
             additionalProperties: false
             description: Networking details including firewall configuration.
@@ -867,6 +883,7 @@ components:
                 firewall:
                     $ref: '#/components/schemas/network_firewall'
             type: object
+            x-omitempty: true
         network_firewall:
             additionalProperties: false
             description: Firewall details - package firewalld must be installed in the image.
@@ -965,6 +982,7 @@ components:
                 - profile_id
             type: object
             x-go-name: OpenSCAP
+            x-omitempty: true
         partition_btrfs:
             additionalProperties: false
             properties:
@@ -977,6 +995,7 @@ components:
                         $ref: '#/components/schemas/partition_subvolumes'
                     type: array
                     x-go-type-skip-optional-pointer: true
+                    x-omitempty: true
                 type:
                     $ref: '#/components/schemas/partition_type'
             required:
@@ -1013,12 +1032,14 @@ components:
                         $ref: '#/components/schemas/partition_lv'
                     type: array
                     x-go-type-skip-optional-pointer: true
+                    x-omitempty: true
                 minsize:
                     $ref: '#/components/schemas/storage_minsize'
                 name:
                     description: Optional name of the volume group. Will be generated automatically if not specified.
                     type: string
                     x-go-type-skip-optional-pointer: true
+                    x-omitempty: true
                 type:
                     $ref: '#/components/schemas/partition_type'
             required:
@@ -1079,6 +1100,7 @@ components:
                 redhat:
                     $ref: '#/components/schemas/registration_redhat'
             type: object
+            x-omitempty: true
         registration_connector:
             additionalProperties: false
             description: Red Hat console.redhat.com connector (rhc) details.
@@ -1240,6 +1262,7 @@ components:
                 - minsize
                 - partitions
             type: object
+            x-omitempty: true
         storage_fstype:
             default: ext4
             description: |
@@ -1328,6 +1351,7 @@ components:
                     type: array
                     x-go-type-skip-optional-pointer: true
             type: object
+            x-omitempty: true
         tailoring_json:
             additionalProperties: false
             properties:
@@ -1389,6 +1413,7 @@ components:
             required:
                 - timezone
             type: object
+            x-omitempty: true
 info:
     contact:
         name: Red Hat Image Builder Team

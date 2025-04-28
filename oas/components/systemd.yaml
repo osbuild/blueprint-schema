@@ -10,6 +10,7 @@ description: |
   services, but add them to the list of services already present in the templates,
   if any.
 nullable: true
+x-omitempty: true
 properties:
   disabled:
     description: The disabled attribute is a list of strings that contains the

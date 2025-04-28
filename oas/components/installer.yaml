@@ -4,6 +4,7 @@ description: |
   Extra customization for Anaconda installer (ISO) and Edge/IOT simplified
   installer image types.
 nullable: true
+x-omitempty: true
 properties:
   anaconda:
     "$ref": "installer_anaconda.yaml"

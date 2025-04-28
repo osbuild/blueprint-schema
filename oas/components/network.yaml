@@ -2,6 +2,7 @@
 type: object
 description: Networking details including firewall configuration.
 nullable: true
+x-omitempty: true
 properties:
   firewall:
     "$ref": "network_firewall.yaml"

@@ -36,11 +36,11 @@ blueprint-oas3.json: $(SCHEMA_SRC) $(SOURCES)
 blueprint-oas3-ext.json: $(SCHEMA_SRC) $(SOURCES)
 	go run ./cmd/image-builder-validate -print-json-extended-schema > blueprint-oas3-ext.json
 
-.PHONY: schema
-schema: blueprint-oas3.yaml blueprint-oas3.json blueprint-oas3-ext.json ## Bundle OpenAPI schema
+.PHONY: schema-bundle
+schema-bundle: blueprint-oas3.yaml blueprint-oas3.json blueprint-oas3-ext.json ## Bundle OpenAPI schema
 
-.PHONY: schema-codegen
-schema-codegen: schema ## Generate Go code from schema
+.PHONY: schema
+schema: schema-bundle ## Generate bundled schema and Go code
 	oapi-codegen -generate types -package blueprint -o pkg/blueprint/types.gen.go blueprint-oas3.json
 	oapi-codegen -generate std-http -package blueprint -o pkg/blueprint/http.gen.go blueprint-oas3.json
 

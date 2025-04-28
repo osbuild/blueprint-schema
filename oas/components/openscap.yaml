@@ -5,6 +5,7 @@ description: |
   RHEL 8.7 & RHEL 9.1. It is possible to either list policy rules (enable or
   disable) or to provide a full policy file.
 x-go-name: OpenSCAP
+x-omitempty: true
 nullable: true
 required:
   - profile_id
