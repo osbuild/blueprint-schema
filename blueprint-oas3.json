@@ -1,218 +1,6 @@
 {
   "components": {
     "schemas": {
-      "./components/blueprint": {
-        "additionalProperties": false,
-        "description": "Image Builder new blueprint schema.\n\nTHIS IS WORK IN PROGRESS",
-        "nullable": true,
-        "properties": {
-          "accounts": {
-            "$ref": "#/components/schemas/accounts"
-          },
-          "cacerts": {
-            "description": "The CA certificates to be added to the image. The certificates\nare added to the system-wide CA trust store. The certificates are added to\nthe /etc/pki/ca-trust/source/anchors/ directory and the update-ca-trust command\nis run to update the system-wide CA trust store.\n",
-            "items": {
-              "$ref": "#/components/schemas/ca_cert"
-            },
-            "nullable": true,
-            "type": "array",
-            "x-go-name": "CACerts",
-            "x-go-type-skip-optional-pointer": true
-          },
-          "containers": {
-            "description": "Containers to be pulled during the image build and stored in the\nimage at the default local container storage location that is appropriate\nfor the image type, so that all supported container tools like podman and\ncri-o will be able to work with it. The embedded containers are not started,\nto do so you can create systemd unit files or quadlets with the files customization.\n",
-            "items": {
-              "$ref": "#/components/schemas/container"
-            },
-            "nullable": true,
-            "type": "array",
-            "x-go-type-skip-optional-pointer": true,
-            "x-omitempty": true
-          },
-          "description": {
-            "description": "The description attribute is a string that can be a longer description\nof the blueprint and is only used for display purposes.\n",
-            "nullable": true,
-            "type": "string",
-            "x-go-type-skip-optional-pointer": true
-          },
-          "dnf": {
-            "$ref": "#/components/schemas/dnf"
-          },
-          "fips": {
-            "$ref": "#/components/schemas/fips"
-          },
-          "fsnodes": {
-            "description": "File system nodes details.\n\nYou can use the customization to create new files or to replace existing ones,\nif not restricted by the policy specified below. If the target path is an existing\nsymlink to another file, the symlink will be replaced by the custom file.\n\nPlease note that the parent directory of a specified file must exist. If it does\nnot exist, the image build will fail. One can ensure that the parent directory\nexists by specifying \"ensure_parents\".\n\nIn addition, the following files are not allowed to be created or replaced by\npolicy: /etc/fstab, /etc/shadow, /etc/passwd and /etc/group.\n\nUsing the files customization comes with a high chance of creating an image that\ndoesn't boot. Use this feature only if you know what you are doing. Although the\nfiles customization can be used to configure parts of the OS which can also be\nconfigured by other blueprint customizations, this use is discouraged. If possible,\nusers should always default to using the specialized blueprint customizations.\nNote that if you combine the files customizations with other customizations, the\nother customizations may not work as expected or may be overridden by the files\ncustomizations.\n\nYou can create custom directories as well. The existence of a specified directory\nis handled gracefully only if no explicit mode, user or group is specified. If any\nof these customizations are specified and the directory already exists in the\nimage, the image build will fail. The intention is to prevent changing the\nownership or permissions of existing directories.\n",
-            "items": {
-              "$ref": "#/components/schemas/fsnode"
-            },
-            "nullable": true,
-            "type": "array",
-            "x-go-name": "FSNodes",
-            "x-go-type-skip-optional-pointer": true
-          },
-          "hostname": {
-            "description": "Hostname is an optional string that can be used to configure the\nhostname of the final image.\n",
-            "nullable": true,
-            "type": "string",
-            "x-go-type-skip-optional-pointer": true
-          },
-          "ignition": {
-            "description": "Provides Ignition configuration files to be used in edge-raw-image and\nedge-simplified-installer images. Check the RHEL for Edge butane specification for\na description of the supported configuration options.\n\nThe blueprint configuration can be done either by embedding an Ignition configuration\nfile into the image, or providing a provisioning URL that will be fetched at first boot.\n",
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/ignition_url"
-              },
-              {
-                "$ref": "#/components/schemas/ignition_text"
-              }
-            ],
-            "x-go-name": "Ignition",
-            "x-go-type-name": "Ignition"
-          },
-          "installer": {
-            "$ref": "#/components/schemas/installer"
-          },
-          "kernel": {
-            "$ref": "#/components/schemas/kernel"
-          },
-          "locale": {
-            "$ref": "#/components/schemas/locale"
-          },
-          "name": {
-            "description": "The name attribute is a string that contains the name of the blueprint.\nIt can contain spaces, but they may be converted to dash characters during build.\nIt should be short and descriptive.\n",
-            "nullable": true,
-            "type": "string",
-            "x-go-type-skip-optional-pointer": true
-          },
-          "network": {
-            "$ref": "#/components/schemas/network"
-          },
-          "openscap": {
-            "$ref": "#/components/schemas/openscap"
-          },
-          "registration": {
-            "$ref": "#/components/schemas/registration"
-          },
-          "storage": {
-            "$ref": "#/components/schemas/storage"
-          },
-          "systemd": {
-            "$ref": "#/components/schemas/systemd"
-          },
-          "timedate": {
-            "$ref": "#/components/schemas/time_date"
-          }
-        },
-        "type": "object"
-      },
-      "Blueprint": {
-        "additionalProperties": false,
-        "description": "Image Builder new blueprint schema.\n\nTHIS IS WORK IN PROGRESS",
-        "nullable": true,
-        "properties": {
-          "accounts": {
-            "$ref": "#/components/schemas/accounts"
-          },
-          "cacerts": {
-            "description": "The CA certificates to be added to the image. The certificates\nare added to the system-wide CA trust store. The certificates are added to\nthe /etc/pki/ca-trust/source/anchors/ directory and the update-ca-trust command\nis run to update the system-wide CA trust store.\n",
-            "items": {
-              "$ref": "#/components/schemas/ca_cert"
-            },
-            "nullable": true,
-            "type": "array",
-            "x-go-name": "CACerts",
-            "x-go-type-skip-optional-pointer": true
-          },
-          "containers": {
-            "description": "Containers to be pulled during the image build and stored in the\nimage at the default local container storage location that is appropriate\nfor the image type, so that all supported container tools like podman and\ncri-o will be able to work with it. The embedded containers are not started,\nto do so you can create systemd unit files or quadlets with the files customization.\n",
-            "items": {
-              "$ref": "#/components/schemas/container"
-            },
-            "nullable": true,
-            "type": "array",
-            "x-go-type-skip-optional-pointer": true,
-            "x-omitempty": true
-          },
-          "description": {
-            "description": "The description attribute is a string that can be a longer description\nof the blueprint and is only used for display purposes.\n",
-            "nullable": true,
-            "type": "string",
-            "x-go-type-skip-optional-pointer": true
-          },
-          "dnf": {
-            "$ref": "#/components/schemas/dnf"
-          },
-          "fips": {
-            "$ref": "#/components/schemas/fips"
-          },
-          "fsnodes": {
-            "description": "File system nodes details.\n\nYou can use the customization to create new files or to replace existing ones,\nif not restricted by the policy specified below. If the target path is an existing\nsymlink to another file, the symlink will be replaced by the custom file.\n\nPlease note that the parent directory of a specified file must exist. If it does\nnot exist, the image build will fail. One can ensure that the parent directory\nexists by specifying \"ensure_parents\".\n\nIn addition, the following files are not allowed to be created or replaced by\npolicy: /etc/fstab, /etc/shadow, /etc/passwd and /etc/group.\n\nUsing the files customization comes with a high chance of creating an image that\ndoesn't boot. Use this feature only if you know what you are doing. Although the\nfiles customization can be used to configure parts of the OS which can also be\nconfigured by other blueprint customizations, this use is discouraged. If possible,\nusers should always default to using the specialized blueprint customizations.\nNote that if you combine the files customizations with other customizations, the\nother customizations may not work as expected or may be overridden by the files\ncustomizations.\n\nYou can create custom directories as well. The existence of a specified directory\nis handled gracefully only if no explicit mode, user or group is specified. If any\nof these customizations are specified and the directory already exists in the\nimage, the image build will fail. The intention is to prevent changing the\nownership or permissions of existing directories.\n",
-            "items": {
-              "$ref": "#/components/schemas/fsnode"
-            },
-            "nullable": true,
-            "type": "array",
-            "x-go-name": "FSNodes",
-            "x-go-type-skip-optional-pointer": true
-          },
-          "hostname": {
-            "description": "Hostname is an optional string that can be used to configure the\nhostname of the final image.\n",
-            "nullable": true,
-            "type": "string",
-            "x-go-type-skip-optional-pointer": true
-          },
-          "ignition": {
-            "description": "Provides Ignition configuration files to be used in edge-raw-image and\nedge-simplified-installer images. Check the RHEL for Edge butane specification for\na description of the supported configuration options.\n\nThe blueprint configuration can be done either by embedding an Ignition configuration\nfile into the image, or providing a provisioning URL that will be fetched at first boot.\n",
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/ignition_url"
-              },
-              {
-                "$ref": "#/components/schemas/ignition_text"
-              }
-            ],
-            "x-go-name": "Ignition",
-            "x-go-type-name": "Ignition"
-          },
-          "installer": {
-            "$ref": "#/components/schemas/installer"
-          },
-          "kernel": {
-            "$ref": "#/components/schemas/kernel"
-          },
-          "locale": {
-            "$ref": "#/components/schemas/locale"
-          },
-          "name": {
-            "description": "The name attribute is a string that contains the name of the blueprint.\nIt can contain spaces, but they may be converted to dash characters during build.\nIt should be short and descriptive.\n",
-            "nullable": true,
-            "type": "string",
-            "x-go-type-skip-optional-pointer": true
-          },
-          "network": {
-            "$ref": "#/components/schemas/network"
-          },
-          "openscap": {
-            "$ref": "#/components/schemas/openscap"
-          },
-          "registration": {
-            "$ref": "#/components/schemas/registration"
-          },
-          "storage": {
-            "$ref": "#/components/schemas/storage"
-          },
-          "systemd": {
-            "$ref": "#/components/schemas/systemd"
-          },
-          "timedate": {
-            "$ref": "#/components/schemas/time_date"
-          }
-        },
-        "type": "object"
-      },
       "accounts": {
         "additionalProperties": false,
         "description": "Operating system user and group accounts to be created on the image.",
@@ -360,6 +148,112 @@
         ],
         "x-go-type-name": "AnacondaModule",
         "x-go-type-skip-optional-pointer": true
+      },
+      "blueprint": {
+        "additionalProperties": false,
+        "description": "Image Builder new blueprint schema.\n\nTHIS IS WORK IN PROGRESS",
+        "nullable": true,
+        "properties": {
+          "accounts": {
+            "$ref": "#/components/schemas/accounts"
+          },
+          "cacerts": {
+            "description": "The CA certificates to be added to the image. The certificates\nare added to the system-wide CA trust store. The certificates are added to\nthe /etc/pki/ca-trust/source/anchors/ directory and the update-ca-trust command\nis run to update the system-wide CA trust store.\n",
+            "items": {
+              "$ref": "#/components/schemas/ca_cert"
+            },
+            "nullable": true,
+            "type": "array",
+            "x-go-name": "CACerts",
+            "x-go-type-skip-optional-pointer": true
+          },
+          "containers": {
+            "description": "Containers to be pulled during the image build and stored in the\nimage at the default local container storage location that is appropriate\nfor the image type, so that all supported container tools like podman and\ncri-o will be able to work with it. The embedded containers are not started,\nto do so you can create systemd unit files or quadlets with the files customization.\n",
+            "items": {
+              "$ref": "#/components/schemas/container"
+            },
+            "nullable": true,
+            "type": "array",
+            "x-go-type-skip-optional-pointer": true,
+            "x-omitempty": true
+          },
+          "description": {
+            "description": "The description attribute is a string that can be a longer description\nof the blueprint and is only used for display purposes.\n",
+            "nullable": true,
+            "type": "string",
+            "x-go-type-skip-optional-pointer": true
+          },
+          "dnf": {
+            "$ref": "#/components/schemas/dnf"
+          },
+          "fips": {
+            "$ref": "#/components/schemas/fips"
+          },
+          "fsnodes": {
+            "description": "File system nodes details.\n\nYou can use the customization to create new files or to replace existing ones,\nif not restricted by the policy specified below. If the target path is an existing\nsymlink to another file, the symlink will be replaced by the custom file.\n\nPlease note that the parent directory of a specified file must exist. If it does\nnot exist, the image build will fail. One can ensure that the parent directory\nexists by specifying \"ensure_parents\".\n\nIn addition, the following files are not allowed to be created or replaced by\npolicy: /etc/fstab, /etc/shadow, /etc/passwd and /etc/group.\n\nUsing the files customization comes with a high chance of creating an image that\ndoesn't boot. Use this feature only if you know what you are doing. Although the\nfiles customization can be used to configure parts of the OS which can also be\nconfigured by other blueprint customizations, this use is discouraged. If possible,\nusers should always default to using the specialized blueprint customizations.\nNote that if you combine the files customizations with other customizations, the\nother customizations may not work as expected or may be overridden by the files\ncustomizations.\n\nYou can create custom directories as well. The existence of a specified directory\nis handled gracefully only if no explicit mode, user or group is specified. If any\nof these customizations are specified and the directory already exists in the\nimage, the image build will fail. The intention is to prevent changing the\nownership or permissions of existing directories.\n",
+            "items": {
+              "$ref": "#/components/schemas/fsnode"
+            },
+            "nullable": true,
+            "type": "array",
+            "x-go-name": "FSNodes",
+            "x-go-type-skip-optional-pointer": true
+          },
+          "hostname": {
+            "description": "Hostname is an optional string that can be used to configure the\nhostname of the final image.\n",
+            "nullable": true,
+            "type": "string",
+            "x-go-type-skip-optional-pointer": true
+          },
+          "ignition": {
+            "description": "Provides Ignition configuration files to be used in edge-raw-image and\nedge-simplified-installer images. Check the RHEL for Edge butane specification for\na description of the supported configuration options.\n\nThe blueprint configuration can be done either by embedding an Ignition configuration\nfile into the image, or providing a provisioning URL that will be fetched at first boot.\n",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ignition_url"
+              },
+              {
+                "$ref": "#/components/schemas/ignition_text"
+              }
+            ],
+            "x-go-name": "Ignition",
+            "x-go-type-name": "Ignition"
+          },
+          "installer": {
+            "$ref": "#/components/schemas/installer"
+          },
+          "kernel": {
+            "$ref": "#/components/schemas/kernel"
+          },
+          "locale": {
+            "$ref": "#/components/schemas/locale"
+          },
+          "name": {
+            "description": "The name attribute is a string that contains the name of the blueprint.\nIt can contain spaces, but they may be converted to dash characters during build.\nIt should be short and descriptive.\n",
+            "nullable": true,
+            "type": "string",
+            "x-go-type-skip-optional-pointer": true
+          },
+          "network": {
+            "$ref": "#/components/schemas/network"
+          },
+          "openscap": {
+            "$ref": "#/components/schemas/openscap"
+          },
+          "registration": {
+            "$ref": "#/components/schemas/registration"
+          },
+          "storage": {
+            "$ref": "#/components/schemas/storage"
+          },
+          "systemd": {
+            "$ref": "#/components/schemas/systemd"
+          },
+          "timedate": {
+            "$ref": "#/components/schemas/time_date"
+          }
+        },
+        "type": "object"
       },
       "ca_cert": {
         "additionalProperties": false,
@@ -1613,7 +1507,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Blueprint"
+                "$ref": "#/components/schemas/blueprint"
               }
             }
           }

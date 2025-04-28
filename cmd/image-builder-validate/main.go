@@ -55,6 +55,7 @@ func main() {
 			panic(err)
 		}
 
+
 		if *printYAMLSchema {
 			buf, err := schema.MarshalYAML()
 			if err != nil {

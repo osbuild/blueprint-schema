@@ -62,6 +62,8 @@ func (s *Schema) Bundle(ctx context.Context) error {
 		return strings.TrimSuffix(c.RefString(), ".yaml")
 	})
 
+	delete(s.doc.Components.Schemas, "./components/blueprint")
+
 	return nil
 }
 
