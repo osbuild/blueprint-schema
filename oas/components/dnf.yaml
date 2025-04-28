@@ -6,6 +6,7 @@ description: |
   package name the version glob should be *. And be aware that you will be unable
   to freeze the blueprint. This is because the provides will expand into multiple
   packages with their own names and versions.
+nullable: true
 x-go-name: DNF
 properties:
   groups:

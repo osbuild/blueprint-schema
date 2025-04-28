@@ -13,7 +13,8 @@ dnf:
   repositories:
     - id: "fedora-cisco-openh264"
       name: "Fedora $releasever openh264 (From Cisco) - $basearch"
-      metalink: "https://mirrors.fedoraproject.org/metalink?repo=fedora-cisco-openh264-$releasever&arch=$basearch"
+      source:
+        metalink: "https://mirrors.fedoraproject.org/metalink?repo=fedora-cisco-openh264-$releasever&arch=$basearch"
       gpg_keys: ["file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch"]
       gpg_check_repo: false
       ssl_verify: true

@@ -9,6 +9,7 @@ description: |
   sshd, chronyd, and cloud-init services. Blueprint services do not replace these
   services, but add them to the list of services already present in the templates,
   if any.
+nullable: true
 properties:
   disabled:
     description: The disabled attribute is a list of strings that contains the

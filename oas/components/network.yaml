@@ -1,6 +1,7 @@
 ---
 type: object
 description: Networking details including firewall configuration.
+nullable: true
 properties:
   firewall:
     "$ref": "network_firewall.yaml"

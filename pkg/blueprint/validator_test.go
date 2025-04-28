@@ -102,7 +102,7 @@ func TestFix(t *testing.T) {
 		fileWithoutFormat := file[0 : len(file)-len(format)]
 		direction := filepath.Ext(fileWithoutFormat)
 		baseFile := file[0 : len(fileWithoutFormat)-len(direction)]
-		validFile := baseFile + ".validator.json"
+		validFile := baseFile + ".validator.out"
 
 		validationTest(t, file, validFile)
 	}

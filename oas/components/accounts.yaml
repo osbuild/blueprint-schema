@@ -1,6 +1,7 @@
 ---
 type: object
 description: Operating system user and group accounts to be created on the image.
+nullable: true
 properties:
   groups:
     type: array

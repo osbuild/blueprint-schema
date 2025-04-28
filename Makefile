@@ -16,7 +16,7 @@ $(DISTDIR):
 
 .PHONY: write-fixtures
 write-fixtures: ## Write new test fixtures
-	@rm -f ./testdata/*.out.yaml ./testdata/*.validator.out ./testdata/*.validator.json
+	@rm -f ./testdata/*.out.yaml ./testdata/*.validator.out ./testdata/*.validator.out
 	@WRITE_FIXTURES=1 go test -count=1 ./pkg/blueprint/
 
 .PHONY: pkg-go-dev-update
@@ -65,5 +65,5 @@ build-editor: ## Build the demo-web editor
 .PHONY: clean
 clean: ## Clean up all build artifacts
 	rm -rf $(DISTDIR) blueprint-oas3*.{yaml,json}
-	rm -f ./testdata/*.out.yaml ./testdata/*.validator.out ./testdata/*.validator.json
+	rm -f ./testdata/*.out.yaml ./testdata/*.validator.out ./testdata/*.validator.out
 	rm -rf web/node_modules web/dist

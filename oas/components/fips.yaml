@@ -1,6 +1,7 @@
 ---
 type: object
 description: FIPS details, optional.
+nullable: true
 x-go-name: FIPS
 properties:
   enabled:

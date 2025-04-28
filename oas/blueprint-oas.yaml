@@ -30,11 +30,11 @@ paths:
       summary: Validate blueprint
       operationId: validateBlueprint
       requestBody:
-        required: true
         content:
           application/json:
             schema:
               $ref: "#/components/schemas/Blueprint"
+              nullable: true
       responses:
         '201':
           description: The blueprint is valid

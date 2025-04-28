@@ -1,3 +1,4 @@
+# XXX: this is currently not enforced
 name: "Firewall example - missing to"
 network:
   firewall:

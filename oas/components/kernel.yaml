@@ -1,6 +1,7 @@
 ---
 type: object
 description: Custom Linux kernel details, optional.
+nullable: true
 properties:
   cmdline_append:
     description: |

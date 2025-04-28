@@ -3,6 +3,7 @@ type: object
 description: |
   Registration details for various registration types, namely Red Hat
   Subscription Manager.
+nullable: true
 properties:
   fdo:
     "$ref": "registration_fdo.yaml"

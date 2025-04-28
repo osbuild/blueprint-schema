@@ -4,6 +4,7 @@ description: |-
 
   THIS IS WORK IN PROGRESS
 type: object
+nullable: true
 properties:
   name:
     description: |
@@ -12,16 +13,16 @@ properties:
       It should be short and descriptive.
     type: string
     x-go-type-skip-optional-pointer: true
-    x-omitempty: true
+    nullable: true
   description:
     description: |
       The description attribute is a string that can be a longer description
       of the blueprint and is only used for display purposes.
     type: string
     x-go-type-skip-optional-pointer: true
+    nullable: true
   accounts:
     "$ref": "accounts.yaml"
-    nullable: true
   cacerts:
     description: |
       The CA certificates to be added to the image. The certificates
@@ -32,8 +33,8 @@ properties:
     items:
       "$ref": "ca_cert.yaml"
     x-go-type-skip-optional-pointer: true
+    nullable: true
     x-go-name: CACerts
-    x-omitempty: true
   containers:
     description: |
       Containers to be pulled during the image build and stored in the
@@ -45,15 +46,12 @@ properties:
     items:
       "$ref": "container.yaml"
     x-go-type-skip-optional-pointer: true
+    nullable: true
     x-omitempty: true
   dnf:
     "$ref": "dnf.yaml"
-    nullable: true
-    x-go-name: DNF
   fips:
     "$ref": "fips.yaml"
-    nullable: true
-    x-go-name: FIPS
   fsnodes:
     description: |
       File system nodes details.
@@ -88,12 +86,14 @@ properties:
       "$ref": "fsnode.yaml"
     x-go-name: FSNodes
     x-go-type-skip-optional-pointer: true
+    nullable: true
   hostname:
     description: |
       Hostname is an optional string that can be used to configure the
       hostname of the final image.
     type: string
     x-go-type-skip-optional-pointer: true
+    nullable: true
   ignition:
     description: |
       Provides Ignition configuration files to be used in edge-raw-image and
@@ -107,32 +107,23 @@ properties:
       - "$ref": "ignition_text.yaml"
     x-go-name: Ignition
     x-go-type-name: Ignition
-    x-omitempty: true
+    nullable: true
   installer:
     "$ref": "installer.yaml"
-    nullable: true
   kernel:
     "$ref": "kernel.yaml"
-    nullable: true
   locale:
     "$ref": "locale.yaml"
-    nullable: true
   network:
     "$ref": "network.yaml"
-    nullable: true
   openscap:
     "$ref": "openscap.yaml"
-    nullable: true
   registration:
     "$ref": "registration.yaml"
-    nullable: true
   storage:
     "$ref": "storage.yaml"
-    nullable: true
   systemd:
     "$ref": "systemd.yaml"
-    nullable: true
   timedate:
     "$ref": "time_date.yaml"
-    nullable: true
 additionalProperties: false
