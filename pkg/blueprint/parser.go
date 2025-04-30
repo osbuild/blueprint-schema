@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"io"
 
-	"github.com/invopop/yaml"
+	"sigs.k8s.io/yaml"
 )
 
 // UnmarshalYAML converts YAML to JSON then uses JSON decoder to unmarshal into an object.

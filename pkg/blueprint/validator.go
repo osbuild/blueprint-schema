@@ -14,7 +14,7 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3filter"
-	"github.com/invopop/yaml"
+	"sigs.k8s.io/yaml"
 	"github.com/osbuild/blueprint-schema"
 )
 
