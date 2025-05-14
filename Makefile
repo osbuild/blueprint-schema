@@ -28,13 +28,13 @@ test: ## Run all tests
 	@go test -count=1 . ./pkg/blueprint
 
 blueprint-oas3.yaml: $(SCHEMA_SRC) $(SOURCES)
-	go run ./cmd/image-builder-validate -print-yaml-schema > blueprint-oas3.yaml
+	go run ./cmd/image-builder-blueprint -print-yaml-schema > blueprint-oas3.yaml
 
 blueprint-oas3.json: $(SCHEMA_SRC) $(SOURCES)
-	go run ./cmd/image-builder-validate -print-json-schema > blueprint-oas3.json
+	go run ./cmd/image-builder-blueprint -print-json-schema > blueprint-oas3.json
 
 blueprint-oas3-ext.json: $(SCHEMA_SRC) $(SOURCES)
-	go run ./cmd/image-builder-validate -print-json-extended-schema > blueprint-oas3-ext.json
+	go run ./cmd/image-builder-blueprint -print-json-extended-schema > blueprint-oas3-ext.json
 
 .PHONY: schema-bundle
 schema-bundle: blueprint-oas3.yaml blueprint-oas3.json blueprint-oas3-ext.json ## Bundle OpenAPI schema

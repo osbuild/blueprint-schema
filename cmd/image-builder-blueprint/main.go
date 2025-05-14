@@ -2,22 +2,29 @@ package main
 
 import (
 	"context"
+	"errors"
 	"flag"
 	"io"
+	"log"
 	"os"
 
+	"github.com/BurntSushi/toml"
+	"github.com/gabriel-vasile/mimetype"
 	"github.com/osbuild/blueprint-schema/pkg/blueprint"
+	"github.com/osbuild/blueprint-schema/pkg/convert"
 )
 
 func main() {
 	ctx := context.Background()
-	input := flag.String("input", "", "input file (defaults to standard input)")
+	input := flag.String("input", "", "input JSON or YAML file (defaults to standard input, detects format)")
 	printJSONSchema := flag.Bool("print-json-schema", false, "print embedded schema to standard output and exit")
 	printJSONExtendedSchema := flag.Bool("print-json-extended-schema", false, "print embedded schema to standard output and exit")
 	printYAMLSchema := flag.Bool("print-yaml-schema", false, "print embedded schema to standard output and exit")
-	validateJSON := flag.Bool("validate-json", false, "validate JSON standard input")
-	validateYAML := flag.Bool("validate-yaml", false, "validate YAML standard input (default behavior)")
+	validate := flag.Bool("validate", false, "validate input document (detects JSON or YAML format)")
+	exportTOML := flag.Bool("export-toml", false, "convert document into legacy TOML")
 	flag.Parse()
+
+	convert.SetLogger(log.Default())
 
 	var inBuf []byte
 	var err error
@@ -31,12 +38,12 @@ func main() {
 		defer in.Close()
 	}
 
-	if !*printJSONSchema && !*printYAMLSchema && !*printJSONExtendedSchema {
-		inBuf, err = io.ReadAll(in)
-		if err != nil {
-			panic(err)
-		}
+	inBuf, err = io.ReadAll(in)
+	if err != nil {
+		panic(err)
 	}
+
+	mime := mimetype.Detect(inBuf)
 
 	schema, err := blueprint.CompileSourceSchema()
 	if err != nil {
@@ -83,26 +90,34 @@ func main() {
 		}
 
 		return
-	} else if *validateJSON {
+	} else if *validate {
 		schema, err = blueprint.CompileBundledSchema()
 		if err != nil {
 			panic(err)
 		}
 
-		err = schema.ValidateJSON(ctx, inBuf)
-		if err != nil {
-			panic(err)
+		if mime.Is("application/json") {
+			err = schema.ValidateJSON(ctx, inBuf)
+		} else if mime.Is("application/x-yaml") || mime.Is("text/yaml") {
+			err = schema.ValidateYAML(ctx, inBuf)
+		} else {
+			err = errors.New("unsupported format, only JSON and YAML are supported")
 		}
-	} else if *validateYAML {
-		schema, err = blueprint.CompileBundledSchema()
 		if err != nil {
 			panic(err)
 		}
 
-		err = schema.ValidateYAML(ctx, inBuf)
+	} else if exportTOML != nil {
+		b, err := blueprint.UnmarshalYAML(inBuf)
 		if err != nil {
 			panic(err)
 		}
+		eb := convert.ExportBlueprint(b)
+		buf, err := toml.Marshal(eb)
+		if err != nil {
+			panic(err)
+		}
+		os.Stdout.Write(buf)
 	}
 
 	_ = inBuf
