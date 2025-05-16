@@ -39,10 +39,13 @@ blueprint-oas3-ext.json: $(SCHEMA_SRC) $(SOURCES)
 .PHONY: schema-bundle
 schema-bundle: blueprint-oas3.yaml blueprint-oas3.json blueprint-oas3-ext.json ## Bundle OpenAPI schema
 
-.PHONY: schema
-schema: schema-bundle ## Generate bundled schema and Go code
-	oapi-codegen -generate types -package blueprint -o pkg/blueprint/types.gen.go blueprint-oas3.json
-	oapi-codegen -generate std-http -package blueprint -o pkg/blueprint/http.gen.go blueprint-oas3.json
+pkg/blueprint/types.gen.go: blueprint-oas3.yaml blueprint-oas3.json blueprint-oas3-ext.json oapi-codegen.cfg.yml
+	oapi-codegen -config oapi-codegen.cfg.yml -generate types -o pkg/blueprint/types.gen.go blueprint-oas3.json
+
+pkg/blueprint/http.gen.go: blueprint-oas3.yaml blueprint-oas3.json blueprint-oas3-ext.json oapi-codegen.cfg.yml
+	oapi-codegen -config oapi-codegen.cfg.yml -generate std-http -o pkg/blueprint/http.gen.go blueprint-oas3.json
+
+schema: pkg/blueprint/types.gen.go pkg/blueprint/http.gen.go ## Generate bundled schema and Go code
 
 .PHONY: run-web-editor-json
 run-web-editor-json: ## show a demo-web editor for the json format
