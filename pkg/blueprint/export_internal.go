@@ -2,33 +2,50 @@ package blueprint
 
 import (
 	"strings"
+	"time"
 
 	"github.com/osbuild/blueprint-schema/pkg/ptr"
-	to "github.com/osbuild/blueprint/pkg/blueprint"
+	int "github.com/osbuild/blueprint/pkg/blueprint"
 )
 
-func (b *Blueprint) ExportBlueprint() *to.Blueprint {
-	to := &to.Blueprint{}
+// ExportData is used for feeding the export function with the
+// information needed to export the blueprint.
+type ExportData struct {
+	Version string
+	Distro  string
+	Arch    string
+}
+
+// ExportInternal converts the blueprint to the internal representation.
+func (b *Blueprint) ExportInternal(ed ExportData) *int.Blueprint {
+	to := &int.Blueprint{}
 	to.Name = b.Name
 	to.Description = b.Description
-	log.Println("TODO: skip the version or create a time-based one")
+	if ed.Version == "" {
+		// Create monotonic incremental version number based on miliseconds
+		to.Version = int64ToVersion(uint64(time.Now().UTC().UnixMilli()))
+	} else {
+		to.Version = ed.Version
+	}
 
 	to.Packages = exportPackages(b)
 	to.EnabledModules = exportModules(b)
 	to.Groups = exportGroups(b)
 	to.Containers = exportContainers(b)
 	to.Customizations = exportCustomizations(b)
+	to.Distro = ed.Distro
+	to.Arch = ed.Arch
 
 	return to
 }
 
-func exportPackages(b *Blueprint) []to.Package {
-	var s []to.Package
+func exportPackages(b *Blueprint) []int.Package {
+	var s []int.Package
 
 	for _, pkg := range b.DNF.Packages {
 		p := splitStringEmptyN(pkg, "-", 2)
 
-		s = append(s, to.Package{
+		s = append(s, int.Package{
 			Name:    p[0],
 			Version: p[1],
 		})
@@ -37,11 +54,11 @@ func exportPackages(b *Blueprint) []to.Package {
 	return s
 }
 
-func exportGroups(b *Blueprint) []to.Group {
-	var s []to.Group
+func exportGroups(b *Blueprint) []int.Group {
+	var s []int.Group
 
 	for _, pkg := range b.DNF.Groups {
-		s = append(s, to.Group{
+		s = append(s, int.Group{
 			Name: pkg,
 		})
 	}
@@ -49,13 +66,13 @@ func exportGroups(b *Blueprint) []to.Group {
 	return s
 }
 
-func exportModules(b *Blueprint) []to.EnabledModule {
-	var s []to.EnabledModule
+func exportModules(b *Blueprint) []int.EnabledModule {
+	var s []int.EnabledModule
 
 	for _, pkg := range b.DNF.Modules {
 		p := splitStringEmptyN(pkg, "-", 2)
 
-		s = append(s, to.EnabledModule{
+		s = append(s, int.EnabledModule{
 			Name:   p[0],
 			Stream: p[1],
 		})
@@ -64,11 +81,11 @@ func exportModules(b *Blueprint) []to.EnabledModule {
 	return s
 }
 
-func exportContainers(b *Blueprint) []to.Container {
-	var s []to.Container
+func exportContainers(b *Blueprint) []int.Container {
+	var s []int.Container
 
 	for _, container := range b.Containers {
-		s = append(s, to.Container{
+		s = append(s, int.Container{
 			Name:         container.Name,
 			Source:       container.Source,
 			TLSVerify:    &container.TLSVerify,
@@ -79,12 +96,12 @@ func exportContainers(b *Blueprint) []to.Container {
 	return s
 }
 
-func exportCustomizations(from *Blueprint) *to.Customizations {
+func exportCustomizations(from *Blueprint) *int.Customizations {
 	if from == nil {
 		return nil
 	}
 
-	to := &to.Customizations{}
+	to := &int.Customizations{}
 	to.Hostname = &from.Hostname
 
 	to.Kernel = ExportKernelCustomization(from.Kernel)
@@ -93,27 +110,27 @@ func exportCustomizations(from *Blueprint) *to.Customizations {
 	return to
 }
 
-func ExportKernelCustomization(from *Kernel) *to.KernelCustomization {
+func ExportKernelCustomization(from *Kernel) *int.KernelCustomization {
 	if from == nil {
 		return nil
 	}
 
-	to := &to.KernelCustomization{}
+	to := &int.KernelCustomization{}
 	to.Name = from.Package
 	to.Append = strings.Join(from.CmdlineAppend, " ")
 	return to
 }
 
-func ExportUserCustomization(in []AccountsUsers) []to.UserCustomization {
+func ExportUserCustomization(in []AccountsUsers) []int.UserCustomization {
 	if in == nil {
 		return nil
 	}
 
-	var s []to.UserCustomization
+	var s []int.UserCustomization
 
 	log.Println("user force password reset ignored")
 	for _, u := range in {
-		uc := to.UserCustomization{}
+		uc := int.UserCustomization{}
 		uc.Name = u.Name
 		uc.Description = &u.Description
 		uc.Password = u.Password

@@ -115,7 +115,10 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
-		eb := b.ExportBlueprint()
+
+		ed := blueprint.ExportData{}
+
+		eb := b.ExportInternal(ed)
 		buf, err := toml.Marshal(eb)
 		if err != nil {
 			panic(err)
