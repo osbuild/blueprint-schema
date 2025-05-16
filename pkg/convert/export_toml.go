@@ -12,42 +12,36 @@ func ExportBlueprint(b *from.Blueprint) *to.Blueprint {
 	to := &to.Blueprint{}
 	to.Name = b.Name
 	to.Description = b.Description
-	log.Println("version skipped")
-	log.Println("distro skipped")
+	log.Println("TODO: skip the version or create a time-based one")
 
-	to.Packages = ExportPackages(b)
-	to.Groups = ExportGroups(b)
-	to.Modules = ExportModules(b)
-	to.Containers = ExportContainers(b)
-	to.Customizations = ExportCustomizations(b)
+	to.Packages = exportPackages(b)
+	to.EnabledModules = exportModules(b)
+	to.Groups = exportGroups(b)
+	to.Containers = exportContainers(b)
+	to.Customizations = exportCustomizations(b)
 
 	return to
 }
 
-func ExportPackages(b *from.Blueprint) []to.Package {
+func exportPackages(b *from.Blueprint) []to.Package {
 	var s []to.Package
 
 	for _, pkg := range b.DNF.Packages {
-		p := strings.SplitN(pkg, "-", 2)
-		name := p[0]
-		version := ""
-		if len(p) > 1 {
-			version = p[1]
-		}
+		p := splitStringEmptyN(pkg, "-", 2)
 
 		s = append(s, to.Package{
-			Name:    name,
-			Version: version,
+			Name:    p[0],
+			Version: p[1],
 		})
 	}
 
 	return s
 }
 
-func ExportGroups(b *from.Blueprint) []to.Group {
+func exportGroups(b *from.Blueprint) []to.Group {
 	var s []to.Group
 
-	for _, pkg := range b.DNF.Packages {
+	for _, pkg := range b.DNF.Groups {
 		s = append(s, to.Group{
 			Name: pkg,
 		})
@@ -56,19 +50,22 @@ func ExportGroups(b *from.Blueprint) []to.Group {
 	return s
 }
 
-func ExportModules(b *from.Blueprint) []to.Package {
-	var s []to.Package
+func exportModules(b *from.Blueprint) []to.EnabledModule {
+	var s []to.EnabledModule
 
-	for _, pkg := range b.DNF.Packages {
-		s = append(s, to.Package{
-			Name: pkg,
+	for _, pkg := range b.DNF.Modules {
+		p := splitStringEmptyN(pkg, "-", 2)
+
+		s = append(s, to.EnabledModule{
+			Name:   p[0],
+			Stream: p[1],
 		})
 	}
 
 	return s
 }
 
-func ExportContainers(b *from.Blueprint) []to.Container {
+func exportContainers(b *from.Blueprint) []to.Container {
 	var s []to.Container
 
 	for _, container := range b.Containers {
@@ -83,7 +80,7 @@ func ExportContainers(b *from.Blueprint) []to.Container {
 	return s
 }
 
-func ExportCustomizations(from *from.Blueprint) *to.Customizations {
+func exportCustomizations(from *from.Blueprint) *to.Customizations {
 	if from == nil {
 		return nil
 	}
