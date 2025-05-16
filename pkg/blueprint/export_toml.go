@@ -1,14 +1,13 @@
-package convert
+package blueprint
 
 import (
 	"strings"
 
-	from "github.com/osbuild/blueprint-schema/pkg/blueprint"
 	"github.com/osbuild/blueprint-schema/pkg/ptr"
 	to "github.com/osbuild/blueprint/pkg/blueprint"
 )
 
-func ExportBlueprint(b *from.Blueprint) *to.Blueprint {
+func (b *Blueprint) ExportBlueprint() *to.Blueprint {
 	to := &to.Blueprint{}
 	to.Name = b.Name
 	to.Description = b.Description
@@ -23,7 +22,7 @@ func ExportBlueprint(b *from.Blueprint) *to.Blueprint {
 	return to
 }
 
-func exportPackages(b *from.Blueprint) []to.Package {
+func exportPackages(b *Blueprint) []to.Package {
 	var s []to.Package
 
 	for _, pkg := range b.DNF.Packages {
@@ -38,7 +37,7 @@ func exportPackages(b *from.Blueprint) []to.Package {
 	return s
 }
 
-func exportGroups(b *from.Blueprint) []to.Group {
+func exportGroups(b *Blueprint) []to.Group {
 	var s []to.Group
 
 	for _, pkg := range b.DNF.Groups {
@@ -50,7 +49,7 @@ func exportGroups(b *from.Blueprint) []to.Group {
 	return s
 }
 
-func exportModules(b *from.Blueprint) []to.EnabledModule {
+func exportModules(b *Blueprint) []to.EnabledModule {
 	var s []to.EnabledModule
 
 	for _, pkg := range b.DNF.Modules {
@@ -65,7 +64,7 @@ func exportModules(b *from.Blueprint) []to.EnabledModule {
 	return s
 }
 
-func exportContainers(b *from.Blueprint) []to.Container {
+func exportContainers(b *Blueprint) []to.Container {
 	var s []to.Container
 
 	for _, container := range b.Containers {
@@ -80,7 +79,7 @@ func exportContainers(b *from.Blueprint) []to.Container {
 	return s
 }
 
-func exportCustomizations(from *from.Blueprint) *to.Customizations {
+func exportCustomizations(from *Blueprint) *to.Customizations {
 	if from == nil {
 		return nil
 	}
@@ -94,7 +93,7 @@ func exportCustomizations(from *from.Blueprint) *to.Customizations {
 	return to
 }
 
-func ExportKernelCustomization(from *from.Kernel) *to.KernelCustomization {
+func ExportKernelCustomization(from *Kernel) *to.KernelCustomization {
 	if from == nil {
 		return nil
 	}
@@ -105,7 +104,7 @@ func ExportKernelCustomization(from *from.Kernel) *to.KernelCustomization {
 	return to
 }
 
-func ExportUserCustomization(in []from.AccountsUsers) []to.UserCustomization {
+func ExportUserCustomization(in []AccountsUsers) []to.UserCustomization {
 	if in == nil {
 		return nil
 	}
@@ -135,7 +134,7 @@ func ExportUserCustomization(in []from.AccountsUsers) []to.UserCustomization {
 		}
 		if u.Expires != nil {
 			var err error
-			uc.ExpireDate, err = ptr.ToErr(from.ExpireDateToEpochDays(*u.Expires))
+			uc.ExpireDate, err = ptr.ToErr(ExpireDateToEpochDays(*u.Expires))
 			if err != nil {
 				log.Printf("error converting expire date for user %s: %v", u.Name, err)
 			}

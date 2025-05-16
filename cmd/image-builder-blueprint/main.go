@@ -11,7 +11,6 @@ import (
 	"github.com/BurntSushi/toml"
 	"github.com/gabriel-vasile/mimetype"
 	"github.com/osbuild/blueprint-schema/pkg/blueprint"
-	"github.com/osbuild/blueprint-schema/pkg/convert"
 )
 
 func main() {
@@ -24,7 +23,7 @@ func main() {
 	exportTOML := flag.Bool("export-toml", false, "convert document into legacy TOML")
 	flag.Parse()
 
-	convert.SetLogger(log.Default())
+	blueprint.SetLogger(log.Default())
 
 	var inBuf []byte
 	var err error
@@ -116,7 +115,7 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
-		eb := convert.ExportBlueprint(b)
+		eb := b.ExportBlueprint()
 		buf, err := toml.Marshal(eb)
 		if err != nil {
 			panic(err)

@@ -1,4 +1,4 @@
-package convert
+package blueprint
 
 type Logger interface {
 	Printf(format string, args ...any)

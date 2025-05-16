@@ -6,6 +6,7 @@ import (
 )
 
 // Convert date in format YYYY-MM-DD or RFC3339 date to amount of days since epoch.
+// Can be refactored to ExpireDate method once https://github.com/oapi-codegen/oapi-codegen/pull/1987 is merged.
 func ExpireDateToEpochDays(date ExpireDate) (int, error) {
 	if date == "" {
 		return 0, nil
