@@ -47,6 +47,11 @@ properties:
       function. The format of the encrypted password is $id$salt$hashed, where
       $id is the algorithm used (1, 5, 6, or 2a).
     type: string
+  force_password_change:
+    description: |
+      If set to true, the user will be forced to change their password
+      on first login.
+    type: boolean
   shell:
     description: The shell of the user.
     type: string

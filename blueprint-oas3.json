@@ -62,6 +62,10 @@
           "expires": {
             "$ref": "#/components/schemas/expire_date"
           },
+          "force_password_change": {
+            "description": "If set to true, the user will be forced to change their password\non first login.\n",
+            "type": "boolean"
+          },
           "gid": {
             "description": "The primary group ID (GID) of the user. Value of zero (or ommited\nvalue) means that the next available UID will be assigned.\n",
             "minimum": 1,

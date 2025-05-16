@@ -38,13 +38,6 @@ func main() {
 		defer in.Close()
 	}
 
-	inBuf, err = io.ReadAll(in)
-	if err != nil {
-		panic(err)
-	}
-
-	mime := mimetype.Detect(inBuf)
-
 	schema, err := blueprint.CompileSourceSchema()
 	if err != nil {
 		panic(err)
@@ -96,6 +89,12 @@ func main() {
 			panic(err)
 		}
 
+		inBuf, err = io.ReadAll(in)
+		if err != nil {
+			panic(err)
+		}
+
+		mime := mimetype.Detect(inBuf)
 		if mime.Is("application/json") {
 			err = schema.ValidateJSON(ctx, inBuf)
 		} else if mime.Is("application/x-yaml") || mime.Is("text/yaml") {
@@ -108,6 +107,11 @@ func main() {
 		}
 
 	} else if exportTOML != nil {
+		inBuf, err = io.ReadAll(in)
+		if err != nil {
+			panic(err)
+		}
+
 		b, err := blueprint.UnmarshalYAML(inBuf)
 		if err != nil {
 			panic(err)

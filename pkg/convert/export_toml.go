@@ -143,6 +143,10 @@ func ExportUserCustomization(in []from.AccountsUsers) []to.UserCustomization {
 				log.Printf("error converting expire date for user %s: %v", u.Name, err)
 			}
 		}
+		if u.ForcePasswordChange != nil {
+			uc.ForcePasswordReset = u.ForcePasswordChange
+		}
+
 		s = append(s, uc)
 	}
 

@@ -82,6 +82,7 @@ accounts:
     - name: "lzap"
       description: ""
       password: ""
+      force_password_change: false
       ssh_keys:
         - "ssh-key 1234"
       home: "/home/lzap"

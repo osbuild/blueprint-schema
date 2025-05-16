@@ -1,3 +1,12 @@
 ---
 package: blueprint
-  
+output-options:
+  # https://github.com/oapi-codegen/oapi-codegen/pull/1987
+  disable-type-aliases-for-type:
+    - "int"
+    - "int32"
+    - "int64"
+    - "float32"
+    - "float64"
+    - "string"
+    - "bool"

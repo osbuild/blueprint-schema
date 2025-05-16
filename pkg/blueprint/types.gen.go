@@ -99,6 +99,10 @@ type AccountsUsers struct {
 	// since YAML automatically converts strings which look like dates into time.Time.
 	Expires *ExpireDate `json:"expires,omitempty"`
 
+	// ForcePasswordChange If set to true, the user will be forced to change their password
+	// on first login.
+	ForcePasswordChange *bool `json:"force_password_change,omitempty"`
+
 	// GID The primary group ID (GID) of the user. Value of zero (or ommited
 	// value) means that the next available UID will be assigned.
 	GID int `json:"gid,omitempty"`
