@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 	"flag"
+	"fmt"
 	"io"
-	"log"
 	"os"
 
 	"github.com/BurntSushi/toml"
@@ -22,8 +22,6 @@ func main() {
 	validate := flag.Bool("validate", false, "validate input document (detects JSON or YAML format)")
 	exportTOML := flag.Bool("export-toml", false, "convert document into legacy TOML")
 	flag.Parse()
-
-	blueprint.SetLogger(log.Default())
 
 	var inBuf []byte
 	var err error
@@ -116,10 +114,13 @@ func main() {
 			panic(err)
 		}
 
-		ed := blueprint.ExportData{}
+		ed := blueprint.ComposeRequest{}
+		exporter := blueprint.NewInternalExporter(b)
+		if logs := exporter.Export(ed); logs != nil {
+			fmt.Fprintln(os.Stderr, logs)
+		}
 
-		eb := b.ExportInternal(ed)
-		buf, err := toml.Marshal(eb)
+		buf, err := toml.Marshal(exporter.Result())
 		if err != nil {
 			panic(err)
 		}
