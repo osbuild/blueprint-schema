@@ -103,7 +103,7 @@ locale:
 systemd:
   enabled: ["sshd.service", "backup.timer"]
   disabled: ["tuned", "cupsd"]
-  masked: []
+  masked: ["masked.service"]
 fsnodes:
   - path: "/var/tmp/dir"
     type: "dir"

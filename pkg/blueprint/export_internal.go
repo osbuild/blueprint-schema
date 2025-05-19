@@ -110,6 +110,9 @@ func exportCustomizations(from *Blueprint) *int.Customizations {
 	if from.Network != nil {
 		to.Firewall = ExportFirewallCustomization(from.Network.Firewall)
 	}
+	if from.Systemd != nil {
+		to.Services = ExportSystemdCustomization(from.Systemd)
+	}
 	return to
 }
 
@@ -248,6 +251,7 @@ func ExportFirewallCustomization(from *NetworkFirewall) *int.FirewallCustomizati
 				to.Ports = append(to.Ports, srv)
 			} else {
 				log.Printf("network service %i error: port number %d cannot be disabled", i, fp.Port)
+				continue
 			}
 		} else if fft.From != 0 && fft.To != 0 {
 			if fft.Protocol != "" {
@@ -259,11 +263,45 @@ func ExportFirewallCustomization(from *NetworkFirewall) *int.FirewallCustomizati
 				to.Ports = append(to.Ports, srv)
 			} else {
 				log.Printf("network service %i error: port number %d cannot be disabled", i, fp.Port)
+				continue
 			}
 		} else {
 			log.Printf("network service %i error: one of service, port or from and to present", i)
-			continue
 		}
+	}
+	if len(to.Ports) == 0 {
+		to.Ports = nil
+	}
+	if len(to.Services.Enabled) == 0 {
+		to.Services.Enabled = nil
+	}
+	if len(to.Services.Disabled) == 0 {
+		to.Services.Disabled = nil
+	}
+	if to.Services.Enabled == nil && to.Services.Disabled == nil {
+		to.Services = nil
+	}
+	return to
+}
+
+func ExportSystemdCustomization(from *Systemd) *int.ServicesCustomization {
+	if from == nil {
+		return nil
+	}
+
+	to := &int.ServicesCustomization{}
+
+	if from.Enabled != nil {
+		to.Enabled = make([]string, len(from.Enabled))
+		copy(to.Enabled, from.Enabled)
+	}
+	if from.Disabled != nil {
+		to.Disabled = make([]string, len(from.Disabled))
+		copy(to.Disabled, from.Disabled)
+	}
+	if from.Masked != nil {
+		to.Masked = make([]string, len(from.Masked))
+		copy(to.Masked, from.Masked)
 	}
 	return to
 }
