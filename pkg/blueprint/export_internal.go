@@ -10,15 +10,15 @@ import (
 )
 
 type InternalExporter struct {
-	b   *Blueprint
-	to  *int.Blueprint
-	log *logs
+	from *Blueprint
+	to   *int.Blueprint
+	log  *logs
 }
 
 func NewInternalExporter(inputBlueprint *Blueprint) *InternalExporter {
 	return &InternalExporter{
-		b:   inputBlueprint,
-		log: newCollector(),
+		from: inputBlueprint,
+		log:  newCollector(),
 	}
 }
 
@@ -26,8 +26,8 @@ func NewInternalExporter(inputBlueprint *Blueprint) *InternalExporter {
 func (e *InternalExporter) Export(ed ComposeRequest) error {
 	to := &int.Blueprint{}
 
-	to.Name = e.b.Name
-	to.Description = e.b.Description
+	to.Name = e.from.Name
+	to.Description = e.from.Description
 	if ed.Version == "" {
 		// Create monotonic incremental version number based on miliseconds
 		to.Version = int64ToVersion(uint64(time.Now().UTC().UnixMilli()))
@@ -54,7 +54,7 @@ func (e *InternalExporter) Result() *int.Blueprint {
 func (e *InternalExporter) exportPackages() []int.Package {
 	var s []int.Package
 
-	for _, pkg := range e.b.DNF.Packages {
+	for _, pkg := range e.from.DNF.Packages {
 		p := splitStringEmptyN(pkg, "-", 2)
 
 		s = append(s, int.Package{
@@ -69,7 +69,7 @@ func (e *InternalExporter) exportPackages() []int.Package {
 func (e *InternalExporter) exportGroups() []int.Group {
 	var s []int.Group
 
-	for _, pkg := range e.b.DNF.Groups {
+	for _, pkg := range e.from.DNF.Groups {
 		s = append(s, int.Group{
 			Name: pkg,
 		})
@@ -81,7 +81,7 @@ func (e *InternalExporter) exportGroups() []int.Group {
 func (e *InternalExporter) exportModules() []int.EnabledModule {
 	var s []int.EnabledModule
 
-	for _, pkg := range e.b.DNF.Modules {
+	for _, pkg := range e.from.DNF.Modules {
 		p := splitStringEmptyN(pkg, "-", 2)
 
 		s = append(s, int.EnabledModule{
@@ -96,7 +96,7 @@ func (e *InternalExporter) exportModules() []int.EnabledModule {
 func (e *InternalExporter) exportContainers() []int.Container {
 	var s []int.Container
 
-	for _, container := range e.b.Containers {
+	for _, container := range e.from.Containers {
 		s = append(s, int.Container{
 			Name:         container.Name,
 			Source:       container.Source,
@@ -111,7 +111,7 @@ func (e *InternalExporter) exportContainers() []int.Container {
 func (e *InternalExporter) exportCustomizations() *int.Customizations {
 	to := &int.Customizations{}
 
-	to.Hostname = &e.b.Hostname
+	to.Hostname = &e.from.Hostname
 	to.Kernel = e.exportKernel()
 	to.User = e.exportUserCustomization()
 	to.Group = e.exportGroupCustomization()
@@ -125,24 +125,24 @@ func (e *InternalExporter) exportCustomizations() *int.Customizations {
 }
 
 func (e *InternalExporter) exportKernel() *int.KernelCustomization {
-	if e.b.Kernel == nil {
+	if e.from.Kernel == nil {
 		return nil
 	}
 
 	to := &int.KernelCustomization{}
-	to.Name = e.b.Kernel.Package
-	to.Append = strings.Join(e.b.Kernel.CmdlineAppend, " ")
+	to.Name = e.from.Kernel.Package
+	to.Append = strings.Join(e.from.Kernel.CmdlineAppend, " ")
 
 	return to
 }
 
 func (e *InternalExporter) exportUserCustomization() []int.UserCustomization {
-	if e.b.Accounts.Users == nil {
+	if e.from.Accounts.Users == nil {
 		return nil
 	}
 
 	var s []int.UserCustomization
-	for _, u := range e.b.Accounts.Users {
+	for _, u := range e.from.Accounts.Users {
 		uc := int.UserCustomization{}
 		uc.Name = u.Name
 		uc.Description = &u.Description
@@ -180,12 +180,12 @@ func (e *InternalExporter) exportUserCustomization() []int.UserCustomization {
 }
 
 func (e *InternalExporter) exportGroupCustomization() []int.GroupCustomization {
-	if e.b.Accounts.Groups == nil {
+	if e.from.Accounts.Groups == nil {
 		return nil
 	}
 
 	var s []int.GroupCustomization
-	for _, g := range e.b.Accounts.Groups {
+	for _, g := range e.from.Accounts.Groups {
 		gc := int.GroupCustomization{}
 		gc.Name = g.Name
 		if g.GID != 0 {
@@ -198,36 +198,36 @@ func (e *InternalExporter) exportGroupCustomization() []int.GroupCustomization {
 }
 
 func (e *InternalExporter) exportTimezoneCustomization() *int.TimezoneCustomization {
-	if e.b.Timedate == nil {
+	if e.from.Timedate == nil {
 		return nil
 	}
 
 	to := &int.TimezoneCustomization{}
-	to.Timezone = &e.b.Timedate.Timezone
-	to.NTPServers = e.b.Timedate.NTPServers
+	to.Timezone = &e.from.Timedate.Timezone
+	to.NTPServers = e.from.Timedate.NTPServers
 
 	return to
 }
 
 func (e *InternalExporter) exportLocaleCustomization() *int.LocaleCustomization {
-	if e.b.Locale == nil {
+	if e.from.Locale == nil {
 		return nil
 	}
 
 	to := &int.LocaleCustomization{}
-	if len(e.b.Locale.Keyboards) > 0 {
-		to.Keyboard = &e.b.Locale.Keyboards[0]
-		if len(e.b.Locale.Keyboards) > 1 {
+	if len(e.from.Locale.Keyboards) > 0 {
+		to.Keyboard = &e.from.Locale.Keyboards[0]
+		if len(e.from.Locale.Keyboards) > 1 {
 			e.log.Println("only one keyboard layout supported, selecting first one")
 		}
 	}
-	to.Languages = e.b.Locale.Languages
+	to.Languages = e.from.Locale.Languages
 
 	return to
 }
 
 func (e *InternalExporter) exportFirewallCustomization() *int.FirewallCustomization {
-	if e.b.Network.Firewall == nil || len(e.b.Network.Firewall.Services) == 0 {
+	if e.from.Network.Firewall == nil || len(e.from.Network.Firewall.Services) == 0 {
 		return nil
 	}
 
@@ -238,7 +238,7 @@ func (e *InternalExporter) exportFirewallCustomization() *int.FirewallCustomizat
 			Disabled: make([]string, 0),
 		},
 	}
-	for i, s := range e.b.Network.Firewall.Services {
+	for i, s := range e.from.Network.Firewall.Services {
 		fs, fp, fft, err := s.SelectUnion()
 		if err != nil {
 			e.log.Printf("could not parse network service %d: %v", i, err)
@@ -298,42 +298,42 @@ func (e *InternalExporter) exportFirewallCustomization() *int.FirewallCustomizat
 }
 
 func (e *InternalExporter) exportSystemdCustomization() *int.ServicesCustomization {
-	if e.b.Systemd == nil {
+	if e.from.Systemd == nil {
 		return nil
 	}
 
 	to := &int.ServicesCustomization{}
 
-	if len(e.b.Systemd.Enabled) > 0 {
-		to.Enabled = make([]string, len(e.b.Systemd.Enabled))
-		copy(to.Enabled, e.b.Systemd.Enabled)
+	if len(e.from.Systemd.Enabled) > 0 {
+		to.Enabled = make([]string, len(e.from.Systemd.Enabled))
+		copy(to.Enabled, e.from.Systemd.Enabled)
 	}
-	if len(e.b.Systemd.Disabled) > 0 {
-		to.Disabled = make([]string, len(e.b.Systemd.Disabled))
-		copy(to.Disabled, e.b.Systemd.Disabled)
+	if len(e.from.Systemd.Disabled) > 0 {
+		to.Disabled = make([]string, len(e.from.Systemd.Disabled))
+		copy(to.Disabled, e.from.Systemd.Disabled)
 	}
-	if len(e.b.Systemd.Masked) > 0 {
-		to.Masked = make([]string, len(e.b.Systemd.Masked))
-		copy(to.Masked, e.b.Systemd.Masked)
+	if len(e.from.Systemd.Masked) > 0 {
+		to.Masked = make([]string, len(e.from.Systemd.Masked))
+		copy(to.Masked, e.from.Systemd.Masked)
 	}
 
 	return to
 }
 
 func (e *InternalExporter) exportStorage() *int.DiskCustomization {
-	if e.b.Storage == nil {
+	if e.from.Storage == nil {
 		return nil
 	}
 
 	to := &int.DiskCustomization{}
-	to.Type = e.b.Storage.Type.String()
-	size, err := ParseSize(e.b.Storage.Minsize)
+	to.Type = e.from.Storage.Type.String()
+	size, err := ParseSize(e.from.Storage.Minsize)
 	if err != nil {
-		e.log.Printf("error parsing size %s: %v", e.b.Storage.Minsize, err)
+		e.log.Printf("error parsing size %s: %v", e.from.Storage.Minsize, err)
 	}
 	to.MinSize = size.Bytes()
 
-	if len(e.b.Storage.Partitions) == 0 {
+	if len(e.from.Storage.Partitions) == 0 {
 		return to
 	}
 
