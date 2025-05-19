@@ -460,7 +460,7 @@ type FirewallFromTo struct {
 	Protocol NetworkProtocol `json:"protocol,omitempty"`
 
 	// Enabled Whether the firewall rule is enabled or not. Defaults to true.
-	Enabled FirewallEnabled `json:"enabled,omitempty"`
+	Enabled *FirewallEnabled `json:"enabled,omitempty"`
 
 	// From The from port number, must be between 1 and 65535.
 	From int `json:"from,omitempty"`
@@ -475,7 +475,7 @@ type FirewallPort struct {
 	Protocol NetworkProtocol `json:"protocol,omitempty"`
 
 	// Enabled Whether the firewall rule is enabled or not. Defaults to true.
-	Enabled FirewallEnabled `json:"enabled,omitempty"`
+	Enabled *FirewallEnabled `json:"enabled,omitempty"`
 
 	// Port The port number, must be between 1 and 65535.
 	Port int `json:"port,omitempty"`
@@ -487,7 +487,7 @@ type FirewallService struct {
 	Protocol NetworkProtocol `json:"protocol,omitempty"`
 
 	// Enabled Whether the firewall rule is enabled or not. Defaults to true.
-	Enabled FirewallEnabled `json:"enabled,omitempty"`
+	Enabled *FirewallEnabled `json:"enabled,omitempty"`
 
 	// Service The name of the IANA service name. This is the name of the service as defined in
 	// the /etc/services file.
@@ -1019,9 +1019,9 @@ type TailoringProfiles struct {
 // TimeDate Time and date details allowing configuration of the timezone and
 // NTP servers. The timezone is set by default to UTC.
 type TimeDate struct {
-	// NtpServers An optional list of strings containing NTP servers to use. If
+	// NTPServers An optional list of strings containing NTP servers to use. If
 	// not provided the distribution defaults are used.
-	NtpServers []string `json:"ntp_servers,omitempty"`
+	NTPServers []string `json:"ntp_servers,omitempty"`
 
 	// Timezone System time zone. Defaults to UTC. To list available time zones run:
 	//

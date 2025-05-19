@@ -1,6 +1,7 @@
 package blueprint
 
 import (
+	"fmt"
 	"strings"
 	"time"
 
@@ -35,7 +36,6 @@ func (b *Blueprint) ExportInternal(ed ExportData) *int.Blueprint {
 	to.Customizations = exportCustomizations(b)
 	to.Distro = ed.Distro
 	to.Arch = ed.Arch
-
 	return to
 }
 
@@ -50,7 +50,6 @@ func exportPackages(b *Blueprint) []int.Package {
 			Version: p[1],
 		})
 	}
-
 	return s
 }
 
@@ -62,7 +61,6 @@ func exportGroups(b *Blueprint) []int.Group {
 			Name: pkg,
 		})
 	}
-
 	return s
 }
 
@@ -77,7 +75,6 @@ func exportModules(b *Blueprint) []int.EnabledModule {
 			Stream: p[1],
 		})
 	}
-
 	return s
 }
 
@@ -92,7 +89,6 @@ func exportContainers(b *Blueprint) []int.Container {
 			LocalStorage: container.LocalStorage,
 		})
 	}
-
 	return s
 }
 
@@ -103,10 +99,17 @@ func exportCustomizations(from *Blueprint) *int.Customizations {
 
 	to := &int.Customizations{}
 	to.Hostname = &from.Hostname
-
+	// SSHKey is not supported, use user customization instead
 	to.Kernel = ExportKernelCustomization(from.Kernel)
-	to.User = ExportUserCustomization(from.Accounts.Users)
-
+	if from.Accounts != nil {
+		to.User = ExportUserCustomization(from.Accounts.Users)
+		to.Group = ExportGroupCustomization(from.Accounts.Groups)
+	}
+	to.Timezone = ExportTimezoneCustomization(from.Timedate)
+	to.Locale = ExportLocaleCustomization(from.Locale)
+	if from.Network != nil {
+		to.Firewall = ExportFirewallCustomization(from.Network.Firewall)
+	}
 	return to
 }
 
@@ -128,7 +131,6 @@ func ExportUserCustomization(in []AccountsUsers) []int.UserCustomization {
 
 	var s []int.UserCustomization
 
-	log.Println("user force password reset ignored")
 	for _, u := range in {
 		uc := int.UserCustomization{}
 		uc.Name = u.Name
@@ -162,6 +164,106 @@ func ExportUserCustomization(in []AccountsUsers) []int.UserCustomization {
 
 		s = append(s, uc)
 	}
-
 	return s
+}
+
+func ExportGroupCustomization(in []AccountsGroups) []int.GroupCustomization {
+	if in == nil {
+		return nil
+	}
+
+	var s []int.GroupCustomization
+
+	for _, g := range in {
+		gc := int.GroupCustomization{}
+		gc.Name = g.Name
+		if g.GID != 0 {
+			gc.GID = &g.GID
+		}
+		s = append(s, gc)
+	}
+	return s
+}
+
+func ExportTimezoneCustomization(from *TimeDate) *int.TimezoneCustomization {
+	if from == nil {
+		return nil
+	}
+
+	to := &int.TimezoneCustomization{}
+	to.Timezone = &from.Timezone
+	to.NTPServers = from.NTPServers
+	return to
+}
+
+func ExportLocaleCustomization(from *Locale) *int.LocaleCustomization {
+	if from == nil {
+		return nil
+	}
+
+	to := &int.LocaleCustomization{}
+	if len(from.Keyboards) > 0 {
+		to.Keyboard = &from.Keyboards[0]
+		if len(from.Keyboards) > 1 {
+			log.Println("only one keyboard layout supported, selecting first one")
+		}
+	}
+	to.Languages = from.Languages
+	return to
+}
+
+func ExportFirewallCustomization(from *NetworkFirewall) *int.FirewallCustomization {
+	if from == nil {
+		return nil
+	}
+
+	to := &int.FirewallCustomization{
+		Ports: make([]string, 0),
+		Services: &int.FirewallServicesCustomization{
+			Enabled:  make([]string, 0),
+			Disabled: make([]string, 0),
+		},
+	}
+	for i, s := range from.Services {
+		fs, fp, fft, err := s.SelectUnion()
+		if err != nil {
+			log.Printf("could not parse network service %i: %v", i, err)
+			continue
+		}
+
+		proto := "tcp"
+		if fs.Service != "" {
+			if fs.Enabled == nil || *fs.Enabled {
+				to.Services.Enabled = append(to.Services.Enabled, fs.Service)
+			} else {
+				to.Services.Disabled = append(to.Services.Disabled, fs.Service)
+			}
+		} else if fp.Port != 0 {
+			if fp.Protocol != "" {
+				proto = fp.Protocol.String()
+			}
+			srv := fmt.Sprintf("%d/%s", fp.Port, proto)
+
+			if fp.Enabled == nil || *fp.Enabled {
+				to.Ports = append(to.Ports, srv)
+			} else {
+				log.Printf("network service %i error: port number %d cannot be disabled", i, fp.Port)
+			}
+		} else if fft.From != 0 && fft.To != 0 {
+			if fft.Protocol != "" {
+				proto = fft.Protocol.String()
+			}
+			srv := fmt.Sprintf("%d-%d/%s", fft.From, fft.To, proto)
+
+			if fft.Enabled == nil || *fft.Enabled {
+				to.Ports = append(to.Ports, srv)
+			} else {
+				log.Printf("network service %i error: port number %d cannot be disabled", i, fp.Port)
+			}
+		} else {
+			log.Printf("network service %i error: one of service, port or from and to present", i)
+			continue
+		}
+	}
+	return to
 }
