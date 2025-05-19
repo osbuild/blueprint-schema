@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"flag"
 	"fmt"
@@ -21,6 +22,7 @@ func main() {
 	printYAMLSchema := flag.Bool("print-yaml-schema", false, "print embedded schema to standard output and exit")
 	validate := flag.Bool("validate", false, "validate input document (detects JSON or YAML format)")
 	exportTOML := flag.Bool("export-toml", false, "convert document into legacy TOML")
+	exportJSON := flag.Bool("export-json", false, "convert document into legacy JSON")
 	flag.Parse()
 
 	var inBuf []byte
@@ -103,7 +105,7 @@ func main() {
 			panic(err)
 		}
 
-	} else if exportTOML != nil {
+	} else if *exportTOML || *exportJSON {
 		inBuf, err = io.ReadAll(in)
 		if err != nil {
 			panic(err)
@@ -120,7 +122,12 @@ func main() {
 			fmt.Fprintln(os.Stderr, logs)
 		}
 
-		buf, err := toml.Marshal(exporter.Result())
+		var buf []byte
+		if *exportJSON {
+			buf, err = json.MarshalIndent(exporter.Result(), "", "  ")
+		} else if *exportTOML {
+			buf, err = toml.Marshal(exporter.Result())
+		}
 		if err != nil {
 			panic(err)
 		}

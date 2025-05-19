@@ -330,14 +330,103 @@ func (e *InternalExporter) exportStorage() *int.DiskCustomization {
 	size, err := ParseSize(e.from.Storage.Minsize)
 	if err != nil {
 		e.log.Printf("error parsing size %s: %v", e.from.Storage.Minsize, err)
+	} else {
+		to.MinSize = size.Bytes()
 	}
-	to.MinSize = size.Bytes()
 
 	if len(e.from.Storage.Partitions) == 0 {
 		return to
 	}
 
-	// TODO: the rest
+	to.Partitions = make([]int.PartitionCustomization, 0, len(e.from.Storage.Partitions))
+	for i, p := range e.from.Storage.Partitions {
+		pp, pl, pb, err := p.SelectUnion()
+		if err != nil {
+			e.log.Printf("could not parse partition %d: %v", i, err)
+			continue
+		}
+
+		if pp.Type == PartTypePlain {
+			size, err := ParseSize(pp.Minsize)
+			if err != nil {
+				e.log.Printf("error parsing size %q: %v", pp.Minsize, err)
+				continue
+			}
+
+			part := &int.PartitionCustomization{
+				Type:    "plain",
+				MinSize: size.Bytes(),
+				FilesystemTypedCustomization: int.FilesystemTypedCustomization{
+					Label:      pp.Label,
+					Mountpoint: pp.Mountpoint,
+					FSType:     pp.FSType.String(),
+				},
+			}
+
+			to.Partitions = append(to.Partitions, *part)
+		} else if pl.Type == PartTypeLVM {
+			size, err := ParseSize(pl.Minsize)
+			if err != nil {
+				e.log.Printf("error parsing size %q: %v", pl.Minsize, err)
+				continue
+			}
+
+			part := &int.PartitionCustomization{
+				Type:    "lvm",
+				MinSize: size.Bytes(),
+				VGCustomization: int.VGCustomization{
+					Name:           pl.Name,
+					LogicalVolumes: make([]int.LVCustomization, 0, len(pl.LogicalVolumes)),
+				},
+			}
+
+			for _, lv := range pl.LogicalVolumes {
+				lvSize, err := ParseSize(lv.Minsize)
+				if err != nil {
+					e.log.Printf("error parsing size %q: %v", lv.Minsize, err)
+					continue
+				}
+				lvc := int.LVCustomization{
+					Name:    lv.Name,
+					MinSize: lvSize.Bytes(),
+					FilesystemTypedCustomization: int.FilesystemTypedCustomization{
+						Label:      lv.Label,
+						Mountpoint: lv.Mountpoint,
+						FSType:     lv.FSType.String(),
+					},
+				}
+				part.VGCustomization.LogicalVolumes = append(part.VGCustomization.LogicalVolumes, lvc)
+			}
+
+			to.Partitions = append(to.Partitions, *part)
+		} else if pb.Type == PartTypeBTRFS {
+			size, err := ParseSize(pb.Minsize)
+			if err != nil {
+				e.log.Printf("error parsing size %q: %v", pb.Minsize, err)
+				continue
+			}
+
+			part := &int.PartitionCustomization{
+				Type:    "btrfs",
+				MinSize: size.Bytes(),
+				BtrfsVolumeCustomization: int.BtrfsVolumeCustomization{
+					Subvolumes: make([]int.BtrfsSubvolumeCustomization, 0, len(pb.Subvolumes)),
+				},
+			}
+
+			for _, sv := range pb.Subvolumes {
+				svc := int.BtrfsSubvolumeCustomization{
+					Name:       sv.Name,
+					Mountpoint: sv.Mountpoint,
+				}
+				part.BtrfsVolumeCustomization.Subvolumes = append(part.BtrfsVolumeCustomization.Subvolumes, svc)
+			}
+
+			to.Partitions = append(to.Partitions, *part)
+		} else {
+			e.log.Printf("unknown partition type %q", pl.Type)
+		}
+	}
 
 	return to
 }
