@@ -127,6 +127,9 @@ func (e *InternalExporter) exportCustomizations() *int.Customizations {
 	to.Disk = e.exportStorage()
 	to.InstallationDevice, to.Installer = e.exportInstaller()
 	to.RHSM, to.FDO = e.exportRegistration()
+	to.OpenSCAP = e.exportOpenSCAP()
+	to.Ignition = e.exportIgnition()
+	to.Files, to.Directories = e.exportFSNodes()
 
 	return to
 }
@@ -515,4 +518,118 @@ func (e *InternalExporter) exportRegistration() (*int.RHSMCustomization, *int.FD
 	}
 
 	return rhsm, fdo
+}
+
+func (e *InternalExporter) exportOpenSCAP() *int.OpenSCAPCustomization {
+	if e.from.OpenSCAP == nil {
+		return nil
+	}
+
+	to := &int.OpenSCAPCustomization{}
+	to.DataStream = e.from.OpenSCAP.Datastream
+	to.ProfileID = e.from.OpenSCAP.ProfileID
+
+	if e.from.OpenSCAP.Tailoring != nil {
+		tp, tj, err := e.from.OpenSCAP.Tailoring.SelectUnion()
+		if err != nil {
+			e.log.Printf("could not parse tailoring: %v", err)
+		}
+
+		if tj.JSONProfileID != "" || tj.JSONFilePath != "" {
+			to.JSONTailoring = &int.OpenSCAPJSONTailoringCustomizations{
+				ProfileID: tj.JSONProfileID,
+				Filepath:  tj.JSONFilePath,
+			}
+		} else if len(tp.Selected) > 0 || len(tp.Unselected) > 0 {
+			to.Tailoring = &int.OpenSCAPTailoringCustomizations{
+				Selected:   tp.Selected,
+				Unselected: tp.Unselected,
+			}
+		} else {
+			e.log.Printf("could not parse tailoring: %v", err)
+		}
+	}
+
+	return to
+}
+
+func (e *InternalExporter) exportIgnition() *int.IgnitionCustomization {
+	if e.from.Ignition == nil {
+		return nil
+	}
+
+	to := &int.IgnitionCustomization{}
+	iu, ie, err := e.from.Ignition.SelectUnion()
+	if err != nil {
+		e.log.Printf("could not parse ignition: %v", err)
+	}
+	if ie.Text != "" {
+		to.Embedded = &int.EmbeddedIgnitionCustomization{
+			Config: ie.Text,
+		}
+	} else if iu.URL != "" {
+		to.FirstBoot = &int.FirstBootIgnitionCustomization{
+			ProvisioningURL: iu.URL,
+		}
+	} else {
+		e.log.Printf("could not parse ignition: %v", err)
+	}
+
+	return to
+}
+
+// parseUGID parses a user/group ID from a string. It returns the
+// user/group ID as an int64 if it is a number, or the string itself
+// if it is not a number. If the string is empty, it returns nil.
+func parseUGID(s string) any {
+	if s == "" {
+		return nil
+	}
+
+	if i, err := strconv.ParseInt(s, 10, 0); err == nil {
+		return i
+	}
+
+	return s
+}
+
+func (e *InternalExporter) exportFSNodes() ([]int.FileCustomization, []int.DirectoryCustomization) {
+	if e.from.FSNodes == nil {
+		return nil, nil
+	}
+
+	// TOD fix appending slice preallocation
+	var files []int.FileCustomization
+	var dirs []int.DirectoryCustomization
+	for i, node := range e.from.FSNodes {
+
+		switch node.Type {
+		case FSNodeFile, "":
+			contents, err := node.Contents.String()
+			if err != nil {
+				e.log.Printf("could not parse contents of node %d: %v", i, err)
+			}
+
+			files = append(files, int.FileCustomization{
+				Path:  node.Path,
+				User:  parseUGID(node.User),
+				Group: parseUGID(node.Group),
+				Mode:  strconv.FormatInt(int64(node.Mode), 8),
+				Data:  contents,
+			})
+		case FSNodeDir:
+			dirs = append(dirs, int.DirectoryCustomization{
+				Path:          node.Path,
+				User:          parseUGID(node.User),
+				Group:         parseUGID(node.Group),
+				Mode:          strconv.FormatInt(int64(node.Mode), 8),
+				EnsureParents: node.EnsureParents,
+			})
+		default:
+			e.log.Printf("unknown node type %d: %q", i, node.Type)
+			continue
+		}
+	}
+
+	return files, dirs
 }

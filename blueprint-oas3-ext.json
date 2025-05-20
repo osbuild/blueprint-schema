@@ -795,13 +795,15 @@
           "url": {
             "description": "The URL to the Ignition configuration to be used by Ignition. This configuration\nis a URL to a remote Ignition configuration.\n",
             "type": "string",
+            "x-go-name": "URL",
             "x-go-type-skip-optional-pointer": true
           }
         },
         "required": [
           "url"
         ],
-        "type": "object"
+        "type": "object",
+        "x-go-name": "IgnitionURL"
       },
       "installer": {
         "additionalProperties": false,

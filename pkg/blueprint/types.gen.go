@@ -560,11 +560,11 @@ type IgnitionText struct {
 	Text string `json:"text"`
 }
 
-// IgnitionUrl defines model for ignition_url.
-type IgnitionUrl struct {
-	// Url The URL to the Ignition configuration to be used by Ignition. This configuration
+// IgnitionURL defines model for ignition_url.
+type IgnitionURL struct {
+	// URL The URL to the Ignition configuration to be used by Ignition. This configuration
 	// is a URL to a remote Ignition configuration.
-	Url string `json:"url"`
+	URL string `json:"url"`
 }
 
 // Installer Extra customization for Anaconda installer (ISO) and Edge/IOT simplified
@@ -1032,22 +1032,22 @@ type TimeDate struct {
 // ValidateBlueprintJSONRequestBody defines body for ValidateBlueprint for application/json ContentType.
 type ValidateBlueprintJSONRequestBody = Blueprint
 
-// AsIgnitionUrl returns the union data inside the Ignition as a IgnitionUrl
-func (t Ignition) AsIgnitionUrl() (IgnitionUrl, error) {
-	var body IgnitionUrl
+// AsIgnitionURL returns the union data inside the Ignition as a IgnitionURL
+func (t Ignition) AsIgnitionURL() (IgnitionURL, error) {
+	var body IgnitionURL
 	err := json.Unmarshal(t.union, &body)
 	return body, err
 }
 
-// FromIgnitionUrl overwrites any union data inside the Ignition as the provided IgnitionUrl
-func (t *Ignition) FromIgnitionUrl(v IgnitionUrl) error {
+// FromIgnitionURL overwrites any union data inside the Ignition as the provided IgnitionURL
+func (t *Ignition) FromIgnitionURL(v IgnitionURL) error {
 	b, err := json.Marshal(v)
 	t.union = b
 	return err
 }
 
-// MergeIgnitionUrl performs a merge with any union data inside the Ignition, using the provided IgnitionUrl
-func (t *Ignition) MergeIgnitionUrl(v IgnitionUrl) error {
+// MergeIgnitionURL performs a merge with any union data inside the Ignition, using the provided IgnitionURL
+func (t *Ignition) MergeIgnitionURL(v IgnitionURL) error {
 	b, err := json.Marshal(v)
 	if err != nil {
 		return err

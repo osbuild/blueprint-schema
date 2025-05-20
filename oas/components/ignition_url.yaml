@@ -2,6 +2,7 @@
 type: object
 required:
   - url
+x-go-name: IgnitionURL
 properties:
   url:
     description: |
@@ -9,4 +10,5 @@ properties:
       is a URL to a remote Ignition configuration.
     type: string
     x-go-type-skip-optional-pointer: true
+    x-go-name: URL
 additionalProperties: false

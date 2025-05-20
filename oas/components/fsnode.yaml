@@ -39,12 +39,12 @@ properties:
     type: boolean
     x-go-type-skip-optional-pointer: true
   user:
-    description: User is the file system node owner. Defaults to root.
+    description: User is the file system node owner. Can be also a decimal UID. Defaults to root.
     default: root
     type: string
     x-go-type-skip-optional-pointer: true
   group:
-    description: Group is the file system node group. Defaults to root.
+    description: Group is the file system node group. Can be also a decimal GID. Defaults to root.
     default: root
     type: string
     x-go-type-skip-optional-pointer: true
