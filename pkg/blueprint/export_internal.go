@@ -242,11 +242,7 @@ func (e *InternalExporter) exportFirewallCustomization() *int.FirewallCustomizat
 	}
 
 	to := &int.FirewallCustomization{
-		Ports: make([]string, 0),
-		Services: &int.FirewallServicesCustomization{
-			Enabled:  make([]string, 0),
-			Disabled: make([]string, 0),
-		},
+		Services: &int.FirewallServicesCustomization{},
 	}
 	for i, s := range e.from.Network.Firewall.Services {
 		fs, fp, fft, err := s.SelectUnion()
@@ -291,19 +287,6 @@ func (e *InternalExporter) exportFirewallCustomization() *int.FirewallCustomizat
 		}
 	}
 
-	if len(to.Ports) == 0 {
-		to.Ports = nil
-	}
-	if len(to.Services.Enabled) == 0 {
-		to.Services.Enabled = nil
-	}
-	if len(to.Services.Disabled) == 0 {
-		to.Services.Disabled = nil
-	}
-	if to.Services.Enabled == nil && to.Services.Disabled == nil {
-		to.Services = nil
-	}
-
 	return to
 }
 
@@ -313,19 +296,9 @@ func (e *InternalExporter) exportSystemdCustomization() *int.ServicesCustomizati
 	}
 
 	to := &int.ServicesCustomization{}
-
-	if len(e.from.Systemd.Enabled) > 0 {
-		to.Enabled = make([]string, len(e.from.Systemd.Enabled))
-		copy(to.Enabled, e.from.Systemd.Enabled)
-	}
-	if len(e.from.Systemd.Disabled) > 0 {
-		to.Disabled = make([]string, len(e.from.Systemd.Disabled))
-		copy(to.Disabled, e.from.Systemd.Disabled)
-	}
-	if len(e.from.Systemd.Masked) > 0 {
-		to.Masked = make([]string, len(e.from.Systemd.Masked))
-		copy(to.Masked, e.from.Systemd.Masked)
-	}
+	to.Enabled = e.from.Systemd.Enabled
+	to.Disabled = e.from.Systemd.Disabled
+	to.Masked = e.from.Systemd.Masked
 
 	return to
 }
@@ -348,7 +321,6 @@ func (e *InternalExporter) exportStorage() *int.DiskCustomization {
 		return to
 	}
 
-	to.Partitions = make([]int.PartitionCustomization, 0, len(e.from.Storage.Partitions))
 	for i, p := range e.from.Storage.Partitions {
 		pp, pl, pb, err := p.SelectUnion()
 		if err != nil {
@@ -386,7 +358,6 @@ func (e *InternalExporter) exportStorage() *int.DiskCustomization {
 				MinSize: size.Bytes(),
 				VGCustomization: int.VGCustomization{
 					Name:           pl.Name,
-					LogicalVolumes: make([]int.LVCustomization, 0, len(pl.LogicalVolumes)),
 				},
 			}
 
@@ -420,7 +391,6 @@ func (e *InternalExporter) exportStorage() *int.DiskCustomization {
 				Type:    "btrfs",
 				MinSize: size.Bytes(),
 				BtrfsVolumeCustomization: int.BtrfsVolumeCustomization{
-					Subvolumes: make([]int.BtrfsSubvolumeCustomization, 0, len(pb.Subvolumes)),
 				},
 			}
 
@@ -459,22 +429,15 @@ func (e *InternalExporter) exportInstaller() (string, *int.InstallerCustomizatio
 		}
 
 		if len(e.from.Installer.Anaconda.EnabledModules) > 0 {
-			to.Modules.Enable = make([]string, len(e.from.Installer.Anaconda.EnabledModules))
-
-			for i, module := range e.from.Installer.Anaconda.EnabledModules {
-				to.Modules.Enable[i] = string(module)
+			for _, module := range e.from.Installer.Anaconda.EnabledModules {
+				to.Modules.Enable = append(to.Modules.Enable, string(module))
 			}
 		}
 
 		if len(e.from.Installer.Anaconda.DisabledModules) > 0 {
-			to.Modules.Disable = make([]string, len(e.from.Installer.Anaconda.DisabledModules))
-			for i, module := range e.from.Installer.Anaconda.DisabledModules {
-				to.Modules.Disable[i] = string(module)
+			for _, module := range e.from.Installer.Anaconda.DisabledModules {
+				to.Modules.Disable = append(to.Modules.Disable, string(module))
 			}
-		}
-
-		if to.Modules.Enable == nil && to.Modules.Disable == nil {
-			to.Modules = nil
 		}
 	}
 
@@ -598,7 +561,6 @@ func (e *InternalExporter) exportFSNodes() ([]int.FileCustomization, []int.Direc
 		return nil, nil
 	}
 
-	// TOD fix appending slice preallocation
 	var files []int.FileCustomization
 	var dirs []int.DirectoryCustomization
 	for i, node := range e.from.FSNodes {
