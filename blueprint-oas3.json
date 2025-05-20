@@ -861,6 +861,7 @@
           }
         },
         "type": "object",
+        "x-go-name": "CoreOS",
         "x-go-type-name": "InstallerCoreOS"
       },
       "kernel": {

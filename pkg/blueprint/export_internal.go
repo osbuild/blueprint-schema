@@ -120,6 +120,7 @@ func (e *InternalExporter) exportCustomizations() *int.Customizations {
 	to.Firewall = e.exportFirewallCustomization()
 	to.Services = e.exportSystemdCustomization()
 	to.Disk = e.exportStorage()
+	to.InstallationDevice, to.Installer = e.exportInstaller()
 
 	return to
 }
@@ -429,4 +430,48 @@ func (e *InternalExporter) exportStorage() *int.DiskCustomization {
 	}
 
 	return to
+}
+
+func (e *InternalExporter) exportInstaller() (string, *int.InstallerCustomization) {
+	var installationDevice string
+	if e.from.Installer == nil {
+		return installationDevice, nil
+	}
+
+	var to *int.InstallerCustomization
+	if e.from.Installer.Anaconda != nil {
+		to = &int.InstallerCustomization{
+			Modules: &int.AnacondaModules{},
+		}
+		to.Unattended = e.from.Installer.Anaconda.Unattended
+		to.SudoNopasswd = e.from.Installer.Anaconda.SudoNOPASSWD
+		if e.from.Installer.Anaconda.Kickstart != "" {
+			to.Kickstart = &int.Kickstart{Contents: e.from.Installer.Anaconda.Kickstart}
+		}
+
+		if len(e.from.Installer.Anaconda.EnabledModules) > 0 {
+			to.Modules.Enable = make([]string, len(e.from.Installer.Anaconda.EnabledModules))
+
+			for i, module := range e.from.Installer.Anaconda.EnabledModules {
+				to.Modules.Enable[i] = string(module)
+			}
+		}
+
+		if len(e.from.Installer.Anaconda.DisabledModules) > 0 {
+			to.Modules.Disable = make([]string, len(e.from.Installer.Anaconda.DisabledModules))
+			for i, module := range e.from.Installer.Anaconda.DisabledModules {
+				to.Modules.Disable[i] = string(module)
+			}
+		}
+
+		if to.Modules.Enable == nil && to.Modules.Disable == nil {
+			to.Modules = nil
+		}
+	}
+
+	if e.from.Installer.CoreOS != nil {
+		installationDevice = e.from.Installer.CoreOS.InstallationDevice
+	}
+
+	return installationDevice, to
 }

@@ -576,9 +576,9 @@ type Installer struct {
 	// timezone) will change the value in the kickstart file as well.
 	Anaconda *InstallerAnaconda `json:"anaconda,omitempty"`
 
-	// Coreos CoreOS installer configuration is required by the edge-simplified-installer
+	// CoreOS CoreOS installer configuration is required by the edge-simplified-installer
 	// image. It allows to define the destination device for the installation.
-	Coreos *InstallerCoreos `json:"coreos,omitempty"`
+	CoreOS *CoreOS `json:"coreos,omitempty"`
 }
 
 // InstallerAnaconda Extra customizations for Anaconda installer (ISO) image types.
@@ -612,9 +612,9 @@ type InstallerAnaconda struct {
 	Unattended bool `json:"unattended,omitempty"`
 }
 
-// InstallerCoreos CoreOS installer configuration is required by the edge-simplified-installer
+// CoreOS CoreOS installer configuration is required by the edge-simplified-installer
 // image. It allows to define the destination device for the installation.
-type InstallerCoreos = InstallerCoreOS
+type CoreOS = InstallerCoreOS
 
 // InstallerCoreOS CoreOS installer configuration is required by the edge-simplified-installer
 // image. It allows to define the destination device for the installation.

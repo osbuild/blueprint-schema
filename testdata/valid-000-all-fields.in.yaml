@@ -131,6 +131,7 @@ installer:
     unattended: true
     sudo_nopasswd: ["lzap"]
     enabled_modules: ["org.fedoraproject.Anaconda.Modules.Subscription"]
+    disabled_modules: ["org.fedoraproject.Anaconda.Modules.Timezone"]
     kickstart: "# some kickstart data"
   coreos:
     installation_device: "/dev/vda"
