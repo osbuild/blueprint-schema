@@ -24,6 +24,22 @@ func From[T any](ref *T) (value T) {
 	return
 }
 
+// FromOr return value of pointer if not nil, else return default value.
+func FromOr[T any](value *T, defaultValue T) T {
+	if value == nil {
+		return defaultValue
+	}
+	return *value
+}
+
+// Or returns the pointer if not nil, else return default value.
+func Or[T any](value *T, defaultValue T) *T {
+	if value == nil {
+		return &defaultValue
+	}
+	return value
+}
+
 // FromOrEmpty returns the value or empty value in case the value is nil.
 func FromOrEmpty[T any](ref *T) (value T) {
 	if ref != nil {

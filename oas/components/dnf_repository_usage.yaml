@@ -4,20 +4,20 @@ x-go-type-name: DNFRepoUsage
 properties:
   install:
     description: |
-      Use the repository for image build.
+      Use the repository for image build. Enabled by default.
 
       When this flag is set, it is possible to install third-party packages during the image build.
-    default: false
+    default: true
     type: boolean
-    x-go-type-skip-optional-pointer: true
   configure:
     description: |
-      Configure the repository for dnf on the created image.
+      Configure the repository for dnf on the created image. Enabled by default.
 
       A repository will be saved as /etc/yum.repos.d/repository-id and enabled so when the image is
       booted, the repository will be available for dnf. This is useful for third-party repositories
       that are not part of the base image.
+
+      When this flag is disabled, the repository will be saved but not enabled.
     default: true
     type: boolean
-    x-go-type-skip-optional-pointer: true
 additionalProperties: false

@@ -351,11 +351,12 @@ type DNFRepository struct {
 	// extension.
 	Filename string `json:"filename,omitempty"`
 
-	// GPGCheck Enable GPG check for the repository.
-	GPGCheck bool `json:"gpg_check,omitempty"`
+	// GPGCheck Enable GPG check for the repository. Enabled by default.
+	GPGCheck *bool `json:"gpg_check,omitempty"`
 
-	// GPGCheckRepo Enable GPG check for the repository metadata.
-	GPGCheckRepo bool `json:"gpg_check_repo,omitempty"`
+	// GPGCheckRepo Enable GPG check for the repository metadata. Enabled by default. This is different from gpg_check, which is for the packages.
+	// This is useful for third-party repositories that do not provide GPG keys for the repository metadata.
+	GPGCheckRepo *bool `json:"gpg_check_repo,omitempty"`
 
 	// GPGKeys GPG keys for the repository.
 	//
@@ -365,7 +366,7 @@ type DNFRepository struct {
 	// ID Repository ID. Required.
 	ID string `json:"id"`
 
-	// ModuleHotfixes Enable module hotfixes for the repository.
+	// ModuleHotfixes Enable module hotfixes for the repository. Disabled by default.
 	//
 	// Adds module_hotfixes flag to all repo types so it can be used during osbuild. This enables users to disable modularity filtering on specific repositories.
 	ModuleHotfixes bool `json:"module_hotfixes,omitempty"`
@@ -379,8 +380,8 @@ type DNFRepository struct {
 	// Source Repository source.
 	Source *DNFSource `json:"source,omitempty"`
 
-	// SSLVerify Enable SSL verification for the repository.
-	SSLVerify bool                `json:"ssl_verify,omitempty"`
+	// SSLVerify Enable SSL verification for the repository. Enabled by default.
+	SSLVerify *bool               `json:"ssl_verify,omitempty"`
 	Usage     *DnfRepositoryUsage `json:"usage,omitempty"`
 }
 
@@ -394,17 +395,19 @@ type DnfRepositoryUsage = DNFRepoUsage
 
 // DNFRepoUsage defines model for .
 type DNFRepoUsage struct {
-	// Configure Configure the repository for dnf on the created image.
+	// Configure Configure the repository for dnf on the created image. Enabled by default.
 	//
 	// A repository will be saved as /etc/yum.repos.d/repository-id and enabled so when the image is
 	// booted, the repository will be available for dnf. This is useful for third-party repositories
 	// that are not part of the base image.
-	Configure bool `json:"configure,omitempty"`
+	//
+	// When this flag is disabled, the repository will be saved but not enabled.
+	Configure *bool `json:"configure,omitempty"`
 
-	// Install Use the repository for image build.
+	// Install Use the repository for image build. Enabled by default.
 	//
 	// When this flag is set, it is possible to install third-party packages during the image build.
-	Install bool `json:"install,omitempty"`
+	Install *bool `json:"install,omitempty"`
 }
 
 // DnfSourceBaseUrls defines model for dnf_source_base_urls.
@@ -412,8 +415,8 @@ type DnfSourceBaseUrls = DNFSourceBaseURLs
 
 // DNFSourceBaseURLs defines model for .
 type DNFSourceBaseURLs struct {
-	// Urls Base URLs for the repository.
-	Urls []string `json:"urls"`
+	// URLs Base URLs for the repository.
+	URLs []string `json:"urls"`
 }
 
 // DnfSourceMetalink defines model for dnf_source_metalink.
@@ -504,7 +507,7 @@ type FSNode struct {
 	// should be created if they do not exist.
 	EnsureParents bool `json:"ensure_parents,omitempty"`
 
-	// Group Group is the file system node group. Defaults to root.
+	// Group Group is the file system node group. Can be also a decimal GID. Defaults to root.
 	Group string `json:"group,omitempty"`
 
 	// Mode Mode is the file system node permissions. Defaults to 0644 for
@@ -520,7 +523,7 @@ type FSNode struct {
 	// Type Type is the type of the file system node, one of: file, dir.
 	Type FSNodeType `json:"type,omitempty"`
 
-	// User User is the file system node owner. Defaults to root.
+	// User User is the file system node owner. Can be also a decimal UID. Defaults to root.
 	User string `json:"user,omitempty"`
 }
 

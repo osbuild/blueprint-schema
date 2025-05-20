@@ -32,6 +32,7 @@ dnf:
       usage:
         install: true
         configure: true
+    - id: "empty-repo"
 containers:
   - source: "quay.io/fedora/fedora:latest"
     name: "fedora"

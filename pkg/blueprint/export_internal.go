@@ -130,6 +130,7 @@ func (e *InternalExporter) exportCustomizations() *int.Customizations {
 	to.OpenSCAP = e.exportOpenSCAP()
 	to.Ignition = e.exportIgnition()
 	to.Files, to.Directories = e.exportFSNodes()
+	to.Repositories = e.exportRepositories()
 
 	return to
 }
@@ -357,7 +358,7 @@ func (e *InternalExporter) exportStorage() *int.DiskCustomization {
 				Type:    "lvm",
 				MinSize: size.Bytes(),
 				VGCustomization: int.VGCustomization{
-					Name:           pl.Name,
+					Name: pl.Name,
 				},
 			}
 
@@ -388,10 +389,9 @@ func (e *InternalExporter) exportStorage() *int.DiskCustomization {
 			}
 
 			part := &int.PartitionCustomization{
-				Type:    "btrfs",
-				MinSize: size.Bytes(),
-				BtrfsVolumeCustomization: int.BtrfsVolumeCustomization{
-				},
+				Type:                     "btrfs",
+				MinSize:                  size.Bytes(),
+				BtrfsVolumeCustomization: int.BtrfsVolumeCustomization{},
 			}
 
 			for _, sv := range pb.Subvolumes {
@@ -594,4 +594,42 @@ func (e *InternalExporter) exportFSNodes() ([]int.FileCustomization, []int.Direc
 	}
 
 	return files, dirs
+}
+
+func (e *InternalExporter) exportRepositories() []int.RepositoryCustomization {
+	if e.from.DNF == nil || e.from.DNF.Repositories == nil {
+		return nil
+	}
+
+	var repos []int.RepositoryCustomization
+	for _, repo := range e.from.DNF.Repositories {
+		burl, bmeta, bmirror, err := repo.Source.SelectUnion()
+		if err != nil {
+			e.log.Printf("missing source for repository %q: %v", repo.ID, err)
+			continue
+		}
+
+		if repo.Usage == nil {
+			repo.Usage = &DNFRepoUsage{}
+		}
+
+		repos = append(repos, int.RepositoryCustomization{
+			Id:             repo.ID,
+			Name:           repo.Name,
+			BaseURLs:       burl.URLs,
+			Metalink:       bmeta.Metalink,
+			Mirrorlist:     bmirror.Mirrorlist,
+			Priority:       &repo.Priority,
+			Enabled:        ptr.Or(repo.Usage.Configure, true),
+			SSLVerify:      repo.SSLVerify,
+			GPGKeys:        repo.GPGKeys,
+			GPGCheck:       repo.GPGCheck,
+			RepoGPGCheck:   repo.GPGCheckRepo,
+			ModuleHotfixes: &repo.ModuleHotfixes,
+			Filename:       repo.Filename,
+			InstallFrom:    ptr.FromOr(repo.Usage.Install, true),
+		})
+	}
+
+	return repos
 }

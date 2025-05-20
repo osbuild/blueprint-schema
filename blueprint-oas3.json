@@ -391,17 +391,15 @@
           },
           "gpg_check": {
             "default": true,
-            "description": "Enable GPG check for the repository.",
+            "description": "Enable GPG check for the repository. Enabled by default.",
             "type": "boolean",
-            "x-go-name": "GPGCheck",
-            "x-go-type-skip-optional-pointer": true
+            "x-go-name": "GPGCheck"
           },
           "gpg_check_repo": {
             "default": true,
-            "description": "Enable GPG check for the repository metadata.",
+            "description": "Enable GPG check for the repository metadata. Enabled by default. This is different from gpg_check, which is for the packages.\nThis is useful for third-party repositories that do not provide GPG keys for the repository metadata.",
             "type": "boolean",
-            "x-go-name": "GPGCheckRepo",
-            "x-go-type-skip-optional-pointer": true
+            "x-go-name": "GPGCheckRepo"
           },
           "gpg_keys": {
             "description": "GPG keys for the repository.\n\nThe blueprint accepts both inline GPG keys and GPG key urls. If an inline GPG key is provided it will be saved to the /etc/pki/rpm-gpg directory and will be referenced accordingly in the repository configuration. GPG keys are not imported to the RPM database and will only be imported when first installing a package from the third-party repository.\n",
@@ -422,7 +420,7 @@
           },
           "module_hotfixes": {
             "default": false,
-            "description": "Enable module hotfixes for the repository.\n\nAdds module_hotfixes flag to all repo types so it can be used during osbuild. This enables users to disable modularity filtering on specific repositories.\n",
+            "description": "Enable module hotfixes for the repository. Disabled by default.\n\nAdds module_hotfixes flag to all repo types so it can be used during osbuild. This enables users to disable modularity filtering on specific repositories.\n",
             "type": "boolean",
             "x-go-type-skip-optional-pointer": true
           },
@@ -454,10 +452,9 @@
           },
           "ssl_verify": {
             "default": true,
-            "description": "Enable SSL verification for the repository.",
+            "description": "Enable SSL verification for the repository. Enabled by default.",
             "type": "boolean",
-            "x-go-name": "SSLVerify",
-            "x-go-type-skip-optional-pointer": true
+            "x-go-name": "SSLVerify"
           },
           "usage": {
             "$ref": "#/components/schemas/dnf_repository_usage"
@@ -474,15 +471,13 @@
         "properties": {
           "configure": {
             "default": true,
-            "description": "Configure the repository for dnf on the created image.\n\nA repository will be saved as /etc/yum.repos.d/repository-id and enabled so when the image is\nbooted, the repository will be available for dnf. This is useful for third-party repositories\nthat are not part of the base image.\n",
-            "type": "boolean",
-            "x-go-type-skip-optional-pointer": true
+            "description": "Configure the repository for dnf on the created image. Enabled by default.\n\nA repository will be saved as /etc/yum.repos.d/repository-id and enabled so when the image is\nbooted, the repository will be available for dnf. This is useful for third-party repositories\nthat are not part of the base image.\n\nWhen this flag is disabled, the repository will be saved but not enabled.\n",
+            "type": "boolean"
           },
           "install": {
-            "default": false,
-            "description": "Use the repository for image build.\n\nWhen this flag is set, it is possible to install third-party packages during the image build.\n",
-            "type": "boolean",
-            "x-go-type-skip-optional-pointer": true
+            "default": true,
+            "description": "Use the repository for image build. Enabled by default.\n\nWhen this flag is set, it is possible to install third-party packages during the image build.\n",
+            "type": "boolean"
           }
         },
         "type": "object",
@@ -497,6 +492,7 @@
               "type": "string"
             },
             "type": "array",
+            "x-go-name": "URLs",
             "x-go-type-skip-optional-pointer": true
           }
         },
@@ -665,7 +661,7 @@
           },
           "group": {
             "default": "root",
-            "description": "Group is the file system node group. Defaults to root.",
+            "description": "Group is the file system node group. Can be also a decimal GID. Defaults to root.",
             "type": "string",
             "x-go-type-skip-optional-pointer": true
           },
@@ -712,7 +708,7 @@
           },
           "user": {
             "default": "root",
-            "description": "User is the file system node owner. Defaults to root.",
+            "description": "User is the file system node owner. Can be also a decimal UID. Defaults to root.",
             "type": "string",
             "x-go-type-skip-optional-pointer": true
           }

@@ -32,16 +32,18 @@ properties:
     maxLength: 256
     x-go-type-skip-optional-pointer: true
   gpg_check:
-    description: Enable GPG check for the repository.
+    description: Enable GPG check for the repository. Enabled by default.
     default: true
     type: boolean
-    x-go-type-skip-optional-pointer: true
     x-go-name: GPGCheck
   gpg_check_repo:
-    description: Enable GPG check for the repository metadata.
+    description: Enable GPG check for the repository metadata. Enabled by default.
+      This is different from gpg_check, which is for the packages.
+
+      This is useful for third-party repositories that do not provide
+      GPG keys for the repository metadata.
     default: true
     type: boolean
-    x-go-type-skip-optional-pointer: true
     x-go-name: GPGCheckRepo
   gpg_keys:
     description: |
@@ -55,7 +57,7 @@ properties:
     x-go-name: GPGKeys
   module_hotfixes:
     description: |
-      Enable module hotfixes for the repository.
+      Enable module hotfixes for the repository. Disabled by default.
 
       Adds module_hotfixes flag to all repo types so it can be used during osbuild. This enables users to disable modularity filtering on specific repositories.
     default: false
@@ -67,10 +69,9 @@ properties:
     type: integer
     x-go-type-skip-optional-pointer: true
   ssl_verify:
-    description: Enable SSL verification for the repository.
+    description: Enable SSL verification for the repository. Enabled by default.
     default: true
     type: boolean
-    x-go-type-skip-optional-pointer: true
     x-go-name: SSLVerify
   usage:
     description: |
