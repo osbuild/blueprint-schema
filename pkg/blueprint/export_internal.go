@@ -2,6 +2,7 @@ package blueprint
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 	"time"
 
@@ -9,6 +10,10 @@ import (
 	int "github.com/osbuild/blueprint/pkg/blueprint"
 )
 
+// InternalExporter is used to convert a blueprint to the internal representation.
+//
+// TODO we need a place for distro, registration and repos, likely BuildOptions:
+// https://github.com/osbuild/blueprint-schema/issues/23
 type InternalExporter struct {
 	from *Blueprint
 	to   *int.Blueprint
@@ -121,6 +126,7 @@ func (e *InternalExporter) exportCustomizations() *int.Customizations {
 	to.Services = e.exportSystemdCustomization()
 	to.Disk = e.exportStorage()
 	to.InstallationDevice, to.Installer = e.exportInstaller()
+	to.RHSM, to.FDO = e.exportRegistration()
 
 	return to
 }
@@ -474,4 +480,39 @@ func (e *InternalExporter) exportInstaller() (string, *int.InstallerCustomizatio
 	}
 
 	return installationDevice, to
+}
+
+func (e *InternalExporter) exportRegistration() (*int.RHSMCustomization, *int.FDOCustomization) {
+	if e.from.Registration == nil {
+		return nil, nil
+	}
+
+	var fdo *int.FDOCustomization
+	if e.from.Registration.RegistrationFDO != nil {
+		fdo = &int.FDOCustomization{}
+		fdo.DiMfgStringTypeMacIface = e.from.Registration.RegistrationFDO.DiMfgStringTypeMacIface
+		fdo.DiunPubKeyHash = e.from.Registration.RegistrationFDO.DiunPubKeyHash
+		fdo.DiunPubKeyInsecure = strconv.FormatBool(e.from.Registration.RegistrationFDO.DiunPubKeyInsecure)
+		fdo.DiunPubKeyRootCerts = e.from.Registration.RegistrationFDO.DiunPubKeyRootCerts
+		fdo.ManufacturingServerURL = e.from.Registration.RegistrationFDO.ManufacturingServerURL
+	}
+
+	var rhsm *int.RHSMCustomization
+	if e.from.Registration.RegistrationRedHat != nil {
+		rhsm = &int.RHSMCustomization{
+			Config: &int.RHSMConfig{
+				SubscriptionManager: &int.SubManConfig{
+					RHSMConfig:      &int.SubManRHSMConfig{},
+					RHSMCertdConfig: &int.SubManRHSMCertdConfig{},
+				},
+				DNFPlugins: &int.SubManDNFPluginsConfig{
+					ProductID:           &int.DNFPluginConfig{},
+					SubscriptionManager: &int.DNFPluginConfig{},
+				},
+			},
+		}
+		e.log.Println("TODO: RHSM customization not yet implemented")
+	}
+
+	return rhsm, fdo
 }

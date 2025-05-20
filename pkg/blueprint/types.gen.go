@@ -870,8 +870,8 @@ type RegistrationFDO struct {
 	// DiunPubKeyRootCerts FDO server public key root certificate path. Cannot be used together with insecure option or hash.
 	DiunPubKeyRootCerts string `json:"diun_pub_key_root_certs,omitempty"`
 
-	// ManufacturingServerUrl FDO manufacturing server URL.
-	ManufacturingServerUrl string `json:"manufacturing_server_url"`
+	// ManufacturingServerURL FDO manufacturing server URL.
+	ManufacturingServerURL string `json:"manufacturing_server_url"`
 }
 
 // RegistrationInsights Red Hat Insights client details.

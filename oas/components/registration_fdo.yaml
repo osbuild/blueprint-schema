@@ -31,4 +31,5 @@ properties:
   manufacturing_server_url:
     description: FDO manufacturing server URL.
     type: string
+    x-go-name: ManufacturingServerURL
 additionalProperties: false

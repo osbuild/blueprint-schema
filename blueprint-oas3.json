@@ -1222,7 +1222,8 @@
           },
           "manufacturing_server_url": {
             "description": "FDO manufacturing server URL.",
-            "type": "string"
+            "type": "string",
+            "x-go-name": "ManufacturingServerURL"
           }
         },
         "required": [
