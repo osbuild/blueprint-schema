@@ -12,9 +12,9 @@ import (
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
-	// Validate blueprint
-	// (POST /validate_blueprint)
-	ValidateBlueprint(w http.ResponseWriter, r *http.Request)
+	// Validate
+	// (POST /validate)
+	Validate(w http.ResponseWriter, r *http.Request)
 }
 
 // ServerInterfaceWrapper converts contexts to parameters.
@@ -26,12 +26,12 @@ type ServerInterfaceWrapper struct {
 
 type MiddlewareFunc func(http.Handler) http.Handler
 
-// ValidateBlueprint operation middleware
-func (siw *ServerInterfaceWrapper) ValidateBlueprint(w http.ResponseWriter, r *http.Request) {
+// Validate operation middleware
+func (siw *ServerInterfaceWrapper) Validate(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.ValidateBlueprint(w, r)
+		siw.Handler.Validate(w, r)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -155,7 +155,7 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 		ErrorHandlerFunc:   options.ErrorHandlerFunc,
 	}
 
-	m.HandleFunc("POST "+options.BaseURL+"/validate_blueprint", wrapper.ValidateBlueprint)
+	m.HandleFunc("POST "+options.BaseURL+"/validate", wrapper.Validate)
 
 	return m
 }

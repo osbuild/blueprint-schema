@@ -14,8 +14,8 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3filter"
-	"sigs.k8s.io/yaml"
 	"github.com/osbuild/blueprint-schema"
+	"sigs.k8s.io/yaml"
 )
 
 type Schema struct {
@@ -71,10 +71,11 @@ func (s *Schema) Document() *openapi3.T {
 // if the schema is already bundled.
 func (s *Schema) Bundle(ctx context.Context) error {
 	s.doc.InternalizeRefs(ctx, func(s *openapi3.T, c openapi3.ComponentRef) string {
-		return strings.TrimSuffix(c.RefString(), ".yaml")
+		str := c.RefString()
+		str = strings.TrimSuffix(str, ".yaml")
+		str = strings.TrimPrefix(str, "./components/0_")
+		return str
 	})
-
-	delete(s.doc.Components.Schemas, "./components/blueprint")
 
 	return nil
 }

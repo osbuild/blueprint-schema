@@ -5,8 +5,6 @@ info:
   version: '1.0'
   description: |
     Image Builder Blueprint
-    
-    WORK IN PROGRESS
   license:
     name: Apache 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
@@ -16,8 +14,11 @@ info:
 
 components:
   schemas:
+    # top-level components must not have underscores in their names
     blueprint:
-      $ref: ./components/blueprint.yaml
+      $ref: ./components/0_blueprint.yaml
+    build_options: 
+      $ref: ./components/0_build_options.yaml
     error:
       type: object
       properties:
@@ -25,15 +26,19 @@ components:
           type: string
 
 paths:
-  /validate_blueprint:
+  /validate:
     post:
-      summary: Validate blueprint
-      operationId: validateBlueprint
+      summary: Validate
+      operationId: validate
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/blueprint"
+              properties:
+                blueprint:
+                  $ref: "#/components/schemas/blueprint"
+                build_options:
+                  $ref: "#/components/schemas/build_options"
       responses:
         '201':
           description: The blueprint is valid

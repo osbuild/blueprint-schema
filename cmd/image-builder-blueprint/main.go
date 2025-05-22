@@ -116,9 +116,10 @@ func main() {
 			panic(err)
 		}
 
-		ed := blueprint.ComposeRequest{}
+		// TODO: support bo via command line
+		bo := blueprint.BuildOptions{}
 		exporter := blueprint.NewInternalExporter(b)
-		if logs := exporter.Export(ed); logs != nil {
+		if logs := exporter.Export(bo); logs != nil {
 			fmt.Fprintln(os.Stderr, logs)
 		}
 

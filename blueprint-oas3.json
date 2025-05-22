@@ -266,6 +266,39 @@
         },
         "type": "object"
       },
+      "build_options": {
+        "additionalProperties": false,
+        "properties": {
+          "architecture": {
+            "description": "Architecture of the image. This is the architecture of the target system, not the build system.\n",
+            "enum": [
+              "x86_64",
+              "aarch64",
+              "ppc64le",
+              "s390x"
+            ],
+            "example": "x86_64",
+            "type": "string",
+            "x-enum-varnames": [
+              "ArchX86_64",
+              "ArchAarch64",
+              "ArchPPC64le",
+              "ArchS390x"
+            ],
+            "x-go-type-name": "BuildOptionsArch",
+            "x-go-type-skip-optional-pointer": true
+          },
+          "distribution": {
+            "description": "Linux OS distribution name followed by dash and version.\n",
+            "example": "fedora-13",
+            "pattern": "^[a-zA-Z0-9]+-[\\.0-9]+$",
+            "type": "string",
+            "x-go-type-skip-optional-pointer": true
+          }
+        },
+        "type": "object",
+        "x-go-name": "BuildOptions"
+      },
       "ca_cert": {
         "additionalProperties": false,
         "description": "The CA certificates to be added to the image.\n",
@@ -1519,7 +1552,7 @@
       "name": "Red Hat Image Builder Team",
       "url": "https://osbuild.org"
     },
-    "description": "Image Builder Blueprint\n\nWORK IN PROGRESS\n",
+    "description": "Image Builder Blueprint\n",
     "license": {
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
@@ -1529,14 +1562,21 @@
   },
   "openapi": "3.0.0",
   "paths": {
-    "/validate_blueprint": {
+    "/validate": {
       "post": {
-        "operationId": "validateBlueprint",
+        "operationId": "validate",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/blueprint"
+                "properties": {
+                  "blueprint": {
+                    "$ref": "#/components/schemas/blueprint"
+                  },
+                  "build_options": {
+                    "$ref": "#/components/schemas/build_options"
+                  }
+                }
               }
             }
           }
@@ -1556,7 +1596,7 @@
             "description": "An error occurred"
           }
         },
-        "summary": "Validate blueprint"
+        "summary": "Validate"
       }
     }
   },

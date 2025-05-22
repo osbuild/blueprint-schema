@@ -6,21 +6,13 @@ import (
 	"strings"
 )
 
-// ComposeRequest is used for feeding the export function with the
-// information needed to export the blueprint.
-type ComposeRequest struct {
-	Version string
-	Distro  string
-	Arch    string
-}
-
 type Logger interface {
 	Printf(format string, args ...any)
 	Println(args ...any)
 }
 
 type Exporter interface {
-	Export(request ComposeRequest) error
+	Export(bu BuildOptions) error
 }
 
 type logs struct {

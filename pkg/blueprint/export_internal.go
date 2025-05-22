@@ -28,25 +28,21 @@ func NewInternalExporter(inputBlueprint *Blueprint) *InternalExporter {
 }
 
 // ExportInternal converts the blueprint to the internal representation.
-func (e *InternalExporter) Export(ed ComposeRequest) error {
+func (e *InternalExporter) Export(bo BuildOptions) error {
 	to := &int.Blueprint{}
+
+	// Create monotonic incremental version number based on miliseconds
+	to.Version = int64ToVersion(uint64(time.Now().UTC().UnixMilli()))
 
 	to.Name = e.from.Name
 	to.Description = e.from.Description
-	if ed.Version == "" {
-		// Create monotonic incremental version number based on miliseconds
-		to.Version = int64ToVersion(uint64(time.Now().UTC().UnixMilli()))
-	} else {
-		to.Version = ed.Version
-	}
-
 	to.Packages = e.exportPackages()
 	to.EnabledModules = e.exportModules()
 	to.Groups = e.exportGroups()
 	to.Containers = e.exportContainers()
 	to.Customizations = e.exportCustomizations()
-	to.Distro = ed.Distro
-	to.Arch = ed.Arch
+	to.Distro = bo.Distribution
+	to.Arch = bo.Architecture.String()
 
 	e.to = to
 	return e.log.Errors()

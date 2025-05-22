@@ -1,5 +1,5 @@
 TINYGO?=tinygo
-SOURCES=$(shell find . -name '*.go' -name 'go.mod' -name 'go.sum' -name 'Makefile')
+SOURCES=$(shell find . \( -name '*.go' -not -name '*.gen.go' \) -or -name 'go.*' -or -name 'Makefile')
 SCHEMA_SRC=$(shell find ./oas -name '*.yaml')
 DISTDIR=dist
 SCHEMA_DST=blueprint-schema.json

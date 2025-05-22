@@ -30,6 +30,14 @@ const (
 	AnacondaUser         AnacondaModules = "org.fedoraproject.Anaconda.Modules.User"
 )
 
+// Defines values for BuildOptionsArch.
+const (
+	ArchAarch64 BuildOptionsArch = "aarch64"
+	ArchPPC64le BuildOptionsArch = "ppc64le"
+	ArchS390x   BuildOptionsArch = "s390x"
+	ArchX8664   BuildOptionsArch = "x86_64"
+)
+
 // Defines values for FSNodeState.
 const (
 	FSStateAbsent  FSNodeState = "absent"
@@ -287,6 +295,18 @@ type Blueprint struct {
 type Ignition struct {
 	union json.RawMessage
 }
+
+// BuildOptions defines model for build_options.
+type BuildOptions struct {
+	// Architecture Architecture of the image. This is the architecture of the target system, not the build system.
+	Architecture BuildOptionsArch `json:"architecture,omitempty"`
+
+	// Distribution Linux OS distribution name followed by dash and version.
+	Distribution string `json:"distribution,omitempty"`
+}
+
+// BuildOptionsArch Architecture of the image. This is the architecture of the target system, not the build system.
+type BuildOptionsArch string
 
 // CACert The CA certificates to be added to the image.
 type CACert struct {
@@ -1032,8 +1052,17 @@ type TimeDate struct {
 	Timezone string `json:"timezone"`
 }
 
-// ValidateBlueprintJSONRequestBody defines body for ValidateBlueprint for application/json ContentType.
-type ValidateBlueprintJSONRequestBody = Blueprint
+// ValidateJSONBody defines parameters for Validate.
+type ValidateJSONBody struct {
+	// Blueprint Image Builder new blueprint schema.
+	//
+	// THIS IS WORK IN PROGRESS
+	Blueprint    *Blueprint    `json:"blueprint"`
+	BuildOptions *BuildOptions `json:"build_options,omitempty"`
+}
+
+// ValidateJSONRequestBody defines body for Validate for application/json ContentType.
+type ValidateJSONRequestBody ValidateJSONBody
 
 // AsIgnitionURL returns the union data inside the Ignition as a IgnitionURL
 func (t Ignition) AsIgnitionURL() (IgnitionURL, error) {
