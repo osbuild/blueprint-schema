@@ -130,7 +130,9 @@ func (e *InternalExporter) exportCustomizations() *int.Customizations {
 	to.OpenSCAP = e.exportOpenSCAP()
 	to.Ignition = e.exportIgnition()
 	to.Files, to.Directories = e.exportFSNodes()
-	to.Repositories = e.exportRepositories()
+	to.Repositories, to.RPM = e.exportRepositories()
+	to.FIPS = &e.from.FIPS.Enabled
+	to.CACerts = e.exportCACerts()
 
 	return to
 }
@@ -596,12 +598,13 @@ func (e *InternalExporter) exportFSNodes() ([]int.FileCustomization, []int.Direc
 	return files, dirs
 }
 
-func (e *InternalExporter) exportRepositories() []int.RepositoryCustomization {
+func (e *InternalExporter) exportRepositories() ([]int.RepositoryCustomization, *int.RPMCustomization) {
 	if e.from.DNF == nil || e.from.DNF.Repositories == nil {
-		return nil
+		return nil, nil
 	}
 
 	var repos []int.RepositoryCustomization
+	var rpm *int.RPMCustomization
 	for _, repo := range e.from.DNF.Repositories {
 		burl, bmeta, bmirror, err := repo.Source.SelectUnion()
 		if err != nil {
@@ -629,7 +632,37 @@ func (e *InternalExporter) exportRepositories() []int.RepositoryCustomization {
 			Filename:       repo.Filename,
 			InstallFrom:    ptr.FromOr(repo.Usage.Install, true),
 		})
+
+		if len(repo.GPGKeys) > 0 {
+			if rpm == nil {
+				rpm = &int.RPMCustomization{
+					ImportKeys: &int.RPMImportKeys{},
+				}
+			}
+
+			rpm.ImportKeys.Files = append(rpm.ImportKeys.Files, repo.GPGKeys...)
+		}
 	}
 
-	return repos
+	return repos, rpm
+}
+
+func (e *InternalExporter) exportCACerts() *int.CACustomization {
+	if e.from.CACerts == nil {
+		return nil
+	}
+
+	var cac *int.CACustomization
+	if len(e.from.CACerts) > 0 {
+		cac = &int.CACustomization{}
+		for _, cert := range e.from.CACerts {
+			if cert.PEM == "" {
+				continue
+			}
+
+			cac.PEMCerts = append(cac.PEMCerts, cert.PEM)
+		}
+	}
+
+	return cac
 }
