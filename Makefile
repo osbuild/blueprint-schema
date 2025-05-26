@@ -68,6 +68,6 @@ build-editor: ## Build the demo-web editor
 .PHONY: clean
 clean: ## Clean up all build artifacts
 	rm -rf $(DISTDIR) blueprint-oas3*.{yaml,json} pkg/blueprint/*.gen.go
-	rm -f ./testdata/*.out.yaml ./testdata/*.validator.out ./testdata/*.validator.out
+	rm -f ./testdata/*.out.{yaml,toml,json} ./testdata/*.validator.out
 	rm -rf web/node_modules web/dist
 	@echo -e '// allow go run\npackage blueprint\ntype Blueprint struct {}' > pkg/blueprint/types.gen.go

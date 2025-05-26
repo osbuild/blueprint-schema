@@ -1,0 +1,14 @@
+name = "Blueprint example: DNF"
+description = ""
+version = "1.0.0"
+distro = ""
+
+[customizations]
+  hostname = ""
+
+  [[customizations.repositories]]
+    id = "fedora-cisco-openh264"
+    priority = 0
+    enabled = true
+    module_hotfixes = false
+    install_from = true

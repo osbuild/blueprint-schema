@@ -74,3 +74,10 @@ var _ error = (*logErrors)(nil)
 func (c *logErrors) Error() string {
 	return c.e.Error()
 }
+
+func (c *logErrors) Unwrap() []error {
+	if unwrapped, ok := c.e.(interface{ Unwrap() []error }); ok {
+		return unwrapped.Unwrap()
+	}
+	return []error{c.e}
+}

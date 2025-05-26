@@ -1,0 +1,10 @@
+name = "Blueprint example: ingition"
+description = ""
+version = "1.0.0"
+distro = ""
+
+[customizations]
+  hostname = ""
+  [customizations.ignition]
+    [customizations.ignition.embedded]
+      config = "{\n  \"ignition\": {\n    \"version\": \"3.1.0\"\n  },\n  \"storage\": {\n    \"files\": [\n      {\n        \"path\": \"/etc/hostname\",\n        \"mode\": 420,\n        \"contents\": {\n          \"source\": \"data:,myhostname\"\n        }\n      }\n    ]\n  }\n}\n"

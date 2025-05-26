@@ -1,0 +1,22 @@
+name = "Blueprint example: accounts"
+description = ""
+version = "1.0.0"
+distro = ""
+
+[customizations]
+  hostname = ""
+
+  [[customizations.group]]
+    name = "-names-starting-with-dash"
+
+  [[customizations.group]]
+    name = "all-names-longer-than-256-characters-------------------------------------- -------------------------------------------------------------------------- -------------------------------------------------------------------------- --------------------------------------------------------------------------"
+
+  [[customizations.group]]
+    name = "names-with-diakritics-žluťoučký-kůň"
+
+  [[customizations.group]]
+    name = "names with spaces"
+
+  [[customizations.group]]
+    name = "gid-0"

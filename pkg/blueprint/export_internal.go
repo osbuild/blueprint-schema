@@ -53,8 +53,11 @@ func (e *InternalExporter) Result() *int.Blueprint {
 }
 
 func (e *InternalExporter) exportPackages() []int.Package {
-	var s []int.Package
+	if e.from.DNF == nil || e.from.DNF.Packages == nil {
+		return nil
+	}
 
+	var s []int.Package
 	for _, pkg := range e.from.DNF.Packages {
 		p := splitStringEmptyN(pkg, "-", 2)
 
@@ -68,8 +71,11 @@ func (e *InternalExporter) exportPackages() []int.Package {
 }
 
 func (e *InternalExporter) exportGroups() []int.Group {
-	var s []int.Group
+	if e.from.DNF == nil || e.from.DNF.Groups == nil {
+		return nil
+	}
 
+	var s []int.Group
 	for _, pkg := range e.from.DNF.Groups {
 		s = append(s, int.Group{
 			Name: pkg,
@@ -80,8 +86,11 @@ func (e *InternalExporter) exportGroups() []int.Group {
 }
 
 func (e *InternalExporter) exportModules() []int.EnabledModule {
-	var s []int.EnabledModule
+	if e.from.DNF == nil || e.from.DNF.Modules == nil {
+		return nil
+	}
 
+	var s []int.EnabledModule
 	for _, pkg := range e.from.DNF.Modules {
 		p := splitStringEmptyN(pkg, "-", 2)
 
@@ -127,7 +136,9 @@ func (e *InternalExporter) exportCustomizations() *int.Customizations {
 	to.Ignition = e.exportIgnition()
 	to.Files, to.Directories = e.exportFSNodes()
 	to.Repositories, to.RPM = e.exportRepositories()
-	to.FIPS = &e.from.FIPS.Enabled
+	if e.from.FIPS != nil {
+		to.FIPS = &e.from.FIPS.Enabled
+	}
 	to.CACerts = e.exportCACerts()
 
 	return to
@@ -146,7 +157,7 @@ func (e *InternalExporter) exportKernel() *int.KernelCustomization {
 }
 
 func (e *InternalExporter) exportUserCustomization() []int.UserCustomization {
-	if e.from.Accounts.Users == nil {
+	if e.from.Accounts == nil || e.from.Accounts.Users == nil {
 		return nil
 	}
 
@@ -189,7 +200,7 @@ func (e *InternalExporter) exportUserCustomization() []int.UserCustomization {
 }
 
 func (e *InternalExporter) exportGroupCustomization() []int.GroupCustomization {
-	if e.from.Accounts.Groups == nil {
+	if e.from.Accounts == nil || e.from.Accounts.Groups == nil {
 		return nil
 	}
 
@@ -236,7 +247,7 @@ func (e *InternalExporter) exportLocaleCustomization() *int.LocaleCustomization 
 }
 
 func (e *InternalExporter) exportFirewallCustomization() *int.FirewallCustomization {
-	if e.from.Network.Firewall == nil || len(e.from.Network.Firewall.Services) == 0 {
+	if e.from.Network == nil || e.from.Network.Firewall == nil || len(e.from.Network.Firewall.Services) == 0 {
 		return nil
 	}
 
@@ -565,9 +576,13 @@ func (e *InternalExporter) exportFSNodes() ([]int.FileCustomization, []int.Direc
 
 		switch node.Type {
 		case FSNodeFile, "":
-			contents, err := node.Contents.String()
-			if err != nil {
-				e.log.Printf("could not parse contents of node %d: %v", i, err)
+			var contents string
+			var err error
+			if node.Contents != nil {
+				contents, err = node.Contents.String()
+				if err != nil {
+					e.log.Printf("could not parse contents of node %d: %v", i, err)
+				}
 			}
 
 			files = append(files, int.FileCustomization{

@@ -1,0 +1,16 @@
+name = "Blueprint example: installer"
+description = ""
+version = "1.0.0"
+distro = ""
+
+[customizations]
+  hostname = ""
+  installation_device = "/dev/vda"
+  [customizations.installer]
+    unattended = true
+    sudo-nopasswd = ["lzap", "%devops"]
+    [customizations.installer.kickstart]
+      contents = "# some kickstart data"
+    [customizations.installer.modules]
+      enable = ["org.fedoraproject.Anaconda.Modules.Network"]
+      disable = ["org.fedoraproject.Anaconda.Modules.Subscription"]

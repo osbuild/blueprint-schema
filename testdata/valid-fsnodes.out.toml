@@ -1,0 +1,28 @@
+name = "Blueprint example: fsnodes"
+description = ""
+version = "1.0.0"
+distro = ""
+
+[customizations]
+  hostname = ""
+
+  [[customizations.directories]]
+    path = "/var/tmp/dir"
+    user = "lzap"
+    group = "lzap"
+    mode = "750"
+    ensure_parents = true
+
+  [[customizations.files]]
+    path = "/var/tmp/file1"
+    mode = "0"
+
+  [[customizations.files]]
+    path = "/var/tmp/dir/file1"
+    mode = "640"
+    data = "---"
+
+  [[customizations.files]]
+    path = "/var/tmp/dir/file2"
+    mode = "0"
+    data = "test"

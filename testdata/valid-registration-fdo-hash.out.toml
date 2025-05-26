@@ -1,0 +1,21 @@
+# TODO: RHSM customization not yet implemented
+
+name = "Blueprint example: registration"
+description = ""
+version = "1.0.0"
+distro = ""
+
+[customizations]
+  hostname = ""
+  [customizations.fdo]
+    manufacturing_server_url = "https://192.168.122.122:8080"
+    diun_pub_key_insecure = "false"
+    diun_pub_key_hash = "94c752494c2c9dcfca3edd2f4522fa1e5c9f67e81132f32a8997c3245d4113cc"
+  [customizations.rhsm]
+    [customizations.rhsm.config]
+      [customizations.rhsm.config.dnf_plugins]
+        [customizations.rhsm.config.dnf_plugins.product_id]
+        [customizations.rhsm.config.dnf_plugins.subscription_manager]
+      [customizations.rhsm.config.subscription_manager]
+        [customizations.rhsm.config.subscription_manager.rhsm]
+        [customizations.rhsm.config.subscription_manager.rhsmcertd]

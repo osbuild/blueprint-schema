@@ -1,0 +1,15 @@
+name = "Blueprint example: fsnodes"
+description = ""
+version = "1.0.0"
+distro = ""
+
+[customizations]
+  hostname = ""
+
+  [[customizations.directories]]
+    path = "/var/tmp/dir"
+    mode = "0"
+
+  [[customizations.directories]]
+    path = "/var/tmp/dir"
+    mode = "0"

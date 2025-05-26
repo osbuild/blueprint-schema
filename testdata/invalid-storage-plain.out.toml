@@ -1,0 +1,21 @@
+name = "Blueprint example: disallowed properties for storage"
+description = ""
+version = "1.0.0"
+distro = ""
+
+[customizations]
+  hostname = ""
+  [customizations.disk]
+    type = "gpt"
+    minsize = 590558003200
+
+    [[customizations.disk.minsize]]
+      type = "plain"
+      minsize = 838860800
+      mountpoint = "/boot"
+      label = "boot"
+      fs_type = "ext4"
+
+    [[customizations.disk.minsize]]
+      type = "plain"
+      minsize = 53687091200

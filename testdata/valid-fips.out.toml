@@ -1,0 +1,8 @@
+name = "Blueprint example: FIPS"
+description = ""
+version = "1.0.0"
+distro = ""
+
+[customizations]
+  hostname = ""
+  fips = true

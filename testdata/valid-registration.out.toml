@@ -1,0 +1,21 @@
+# TODO: RHSM customization not yet implemented
+
+name = "Blueprint example: registration"
+description = ""
+version = "1.0.0"
+distro = ""
+
+[customizations]
+  hostname = ""
+  [customizations.fdo]
+    manufacturing_server_url = "http://192.168.122.122:8080"
+    diun_pub_key_insecure = "true"
+    di_mfg_string_type_mac_iface = "wg0"
+  [customizations.rhsm]
+    [customizations.rhsm.config]
+      [customizations.rhsm.config.dnf_plugins]
+        [customizations.rhsm.config.dnf_plugins.product_id]
+        [customizations.rhsm.config.dnf_plugins.subscription_manager]
+      [customizations.rhsm.config.subscription_manager]
+        [customizations.rhsm.config.subscription_manager.rhsm]
+        [customizations.rhsm.config.subscription_manager.rhsmcertd]
