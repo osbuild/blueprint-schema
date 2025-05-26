@@ -268,6 +268,7 @@
       },
       "build_options": {
         "additionalProperties": false,
+        "nullable": true,
         "properties": {
           "architecture": {
             "description": "Architecture of the image. This is the architecture of the target system, not the build system.\n",
@@ -566,12 +567,8 @@
         "x-go-type-name": "DNFSourceMirrorlist"
       },
       "error": {
-        "properties": {
-          "error": {
-            "type": "string"
-          }
-        },
-        "type": "object"
+        "type": "string",
+        "x-go-type-name": "EndpointError"
       },
       "expire_date": {
         "description": "The expiration date in the format YYYY-MM-DD. Leave empty to never expire.\n\nString-based type which accepts date (YYYY-MM-DD) or date-time (RFC3339)\nformat and only marshals into date format. This is needed for JSON/YAML compatibility\nsince YAML automatically converts strings which look like dates into time.Time.\n",
@@ -1541,6 +1538,10 @@
         },
         "type": "object"
       },
+      "text": {
+        "type": "string",
+        "x-go-type-name": "EndpointText"
+      },
       "time_date": {
         "additionalProperties": false,
         "description": "Time and date details allowing configuration of the timezone and\nNTP servers. The timezone is set by default to UTC.\n",
@@ -1585,6 +1586,50 @@
   },
   "openapi": "3.0.0",
   "paths": {
+    "/export_toml": {
+      "post": {
+        "operationId": "export_toml",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/blueprint"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "build_options": {
+                      "$ref": "#/components/schemas/build_options"
+                    },
+                    "result": {
+                      "$ref": "#/components/schemas/text"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "The blueprint is valid"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            },
+            "description": "An error occurred"
+          }
+        },
+        "summary": "Export to TOML"
+      }
+    },
     "/validate": {
       "post": {
         "operationId": "validate",
@@ -1592,23 +1637,16 @@
           "content": {
             "application/json": {
               "schema": {
-                "properties": {
-                  "blueprint": {
-                    "$ref": "#/components/schemas/blueprint"
-                  },
-                  "build_options": {
-                    "$ref": "#/components/schemas/build_options"
-                  }
-                }
+                "$ref": "#/components/schemas/blueprint"
               }
             }
           }
         },
         "responses": {
-          "201": {
+          "200": {
             "description": "The blueprint is valid"
           },
-          "500": {
+          "409": {
             "content": {
               "application/json": {
                 "schema": {

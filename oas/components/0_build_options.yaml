@@ -1,5 +1,6 @@
 ---
 type: object
+nullable: true
 x-go-name: BuildOptions
 properties:
   distribution:

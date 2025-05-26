@@ -279,6 +279,7 @@ components:
       type: object
     build_options:
       additionalProperties: false
+      nullable: true
       properties:
         architecture:
           description: |
@@ -558,10 +559,8 @@ components:
       type: object
       x-go-type-name: DNFSourceMirrorlist
     error:
-      properties:
-        error:
-          type: string
-      type: object
+      type: string
+      x-go-type-name: EndpointError
     expire_date:
       description: |
         The expiration date in the format YYYY-MM-DD. Leave empty to never expire.
@@ -1439,6 +1438,9 @@ components:
           type: array
           x-go-type-skip-optional-pointer: true
       type: object
+    text:
+      type: string
+      x-go-type-name: EndpointText
     time_date:
       additionalProperties: false
       description: |
@@ -1480,6 +1482,32 @@ info:
   version: "1.0"
 openapi: 3.0.0
 paths:
+  /export_toml:
+    post:
+      operationId: export_toml
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/blueprint'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                properties:
+                  build_options:
+                    $ref: '#/components/schemas/build_options'
+                  result:
+                    $ref: '#/components/schemas/text'
+          description: The blueprint is valid
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: An error occurred
+      summary: Export to TOML
   /validate:
     post:
       operationId: validate
@@ -1487,15 +1515,11 @@ paths:
         content:
           application/json:
             schema:
-              properties:
-                blueprint:
-                  $ref: '#/components/schemas/blueprint'
-                build_options:
-                  $ref: '#/components/schemas/build_options'
+              $ref: '#/components/schemas/blueprint'
       responses:
-        "201":
+        "200":
           description: The blueprint is valid
-        "500":
+        "409":
           content:
             application/json:
               schema:

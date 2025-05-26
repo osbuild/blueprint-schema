@@ -458,9 +458,7 @@ type DNFSourceMirrorlist struct {
 }
 
 // Error defines model for error.
-type Error struct {
-	Error *string `json:"error,omitempty"`
-}
+type Error = string
 
 // ExpireDate The expiration date in the format YYYY-MM-DD. Leave empty to never expire.
 //
@@ -1039,6 +1037,9 @@ type TailoringProfiles struct {
 	Unselected []string `json:"unselected,omitempty"`
 }
 
+// Text defines model for text.
+type Text = string
+
 // TimeDate Time and date details allowing configuration of the timezone and
 // NTP servers. The timezone is set by default to UTC.
 type TimeDate struct {
@@ -1052,17 +1053,11 @@ type TimeDate struct {
 	Timezone string `json:"timezone"`
 }
 
-// ValidateJSONBody defines parameters for Validate.
-type ValidateJSONBody struct {
-	// Blueprint Image Builder new blueprint schema.
-	//
-	// THIS IS WORK IN PROGRESS
-	Blueprint    *Blueprint    `json:"blueprint"`
-	BuildOptions *BuildOptions `json:"build_options,omitempty"`
-}
+// ExportTomlJSONRequestBody defines body for ExportToml for application/json ContentType.
+type ExportTomlJSONRequestBody = Blueprint
 
 // ValidateJSONRequestBody defines body for Validate for application/json ContentType.
-type ValidateJSONRequestBody ValidateJSONBody
+type ValidateJSONRequestBody = Blueprint
 
 // AsIgnitionURL returns the union data inside the Ignition as a IgnitionURL
 func (t Ignition) AsIgnitionURL() (IgnitionURL, error) {

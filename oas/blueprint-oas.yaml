@@ -14,16 +14,14 @@ info:
 
 components:
   schemas:
-    # top-level components must not have underscores in their names
     blueprint:
       $ref: ./components/0_blueprint.yaml
     build_options: 
       $ref: ./components/0_build_options.yaml
+    text:
+      type: string
     error:
-      type: object
-      properties:
-        error:
-          type: string
+      type: string
 
 paths:
   /validate:
@@ -34,15 +32,37 @@ paths:
         content:
           application/json:
             schema:
-              properties:
-                blueprint:
-                  $ref: "#/components/schemas/blueprint"
-                build_options:
-                  $ref: "#/components/schemas/build_options"
+              $ref: "#/components/schemas/blueprint"
       responses:
-        '201':
+        '200':
           description: The blueprint is valid
-        '500':
+        '409':
+          description: An error occurred
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+  /export_toml:
+    post:
+      summary: Export to TOML
+      operationId: export_toml
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/blueprint"
+      responses:
+        '200':
+          description: The blueprint is valid
+          content:
+            application/json:
+              schema:
+                properties:
+                  build_options:
+                    $ref: "#/components/schemas/build_options"
+                  result:
+                    $ref: "#/components/schemas/text"
+        '409':
           description: An error occurred
           content:
             application/json:

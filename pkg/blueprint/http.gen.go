@@ -12,6 +12,9 @@ import (
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
+	// Export to TOML
+	// (POST /export_toml)
+	ExportToml(w http.ResponseWriter, r *http.Request)
 	// Validate
 	// (POST /validate)
 	Validate(w http.ResponseWriter, r *http.Request)
@@ -25,6 +28,21 @@ type ServerInterfaceWrapper struct {
 }
 
 type MiddlewareFunc func(http.Handler) http.Handler
+
+// ExportToml operation middleware
+func (siw *ServerInterfaceWrapper) ExportToml(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ExportToml(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r.WithContext(ctx))
+}
 
 // Validate operation middleware
 func (siw *ServerInterfaceWrapper) Validate(w http.ResponseWriter, r *http.Request) {
@@ -155,6 +173,7 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 		ErrorHandlerFunc:   options.ErrorHandlerFunc,
 	}
 
+	m.HandleFunc("POST "+options.BaseURL+"/export_toml", wrapper.ExportToml)
 	m.HandleFunc("POST "+options.BaseURL+"/validate", wrapper.Validate)
 
 	return m

@@ -116,8 +116,8 @@ func (s *Schema) ValidateJSON(ctx context.Context, data []byte) error {
 	rvi := &openapi3filter.RequestValidationInput{
 		Request: req,
 	}
-	rb := s.doc.Paths.Find("/validate_blueprint").GetOperation(http.MethodPost).RequestBody
-	err = openapi3filter.ValidateRequestBody(context.Background(), rvi, rb.Value)
+	rb := s.doc.Paths.Find("/validate").GetOperation(http.MethodPost).RequestBody
+	err = openapi3filter.ValidateRequestBody(ctx, rvi, rb.Value)
 	if err != nil {
 		return err
 	}
