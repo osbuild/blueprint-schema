@@ -147,7 +147,7 @@ func TestFix(t *testing.T) {
 
 			var inputBlueprint *Blueprint
 			if strings.HasSuffix(input, ".json") {
-				b, err := UnmarshalJSON(inputBuf.Bytes())
+				b, err := unmarshalJSON(inputBuf.Bytes())
 				if err != nil {
 					t.Fatal(err)
 				}
