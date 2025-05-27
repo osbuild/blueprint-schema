@@ -1,7 +1,9 @@
 # only one keyboard layout supported, selecting first one
 
 name = "Blueprint example: locale"
+description = ""
 version = "1.0.0"
+distro = ""
 
 [customizations]
   [customizations.locale]

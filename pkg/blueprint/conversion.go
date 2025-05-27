@@ -12,7 +12,7 @@ type Logger interface {
 }
 
 type Exporter interface {
-	Export(bu BuildOptions) error
+	Export() error
 }
 
 type logs struct {

@@ -156,6 +156,9 @@ type Blueprint struct {
 	// Accounts Operating system user and group accounts to be created on the image.
 	Accounts *Accounts `json:"accounts,omitempty"`
 
+	// Architecture Architecture of the image. This is the architecture of the target system, not the build system.
+	Architecture BuildOptionsArch `json:"architecture,omitempty"`
+
 	// CACerts The CA certificates to be added to the image. The certificates
 	// are added to the system-wide CA trust store. The certificates are added to
 	// the /etc/pki/ca-trust/source/anchors/ directory and the update-ca-trust command
@@ -172,6 +175,9 @@ type Blueprint struct {
 	// Description The description attribute is a string that can be a longer description
 	// of the blueprint and is only used for display purposes.
 	Description string `json:"description,omitempty"`
+
+	// Distribution Linux OS distribution name followed by dash and version.
+	Distribution string `json:"distribution,omitempty"`
 
 	// DNF DNF package managers details. When using virtual provides as the
 	// package name the version glob should be *. And be aware that you will be unable
@@ -287,6 +293,9 @@ type Blueprint struct {
 	Timedate *TimeDate `json:"timedate,omitempty"`
 }
 
+// BuildOptionsArch Architecture of the image. This is the architecture of the target system, not the build system.
+type BuildOptionsArch string
+
 // Ignition Provides Ignition configuration files to be used in edge-raw-image and
 // edge-simplified-installer images. Check the RHEL for Edge butane specification for
 // a description of the supported configuration options.
@@ -296,18 +305,6 @@ type Blueprint struct {
 type Ignition struct {
 	union json.RawMessage
 }
-
-// BuildOptions defines model for build_options.
-type BuildOptions struct {
-	// Architecture Architecture of the image. This is the architecture of the target system, not the build system.
-	Architecture BuildOptionsArch `json:"architecture,omitempty"`
-
-	// Distribution Linux OS distribution name followed by dash and version.
-	Distribution string `json:"distribution,omitempty"`
-}
-
-// BuildOptionsArch Architecture of the image. This is the architecture of the target system, not the build system.
-type BuildOptionsArch string
 
 // CACert The CA certificates to be added to the image.
 type CACert struct {

@@ -1,7 +1,9 @@
 # Registration not converted
 
 name = "Blueprint example: registration"
+description = ""
 version = "1.0.0"
+distro = ""
 
 [customizations]
   [customizations.fdo]

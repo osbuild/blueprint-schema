@@ -1,7 +1,9 @@
 # network service 3 error: port number 53 cannot be disabled
 
 name = "Firewall valid example"
+description = ""
 version = "1.0.0"
+distro = ""
 
 [customizations]
   [customizations.firewall]

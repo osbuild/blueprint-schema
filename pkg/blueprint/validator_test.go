@@ -162,9 +162,8 @@ func TestFix(t *testing.T) {
 				t.Fatalf("Unknown fixture extension: %s", input)
 			}
 
-			bo := BuildOptions{}
 			exporter := NewInternalExporter(inputBlueprint)
-			exportErrors := exporter.Export(bo)
+			exportErrors := exporter.Export()
 			resultBlueprint := exporter.Result()
 			resultBlueprint.Version = "1.0.0"
 			got, err := toml.Marshal(resultBlueprint)

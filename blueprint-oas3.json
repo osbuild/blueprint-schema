@@ -162,6 +162,27 @@
           "accounts": {
             "$ref": "#/components/schemas/accounts"
           },
+          "architecture": {
+            "description": "Architecture of the image. This is the architecture of the target system, not the build system.\n",
+            "enum": [
+              "x86_64",
+              "aarch64",
+              "ppc64le",
+              "s390x",
+              "riscv64"
+            ],
+            "example": "x86_64",
+            "type": "string",
+            "x-enum-varnames": [
+              "ArchX86_64",
+              "ArchAarch64",
+              "ArchPPC64le",
+              "ArchS390x",
+              "ArchRISCV64"
+            ],
+            "x-go-type-name": "BuildOptionsArch",
+            "x-go-type-skip-optional-pointer": true
+          },
           "cacerts": {
             "description": "The CA certificates to be added to the image. The certificates\nare added to the system-wide CA trust store. The certificates are added to\nthe /etc/pki/ca-trust/source/anchors/ directory and the update-ca-trust command\nis run to update the system-wide CA trust store.\n",
             "items": {
@@ -189,6 +210,13 @@
             "type": "string",
             "x-go-type-skip-optional-pointer": true,
             "x-omitempty": true
+          },
+          "distribution": {
+            "description": "Linux OS distribution name followed by dash and version.\n",
+            "example": "fedora-13",
+            "pattern": "^[a-zA-Z0-9]+-[\\.0-9]+$",
+            "type": "string",
+            "x-go-type-skip-optional-pointer": true
           },
           "dnf": {
             "$ref": "#/components/schemas/dnf"
@@ -265,42 +293,6 @@
           }
         },
         "type": "object"
-      },
-      "build_options": {
-        "additionalProperties": false,
-        "nullable": true,
-        "properties": {
-          "architecture": {
-            "description": "Architecture of the image. This is the architecture of the target system, not the build system.\n",
-            "enum": [
-              "x86_64",
-              "aarch64",
-              "ppc64le",
-              "s390x",
-              "riscv64"
-            ],
-            "example": "x86_64",
-            "type": "string",
-            "x-enum-varnames": [
-              "ArchX86_64",
-              "ArchAarch64",
-              "ArchPPC64le",
-              "ArchS390x",
-              "ArchRISCV64"
-            ],
-            "x-go-type-name": "BuildOptionsArch",
-            "x-go-type-skip-optional-pointer": true
-          },
-          "distribution": {
-            "description": "Linux OS distribution name followed by dash and version.\n",
-            "example": "fedora-13",
-            "pattern": "^[a-zA-Z0-9]+-[\\.0-9]+$",
-            "type": "string",
-            "x-go-type-skip-optional-pointer": true
-          }
-        },
-        "type": "object",
-        "x-go-name": "BuildOptions"
       },
       "ca_cert": {
         "additionalProperties": false,
@@ -1571,9 +1563,6 @@
               "application/json": {
                 "schema": {
                   "properties": {
-                    "build_options": {
-                      "$ref": "#/components/schemas/build_options"
-                    },
                     "result": {
                       "$ref": "#/components/schemas/text"
                     }

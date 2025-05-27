@@ -11,9 +11,6 @@ import (
 )
 
 // InternalExporter is used to convert a blueprint to the internal representation.
-//
-// TODO we need a place for distro, registration and repos, likely BuildOptions:
-// https://github.com/osbuild/blueprint-schema/issues/23
 type InternalExporter struct {
 	from *Blueprint
 	to   *int.Blueprint
@@ -28,7 +25,7 @@ func NewInternalExporter(inputBlueprint *Blueprint) *InternalExporter {
 }
 
 // ExportInternal converts the blueprint to the internal representation.
-func (e *InternalExporter) Export(bo BuildOptions) error {
+func (e *InternalExporter) Export() error {
 	to := &int.Blueprint{}
 
 	// Create monotonic incremental version number based on miliseconds
@@ -41,8 +38,8 @@ func (e *InternalExporter) Export(bo BuildOptions) error {
 	to.Groups = e.exportGroups()
 	to.Containers = e.exportContainers()
 	to.Customizations = e.exportCustomizations()
-	to.Distro = bo.Distribution
-	to.Arch = bo.Architecture.String()
+	to.Distro = e.from.Distribution
+	to.Arch = e.from.Architecture.String()
 
 	e.to = to
 	return e.log.Errors()

@@ -1,6 +1,9 @@
 # error parsing device size : expected number: ""
 
+name = ""
+description = ""
 version = "1.0.0"
+distro = ""
 
 [customizations]
 

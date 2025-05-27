@@ -16,8 +16,6 @@ components:
   schemas:
     blueprint:
       $ref: ./components/0_blueprint.yaml
-    build_options:
-      $ref: ./components/0_build_options.yaml
     text:
       type: string
     error:
@@ -58,8 +56,6 @@ paths:
             application/json:
               schema:
                 properties:
-                  build_options:
-                    $ref: "#/components/schemas/build_options"
                   result:
                     $ref: "#/components/schemas/text"
         '409':

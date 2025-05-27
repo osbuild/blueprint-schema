@@ -1,5 +1,7 @@
 name = "Blueprint example: installer"
+description = ""
 version = "1.0.0"
+distro = ""
 
 [customizations]
   installation_device = "/dev/vda"

@@ -1,5 +1,7 @@
 name = "Blueprint example: hostname"
+description = ""
 version = "1.0.0"
+distro = ""
 
 [customizations]
   hostname = "inst1.example.com"

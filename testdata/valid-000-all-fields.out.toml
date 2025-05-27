@@ -5,6 +5,7 @@
 name = "Blueprint example"
 description = "A complete example of a blueprint with all possible fields"
 version = "1.0.0"
+distro = ""
 
 [[packages]]
   name = "vim"
@@ -75,30 +76,30 @@ version = "1.0.0"
     type = "gpt"
     minsize = 161061273600
 
-    [[customizations.disk.partitions]]
+    [[customizations.disk.minsize]]
       type = "plain"
       minsize = 53687091200
       mountpoint = "/"
       label = "label"
       fs_type = "ext4"
 
-    [[customizations.disk.partitions]]
+    [[customizations.disk.minsize]]
       type = "lvm"
       minsize = 53687091200
       name = "vg_name"
 
-      [[customizations.disk.partitions.logical_volumes]]
+      [[customizations.disk.minsize.logical_volumes]]
         name = "lv_name"
         minsize = 53687091200
         mountpoint = "/var"
         label = "label"
         fs_type = "ext4"
 
-    [[customizations.disk.partitions]]
+    [[customizations.disk.minsize]]
       type = "btrfs"
       minsize = 53687091200
 
-      [[customizations.disk.partitions.subvolumes]]
+      [[customizations.disk.minsize.subvolumes]]
         name = "name"
         mountpoint = "/opt/name"
   [customizations.fdo]

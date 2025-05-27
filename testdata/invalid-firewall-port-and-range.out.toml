@@ -1,5 +1,7 @@
 name = "Firewall example - port and range specified"
+description = ""
 version = "1.0.0"
+distro = ""
 
 [customizations]
   [customizations.firewall]

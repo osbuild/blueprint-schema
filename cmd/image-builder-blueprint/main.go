@@ -116,10 +116,8 @@ func main() {
 			panic(err)
 		}
 
-		// TODO: support bo via command line
-		bo := blueprint.BuildOptions{}
 		exporter := blueprint.NewInternalExporter(b)
-		if logs := exporter.Export(bo); logs != nil {
+		if logs := exporter.Export(); logs != nil {
 			fmt.Fprintln(os.Stderr, logs)
 		}
 

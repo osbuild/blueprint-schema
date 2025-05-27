@@ -23,6 +23,32 @@ properties:
     x-go-type-skip-optional-pointer: true
     x-omitempty: true
     nullable: true
+  distribution:
+    description: |
+      Linux OS distribution name followed by dash and version.
+    type: string
+    x-go-type-skip-optional-pointer: true
+    example: "fedora-13"
+    pattern: "^[a-zA-Z0-9]+-[\\.0-9]+$"
+  architecture:
+    description: |
+      Architecture of the image. This is the architecture of the target system, not the build system.
+    type: string
+    x-go-type-name: BuildOptionsArch
+    x-go-type-skip-optional-pointer: true
+    example: "x86_64"
+    enum:
+      - x86_64
+      - aarch64
+      - ppc64le
+      - s390x
+      - riscv64
+    x-enum-varnames:
+      - ArchX86_64
+      - ArchAarch64
+      - ArchPPC64le
+      - ArchS390x
+      - ArchRISCV64
   accounts:
     "$ref": "accounts.yaml"
   cacerts:
