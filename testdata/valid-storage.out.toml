@@ -1,44 +1,41 @@
 name = "Blueprint example: valid storage"
-description = ""
 version = "1.0.0"
-distro = ""
 
 [customizations]
-  hostname = ""
   [customizations.disk]
     type = "gpt"
     minsize = 590558003200
 
-    [[customizations.disk.minsize]]
+    [[customizations.disk.partitions]]
       type = "plain"
       minsize = 838860800
       mountpoint = "/boot"
       label = "boot"
       fs_type = "ext4"
 
-    [[customizations.disk.minsize]]
+    [[customizations.disk.partitions]]
       type = "plain"
       minsize = 42949672960
       mountpoint = "/"
       label = "root"
       fs_type = "xfs"
 
-    [[customizations.disk.minsize]]
+    [[customizations.disk.partitions]]
       type = "lvm"
       minsize = 96636764160
       name = "vg_data"
 
-      [[customizations.disk.minsize.logical_volumes]]
+      [[customizations.disk.partitions.logical_volumes]]
         name = "lv_name"
         minsize = 53687091200
         mountpoint = "/var"
         label = "vg_data_var"
         fs_type = "xfs"
 
-    [[customizations.disk.minsize]]
+    [[customizations.disk.partitions]]
       type = "btrfs"
       minsize = 53687091200
 
-      [[customizations.disk.minsize.subvolumes]]
+      [[customizations.disk.partitions.subvolumes]]
         name = "root"
         mountpoint = "/var/backups"

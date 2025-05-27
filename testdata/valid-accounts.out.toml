@@ -1,10 +1,7 @@
 name = "Blueprint example: accounts"
-description = ""
 version = "1.0.0"
-distro = ""
 
 [customizations]
-  hostname = ""
 
   [[customizations.user]]
     name = "lzap"
@@ -20,39 +17,21 @@ distro = ""
 
   [[customizations.user]]
     name = "dash-allowed"
-    description = ""
-    home = ""
-    shell = ""
 
   [[customizations.user]]
     name = "underscore_allowed"
-    description = ""
-    home = ""
-    shell = ""
 
   [[customizations.user]]
     name = "dot.allowed"
-    description = ""
-    home = ""
-    shell = ""
 
   [[customizations.user]]
     name = ".head-dot-allowed-too"
-    description = ""
-    home = ""
-    shell = ""
 
   [[customizations.user]]
     name = "123456789"
-    description = ""
-    home = ""
-    shell = ""
 
   [[customizations.user]]
     name = "trailing-dollar-for-samba$"
-    description = ""
-    home = ""
-    shell = ""
 
   [[customizations.group]]
     name = "operators"

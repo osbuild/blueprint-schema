@@ -110,7 +110,7 @@ func (e *InternalExporter) exportContainers() []int.Container {
 		s = append(s, int.Container{
 			Name:         container.Name,
 			Source:       container.Source,
-			TLSVerify:    &container.TLSVerify,
+			TLSVerify:    ptr.ToNilEmpty(container.TLSVerify),
 			LocalStorage: container.LocalStorage,
 		})
 	}
@@ -121,7 +121,7 @@ func (e *InternalExporter) exportContainers() []int.Container {
 func (e *InternalExporter) exportCustomizations() *int.Customizations {
 	to := &int.Customizations{}
 
-	to.Hostname = &e.from.Hostname
+	to.Hostname = ptr.ToNilEmpty(e.from.Hostname)
 	to.Kernel = e.exportKernel()
 	to.User = e.exportUserCustomization()
 	to.Group = e.exportGroupCustomization()
@@ -137,7 +137,7 @@ func (e *InternalExporter) exportCustomizations() *int.Customizations {
 	to.Files, to.Directories = e.exportFSNodes()
 	to.Repositories, to.RPM = e.exportRepositories()
 	if e.from.FIPS != nil {
-		to.FIPS = &e.from.FIPS.Enabled
+		to.FIPS = ptr.ToNilEmpty(e.from.FIPS.Enabled)
 	}
 	to.CACerts = e.exportCACerts()
 
@@ -151,9 +151,11 @@ func (e *InternalExporter) exportKernel() *int.KernelCustomization {
 
 	to := &int.KernelCustomization{}
 	to.Name = e.from.Kernel.Package
-	to.Append = strings.Join(e.from.Kernel.CmdlineAppend, " ")
+	if len(e.from.Kernel.CmdlineAppend) > 0 {
+		to.Append = strings.Join(e.from.Kernel.CmdlineAppend, " ")
+	}
 
-	return to
+	return ptr.EmptyToNil(to)
 }
 
 func (e *InternalExporter) exportUserCustomization() []int.UserCustomization {
@@ -165,22 +167,22 @@ func (e *InternalExporter) exportUserCustomization() []int.UserCustomization {
 	for _, u := range e.from.Accounts.Users {
 		uc := int.UserCustomization{}
 		uc.Name = u.Name
-		uc.Description = &u.Description
+		uc.Description = ptr.ToNilEmpty(u.Description)
 		uc.Password = u.Password
 		if len(u.SSHKeys) == 1 {
-			uc.Key = &u.SSHKeys[0]
+			uc.Key = ptr.ToNilEmpty(u.SSHKeys[0])
 		} else if len(u.SSHKeys) > 1 {
-			uc.Key = &u.SSHKeys[0]
+			uc.Key = ptr.ToNilEmpty(u.SSHKeys[0])
 			e.log.Printf("only one ssh key supported for user: %s", u.Name)
 		}
-		uc.Home = &u.Home
-		uc.Shell = &u.Shell
+		uc.Home = ptr.ToNilEmpty(u.Home)
+		uc.Shell = ptr.ToNilEmpty(u.Shell)
 		uc.Groups = u.Groups
 		if u.UID != 0 {
-			uc.UID = &u.UID
+			uc.UID = ptr.ToNilEmpty(u.UID)
 		}
 		if u.GID != 0 {
-			uc.GID = &u.GID
+			uc.GID = ptr.ToNilEmpty(u.GID)
 		}
 		if u.Expires != nil {
 			var err error
@@ -209,7 +211,7 @@ func (e *InternalExporter) exportGroupCustomization() []int.GroupCustomization {
 		gc := int.GroupCustomization{}
 		gc.Name = g.Name
 		if g.GID != 0 {
-			gc.GID = &g.GID
+			gc.GID = ptr.ToNilEmpty(g.GID)
 		}
 		s = append(s, gc)
 	}
@@ -223,7 +225,7 @@ func (e *InternalExporter) exportTimezoneCustomization() *int.TimezoneCustomizat
 	}
 
 	to := &int.TimezoneCustomization{}
-	to.Timezone = &e.from.Timedate.Timezone
+	to.Timezone = ptr.ToNilEmpty(e.from.Timedate.Timezone)
 	to.NTPServers = e.from.Timedate.NTPServers
 
 	return to
@@ -236,7 +238,7 @@ func (e *InternalExporter) exportLocaleCustomization() *int.LocaleCustomization 
 
 	to := &int.LocaleCustomization{}
 	if len(e.from.Locale.Keyboards) > 0 {
-		to.Keyboard = &e.from.Locale.Keyboards[0]
+		to.Keyboard = ptr.ToNilEmpty(e.from.Locale.Keyboards[0])
 		if len(e.from.Locale.Keyboards) > 1 {
 			e.log.Println("only one keyboard layout supported, selecting first one")
 		}
@@ -322,13 +324,9 @@ func (e *InternalExporter) exportStorage() *int.DiskCustomization {
 	to.Type = e.from.Storage.Type.String()
 	size, err := ParseSize(e.from.Storage.Minsize)
 	if err != nil {
-		e.log.Printf("error parsing size %s: %v", e.from.Storage.Minsize, err)
+		e.log.Printf("error parsing device size %s: %v", e.from.Storage.Minsize, err)
 	} else {
 		to.MinSize = size.Bytes()
-	}
-
-	if len(e.from.Storage.Partitions) == 0 {
-		return to
 	}
 
 	for i, p := range e.from.Storage.Partitions {
@@ -341,7 +339,7 @@ func (e *InternalExporter) exportStorage() *int.DiskCustomization {
 		if pp.Type == PartTypePlain {
 			size, err := ParseSize(pp.Minsize)
 			if err != nil {
-				e.log.Printf("error parsing size %q: %v", pp.Minsize, err)
+				e.log.Printf("error parsing parition size %q: %v", pp.Minsize, err)
 				continue
 			}
 
@@ -359,7 +357,7 @@ func (e *InternalExporter) exportStorage() *int.DiskCustomization {
 		} else if pl.Type == PartTypeLVM {
 			size, err := ParseSize(pl.Minsize)
 			if err != nil {
-				e.log.Printf("error parsing size %q: %v", pl.Minsize, err)
+				e.log.Printf("error parsing volume size %q: %v", pl.Minsize, err)
 				continue
 			}
 
@@ -374,7 +372,7 @@ func (e *InternalExporter) exportStorage() *int.DiskCustomization {
 			for _, lv := range pl.LogicalVolumes {
 				lvSize, err := ParseSize(lv.Minsize)
 				if err != nil {
-					e.log.Printf("error parsing size %q: %v", lv.Minsize, err)
+					e.log.Printf("error parsing LVM size %q: %v", lv.Minsize, err)
 					continue
 				}
 				lvc := int.LVCustomization{
@@ -393,7 +391,7 @@ func (e *InternalExporter) exportStorage() *int.DiskCustomization {
 		} else if pb.Type == PartTypeBTRFS {
 			size, err := ParseSize(pb.Minsize)
 			if err != nil {
-				e.log.Printf("error parsing size %q: %v", pb.Minsize, err)
+				e.log.Printf("error parsing BTRFS size %q: %v", pb.Minsize, err)
 				continue
 			}
 
@@ -415,6 +413,10 @@ func (e *InternalExporter) exportStorage() *int.DiskCustomization {
 		} else {
 			e.log.Printf("unknown partition type %q", pl.Type)
 		}
+	}
+
+	if to.Type == "" && to.MinSize == 0 && len(to.Partitions) == 0 {
+		return nil
 	}
 
 	return to
@@ -461,35 +463,45 @@ func (e *InternalExporter) exportRegistration() (*int.RHSMCustomization, *int.FD
 	if e.from.Registration == nil {
 		return nil, nil
 	}
+	r := e.from.Registration
 
 	var fdo *int.FDOCustomization
-	if e.from.Registration.RegistrationFDO != nil {
+	if r.RegistrationFDO != nil {
 		fdo = &int.FDOCustomization{}
-		fdo.DiMfgStringTypeMacIface = e.from.Registration.RegistrationFDO.DiMfgStringTypeMacIface
-		fdo.DiunPubKeyHash = e.from.Registration.RegistrationFDO.DiunPubKeyHash
-		fdo.DiunPubKeyInsecure = strconv.FormatBool(e.from.Registration.RegistrationFDO.DiunPubKeyInsecure)
-		fdo.DiunPubKeyRootCerts = e.from.Registration.RegistrationFDO.DiunPubKeyRootCerts
-		fdo.ManufacturingServerURL = e.from.Registration.RegistrationFDO.ManufacturingServerURL
+		fdo.DiMfgStringTypeMacIface = r.RegistrationFDO.DiMfgStringTypeMacIface
+		fdo.DiunPubKeyHash = r.RegistrationFDO.DiunPubKeyHash
+		fdo.DiunPubKeyInsecure = strconv.FormatBool(r.RegistrationFDO.DiunPubKeyInsecure)
+		fdo.DiunPubKeyRootCerts = r.RegistrationFDO.DiunPubKeyRootCerts
+		fdo.ManufacturingServerURL = r.RegistrationFDO.ManufacturingServerURL
 	}
 
 	var rhsm *int.RHSMCustomization
-	if e.from.Registration.RegistrationRedHat != nil {
+	if r.RegistrationRedHat != nil && r.RegistrationRedHat.RegistrationRHSM != nil {
 		rhsm = &int.RHSMCustomization{
 			Config: &int.RHSMConfig{
 				SubscriptionManager: &int.SubManConfig{
-					RHSMConfig:      &int.SubManRHSMConfig{},
-					RHSMCertdConfig: &int.SubManRHSMCertdConfig{},
+					RHSMConfig: &int.SubManRHSMConfig{
+						ManageRepos:          r.RegistrationRedHat.RegistrationRHSM.RepositoryManagement,
+						AutoEnableYumPlugins: r.RegistrationRedHat.RegistrationRHSM.AutoEnable,
+					},
+					RHSMCertdConfig: &int.SubManRHSMCertdConfig{
+						AutoRegistration: r.RegistrationRedHat.RegistrationRHSM.AutoRegistration,
+					},
 				},
 				DNFPlugins: &int.SubManDNFPluginsConfig{
-					ProductID:           &int.DNFPluginConfig{},
-					SubscriptionManager: &int.DNFPluginConfig{},
+					ProductID: &int.DNFPluginConfig{
+						Enabled: r.RegistrationRedHat.RegistrationRHSM.ProductPluginEnabled,
+					},
+					SubscriptionManager: &int.DNFPluginConfig{
+						Enabled: r.RegistrationRedHat.RegistrationRHSM.Enabled,
+					},
 				},
 			},
 		}
-		e.log.Println("TODO: RHSM customization not yet implemented")
+		e.log.Println("Registration not converted")
 	}
 
-	return rhsm, fdo
+	return ptr.EmptyToNil(rhsm), ptr.EmptyToNil(fdo)
 }
 
 func (e *InternalExporter) exportOpenSCAP() *int.OpenSCAPCustomization {
@@ -522,7 +534,7 @@ func (e *InternalExporter) exportOpenSCAP() *int.OpenSCAPCustomization {
 		}
 	}
 
-	return to
+	return ptr.EmptyToNil(to)
 }
 
 func (e *InternalExporter) exportIgnition() *int.IgnitionCustomization {
@@ -547,7 +559,7 @@ func (e *InternalExporter) exportIgnition() *int.IgnitionCustomization {
 		e.log.Printf("could not parse ignition: %v", err)
 	}
 
-	return to
+	return ptr.EmptyToNil(to)
 }
 
 // parseUGID parses a user/group ID from a string. It returns the
@@ -633,13 +645,13 @@ func (e *InternalExporter) exportRepositories() ([]int.RepositoryCustomization, 
 			BaseURLs:       burl.URLs,
 			Metalink:       bmeta.Metalink,
 			Mirrorlist:     bmirror.Mirrorlist,
-			Priority:       &repo.Priority,
+			Priority:       ptr.ToNilEmpty(repo.Priority),
 			Enabled:        ptr.Or(repo.Usage.Configure, true),
-			SSLVerify:      repo.SSLVerify,
+			SSLVerify:      ptr.Or(repo.SSLVerify, true),
 			GPGKeys:        repo.GPGKeys,
 			GPGCheck:       repo.GPGCheck,
 			RepoGPGCheck:   repo.GPGCheckRepo,
-			ModuleHotfixes: &repo.ModuleHotfixes,
+			ModuleHotfixes: ptr.ToNilEmpty(repo.ModuleHotfixes),
 			Filename:       repo.Filename,
 			InstallFrom:    ptr.FromOr(repo.Usage.Install, true),
 		})
@@ -655,7 +667,7 @@ func (e *InternalExporter) exportRepositories() ([]int.RepositoryCustomization, 
 		}
 	}
 
-	return repos, rpm
+	return repos, ptr.EmptyToNil(rpm)
 }
 
 func (e *InternalExporter) exportCACerts() *int.CACustomization {
@@ -663,17 +675,17 @@ func (e *InternalExporter) exportCACerts() *int.CACustomization {
 		return nil
 	}
 
-	var cac *int.CACustomization
+	var to *int.CACustomization
 	if len(e.from.CACerts) > 0 {
-		cac = &int.CACustomization{}
+		to = &int.CACustomization{}
 		for _, cert := range e.from.CACerts {
 			if cert.PEM == "" {
 				continue
 			}
 
-			cac.PEMCerts = append(cac.PEMCerts, cert.PEM)
+			to.PEMCerts = append(to.PEMCerts, cert.PEM)
 		}
 	}
 
-	return cac
+	return to
 }

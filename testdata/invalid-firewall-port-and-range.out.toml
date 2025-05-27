@@ -1,10 +1,7 @@
 name = "Firewall example - port and range specified"
-description = ""
 version = "1.0.0"
-distro = ""
 
 [customizations]
-  hostname = ""
   [customizations.firewall]
     ports = ["1301/tcp"]
     [customizations.firewall.services]

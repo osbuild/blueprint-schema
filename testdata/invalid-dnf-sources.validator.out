@@ -12,13 +12,13 @@ Schema:
       },
       "gpg_check": {
         "default": true,
-        "description": "Enable GPG check for the repository. Enabled by default.",
+        "description": "Enable GPG check for the repository. GPG key(s) must be provided. Disabled by default.",
         "type": "boolean",
         "x-go-name": "GPGCheck"
       },
       "gpg_check_repo": {
         "default": true,
-        "description": "Enable GPG check for the repository metadata. Enabled by default. This is different from gpg_check, which is for the packages.\nThis is useful for third-party repositories that do not provide GPG keys for the repository metadata.",
+        "description": "Enable GPG check for the repository metadata. Disabled by default. This is different from gpg_check, which is for the packages.\nThis is useful for third-party repositories that do not provide GPG keys for the repository metadata.",
         "type": "boolean",
         "x-go-name": "GPGCheckRepo"
       },

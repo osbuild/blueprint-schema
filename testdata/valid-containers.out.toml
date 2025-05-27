@@ -1,12 +1,8 @@
 name = "Blueprint example: containers"
-description = ""
 version = "1.0.0"
-distro = ""
 
 [[containers]]
   source = "quay.io/fedora/fedora:latest"
   name = "fedora"
-  tls-verify = false
 
 [customizations]
-  hostname = ""

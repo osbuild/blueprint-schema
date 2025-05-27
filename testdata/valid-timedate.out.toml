@@ -1,10 +1,7 @@
 name = "Blueprint example: timedate"
-description = ""
 version = "1.0.0"
-distro = ""
 
 [customizations]
-  hostname = ""
   [customizations.timezone]
     timezone = "Europe/Prague"
     ntpservers = ["0.north-america.pool.ntp.org", "1.north-america.pool.ntp.org"]

@@ -7,30 +7,20 @@ description: |
   install the package, add it to the packages section in the blueprint.
   The customization is not supported on Fedora distribution images.
 x-go-name: RegistrationRHSM
-required:
-- enabled
-- product_plugin_enabled
-- repository_management
-- auto_registration
 properties:
   auto_registration:
-    description: Enabled auto_registration plugin configuration.
-    default: true
+    description: Enabled auto_registration rhsmcertd configuration in rhsm.conf.
     type: boolean
-    x-go-type-skip-optional-pointer: true
+  auto_enable:
+    description: Enabled auto_enable_yum_plugins rhsm configuration in rhsm.conf.
+    type: boolean
   enabled:
-    description: Enables the subscription-manager DNF plugin.
-    default: true
+    description: Enables the subscription-manager dnf plugin.
     type: boolean
-    x-go-type-skip-optional-pointer: true
   product_plugin_enabled:
-    description: Enables the product-id DNF plugin.
-    default: true
+    description: Enables the product-id dnf plugin.
     type: boolean
-    x-go-type-skip-optional-pointer: true
   repository_management:
-    description: Enabled repository_management plugin configuration.
-    default: true
+    description: Enabled repository_management rhsm configuration in rhsm.conf.
     type: boolean
-    x-go-type-skip-optional-pointer: true
 additionalProperties: false

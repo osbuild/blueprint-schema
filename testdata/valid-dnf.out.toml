@@ -1,7 +1,5 @@
 name = "Blueprint example: DNF"
-description = ""
 version = "1.0.0"
-distro = ""
 
 [[packages]]
   name = "mosh"
@@ -20,18 +18,15 @@ distro = ""
   name = "text-internet"
 
 [customizations]
-  hostname = ""
 
   [[customizations.repositories]]
     id = "fedora-cisco-openh264"
     gpgkeys = ["file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch"]
     metalink = "https://mirrors.fedoraproject.org/metalink?repo=fedora-cisco-openh264-$releasever&arch=$basearch"
     name = "Fedora $releasever openh264 (From Cisco) - $basearch"
-    priority = 0
     enabled = true
     repo_gpgcheck = false
     sslverify = true
-    module_hotfixes = false
     install_from = true
   [customizations.rpm]
     [customizations.rpm.import_keys]

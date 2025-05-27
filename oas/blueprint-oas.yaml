@@ -16,7 +16,7 @@ components:
   schemas:
     blueprint:
       $ref: ./components/0_blueprint.yaml
-    build_options: 
+    build_options:
       $ref: ./components/0_build_options.yaml
     text:
       type: string

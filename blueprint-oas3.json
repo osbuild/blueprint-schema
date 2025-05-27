@@ -276,7 +276,8 @@
               "x86_64",
               "aarch64",
               "ppc64le",
-              "s390x"
+              "s390x",
+              "riscv64"
             ],
             "example": "x86_64",
             "type": "string",
@@ -284,7 +285,8 @@
               "ArchX86_64",
               "ArchAarch64",
               "ArchPPC64le",
-              "ArchS390x"
+              "ArchS390x",
+              "ArchRISCV64"
             ],
             "x-go-type-name": "BuildOptionsArch",
             "x-go-type-skip-optional-pointer": true
@@ -425,13 +427,13 @@
           },
           "gpg_check": {
             "default": true,
-            "description": "Enable GPG check for the repository. Enabled by default.",
+            "description": "Enable GPG check for the repository. GPG key(s) must be provided. Disabled by default.",
             "type": "boolean",
             "x-go-name": "GPGCheck"
           },
           "gpg_check_repo": {
             "default": true,
-            "description": "Enable GPG check for the repository metadata. Enabled by default. This is different from gpg_check, which is for the packages.\nThis is useful for third-party repositories that do not provide GPG keys for the repository metadata.",
+            "description": "Enable GPG check for the repository metadata. Disabled by default. This is different from gpg_check, which is for the packages.\nThis is useful for third-party repositories that do not provide GPG keys for the repository metadata.",
             "type": "boolean",
             "x-go-name": "GPGCheckRepo"
           },
@@ -567,8 +569,7 @@
         "x-go-type-name": "DNFSourceMirrorlist"
       },
       "error": {
-        "type": "string",
-        "x-go-type-name": "EndpointError"
+        "type": "string"
       },
       "expire_date": {
         "description": "The expiration date in the format YYYY-MM-DD. Leave empty to never expire.\n\nString-based type which accepts date (YYYY-MM-DD) or date-time (RFC3339)\nformat and only marshals into date format. This is needed for JSON/YAML compatibility\nsince YAML automatically converts strings which look like dates into time.Time.\n",
@@ -1306,37 +1307,27 @@
         "additionalProperties": false,
         "description": "Subscription manager details (internal use only). The customization\nexpects that subscription-manager package is installed in the image, which\nis by default part of the RHEL distribution bootable images. To explicitly\ninstall the package, add it to the packages section in the blueprint.\nThe customization is not supported on Fedora distribution images.\n",
         "properties": {
+          "auto_enable": {
+            "description": "Enabled auto_enable_yum_plugins rhsm configuration in rhsm.conf.",
+            "type": "boolean"
+          },
           "auto_registration": {
-            "default": true,
-            "description": "Enabled auto_registration plugin configuration.",
-            "type": "boolean",
-            "x-go-type-skip-optional-pointer": true
+            "description": "Enabled auto_registration rhsmcertd configuration in rhsm.conf.",
+            "type": "boolean"
           },
           "enabled": {
-            "default": true,
-            "description": "Enables the subscription-manager DNF plugin.",
-            "type": "boolean",
-            "x-go-type-skip-optional-pointer": true
+            "description": "Enables the subscription-manager dnf plugin.",
+            "type": "boolean"
           },
           "product_plugin_enabled": {
-            "default": true,
-            "description": "Enables the product-id DNF plugin.",
-            "type": "boolean",
-            "x-go-type-skip-optional-pointer": true
+            "description": "Enables the product-id dnf plugin.",
+            "type": "boolean"
           },
           "repository_management": {
-            "default": true,
-            "description": "Enabled repository_management plugin configuration.",
-            "type": "boolean",
-            "x-go-type-skip-optional-pointer": true
+            "description": "Enabled repository_management rhsm configuration in rhsm.conf.",
+            "type": "boolean"
           }
         },
-        "required": [
-          "enabled",
-          "product_plugin_enabled",
-          "repository_management",
-          "auto_registration"
-        ],
         "type": "object",
         "x-go-name": "RegistrationRHSM"
       },
@@ -1516,8 +1507,7 @@
         "type": "object"
       },
       "text": {
-        "type": "string",
-        "x-go-type-name": "EndpointText"
+        "type": "string"
       },
       "time_date": {
         "additionalProperties": false,

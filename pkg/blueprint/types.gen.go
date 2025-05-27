@@ -34,6 +34,7 @@ const (
 const (
 	ArchAarch64 BuildOptionsArch = "aarch64"
 	ArchPPC64le BuildOptionsArch = "ppc64le"
+	ArchRISCV64 BuildOptionsArch = "riscv64"
 	ArchS390x   BuildOptionsArch = "s390x"
 	ArchX8664   BuildOptionsArch = "x86_64"
 )
@@ -371,10 +372,10 @@ type DNFRepository struct {
 	// extension.
 	Filename string `json:"filename,omitempty"`
 
-	// GPGCheck Enable GPG check for the repository. Enabled by default.
+	// GPGCheck Enable GPG check for the repository. GPG key(s) must be provided. Disabled by default.
 	GPGCheck *bool `json:"gpg_check,omitempty"`
 
-	// GPGCheckRepo Enable GPG check for the repository metadata. Enabled by default. This is different from gpg_check, which is for the packages.
+	// GPGCheckRepo Enable GPG check for the repository metadata. Disabled by default. This is different from gpg_check, which is for the packages.
 	// This is useful for third-party repositories that do not provide GPG keys for the repository metadata.
 	GPGCheckRepo *bool `json:"gpg_check_repo,omitempty"`
 
@@ -930,17 +931,20 @@ type RegistrationRedHat struct {
 // install the package, add it to the packages section in the blueprint.
 // The customization is not supported on Fedora distribution images.
 type RegistrationRHSM struct {
-	// AutoRegistration Enabled auto_registration plugin configuration.
-	AutoRegistration bool `json:"auto_registration"`
+	// AutoEnable Enabled auto_enable_yum_plugins rhsm configuration in rhsm.conf.
+	AutoEnable *bool `json:"auto_enable,omitempty"`
 
-	// Enabled Enables the subscription-manager DNF plugin.
-	Enabled bool `json:"enabled"`
+	// AutoRegistration Enabled auto_registration rhsmcertd configuration in rhsm.conf.
+	AutoRegistration *bool `json:"auto_registration,omitempty"`
 
-	// ProductPluginEnabled Enables the product-id DNF plugin.
-	ProductPluginEnabled bool `json:"product_plugin_enabled"`
+	// Enabled Enables the subscription-manager dnf plugin.
+	Enabled *bool `json:"enabled,omitempty"`
 
-	// RepositoryManagement Enabled repository_management plugin configuration.
-	RepositoryManagement bool `json:"repository_management"`
+	// ProductPluginEnabled Enables the product-id dnf plugin.
+	ProductPluginEnabled *bool `json:"product_plugin_enabled,omitempty"`
+
+	// RepositoryManagement Enabled repository_management rhsm configuration in rhsm.conf.
+	RepositoryManagement *bool `json:"repository_management,omitempty"`
 }
 
 // Storage Disk partitioning details. Not available for installer-based images.

@@ -1,0 +1,45 @@
+#
+# A complete example of a blueprint with all possible fields.
+#
+---
+fips:
+dnf:
+  packages:
+  groups:
+  import_keys:
+  modules:
+  repositories:
+    - id: "one"
+      source:
+      usage:
+    - id: "two"
+containers:
+kernel:
+  cmdline_append:
+registration:
+  redhat:
+    subscription_manager:
+    insights:
+    connector:
+  fdo:
+network:
+  firewall:
+    services:
+accounts:
+  users:
+    - name: "user"
+      ssh_keys:
+  groups:
+timedate:
+locale:
+systemd:
+fsnodes:
+ignition:
+installer:
+  anaconda:
+  coreos:
+cacerts:
+openscap:
+  tailoring:
+storage:
+  partitions:

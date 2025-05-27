@@ -22,9 +22,11 @@ properties:
       - aarch64
       - ppc64le
       - s390x
+      - riscv64
     x-enum-varnames:
       - ArchX86_64
       - ArchAarch64
       - ArchPPC64le
       - ArchS390x
+      - ArchRISCV64
 additionalProperties: false

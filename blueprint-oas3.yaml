@@ -289,6 +289,7 @@ components:
           - aarch64
           - ppc64le
           - s390x
+          - riscv64
           example: x86_64
           type: string
           x-enum-varnames:
@@ -296,6 +297,7 @@ components:
           - ArchAarch64
           - ArchPPC64le
           - ArchS390x
+          - ArchRISCV64
           x-go-type-name: BuildOptionsArch
           x-go-type-skip-optional-pointer: true
         distribution:
@@ -437,13 +439,14 @@ components:
           x-go-type-skip-optional-pointer: true
         gpg_check:
           default: true
-          description: Enable GPG check for the repository. Enabled by default.
+          description: Enable GPG check for the repository. GPG key(s) must be provided.
+            Disabled by default.
           type: boolean
           x-go-name: GPGCheck
         gpg_check_repo:
           default: true
           description: |-
-            Enable GPG check for the repository metadata. Enabled by default. This is different from gpg_check, which is for the packages.
+            Enable GPG check for the repository metadata. Disabled by default. This is different from gpg_check, which is for the packages.
             This is useful for third-party repositories that do not provide GPG keys for the repository metadata.
           type: boolean
           x-go-name: GPGCheckRepo
@@ -560,7 +563,6 @@ components:
       x-go-type-name: DNFSourceMirrorlist
     error:
       type: string
-      x-go-type-name: EndpointError
     expire_date:
       description: |
         The expiration date in the format YYYY-MM-DD. Leave empty to never expire.
@@ -1231,31 +1233,21 @@ components:
         install the package, add it to the packages section in the blueprint.
         The customization is not supported on Fedora distribution images.
       properties:
+        auto_enable:
+          description: Enabled auto_enable_yum_plugins rhsm configuration in rhsm.conf.
+          type: boolean
         auto_registration:
-          default: true
-          description: Enabled auto_registration plugin configuration.
+          description: Enabled auto_registration rhsmcertd configuration in rhsm.conf.
           type: boolean
-          x-go-type-skip-optional-pointer: true
         enabled:
-          default: true
-          description: Enables the subscription-manager DNF plugin.
+          description: Enables the subscription-manager dnf plugin.
           type: boolean
-          x-go-type-skip-optional-pointer: true
         product_plugin_enabled:
-          default: true
-          description: Enables the product-id DNF plugin.
+          description: Enables the product-id dnf plugin.
           type: boolean
-          x-go-type-skip-optional-pointer: true
         repository_management:
-          default: true
-          description: Enabled repository_management plugin configuration.
+          description: Enabled repository_management rhsm configuration in rhsm.conf.
           type: boolean
-          x-go-type-skip-optional-pointer: true
-      required:
-      - enabled
-      - product_plugin_enabled
-      - repository_management
-      - auto_registration
       type: object
       x-go-name: RegistrationRHSM
     storage:
@@ -1440,7 +1432,6 @@ components:
       type: object
     text:
       type: string
-      x-go-type-name: EndpointText
     time_date:
       additionalProperties: false
       description: |

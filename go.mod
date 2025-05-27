@@ -4,7 +4,17 @@ go 1.23.0
 
 toolchain go1.23.7
 
-require github.com/getkin/kin-openapi v0.131.0
+replace github.com/osbuild/blueprint => ../blueprint
+
+require (
+	github.com/BurntSushi/toml v1.5.1-0.20250403130103-3d3abc24416a
+	github.com/gabriel-vasile/mimetype v1.4.2
+	github.com/getkin/kin-openapi v0.131.0
+	github.com/google/go-cmp v0.7.0
+	github.com/oapi-codegen/runtime v1.1.1
+	github.com/osbuild/blueprint v1.6.0
+	sigs.k8s.io/yaml v1.4.0
+)
 
 require (
 	github.com/apapsch/go-jsonmerge/v2 v2.0.0 // indirect
@@ -23,13 +33,4 @@ require (
 	github.com/perimeterx/marshmallow v1.1.5 // indirect
 	golang.org/x/net v0.35.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-)
-
-require (
-	github.com/BurntSushi/toml v1.5.1-0.20250403130103-3d3abc24416a
-	github.com/gabriel-vasile/mimetype v1.4.2
-	github.com/google/go-cmp v0.7.0
-	github.com/oapi-codegen/runtime v1.1.1
-	github.com/osbuild/blueprint v1.6.0
-	sigs.k8s.io/yaml v1.4.0
 )

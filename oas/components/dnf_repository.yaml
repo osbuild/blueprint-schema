@@ -32,12 +32,12 @@ properties:
     maxLength: 256
     x-go-type-skip-optional-pointer: true
   gpg_check:
-    description: Enable GPG check for the repository. Enabled by default.
+    description: Enable GPG check for the repository. GPG key(s) must be provided. Disabled by default.
     default: true
     type: boolean
     x-go-name: GPGCheck
   gpg_check_repo:
-    description: Enable GPG check for the repository metadata. Enabled by default.
+    description: Enable GPG check for the repository metadata. Disabled by default.
       This is different from gpg_check, which is for the packages.
 
       This is useful for third-party repositories that do not provide

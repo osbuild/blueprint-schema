@@ -1,10 +1,7 @@
 name = "Blueprint example: installer"
-description = ""
 version = "1.0.0"
-distro = ""
 
 [customizations]
-  hostname = ""
   [customizations.installer]
     unattended = true
     [customizations.installer.modules]

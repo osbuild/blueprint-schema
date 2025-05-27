@@ -1,11 +1,10 @@
 # only one keyboard layout supported, selecting first one
 # network service 4 error: port number 1313 cannot be disabled
-# TODO: RHSM customization not yet implemented
+# Registration not converted
 
 name = "Blueprint example"
 description = "A complete example of a blueprint with all possible fields"
 version = "1.0.0"
-distro = ""
 
 [[packages]]
   name = "vim"
@@ -44,7 +43,6 @@ distro = ""
 
   [[customizations.user]]
     name = "lzap"
-    description = ""
     password = ""
     key = "ssh-key 1234"
     home = "/home/lzap"
@@ -77,30 +75,30 @@ distro = ""
     type = "gpt"
     minsize = 161061273600
 
-    [[customizations.disk.minsize]]
+    [[customizations.disk.partitions]]
       type = "plain"
       minsize = 53687091200
       mountpoint = "/"
       label = "label"
       fs_type = "ext4"
 
-    [[customizations.disk.minsize]]
+    [[customizations.disk.partitions]]
       type = "lvm"
       minsize = 53687091200
       name = "vg_name"
 
-      [[customizations.disk.minsize.logical_volumes]]
+      [[customizations.disk.partitions.logical_volumes]]
         name = "lv_name"
         minsize = 53687091200
         mountpoint = "/var"
         label = "label"
         fs_type = "ext4"
 
-    [[customizations.disk.minsize]]
+    [[customizations.disk.partitions]]
       type = "btrfs"
       minsize = 53687091200
 
-      [[customizations.disk.minsize.subvolumes]]
+      [[customizations.disk.partitions.subvolumes]]
         name = "name"
         mountpoint = "/opt/name"
   [customizations.fdo]
@@ -141,18 +139,15 @@ distro = ""
     gpgkeys = ["file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch"]
     metalink = "https://mirrors.fedoraproject.org/metalink?repo=fedora-cisco-openh264-$releasever&arch=$basearch"
     name = "Fedora $releasever openh264 (From Cisco) - $basearch"
-    priority = 0
     enabled = true
     repo_gpgcheck = false
     sslverify = true
-    module_hotfixes = false
     install_from = true
 
   [[customizations.repositories]]
     id = "empty-repo"
-    priority = 0
     enabled = true
-    module_hotfixes = false
+    sslverify = true
     install_from = true
   [customizations.installer]
     unattended = true
@@ -169,9 +164,13 @@ distro = ""
     [customizations.rhsm.config]
       [customizations.rhsm.config.dnf_plugins]
         [customizations.rhsm.config.dnf_plugins.product_id]
+          enabled = true
         [customizations.rhsm.config.dnf_plugins.subscription_manager]
+          enabled = true
       [customizations.rhsm.config.subscription_manager]
         [customizations.rhsm.config.subscription_manager.rhsm]
+          manage_repos = true
         [customizations.rhsm.config.subscription_manager.rhsmcertd]
+          auto_registration = true
   [customizations.cacerts]
     pem_certs = ["pem encoded cert"]

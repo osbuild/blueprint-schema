@@ -10,6 +10,15 @@ func To[T any](value T) *T {
 	return &value
 }
 
+// ToNilEmpty returns a pointer to the given value if it is not equal to
+// the zero value of type T. If it is equal to the zero value, it returns nil.
+func ToNilEmpty[T comparable](value T) *T {
+	if value == *new(T) {
+		return nil
+	}
+	return &value
+}
+
 // ToErr returns a pointer to the given value and error which is unchanged.
 func ToErr[T any](value T, e error) (*T, error) {
 	return &value, e
@@ -48,4 +57,25 @@ func FromOrEmpty[T any](ref *T) (value T) {
 		value = *new(T)
 	}
 	return
+}
+
+// IsZero checks if the pointer is nil or if it points to a zero value of type T.
+// It returns true if the pointer is nil or if the value it points to is
+// equal to the zero value of type T.
+func IsZero[T comparable](value *T) bool {
+	if value == nil {
+		return true
+	}
+
+	return *value == *new(T)
+}
+
+// EmptyToNil checks if the pointer is nil or if it points to a zero value of type T.
+// If it is nil or points to a zero value, it returns nil. Otherwise, it returns
+// a pointer to the value it points to.
+func EmptyToNil[T comparable](value *T) *T {
+	if value == nil || *value == *new(T) {
+		return nil
+	}
+	return value
 }

@@ -1,0 +1,20 @@
+# error parsing device size : expected number: ""
+
+version = "1.0.0"
+
+[customizations]
+
+  [[customizations.user]]
+    name = "user"
+
+  [[customizations.repositories]]
+    id = "one"
+    enabled = true
+    sslverify = true
+    install_from = true
+
+  [[customizations.repositories]]
+    id = "two"
+    enabled = true
+    sslverify = true
+    install_from = true
