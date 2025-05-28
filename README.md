@@ -13,6 +13,10 @@ This repository contains the common blueprint JSON Schema and Go types for Image
 * **CRC Blueprint**: The blueprint as it exists in [image-builder-crc](https://github.com/osbuild/image-builder-crc), is user-facing in the service API, and is documented on osbuild.org.  This is very close but sometimes slightly different from the Blueprint.
 * **Images Blueprint**: The format and code that currently exists in [osbuild/images](https://github.com/osbuild/images) in `pkg/blueprint`, which was never meant to be user-facing, but through sloppiness (on my part as well) initially (but not anymore) ended up being the user-facing blueprint in bootc-image-builder and, for a short period, ib-cli.  This slightly differs from the Old Schema in that it was more aggressive in dropping deprecated options (like SSHKey), because the user-facing blueprints (Old and CRC) were responsible for backwards compatibility.
 
+### Schema source
+
+All schema source files are in `oas/` directory, each component resides in its own YAML file in `oas/components`. Make sure to create component for each object that is supposed to be a Go type (`struct`). There is a README in the `oas/` directory with some tips on how to write OAS3 schemas.
+
 ### Schema files
 
 * `blueprint-oas3.yaml` - OpenAPI 3.0 schema, the blueprint document is at `#/components/schemas/blueprint`
@@ -20,10 +24,6 @@ This repository contains the common blueprint JSON Schema and Go types for Image
 * `blueprint-oas3-ext.json` - the schema with additional "extensions" which would confuse Go code generator but are useful for validation purposes, they are defined in `oas/extensions`
 
 All the mentioned files are generated using `make schema`
-
-### Schema source
-
-All schema source files are in `oas/` directory, each component resides in its own YAML file in `oas/components`. Make sure to create component for each object that is supposed to be a Go type (`struct`). There is a README in the `oas/` directory with some tips on how to write OAS3 schemas.
 
 ### Go code
 
