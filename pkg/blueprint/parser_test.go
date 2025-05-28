@@ -82,7 +82,7 @@ func TestReadJSONWriteYAML(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	
+
 	if cmp.Diff(string(out), in) != "" {
 		t.Fatalf("Unexpected JSON output: %s", out)
 	}
@@ -113,5 +113,192 @@ func TestConvertYAMLtoJSON(t *testing.T) {
 
 	if cmp.Diff(string(out), want) != "" {
 		t.Fatalf("Unexpected JSON output: %s", out)
+	}
+}
+
+func TestUnmarshalYAMLMultipleDocuments(t *testing.T) {
+	tc := []struct {
+		name        string
+		in          string
+		want        string
+		wantErr     bool
+		errContains string
+	}{
+		{
+			name: "simple",
+			in: `
+name: test1
+---
+name: test2
+`,
+			want: `
+name: test2
+`,
+		},
+		{
+			name: "three",
+			in: `
+name: test1
+---
+name: test2
+---
+name: test3
+`,
+			want: `
+name: test3
+`,
+		},
+		{
+			name: "two unique",
+			in: `
+name: test1
+description: "desc1"
+---
+name: test2
+`,
+			want: `
+name: test2
+description: "desc1"
+`,
+		},
+		{
+			name: "tail",
+			in: `
+name: test1
+---
+`,
+			want: `
+name: test1
+`,
+		},
+		{
+			name: "with header",
+			in: `
+---
+name: test1
+---
+name: test2
+`,
+			want: `
+name: test2
+`,
+		},
+		{
+			name: "with header and dots",
+			in: `
+---
+name: test1
+...
+---
+name: test2
+`,
+			want: `
+name: test2
+`,
+		},
+		{
+			name: "empty string",
+			in: `
+name: test1
+---
+name: ""
+`,
+			want: `
+name: "test1"
+`,
+		},
+		{
+			name: "slices",
+			in: `
+accounts:
+  users:
+    - name: "user1"
+---
+accounts:
+  users:
+    - name: "user2"
+`,
+			want: `
+accounts:
+  users:
+    - name: "user1"
+    - name: "user2"
+`,
+		},
+		{
+			name: "slices with empty",
+			in: `
+accounts:
+  users:
+    - name: "user1"
+---
+accounts:
+  users:
+`,
+			want: `
+accounts:
+  users:
+    - name: "user1"
+`,
+		},
+		{
+			name: "bool positive",
+			in: `
+fips:
+  enabled: false
+---
+fips:
+  enabled: true
+`,
+			want: `
+fips:
+  enabled: true
+`,
+		},
+		{
+			name: "bool negative",
+			in: `
+fips:
+  enabled: true
+---
+fips:
+  enabled: false
+`,
+			want: `
+fips:
+  enabled: true # TODO: this is confusing pointer must be used for all bools, strings and numbers
+`,
+		},
+		{
+			name: "bool with empty",
+			in: `
+fips:
+  enabled: true
+---
+fips:
+`,
+			want: `
+fips:
+  enabled: true
+`,
+		},
+	}
+
+	for _, c := range tc {
+		t.Run(c.name, func(t *testing.T) {
+			got, err := ReadYAML(bytes.NewBufferString(c.in))
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			want, err := ReadYAML(bytes.NewBufferString(c.want))
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			if !cmp.Equal(*want, *got) {
+				t.Fatalf("Unexpected data: %s", cmp.Diff(*want, *got))
+			}
+		})
 	}
 }

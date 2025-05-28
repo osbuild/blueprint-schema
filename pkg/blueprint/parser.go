@@ -6,15 +6,40 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"reflect"
+	"time"
 
+	"dario.cat/mergo"
 	"sigs.k8s.io/yaml"
 	goyaml "sigs.k8s.io/yaml/goyaml.v3"
 )
 
-// SplitYAMLDocuments takes a byte slice containing one or more YAML documents
+type zeroTransformer struct{}
+
+func zeroTransformerFunc(dst, src reflect.Value) error {
+	if dst.CanSet() {
+		isZero := dst.MethodByName("IsZero")
+		result := isZero.Call([]reflect.Value{})
+		if result[0].Bool() {
+			dst.Set(src)
+		}
+	}
+	return nil
+}
+
+func (t zeroTransformer) Transformer(typ reflect.Type) func(dst, src reflect.Value) error {
+	switch typ {
+	case reflect.TypeOf(time.Time{}):
+		return zeroTransformerFunc
+	default:
+		return nil
+	}
+}
+
+// splitYAMLDocuments takes a byte slice containing one or more YAML documents
 // separated by "---" and returns a slice of byte slices, each representing
 // a single YAML document.
-func SplitYAMLDocuments(input []byte) ([][]byte, error) {
+func splitYAMLDocuments(input []byte) ([][]byte, error) {
 	var documents [][]byte
 	decoder := goyaml.NewDecoder(bytes.NewReader(input))
 
@@ -44,26 +69,47 @@ func SplitYAMLDocuments(input []byte) ([][]byte, error) {
 }
 
 // UnmarshalYAML splits multiple YAML documents, convert them one by one to JSON then
-// uses the standard library JSON decoder to unmarshal them into Blueprint. 
+// uses the standard library JSON decoder to unmarshal them into Blueprint.
+//
+// Document buffers can be passed as variadic arguments, in a single ocument concatenated
+// with "---" or any combination of multiple documents.
+//
+// Documents are safely merged into each other sequentially.
 //
 // Note the blueprint types do not use any YAML Go struct tags, this is because
 // the JSON tags are used instead. This ensures consistency between JSON and YAML
 // representations, as YAML is a superset of JSON.
-func UnmarshalYAML(data []byte) (*Blueprint, error) {
-	b := new(Blueprint)
+func UnmarshalYAML(yamlBufs ...[]byte) (*Blueprint, error) {
+	b := Blueprint{}
 
-	docs, err := SplitYAMLDocuments(data)
-	if err != nil {
-		return nil, fmt.Errorf("failed to split YAML documents: %w", err)
-	}
+	for _, buf := range yamlBufs {
+		docs, err := splitYAMLDocuments(buf)
+		if err != nil {
+			return nil, fmt.Errorf("failed to split YAML documents: %w", err)
+		}
 
-	for _, doc := range docs {
-		if err := yaml.Unmarshal(doc, b); err != nil {
-			return nil, fmt.Errorf("failed to unmarshal YAML document: %w", err)
+		for i, doc := range docs {
+			if len(doc) == 0 {
+				continue
+			}
+
+			tmp := Blueprint{}
+			if err := yaml.Unmarshal(doc, &tmp); err != nil {
+				return nil, fmt.Errorf("failed to unmarshal YAML document %d: %w", i, err)
+			}
+
+			err = mergo.Merge(&b, tmp,
+				mergo.WithOverride,
+				mergo.WithAppendSlice,
+				mergo.WithTransformers(zeroTransformer{}),
+			)
+			if err != nil {
+				return nil, fmt.Errorf("failed to merge YAML document %d into blueprint: %w", i, err)
+			}
 		}
 	}
 
-	return b, nil
+	return &b, nil
 }
 
 // ReadYAML reads into a buffer and calls UnmarshalYAML. Read UnmarshalYAML for more details.

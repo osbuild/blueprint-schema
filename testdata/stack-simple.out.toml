@@ -11,7 +11,7 @@ architecture = "x86_64"
     name = "user2"
 
   [[customizations.group]]
-    name = "group2"
+    name = "group1"
   [customizations.ignition]
     [customizations.ignition.firstboot]
       url = "https://ignition.example.com/firstboot?ak=ak1"
