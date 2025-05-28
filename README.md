@@ -8,10 +8,10 @@ This repository contains the common blueprint JSON Schema and Go types for Image
 
 ### Terminology
 
-* UBP: Unified Blueprint (this repo). Also known as Blueprint v2.
-* Blueprint: The blueprint as it exists in osbuild/blueprint, is user-facing in osbuild-composer, and is documented on osbuild.org
-* CRC Blueprint: The blueprint as it exists in image-builder-crc, is user-facing in the service API, and is documented on osbuild.org.  This is very close but sometimes slightly different from the Blueprint.
-* Images Blueprint: The format and code that currently exists in osbuild/images/pkg/blueprint, which was never meant to be user-facing, but through sloppiness (on my part as well) initially (but not anymore) ended up being the user-facing blueprint in bootc-image-builder and, for a short period, ib-cli.  This slightly differs from the Old Schema in that it was more aggressive in dropping deprecated options (like SSHKey), because the user-facing blueprints (Old and CRC) were responsible for backwards compatibility.
+* **UBP**: Unified Blueprint (this repo). Also known as Blueprint v2.
+* **Blueprint**: The blueprint as it exists in [osbuild/blueprint](https://github.com/osbuild/blueprint), is user-facing in osbuild-composer, and is documented on osbuild.org
+* **CRC Blueprint**: The blueprint as it exists in [image-builder-crc](https://github.com/osbuild/image-builder-crc), is user-facing in the service API, and is documented on osbuild.org.  This is very close but sometimes slightly different from the Blueprint.
+* **Images Blueprint**: The format and code that currently exists in [osbuild/images](https://github.com/osbuild/images) in `pkg/blueprint`, which was never meant to be user-facing, but through sloppiness (on my part as well) initially (but not anymore) ended up being the user-facing blueprint in bootc-image-builder and, for a short period, ib-cli.  This slightly differs from the Old Schema in that it was more aggressive in dropping deprecated options (like SSHKey), because the user-facing blueprints (Old and CRC) were responsible for backwards compatibility.
 
 ### Schema files
 
@@ -30,6 +30,58 @@ All schema source files are in `oas/` directory, each component resides in its o
 Go code is generated from `blueprint-oas3.json` via `oapi-codegen` using `make schema`.
 
 All the code resides in `pkg/blueprint` except embedded schemas from above which are in the top-level directory for technical reasons (Go embedding limitations). Direct access to schema files is not required for any scenario, so only import the former package.
+
+### CLI tool
+
+A simple CLI tool for schema bundling, schema validation or conversion is part of this library:
+
+```
+go run github.com/osbuild/blueprint-schema/cmd/image-builder-blueprint/ -h
+```
+
+The usage is self-explanatory:
+
+```
+Usage of image-builder-blueprint:
+  -export-json
+        convert document into legacy JSON
+  -export-toml
+        convert document into legacy TOML
+  -input string
+        input JSON or YAML file (defaults to standard input, detects format)
+  -print-json-extended-schema
+        print embedded schema to standard output and exit
+  -print-json-schema
+        print embedded schema to standard output and exit
+  -print-yaml-schema
+        print embedded schema to standard output and exit
+  -validate
+        validate input document (detects JSON or YAML format)
+```
+
+Example validation:
+
+```
+go run github.com/osbuild/blueprint-schema/cmd/image-builder-blueprint/ -validate -input testdata/valid-000-all-fields.in.yaml
+```
+
+The return value is non-zero when validation fails and error is printed on the standard error. Example export:
+
+```
+go run github.com/osbuild/blueprint-schema/cmd/image-builder-blueprint/ -export-toml -input testdata/valid-kernel.in.yaml 
+```
+
+Output (TOML):
+
+```toml
+name = "Blueprint example: kernel"
+version = "408.5848.48376"
+
+[customizations]
+  [customizations.kernel]
+    name = "kernel-debug-6.11.5-300"
+    append = "nosmt=force crashkernel=1G-4G:192M,4G-64G:256M,64G-:512M"
+```
 
 ### Parsing blueprints
 

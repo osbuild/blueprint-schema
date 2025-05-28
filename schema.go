@@ -28,7 +28,7 @@ func SchemaSource() []byte {
 }
 
 func BundledSchema() []byte {
-	buf, err := BundledSchemaFS.Open("blueprint-oas3-ext.yaml")
+	buf, err := BundledSchemaFS.Open("blueprint-oas3-ext.json")
 	if err != nil {
 		panic(err)
 	}

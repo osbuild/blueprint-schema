@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"flag"
 	"fmt"
 	"io"
@@ -96,10 +95,10 @@ func main() {
 		mime := mimetype.Detect(inBuf)
 		if mime.Is("application/json") {
 			err = schema.ValidateJSON(ctx, inBuf)
-		} else if mime.Is("application/x-yaml") || mime.Is("text/yaml") {
+		} else if mime.Is("application/x-yaml") || mime.Is("text/yaml") || mime.Is("text/plain") {
 			err = schema.ValidateYAML(ctx, inBuf)
 		} else {
-			err = errors.New("unsupported format, only JSON and YAML are supported")
+			err = fmt.Errorf("unsupported format: %s, only JSON and YAML are supported", mime.String())
 		}
 		if err != nil {
 			panic(err)
