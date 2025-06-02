@@ -1,9 +1,7 @@
 # error parsing parition size "": expected number: ""
 
 name = "Blueprint example: missing required properties for storage"
-description = ""
 version = "1.0.0"
-distro = ""
 
 [customizations]
   [customizations.disk]

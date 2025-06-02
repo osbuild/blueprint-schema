@@ -7,34 +7,10 @@ import (
 	"fmt"
 	"io"
 	"reflect"
-	"time"
 
-	"dario.cat/mergo"
 	"sigs.k8s.io/yaml"
 	goyaml "sigs.k8s.io/yaml/goyaml.v3"
 )
-
-type zeroTransformer struct{}
-
-func zeroTransformerFunc(dst, src reflect.Value) error {
-	if dst.CanSet() {
-		isZero := dst.MethodByName("IsZero")
-		result := isZero.Call([]reflect.Value{})
-		if result[0].Bool() {
-			dst.Set(src)
-		}
-	}
-	return nil
-}
-
-func (t zeroTransformer) Transformer(typ reflect.Type) func(dst, src reflect.Value) error {
-	switch typ {
-	case reflect.TypeOf(time.Time{}):
-		return zeroTransformerFunc
-	default:
-		return nil
-	}
-}
 
 // splitYAMLDocuments takes a byte slice containing one or more YAML documents
 // separated by "---" and returns a slice of byte slices, each representing
@@ -68,19 +44,68 @@ func splitYAMLDocuments(input []byte) ([][]byte, error) {
 	return documents, nil
 }
 
+// isFieldSet determines if a reflect.Value is "set", meaning it's not its
+// type's zero value. For pointers, slices, maps, interfaces, channels,
+// and functions, this means it's not nil. For other types (bool, int,
+// string, struct, array), it means it's not the standard zero value (e.g.,
+// false, 0, "", or a struct/array with all fields/elements zero).
+func isFieldSet(v reflect.Value) bool {
+	if !v.IsValid() {
+		return false
+	}
+	switch v.Kind() {
+	case reflect.Ptr, reflect.Interface, reflect.Slice, reflect.Map, reflect.Chan, reflect.Func:
+		return !v.IsNil()
+	default:
+		return !v.IsZero()
+	}
+}
+
+// nonZeroFields returns a slice of strings containing the names of all exported fields
+// that are not their zero value.
+func nonZeroFields(s *Blueprint) []string {
+	val := reflect.ValueOf(s).Elem()
+
+	var nonZeroFieldNames []string
+	structType := val.Type()
+
+	for i := 0; i < val.NumField(); i++ {
+		fieldVal := val.Field(i)
+		structField := structType.Field(i)
+
+		// Skip unexported fields.
+		if structField.PkgPath != "" {
+			continue
+		}
+
+		// Check if the field is set (not its zero value).
+		if isFieldSet(fieldVal) {
+			nonZeroFieldNames = append(nonZeroFieldNames, structField.Name)
+		}
+	}
+
+	return nonZeroFieldNames
+}
+
+var ErrMergeField = errors.New("cannot merge field into blueprint")
+
 // UnmarshalYAML splits multiple YAML documents, convert them one by one to JSON then
 // uses the standard library JSON decoder to unmarshal them into Blueprint.
 //
 // Document buffers can be passed as variadic arguments, in a single ocument concatenated
 // with "---" or any combination of multiple documents.
 //
-// Documents are safely merged into each other sequentially.
+// Documents are safely merged into each other sequentially. Only selected top-level fields
+// are supported merged.
 //
 // Note the blueprint types do not use any YAML Go struct tags, this is because
 // the JSON tags are used instead. This ensures consistency between JSON and YAML
 // representations, as YAML is a superset of JSON.
 func UnmarshalYAML(yamlBufs ...[]byte) (*Blueprint, error) {
-	b := Blueprint{}
+	var b *Blueprint
+	var done struct {
+		Registration bool
+	}
 
 	for _, buf := range yamlBufs {
 		docs, err := splitYAMLDocuments(buf)
@@ -98,18 +123,31 @@ func UnmarshalYAML(yamlBufs ...[]byte) (*Blueprint, error) {
 				return nil, fmt.Errorf("failed to unmarshal YAML document %d: %w", i, err)
 			}
 
-			err = mergo.Merge(&b, tmp,
-				mergo.WithOverride,
-				mergo.WithAppendSlice,
-				mergo.WithTransformers(zeroTransformer{}),
-			)
-			if err != nil {
-				return nil, fmt.Errorf("failed to merge YAML document %d into blueprint: %w", i, err)
+			// The first document initializes the blueprint.
+			if b == nil {
+				b = &tmp
+				continue
+			}
+
+			// The merging code
+			if tmp.Registration != nil {
+				if done.Registration {
+					return nil, fmt.Errorf("%w: cannot merge twice: %q", ErrMergeField, "Registration")
+				}
+				b.Registration = tmp.Registration
+				tmp.Registration = nil
+				done.Registration = true
+			}
+
+			// With all the fields that can be merged gone, the rest must be nil or empty.
+			fields := nonZeroFields(&tmp)
+			if len(fields) > 0 {
+				return nil, fmt.Errorf("%w: %q", ErrMergeField, fields)
 			}
 		}
 	}
 
-	return &b, nil
+	return b, nil
 }
 
 // ReadYAML reads into a buffer and calls UnmarshalYAML. Read UnmarshalYAML for more details.

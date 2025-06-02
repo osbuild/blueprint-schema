@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
 )
 
 func TestReadYAMLWriteJSON(t *testing.T) {
@@ -121,165 +122,39 @@ func TestUnmarshalYAMLMultipleDocuments(t *testing.T) {
 		name        string
 		in          string
 		want        string
-		wantErr     bool
 		errContains string
 	}{
 		{
-			name: "simple",
+			name: "Unsupported field",
 			in: `
-name: test1
+name: "Unsupported"
+description: "Document one"
 ---
-name: test2
+description: "Document one"
+registration:
 `,
-			want: `
-name: test2
-`,
+			errContains: `cannot merge field into blueprint: ["Description"]`,
 		},
 		{
-			name: "three",
+			name: "Registration",
 			in: `
-name: test1
+name: "Registration"
 ---
-name: test2
----
-name: test3
+registration:
+  redhat:
+    activation_key: "123456789"
+    organization: "123456"
+    subscription_manager:
+      enabled: true
 `,
 			want: `
-name: test3
-`,
-		},
-		{
-			name: "two unique",
-			in: `
-name: test1
-description: "desc1"
----
-name: test2
-`,
-			want: `
-name: test2
-description: "desc1"
-`,
-		},
-		{
-			name: "tail",
-			in: `
-name: test1
----
-`,
-			want: `
-name: test1
-`,
-		},
-		{
-			name: "with header",
-			in: `
----
-name: test1
----
-name: test2
-`,
-			want: `
-name: test2
-`,
-		},
-		{
-			name: "with header and dots",
-			in: `
----
-name: test1
-...
----
-name: test2
-`,
-			want: `
-name: test2
-`,
-		},
-		{
-			name: "empty string",
-			in: `
-name: test1
----
-name: ""
-`,
-			want: `
-name: "test1"
-`,
-		},
-		{
-			name: "slices",
-			in: `
-accounts:
-  users:
-    - name: "user1"
----
-accounts:
-  users:
-    - name: "user2"
-`,
-			want: `
-accounts:
-  users:
-    - name: "user1"
-    - name: "user2"
-`,
-		},
-		{
-			name: "slices with empty",
-			in: `
-accounts:
-  users:
-    - name: "user1"
----
-accounts:
-  users:
-`,
-			want: `
-accounts:
-  users:
-    - name: "user1"
-`,
-		},
-		{
-			name: "bool positive",
-			in: `
-fips:
-  enabled: false
----
-fips:
-  enabled: true
-`,
-			want: `
-fips:
-  enabled: true
-`,
-		},
-		{
-			name: "bool negative",
-			in: `
-fips:
-  enabled: true
----
-fips:
-  enabled: false
-`,
-			want: `
-fips:
-  enabled: true # TODO: this is confusing pointer must be used for all bools, strings and numbers
-`,
-		},
-		{
-			name: "bool with empty",
-			in: `
-fips:
-  enabled: true
----
-fips:
-`,
-			want: `
-fips:
-  enabled: true
+name: "Registration"
+registration:
+  redhat:
+    activation_key: "123456789"
+    organization: "123456"
+    subscription_manager:
+      enabled: true
 `,
 		},
 	}
@@ -287,7 +162,18 @@ fips:
 	for _, c := range tc {
 		t.Run(c.name, func(t *testing.T) {
 			got, err := ReadYAML(bytes.NewBufferString(c.in))
-			if err != nil {
+
+			if c.errContains != "" {
+				if err == nil {
+					t.Fatalf("Expected error containing %q, got nil", c.errContains)
+				}
+
+				if !bytes.Contains([]byte(err.Error()), []byte(c.errContains)) {
+					t.Fatalf("Expected error containing %q, got %q", c.errContains, err.Error())
+				}
+
+				return
+			} else if err != nil {
 				t.Fatal(err)
 			}
 
@@ -298,6 +184,63 @@ fips:
 
 			if !cmp.Equal(*want, *got) {
 				t.Fatalf("Unexpected data: %s", cmp.Diff(*want, *got))
+			}
+		})
+	}
+}
+
+func TestNonZeroFields(t *testing.T) {
+	tests := []struct {
+		name          string
+		input         *Blueprint
+		expectedNames []string
+	}{
+		{
+			name: "Name",
+			input: &Blueprint{
+				Name: "name",
+			},
+			expectedNames: []string{"Name"},
+		},
+		{
+			name: "Name and Description",
+			input: &Blueprint{
+				Name:        "name",
+				Description: "description",
+			},
+			expectedNames: []string{"Name", "Description"},
+		},
+		{
+			name: "Slice",
+			input: &Blueprint{
+				Containers: []Container{
+					{
+						Name: "cont",
+					},
+				},
+			},
+			expectedNames: []string{"Containers"},
+		},
+		{
+			name: "Slice",
+			input: &Blueprint{
+				FIPS: &FIPS{
+					Enabled: true,
+				},
+			},
+			expectedNames: []string{"FIPS"},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			gotNames := nonZeroFields(tt.input)
+
+			// Use cmpopts.SortSlices to handle different orderings if field iteration order is not guaranteed
+			// (though for struct fields it's typically definition order).
+			sorter := cmpopts.SortSlices(func(x, y string) bool { return x < y })
+			if !cmp.Equal(tt.expectedNames, gotNames, sorter) {
+				t.Errorf("nonZeroFields() got = %v, want %v, diff: %s", gotNames, tt.expectedNames, cmp.Diff(tt.expectedNames, gotNames, sorter))
 			}
 		})
 	}

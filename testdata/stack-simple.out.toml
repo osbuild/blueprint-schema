@@ -1,17 +1,4 @@
-name = "Blueprint example"
-description = "A complete example of a blueprint with all possible fields"
+name = "Blueprint stacked example"
 version = "1.0.0"
-distro = "fedora-13"
-architecture = "x86_64"
 
 [customizations]
-  hostname = "worker-x86_64.example.com"
-
-  [[customizations.user]]
-    name = "user2"
-
-  [[customizations.group]]
-    name = "group1"
-  [customizations.ignition]
-    [customizations.ignition.firstboot]
-      url = "https://ignition.example.com/firstboot?ak=ak1"

@@ -12,7 +12,7 @@ require (
 	github.com/getkin/kin-openapi v0.131.0
 	github.com/google/go-cmp v0.7.0
 	github.com/oapi-codegen/runtime v1.1.1
-	github.com/osbuild/blueprint v1.6.0
+	github.com/osbuild/blueprint v1.9.0
 	sigs.k8s.io/yaml v1.4.0
 )
 

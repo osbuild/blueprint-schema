@@ -2,22 +2,9 @@
 # An example with stacked YAML documents.
 #
 ---
-name: "Blueprint example"
-description: "A complete example of a blueprint with all possible fields"
-accounts:
-  groups:
-    - name: "group1"
----
-distribution: "fedora-13"
-architecture: "x86_64"
-hostname: "worker-x86_64.example.com"
-accounts:
-  users:
-    - name: "user2"
+name: "Blueprint stacked example"
 ---
 registration:
   redhat:
     activation_key: "ak1"
     organization: "MyOrg"
-ignition:
-  url: "https://ignition.example.com/firstboot?ak=ak1"

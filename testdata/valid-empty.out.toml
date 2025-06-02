@@ -1,6 +1,3 @@
-name = ""
-description = ""
 version = "1.0.0"
-distro = ""
 
 [customizations]
