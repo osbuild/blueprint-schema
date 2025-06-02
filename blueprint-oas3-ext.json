@@ -270,6 +270,11 @@
             "description": "The name attribute is a string that contains the name of the blueprint.\nIt can contain spaces, but they may be converted to dash characters during build.\nIt should be short and descriptive.\n",
             "nullable": true,
             "type": "string",
+            "x-go-type": "ptr.Ref[string]",
+            "x-go-type-import": {
+              "name": "ptr",
+              "path": "github.com/osbuild/blueprint-schema/pkg/ptr"
+            },
             "x-go-type-skip-optional-pointer": true,
             "x-omitempty": true
           },

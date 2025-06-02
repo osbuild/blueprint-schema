@@ -5,6 +5,8 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
+	"github.com/osbuild/blueprint-schema/pkg/ptr"
 )
 
 func TestReadYAMLWriteJSON(t *testing.T) {
@@ -20,8 +22,8 @@ func TestReadYAMLWriteJSON(t *testing.T) {
 		t.Fatal("Expected data, got nil")
 	}
 
-	if b.Name != "test" {
-		t.Fatalf("Expected 'test', got '%s'", b.Name)
+	if b.Name.Get() != "test" {
+		t.Fatalf("Expected 'test', got '%s'", b.Name.Get())
 	}
 
 	out, err := marshalJSON(b, true)
@@ -56,8 +58,8 @@ func TestReadJSONWriteYAML(t *testing.T) {
 		t.Fatal("Expected data, got nil")
 	}
 
-	if b.Name != "test" {
-		t.Fatalf("Expected 'test', got '%s'", b.Name)
+	if b.Name.Get() != "test" {
+		t.Fatalf("Expected 'test', got '%s'", b.Name.Get())
 	}
 
 	out, err := MarshalYAML(b)
@@ -296,8 +298,8 @@ fips:
 				t.Fatal(err)
 			}
 
-			if !cmp.Equal(*want, *got) {
-				t.Fatalf("Unexpected data: %s", cmp.Diff(*want, *got))
+			if !cmp.Equal(*want, *got, cmp.AllowUnexported(Blueprint{}), cmpopts.EquateComparable(ptr.Ref[string]{})) {
+				t.Fatalf("Unexpected data: %s", cmp.Diff(*want, *got, cmp.AllowUnexported(Blueprint{}), cmpopts.EquateComparable(ptr.Ref[string]{})))
 			}
 		})
 	}
