@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 
 	"github.com/oapi-codegen/runtime"
+	ptr "github.com/osbuild/blueprint-schema/pkg/ptr"
 )
 
 // Defines values for NetworkProtocol.
@@ -244,7 +245,7 @@ type Blueprint struct {
 	// Name The name attribute is a string that contains the name of the blueprint.
 	// It can contain spaces, but they may be converted to dash characters during build.
 	// It should be short and descriptive.
-	Name string `json:"name,omitempty"`
+	Name ptr.Ref[string] `json:"name,omitempty"`
 
 	// Network Networking details including firewall configuration.
 	Network *Network `json:"network,omitempty"`

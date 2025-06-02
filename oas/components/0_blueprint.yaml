@@ -15,6 +15,10 @@ properties:
     x-go-type-skip-optional-pointer: true
     nullable: true
     x-omitempty: true
+    x-go-type: "ptr.Ref[string]"
+    x-go-type-import:
+      path: "github.com/osbuild/blueprint-schema/pkg/ptr"
+      name: ptr
   description:
     description: |
       The description attribute is a string that can be a longer description

@@ -34,6 +34,7 @@ func From[T any](ref *T) (value T) {
 }
 
 // FromOr return value of pointer if not nil, else return default value.
+// Similar functions are Or and cmp.Or.
 func FromOr[T any](value *T, defaultValue T) T {
 	if value == nil {
 		return defaultValue
@@ -42,6 +43,7 @@ func FromOr[T any](value *T, defaultValue T) T {
 }
 
 // Or returns the pointer if not nil, else return default value.
+// Similar functions are FromOr and cmp.Or.
 func Or[T any](value *T, defaultValue T) *T {
 	if value == nil {
 		return &defaultValue

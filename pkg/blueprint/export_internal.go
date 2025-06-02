@@ -31,7 +31,7 @@ func (e *InternalExporter) Export() error {
 	// Create monotonic incremental version number based on miliseconds
 	to.Version = int64ToVersion(uint64(time.Now().UTC().UnixMilli()))
 
-	to.Name = e.from.Name
+	to.Name = e.from.Name.Get()
 	to.Description = e.from.Description
 	to.Packages = e.exportPackages()
 	to.EnabledModules = e.exportModules()

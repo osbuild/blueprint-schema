@@ -7,6 +7,7 @@ toolchain go1.23.7
 //replace github.com/osbuild/blueprint => ../blueprint
 
 require (
+	dario.cat/mergo v1.0.2
 	github.com/BurntSushi/toml v1.5.1-0.20250403130103-3d3abc24416a
 	github.com/gabriel-vasile/mimetype v1.4.2
 	github.com/getkin/kin-openapi v0.131.0
@@ -17,7 +18,6 @@ require (
 )
 
 require (
-	dario.cat/mergo v1.0.2 // indirect
 	github.com/apapsch/go-jsonmerge/v2 v2.0.0 // indirect
 	github.com/coreos/go-semver v0.3.1 // indirect
 	github.com/go-openapi/jsonpointer v0.21.0 // indirect
