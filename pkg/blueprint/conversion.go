@@ -15,6 +15,10 @@ type Exporter interface {
 	Export() error
 }
 
+type Importer interface {
+	Import() error
+}
+
 type logs struct {
 	msgs []string
 }
