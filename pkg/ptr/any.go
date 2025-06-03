@@ -10,54 +10,39 @@ func To[T any](value T) *T {
 	return &value
 }
 
-// ToNilEmpty returns a pointer to the given value if it is not equal to
+// ToNilIfEmpty returns a pointer to the given value if it is not equal to
 // the zero value of type T. If it is equal to the zero value, it returns nil.
-func ToNilEmpty[T comparable](value T) *T {
+func ToNilIfEmpty[T comparable](value T) *T {
 	if value == *new(T) {
 		return nil
 	}
 	return &value
 }
 
-// ToErr returns a pointer to the given value and error which is unchanged.
-func ToErr[T any](value T, e error) (*T, error) {
-	return &value, e
-}
-
-// From returns the value from a given pointer. If ref is nil, a zero
-// value of type T will be returned.
-func From[T any](ref *T) (value T) {
+// ValueOrEmpty returns the value from a given pointer. If ref is nil,
+// a zero value of type T will be returned.
+func ValueOrEmpty[T any](ref *T) (value T) {
 	if ref != nil {
 		value = *ref
 	}
 	return
 }
 
-// FromOr return value of pointer if not nil, else return default value.
-func FromOr[T any](value *T, defaultValue T) T {
+// ValueOr return value of pointer if not nil, else return default value.
+func ValueOr[T any](value *T, defaultValue T) T {
 	if value == nil {
 		return defaultValue
 	}
 	return *value
 }
 
-// Or returns the pointer if not nil, else return default value.
-func Or[T any](value *T, defaultValue T) *T {
+// OrTo returns the pointer if not nil, else return a pointer to the
+// default value.
+func OrTo[T any](value *T, defaultValue T) *T {
 	if value == nil {
 		return &defaultValue
 	}
 	return value
-}
-
-// IsZero checks if the pointer is nil or if it points to a zero value of type T.
-// It returns true if the pointer is nil or if the value it points to is
-// equal to the zero value of type T.
-func IsZero[T comparable](value *T) bool {
-	if value == nil {
-		return true
-	}
-
-	return *value == *new(T)
 }
 
 // EmptyToNil checks if the pointer is nil or if it points to a zero value of type T.
