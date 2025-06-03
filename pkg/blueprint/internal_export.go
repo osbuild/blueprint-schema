@@ -118,7 +118,7 @@ func (e *InternalExporter) exportContainers() []int.Container {
 func (e *InternalExporter) exportCustomizations() *int.Customizations {
 	to := &int.Customizations{}
 
-	to.Hostname = ptr.ToNilEmpty(e.from.Hostname)
+	to.Hostname = ptr.ToNilIfEmpty(e.from.Hostname)
 	to.Kernel = e.exportKernel()
 	to.User = e.exportUserCustomization()
 	to.Group = e.exportGroupCustomization()
@@ -134,7 +134,7 @@ func (e *InternalExporter) exportCustomizations() *int.Customizations {
 	to.Files, to.Directories = e.exportFSNodes()
 	to.Repositories, to.RPM = e.exportRepositories()
 	if e.from.FIPS != nil {
-		to.FIPS = ptr.ToNilEmpty(e.from.FIPS.Enabled)
+		to.FIPS = ptr.ToNilIfEmpty(e.from.FIPS.Enabled)
 	}
 	to.CACerts = e.exportCACerts()
 
@@ -164,29 +164,29 @@ func (e *InternalExporter) exportUserCustomization() []int.UserCustomization {
 	for _, u := range e.from.Accounts.Users {
 		uc := int.UserCustomization{}
 		uc.Name = u.Name
-		uc.Description = ptr.ToNilEmpty(u.Description)
+		uc.Description = ptr.ToNilIfEmpty(u.Description)
 		uc.Password = u.Password
 		if len(u.SSHKeys) == 1 {
-			uc.Key = ptr.ToNilEmpty(u.SSHKeys[0])
+			uc.Key = ptr.ToNilIfEmpty(u.SSHKeys[0])
 		} else if len(u.SSHKeys) > 1 {
-			uc.Key = ptr.ToNilEmpty(u.SSHKeys[0])
+			uc.Key = ptr.ToNilIfEmpty(u.SSHKeys[0])
 			e.log.Printf("only one ssh key supported for user: %s", u.Name)
 		}
-		uc.Home = ptr.ToNilEmpty(u.Home)
-		uc.Shell = ptr.ToNilEmpty(u.Shell)
+		uc.Home = ptr.ToNilIfEmpty(u.Home)
+		uc.Shell = ptr.ToNilIfEmpty(u.Shell)
 		uc.Groups = u.Groups
 		if u.UID != 0 {
-			uc.UID = ptr.ToNilEmpty(u.UID)
+			uc.UID = ptr.ToNilIfEmpty(u.UID)
 		}
 		if u.GID != 0 {
-			uc.GID = ptr.ToNilEmpty(u.GID)
+			uc.GID = ptr.ToNilIfEmpty(u.GID)
 		}
 		if u.Expires != nil {
-			var err error
-			uc.ExpireDate, err = ptr.ToErr(ExpireDateToEpochDays(*u.Expires))
+			expireDate, err := ExpireDateToEpochDays(*u.Expires)
 			if err != nil {
 				e.log.Printf("error converting expire date for user %s: %v", u.Name, err)
 			}
+			uc.ExpireDate = ptr.To(expireDate)
 		}
 		if u.ForcePasswordChange != nil {
 			uc.ForcePasswordReset = u.ForcePasswordChange
@@ -208,7 +208,7 @@ func (e *InternalExporter) exportGroupCustomization() []int.GroupCustomization {
 		gc := int.GroupCustomization{}
 		gc.Name = g.Name
 		if g.GID != 0 {
-			gc.GID = ptr.ToNilEmpty(g.GID)
+			gc.GID = ptr.ToNilIfEmpty(g.GID)
 		}
 		s = append(s, gc)
 	}
@@ -222,7 +222,7 @@ func (e *InternalExporter) exportTimezoneCustomization() *int.TimezoneCustomizat
 	}
 
 	to := &int.TimezoneCustomization{}
-	to.Timezone = ptr.ToNilEmpty(e.from.Timedate.Timezone)
+	to.Timezone = ptr.ToNilIfEmpty(e.from.Timedate.Timezone)
 	to.NTPServers = e.from.Timedate.NTPServers
 
 	return to
@@ -235,7 +235,7 @@ func (e *InternalExporter) exportLocaleCustomization() *int.LocaleCustomization 
 
 	to := &int.LocaleCustomization{}
 	if len(e.from.Locale.Keyboards) > 0 {
-		to.Keyboard = ptr.ToNilEmpty(e.from.Locale.Keyboards[0])
+		to.Keyboard = ptr.ToNilIfEmpty(e.from.Locale.Keyboards[0])
 		if len(e.from.Locale.Keyboards) > 1 {
 			e.log.Println("only one keyboard layout supported, selecting first one")
 		}
@@ -559,7 +559,6 @@ func (e *InternalExporter) exportIgnition() *int.IgnitionCustomization {
 	return ptr.EmptyToNil(to)
 }
 
-
 func (e *InternalExporter) exportFSNodes() ([]int.FileCustomization, []int.DirectoryCustomization) {
 	if e.from.FSNodes == nil {
 		return nil, nil
@@ -633,15 +632,15 @@ func (e *InternalExporter) exportRepositories() ([]int.RepositoryCustomization, 
 			BaseURLs:       burl.URLs,
 			Metalink:       bmeta.Metalink,
 			Mirrorlist:     bmirror.Mirrorlist,
-			Priority:       ptr.ToNilEmpty(repo.Priority),
-			Enabled:        ptr.Or(repo.Usage.Configure, true),
-			SSLVerify:      ptr.Or(repo.SSLVerify, true),
+			Priority:       ptr.ToNilIfEmpty(repo.Priority),
+			Enabled:        ptr.OrTo(repo.Usage.Configure, true),
+			SSLVerify:      ptr.OrTo(repo.SSLVerify, true),
 			GPGKeys:        repo.GPGKeys,
 			GPGCheck:       repo.GPGCheck,
 			RepoGPGCheck:   repo.GPGCheckRepo,
-			ModuleHotfixes: ptr.ToNilEmpty(repo.ModuleHotfixes),
+			ModuleHotfixes: ptr.ToNilIfEmpty(repo.ModuleHotfixes),
 			Filename:       repo.Filename,
-			InstallFrom:    ptr.FromOr(repo.Usage.Install, true),
+			InstallFrom:    ptr.ValueOr(repo.Usage.Install, true),
 		})
 
 		if len(repo.GPGKeys) > 0 {

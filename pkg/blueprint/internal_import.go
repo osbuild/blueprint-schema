@@ -40,7 +40,7 @@ func (e *InternalImporter) Import() error {
 	to.Distribution = e.from.Distro
 	to.FIPS = e.importFIPS()
 	to.FSNodes = e.importFSNodes()
-	to.Hostname = ptr.From(e.from.Customizations.Hostname)
+	to.Hostname = ptr.ValueOrEmpty(e.from.Customizations.Hostname)
 	to.Ignition = e.importIgnition()
 	to.Installer = e.importInstaller()
 
@@ -123,8 +123,8 @@ func (e *InternalImporter) importRepositories() []DNFRepository {
 			GPGCheck:       repo.GPGCheck,
 			GPGCheckRepo:   repo.RepoGPGCheck,
 			GPGKeys:        repo.GPGKeys,
-			ModuleHotfixes: ptr.FromOr(repo.ModuleHotfixes, false),
-			Priority:       ptr.FromOr(repo.Priority, 0),
+			ModuleHotfixes: ptr.ValueOr(repo.ModuleHotfixes, false),
+			Priority:       ptr.ValueOr(repo.Priority, 0),
 			SSLVerify:      repo.SSLVerify,
 			Usage: &DnfRepositoryUsage{
 				Configure: ptr.To(true),
@@ -178,15 +178,15 @@ func (e *InternalImporter) importAccounts() *Accounts {
 	for _, user := range e.from.Customizations.User {
 		u := AccountsUsers{
 			Name:                user.Name,
-			Description:         ptr.From(user.Description),
-			Home:                ptr.From(user.Home),
-			UID:                 ptr.FromOr(user.UID, 0),
-			GID:                 ptr.FromOr(user.GID, 0),
+			Description:         ptr.ValueOrEmpty(user.Description),
+			Home:                ptr.ValueOrEmpty(user.Home),
+			UID:                 ptr.ValueOr(user.UID, 0),
+			GID:                 ptr.ValueOr(user.GID, 0),
 			Groups:              user.Groups,
 			Password:            user.Password,
 			Expires:             ParseExpireDate(user.ExpireDate),
 			ForcePasswordChange: user.ForcePasswordReset,
-			Shell:               ptr.From(user.Shell),
+			Shell:               ptr.ValueOrEmpty(user.Shell),
 		}
 
 		if user.Key != nil {
@@ -199,7 +199,7 @@ func (e *InternalImporter) importAccounts() *Accounts {
 	for _, group := range e.from.Customizations.Group {
 		g := AccountsGroups{
 			Name: group.Name,
-			GID:  ptr.FromOr(group.GID, 0),
+			GID:  ptr.ValueOr(group.GID, 0),
 		}
 
 		to.Groups = append(to.Groups, g)
@@ -233,7 +233,7 @@ func (e *InternalImporter) importFIPS() *FIPS {
 	}
 
 	fips := FIPS{
-		Enabled: ptr.FromOr(e.from.Customizations.FIPS, false),
+		Enabled: ptr.ValueOr(e.from.Customizations.FIPS, false),
 	}
 
 	if reflect.DeepEqual(fips, FIPS{}) {
