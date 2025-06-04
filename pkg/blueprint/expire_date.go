@@ -3,6 +3,8 @@ package blueprint
 import (
 	"strings"
 	"time"
+
+	"github.com/osbuild/blueprint-schema/pkg/ptr"
 )
 
 // Convert date in format YYYY-MM-DD or RFC3339 date to amount of days since epoch.
@@ -22,4 +24,13 @@ func ExpireDateToEpochDays(date ExpireDate) (int, error) {
 		return 0, err
 	}
 	return int(t.Unix() / (24 * 60 * 60)), nil
+}
+
+func ParseExpireDate(epochDays *int) *ExpireDate {
+	if epochDays == nil || *epochDays < 0 {
+		return nil
+	}
+
+	t := time.Unix(int64(*epochDays)*24*60*60, 0).UTC()
+	return ptr.To(ExpireDate(t.Format(time.RFC3339)))
 }

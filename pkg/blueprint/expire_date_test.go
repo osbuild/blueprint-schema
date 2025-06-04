@@ -1,6 +1,10 @@
 package blueprint
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/osbuild/blueprint-schema/pkg/ptr"
+)
 
 func TestExpireDateToEpoch(t *testing.T) {
 	tests := []struct {
@@ -23,6 +27,30 @@ func TestExpireDateToEpoch(t *testing.T) {
 
 		if result != test.expected {
 			t.Errorf("Expected %d, got %d for input %s", test.expected, result, test.input)
+		}
+	}
+}
+
+func TestParseExpireDate(t *testing.T) {
+	tests := []struct {
+		input    *int
+		expected *ExpireDate
+	}{
+		{ptr.To(0), ptr.To("1970-01-01T00:00:00Z")},
+		{ptr.To(1), ptr.To("1970-01-02T00:00:00Z")},
+		{ptr.To(3666), ptr.To("1980-01-15T00:00:00Z")},
+		{ptr.To(19631), ptr.To("2023-10-01T00:00:00Z")},
+	}
+
+	for _, test := range tests {
+		result := ParseExpireDate(test.input)
+		if result == nil && test.expected != nil {
+			t.Errorf("Expected %s, got nil for input %v", *test.expected, test.input)
+			continue
+		}
+
+		if result != nil && *result != *test.expected {
+			t.Errorf("Expected %s, got %s for input %v", *test.expected, *result, test.input)
 		}
 	}
 }

@@ -28,16 +28,21 @@ func (e *InternalImporter) Import() error {
 	to := &Blueprint{}
 	var err error
 
-	to.Name = e.from.Name
-	to.Description = e.from.Description
-	to.DNF = e.importDNF()
-	to.Containers = e.importContainers()
-	to.Kernel = e.exportKernel()
-	to.Distribution = e.from.Distro
+	to.Accounts = e.importAccounts()
 	to.Architecture, err = ParseArch(e.from.Arch)
 	if err != nil {
 		e.log.Printf("error parsing architecture %q: %v", e.from.Arch, err)
 	}
+	to.CACerts = e.importCACerts()
+	to.Containers = e.importContainers()
+	to.DNF = e.importDNF()
+	to.Description = e.from.Description
+	to.Distribution = e.from.Distro
+	to.FIPS = e.importFIPS()
+	to.FSNodes = e.importFSNodes()
+
+	to.Name = e.from.Name
+	to.Kernel = e.importKernel()
 
 	e.to = to
 	return e.log.Errors()
@@ -145,7 +150,7 @@ func (e *InternalImporter) importContainers() []Container {
 	return containers
 }
 
-func (e *InternalImporter) exportKernel() *Kernel {
+func (e *InternalImporter) importKernel() *Kernel {
 	if e.from.Customizations == nil || e.from.Customizations.Kernel == nil {
 		return nil
 	}
@@ -159,4 +164,82 @@ func (e *InternalImporter) exportKernel() *Kernel {
 	}
 
 	return r
+}
+
+func (e *InternalImporter) importAccounts() *Accounts {
+	if e.from.Customizations == nil {
+		return nil
+	}
+
+	to := Accounts{}
+	for _, user := range e.from.Customizations.User {
+		u := AccountsUsers{
+			Name:                user.Name,
+			Description:         ptr.From(user.Description),
+			Home:                ptr.From(user.Home),
+			UID:                 ptr.FromOr(user.UID, 0),
+			GID:                 ptr.FromOr(user.GID, 0),
+			Groups:              user.Groups,
+			Password:            user.Password,
+			Expires:             ParseExpireDate(user.ExpireDate),
+			ForcePasswordChange: user.ForcePasswordReset,
+			Shell:               ptr.From(user.Shell),
+		}
+
+		if user.Key != nil {
+			u.SSHKeys = []string{*user.Key}
+		}
+
+		to.Users = append(to.Users, u)
+	}
+
+	for _, group := range e.from.Customizations.Group {
+		g := AccountsGroups{
+			Name: group.Name,
+			GID:  ptr.FromOr(group.GID, 0),
+		}
+
+		to.Groups = append(to.Groups, g)
+	}
+
+	if reflect.DeepEqual(to, Accounts{}) {
+		return nil // omitzero
+	}
+
+	return &to
+}
+
+func (e *InternalImporter) importCACerts() []CACert {
+	if e.from.Customizations == nil || e.from.Customizations.CACerts == nil || e.from.Customizations.CACerts.PEMCerts == nil {
+		return nil
+	}
+
+	caCerts := make([]CACert, len(e.from.Customizations.CACerts.PEMCerts))
+	for i, cert := range e.from.Customizations.CACerts.PEMCerts {
+		caCerts[i] = CACert{
+			PEM: cert,
+		}
+	}
+
+	return caCerts
+}
+
+func (e *InternalImporter) importFIPS() *FIPS {
+	if e.from.Customizations == nil || e.from.Customizations.FIPS == nil {
+		return nil
+	}
+
+	fips := FIPS{
+		Enabled: ptr.FromOr(e.from.Customizations.FIPS, false),
+	}
+
+	if reflect.DeepEqual(fips, FIPS{}) {
+		return nil // omitzero
+	}
+
+	return &fips
+}
+
+func (e *InternalImporter) importFSNodes() []FSNode {
+	return nil
 }
