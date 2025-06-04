@@ -30,13 +30,13 @@ const (
 	AnacondaUser         AnacondaModules = "org.fedoraproject.Anaconda.Modules.User"
 )
 
-// Defines values for BuildOptionsArch.
+// Defines values for Arch.
 const (
-	ArchAarch64 BuildOptionsArch = "aarch64"
-	ArchPPC64le BuildOptionsArch = "ppc64le"
-	ArchRISCV64 BuildOptionsArch = "riscv64"
-	ArchS390x   BuildOptionsArch = "s390x"
-	ArchX8664   BuildOptionsArch = "x86_64"
+	ArchAarch64 Arch = "aarch64"
+	ArchPPC64le Arch = "ppc64le"
+	ArchRISCV64 Arch = "riscv64"
+	ArchS390x   Arch = "s390x"
+	ArchX8664   Arch = "x86_64"
 )
 
 // Defines values for FSNodeState.
@@ -157,7 +157,7 @@ type Blueprint struct {
 	Accounts *Accounts `json:"accounts,omitempty"`
 
 	// Architecture Architecture of the image. This is the architecture of the target system, not the build system.
-	Architecture BuildOptionsArch `json:"architecture,omitempty"`
+	Architecture Arch `json:"architecture,omitempty"`
 
 	// CACerts The CA certificates to be added to the image. The certificates
 	// are added to the system-wide CA trust store. The certificates are added to
@@ -293,8 +293,8 @@ type Blueprint struct {
 	Timedate *TimeDate `json:"timedate,omitempty"`
 }
 
-// BuildOptionsArch Architecture of the image. This is the architecture of the target system, not the build system.
-type BuildOptionsArch string
+// Arch Architecture of the image. This is the architecture of the target system, not the build system.
+type Arch string
 
 // Ignition Provides Ignition configuration files to be used in edge-raw-image and
 // edge-simplified-installer images. Check the RHEL for Edge butane specification for
@@ -324,7 +324,7 @@ type Container struct {
 	Source string `json:"source"`
 
 	// TLSVerify Verify TLS connection, default is true.
-	TLSVerify bool `json:"tls_verify,omitempty"`
+	TLSVerify *bool `json:"tls_verify,omitempty"`
 }
 
 // DNF DNF package managers details. When using virtual provides as the

@@ -4,5 +4,6 @@ version = "1.0.0"
 [[containers]]
   source = "quay.io/fedora/fedora:latest"
   name = "fedora"
+  tls-verify = false
 
 [customizations]

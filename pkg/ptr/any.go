@@ -49,16 +49,6 @@ func Or[T any](value *T, defaultValue T) *T {
 	return value
 }
 
-// FromOrEmpty returns the value or empty value in case the value is nil.
-func FromOrEmpty[T any](ref *T) (value T) {
-	if ref != nil {
-		value = *ref
-	} else {
-		value = *new(T)
-	}
-	return
-}
-
 // IsZero checks if the pointer is nil or if it points to a zero value of type T.
 // It returns true if the pointer is nil or if the value it points to is
 // equal to the zero value of type T.

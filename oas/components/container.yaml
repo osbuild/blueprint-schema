@@ -25,6 +25,5 @@ properties:
     description: Verify TLS connection, default is true.
     default: true
     type: boolean
-    x-go-type-skip-optional-pointer: true
     x-go-name: TLSVerify
 additionalProperties: false

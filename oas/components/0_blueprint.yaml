@@ -34,7 +34,7 @@ properties:
     description: |
       Architecture of the image. This is the architecture of the target system, not the build system.
     type: string
-    x-go-type-name: BuildOptionsArch
+    x-go-type-name: Arch
     x-go-type-skip-optional-pointer: true
     example: "x86_64"
     enum:

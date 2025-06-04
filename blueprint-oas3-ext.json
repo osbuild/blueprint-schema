@@ -180,7 +180,7 @@
               "ArchS390x",
               "ArchRISCV64"
             ],
-            "x-go-type-name": "BuildOptionsArch",
+            "x-go-type-name": "Arch",
             "x-go-type-skip-optional-pointer": true
           },
           "cacerts": {
@@ -336,8 +336,7 @@
             "default": true,
             "description": "Verify TLS connection, default is true.",
             "type": "boolean",
-            "x-go-name": "TLSVerify",
-            "x-go-type-skip-optional-pointer": true
+            "x-go-name": "TLSVerify"
           }
         },
         "required": [

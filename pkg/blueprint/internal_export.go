@@ -107,7 +107,7 @@ func (e *InternalExporter) exportContainers() []int.Container {
 		s = append(s, int.Container{
 			Name:         container.Name,
 			Source:       container.Source,
-			TLSVerify:    ptr.ToNilEmpty(container.TLSVerify),
+			TLSVerify:    container.TLSVerify,
 			LocalStorage: container.LocalStorage,
 		})
 	}

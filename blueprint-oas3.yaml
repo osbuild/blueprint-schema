@@ -169,7 +169,7 @@ components:
           - ArchPPC64le
           - ArchS390x
           - ArchRISCV64
-          x-go-type-name: BuildOptionsArch
+          x-go-type-name: Arch
           x-go-type-skip-optional-pointer: true
         cacerts:
           description: |
@@ -343,7 +343,6 @@ components:
           description: Verify TLS connection, default is true.
           type: boolean
           x-go-name: TLSVerify
-          x-go-type-skip-optional-pointer: true
       required:
       - name
       - source
