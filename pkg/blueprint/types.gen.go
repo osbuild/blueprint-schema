@@ -533,8 +533,8 @@ type FSNode struct {
 	// Path Path is the absolute path to the file or directory.
 	Path string `json:"path"`
 
-	// State State is the state of the file system node, one of: present, absent.
-	State FSNodeState `json:"state,omitempty"`
+	// State State is the state of the file system node, one of: present, absent. Defaults to present.
+	State *FSNodeState `json:"state,omitempty"`
 
 	// Type Type is the type of the file system node, one of: file, dir.
 	Type FSNodeType `json:"type,omitempty"`
@@ -549,7 +549,7 @@ type FSNodeContents struct {
 	union json.RawMessage
 }
 
-// FSNodeState State is the state of the file system node, one of: present, absent.
+// FSNodeState State is the state of the file system node, one of: present, absent. Defaults to present.
 type FSNodeState string
 
 // FSNodeType Type is the type of the file system node, one of: file, dir.

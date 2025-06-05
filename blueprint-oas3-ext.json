@@ -723,7 +723,7 @@
           },
           "state": {
             "default": "present",
-            "description": "State is the state of the file system node, one of: present, absent.\n",
+            "description": "State is the state of the file system node, one of: present, absent. Defaults to present.\n",
             "enum": [
               "present",
               "absent"
@@ -733,8 +733,7 @@
               "FSStatePresent",
               "FSStateAbsent"
             ],
-            "x-go-type-name": "FSNodeState",
-            "x-go-type-skip-optional-pointer": true
+            "x-go-type-name": "FSNodeState"
           },
           "type": {
             "default": "file",

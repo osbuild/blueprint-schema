@@ -241,5 +241,50 @@ func (e *InternalImporter) importFIPS() *FIPS {
 }
 
 func (e *InternalImporter) importFSNodes() []FSNode {
-	return nil
+	if e.from.Customizations == nil {
+		return nil
+	}
+
+	var res []FSNode
+	for _, file := range e.from.Customizations.Files {
+		mode, err := parseOctalString(file.Mode)
+		if err != nil {
+			e.log.Printf("error parsing file mode %q for file %q: %v, using default", file.Mode, file.Path, err)
+		}
+
+		n := FSNode{
+			Type:  FSNodeFile,
+			Path:  file.Path,
+			User:  parseUGIDany(file.User),
+			Group: parseUGIDany(file.Group),
+			Mode:  mode,
+		}
+
+		if file.Data != "" {
+			n.Contents = FSNodeContentsFromText(FSNodeContentsText{
+				Text: file.Data,
+			})
+		}
+
+		res = append(res, n)
+	}
+
+	for _, dir := range e.from.Customizations.Directories {
+		mode, err := parseOctalString(dir.Mode)
+		if err != nil {
+			e.log.Printf("error parsing file mode %q for dir %q: %v, using default", dir.Mode, dir.Path, err)
+		}
+
+		n := FSNode{
+			Type:          FSNodeDir,
+			Path:          dir.Path,
+			User:          parseUGIDany(dir.User),
+			Group:         parseUGIDany(dir.Group),
+			Mode:          mode,
+			EnsureParents: dir.EnsureParents,
+		}
+
+		res = append(res, n)
+	}
+	return res
 }

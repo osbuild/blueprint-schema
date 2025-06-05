@@ -52,3 +52,65 @@ func TestInt64ToVersion(t *testing.T) {
 		}
 	}
 }
+
+func TestParseUGID(t *testing.T) {
+	tests := []struct {
+		str string
+		an  any
+	}{
+		{"", nil},
+		{"1000", int64(1000)},
+		{"0", int64(0)},
+		{"1000.1", "1000.1"},
+		{"user", "user"},
+		{"group", "group"},
+		{"1000user", "1000user"},
+		{"user1000", "user1000"},
+		{"1000user1000", "1000user1000"},
+	}
+
+	for _, test := range tests {
+		result := parseUGIDstr(test.str)
+
+		if diff := cmp.Diff(test.an, result); diff != "" {
+			t.Errorf("parseUGIDstr(%q) mismatch (-want +got):\n%s", test.str, diff)
+		}
+	}
+	for _, test := range tests {
+		result := parseUGIDany(test.an)
+
+		if diff := cmp.Diff(test.str, result); diff != "" {
+			t.Errorf("parseUGIDany(%v) mismatch (-want +got):\n%s", test.an, diff)
+		}
+	}
+}
+
+func TestParseOctalString(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected int
+		err      string
+	}{
+		{"", 0, ""},
+		{"0", 0, ""},
+		{"01", 1, ""},
+		{"07", 7, ""},
+		{"010", 8, ""},
+		{"0777", 511, ""},
+		{"1000", 0, `parsing error: string "1000" is not a valid octal number`},
+		{"1234", 0, `parsing error: string "1234" is not a valid octal number`},
+	}
+
+	for _, test := range tests {
+		result, err := parseOctalString(test.input)
+
+		if err != nil && test.err != err.Error() {
+			t.Errorf("parseOctalString(%q) error mismatch: got %v, want %v", test.input, err, test.err)
+			continue
+		}
+
+		if result != test.expected {
+			t.Errorf("parseOctalString(%q) mismatch: got %d, want %d", test.input, result, test.expected)
+		}
+	}
+}

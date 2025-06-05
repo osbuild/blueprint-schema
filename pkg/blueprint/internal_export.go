@@ -559,20 +559,6 @@ func (e *InternalExporter) exportIgnition() *int.IgnitionCustomization {
 	return ptr.EmptyToNil(to)
 }
 
-// parseUGID parses a user/group ID from a string. It returns the
-// user/group ID as an int64 if it is a number, or the string itself
-// if it is not a number. If the string is empty, it returns nil.
-func parseUGID(s string) any {
-	if s == "" {
-		return nil
-	}
-
-	if i, err := strconv.ParseInt(s, 10, 0); err == nil {
-		return i
-	}
-
-	return s
-}
 
 func (e *InternalExporter) exportFSNodes() ([]int.FileCustomization, []int.DirectoryCustomization) {
 	if e.from.FSNodes == nil {
@@ -590,22 +576,27 @@ func (e *InternalExporter) exportFSNodes() ([]int.FileCustomization, []int.Direc
 			if node.Contents != nil {
 				contents, err = node.Contents.String()
 				if err != nil {
-					e.log.Printf("could not parse contents of node %d: %v", i, err)
+					e.log.Printf("could not parse contents of node %d: %v, contents skipped", i, err)
 				}
+			}
+
+			if node.State != nil && node.State.IsAbsent() {
+				e.log.Printf("fs node %d is marked as absent, unsupported", i)
+				continue
 			}
 
 			files = append(files, int.FileCustomization{
 				Path:  node.Path,
-				User:  parseUGID(node.User),
-				Group: parseUGID(node.Group),
+				User:  parseUGIDstr(node.User),
+				Group: parseUGIDstr(node.Group),
 				Mode:  strconv.FormatInt(int64(node.Mode), 8),
 				Data:  contents,
 			})
 		case FSNodeDir:
 			dirs = append(dirs, int.DirectoryCustomization{
 				Path:          node.Path,
-				User:          parseUGID(node.User),
-				Group:         parseUGID(node.Group),
+				User:          parseUGIDstr(node.User),
+				Group:         parseUGIDstr(node.Group),
 				Mode:          strconv.FormatInt(int64(node.Mode), 8),
 				EnsureParents: node.EnsureParents,
 			})

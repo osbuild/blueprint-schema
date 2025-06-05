@@ -21,6 +21,18 @@ func (node FSNodeContents) SelectUnion() (FSNodeContentsText, FSNodeContentsBase
 	return ft, fb, nil
 }
 
+func (n FSNodeState) String() string {
+	return string(n)
+}
+
+func (n FSNodeState) IsPresent() bool {
+	return n == FSStatePresent
+}
+
+func (n FSNodeState) IsAbsent() bool {
+	return n == FSStateAbsent
+}
+
 func (c FSNodeContentsText) String() (string, error) {
 	return c.Text, nil
 }
@@ -43,4 +55,14 @@ func (node FSNodeContents) String() (string, error) {
 	}
 
 	return "", nil
+}
+
+func FSNodeContentsFromText(node FSNodeContentsText) *FSNodeContents {
+	u, _ := json.Marshal(node)
+	return &FSNodeContents{union: u}
+}
+
+func FSNodeContentsFromBase64(node FSNodeContentsBase64) *FSNodeContents {
+	u, _ := json.Marshal(node)
+	return &FSNodeContents{union: u}
 }

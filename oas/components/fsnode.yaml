@@ -20,7 +20,7 @@ properties:
     x-go-type-name: FSNodeType
   state:
     description: |
-      State is the state of the file system node, one of: present, absent.
+      State is the state of the file system node, one of: present, absent. Defaults to present.
     type: string
     default: present
     enum:
@@ -29,7 +29,6 @@ properties:
     x-enum-varnames:
       - FSStatePresent
       - FSStateAbsent
-    x-go-type-skip-optional-pointer: true
     x-go-type-name: FSNodeState
   ensure_parents:
     description: |

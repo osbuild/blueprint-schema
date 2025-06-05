@@ -684,7 +684,7 @@ components:
         state:
           default: present
           description: |
-            State is the state of the file system node, one of: present, absent.
+            State is the state of the file system node, one of: present, absent. Defaults to present.
           enum:
           - present
           - absent
@@ -693,7 +693,6 @@ components:
           - FSStatePresent
           - FSStateAbsent
           x-go-type-name: FSNodeState
-          x-go-type-skip-optional-pointer: true
         type:
           default: file
           description: |
