@@ -40,6 +40,9 @@ func (e *InternalImporter) Import() error {
 	to.Distribution = e.from.Distro
 	to.FIPS = e.importFIPS()
 	to.FSNodes = e.importFSNodes()
+	to.Hostname = ptr.From(e.from.Customizations.Hostname)
+	to.Ignition = e.importIgnition()
+	to.Installer = e.importInstaller()
 
 	to.Name = e.from.Name
 	to.Kernel = e.importKernel()
@@ -287,4 +290,62 @@ func (e *InternalImporter) importFSNodes() []FSNode {
 		res = append(res, n)
 	}
 	return res
+}
+
+func (e *InternalImporter) importIgnition() *Ignition {
+	if e.from.Customizations == nil || e.from.Customizations.Ignition == nil {
+		return nil
+	}
+
+	var res *Ignition
+	if e.from.Customizations.Ignition.FirstBoot != nil {
+		res = IgnitionFromURL(IgnitionURL{
+			URL: e.from.Customizations.Ignition.FirstBoot.ProvisioningURL,
+		})
+	}
+
+	if e.from.Customizations.Ignition.Embedded != nil {
+		res = IgnitionFromText(IgnitionText{
+			Text: e.from.Customizations.Ignition.Embedded.Config,
+		})
+	}
+
+	return res
+}
+
+func (e *InternalImporter) importInstaller() *Installer {
+	if e.from.Customizations == nil || e.from.Customizations.Installer == nil {
+		return nil
+	}
+
+	to := Installer{
+		Anaconda: &InstallerAnaconda{
+			Unattended:   e.from.Customizations.Installer.Unattended,
+			SudoNOPASSWD: e.from.Customizations.Installer.SudoNopasswd,
+		},
+	}
+
+	if e.from.Customizations.Installer.Kickstart != nil {
+		to.Anaconda.Kickstart = e.from.Customizations.Installer.Kickstart.Contents
+	}
+
+	if e.from.Customizations.Installer.Modules != nil {
+		for _, m := range e.from.Customizations.Installer.Modules.Enable {
+			if pm := ParseAnacondaModule(m); pm != "" {
+				to.Anaconda.EnabledModules = append(to.Anaconda.EnabledModules, pm)
+			}
+		}
+
+		for _, m := range e.from.Customizations.Installer.Modules.Disable {
+			if pm := ParseAnacondaModule(m); pm != "" {
+				to.Anaconda.DisabledModules = append(to.Anaconda.DisabledModules, pm)
+			}
+		}
+	}
+
+	if reflect.DeepEqual(to, Installer{}) {
+		return nil // omitzero
+	}
+
+	return &to
 }

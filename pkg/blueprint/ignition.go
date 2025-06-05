@@ -17,3 +17,19 @@ func (ost Ignition) SelectUnion() (IgnitionURL, IgnitionText, error) {
 
 	return iu, it, nil
 }
+
+func IgnitionFromURL(url IgnitionURL) *Ignition {
+	u, _ := json.Marshal(url)
+
+	return &Ignition{
+		union: u,
+	}
+}
+
+func IgnitionFromText(text IgnitionText) *Ignition {
+	t, _ := json.Marshal(text)
+
+	return &Ignition{
+		union: t,
+	}
+}
