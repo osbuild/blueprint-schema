@@ -11,9 +11,10 @@ import (
 
 // Defines values for NetworkProtocol.
 const (
-	ProtocolAny NetworkProtocol = "any"
-	ProtocolTCP NetworkProtocol = "tcp"
-	ProtocolUDP NetworkProtocol = "udp"
+	ProtocolAny  NetworkProtocol = "any"
+	ProtocolICMP NetworkProtocol = "icmp"
+	ProtocolTCP  NetworkProtocol = "tcp"
+	ProtocolUDP  NetworkProtocol = "udp"
 )
 
 // Defines values for AnacondaModules.
@@ -72,7 +73,9 @@ const (
 	StorageTypeMBR StorageType = "mbr"
 )
 
-// NetworkProtocol The network protocol used for the connection. This can be either TCP, UDP, or any protocol.
+// NetworkProtocol The network protocol used for the connection. This can be either TCP, UDP, ICMP or ANY protocol.
+//
+// Empty value is equivalent to `any` for port definitions or is ignored for service definitions.
 type NetworkProtocol string
 
 // FirewallEnabled Whether the firewall rule is enabled or not. Defaults to true.
@@ -475,7 +478,9 @@ type FIPS struct {
 
 // FirewallFromTo defines model for firewall_from_to.
 type FirewallFromTo struct {
-	// Protocol The network protocol used for the connection. This can be either TCP, UDP, or any protocol.
+	// Protocol The network protocol used for the connection. This can be either TCP, UDP, ICMP or ANY protocol.
+	//
+	// Empty value is equivalent to `any` for port definitions or is ignored for service definitions.
 	Protocol NetworkProtocol `json:"protocol,omitempty"`
 
 	// Enabled Whether the firewall rule is enabled or not. Defaults to true.
@@ -490,7 +495,9 @@ type FirewallFromTo struct {
 
 // FirewallPort defines model for firewall_port.
 type FirewallPort struct {
-	// Protocol The network protocol used for the connection. This can be either TCP, UDP, or any protocol.
+	// Protocol The network protocol used for the connection. This can be either TCP, UDP, ICMP or ANY protocol.
+	//
+	// Empty value is equivalent to `any` for port definitions or is ignored for service definitions.
 	Protocol NetworkProtocol `json:"protocol,omitempty"`
 
 	// Enabled Whether the firewall rule is enabled or not. Defaults to true.
@@ -502,7 +509,9 @@ type FirewallPort struct {
 
 // FirewallService defines model for firewall_service.
 type FirewallService struct {
-	// Protocol The network protocol used for the connection. This can be either TCP, UDP, or any protocol.
+	// Protocol The network protocol used for the connection. This can be either TCP, UDP, ICMP or ANY protocol.
+	//
+	// Empty value is equivalent to `any` for port definitions or is ignored for service definitions.
 	Protocol NetworkProtocol `json:"protocol,omitempty"`
 
 	// Enabled Whether the firewall rule is enabled or not. Defaults to true.

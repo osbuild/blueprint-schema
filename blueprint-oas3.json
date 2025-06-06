@@ -989,17 +989,19 @@
       "network_protocol": {
         "additionalProperties": false,
         "default": "any",
-        "description": "The network protocol used for the connection. This can be either TCP, UDP, or any protocol.\n",
+        "description": "The network protocol used for the connection. This can be either TCP, UDP, ICMP or ANY protocol.\n\nEmpty value is equivalent to `any` for port definitions or is ignored for service definitions.\n",
         "enum": [
           "tcp",
           "udp",
-          "any"
+          "any",
+          "icmp"
         ],
         "type": "string",
         "x-enum-varnames": [
           "ProtocolTCP",
           "ProtocolUDP",
-          "ProtocolAny"
+          "ProtocolAny",
+          "ProtocolICMP"
         ],
         "x-go-type-name": "NetworkProtocol",
         "x-go-type-skip-optional-pointer": true,

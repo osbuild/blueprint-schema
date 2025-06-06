@@ -43,9 +43,10 @@ func (e *InternalImporter) Import() error {
 	to.Hostname = ptr.ValueOrEmpty(e.from.Customizations.Hostname)
 	to.Ignition = e.importIgnition()
 	to.Installer = e.importInstaller()
-
-	to.Name = e.from.Name
 	to.Kernel = e.importKernel()
+	to.Locale = e.importLocale()
+	to.Name = e.from.Name
+	to.Network = e.importNetwork()
 
 	e.to = to
 	return e.log.Errors()
@@ -344,6 +345,78 @@ func (e *InternalImporter) importInstaller() *Installer {
 	}
 
 	if reflect.DeepEqual(to, Installer{}) {
+		return nil // omitzero
+	}
+
+	return &to
+}
+
+func (e *InternalImporter) importLocale() *Locale {
+	if e.from.Customizations == nil || e.from.Customizations.Locale == nil {
+		return nil
+	}
+
+	to := Locale{}
+	to.Languages = append(to.Languages, e.from.Customizations.Locale.Languages...)
+	if e.from.Customizations.Locale.Keyboard != nil {
+		to.Languages = []string{*e.from.Customizations.Locale.Keyboard}
+	}
+
+	if reflect.DeepEqual(to, Locale{}) {
+		return nil // omitzero
+	}
+
+	return &to
+}
+
+func (e *InternalImporter) importNetwork() *Network {
+	if e.from.Customizations == nil || e.from.Customizations.Firewall == nil {
+		return nil
+	}
+
+	to := Network{
+		Firewall: &NetworkFirewall{},
+	}
+
+	if e.from.Customizations.Firewall.Services != nil {
+		for _, srv := range e.from.Customizations.Firewall.Services.Enabled {
+			ns := FirewallService{
+				Service: srv,
+			}
+			if service := NetworkServiceFromService(ns); service != nil {
+				to.Firewall.Services = append(to.Firewall.Services, *service)
+			}
+		}
+	}
+
+	for _, port := range e.from.Customizations.Firewall.Ports {
+		if strings.Contains(port, "-") {
+			fromTo, err := ParseFirewalldFromTo(port)
+			if err != nil {
+				e.log.Printf("error parsing firewall port range %q: %v, ignoring", port, err)
+				continue
+			}
+
+			ns := NetworkServiceFromFromTo(fromTo)
+			to.Firewall.Services = append(to.Firewall.Services, *ns)
+			continue
+		} else {
+			firewallPort, err := ParseFirewalldPort(port)
+			if err != nil {
+				e.log.Printf("error parsing firewall port %q: %v, ignoring", port, err)
+				continue
+			}
+
+			ns := NetworkServiceFromPort(firewallPort)
+			to.Firewall.Services = append(to.Firewall.Services, *ns)
+		}
+	}
+
+	if e.from.Customizations.Firewall.Zones != nil {
+		e.log.Printf("firewall zones are not supported, ignoring")
+	}
+
+	if reflect.DeepEqual(to.Firewall, NetworkFirewall{}) {
 		return nil // omitzero
 	}
 
