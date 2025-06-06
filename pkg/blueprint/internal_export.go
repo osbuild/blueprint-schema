@@ -495,7 +495,7 @@ func (e *InternalExporter) exportRegistration() (*int.RHSMCustomization, *int.FD
 				},
 			},
 		}
-		e.log.Println("Registration not converted")
+		e.log.Println("registration not converted")
 	}
 
 	return ptr.EmptyToNil(rhsm), ptr.EmptyToNil(fdo)
@@ -584,21 +584,32 @@ func (e *InternalExporter) exportFSNodes() ([]int.FileCustomization, []int.Direc
 				continue
 			}
 
-			files = append(files, int.FileCustomization{
+			fc := int.FileCustomization{
 				Path:  node.Path,
 				User:  parseUGIDstr(node.User),
 				Group: parseUGIDstr(node.Group),
-				Mode:  strconv.FormatInt(int64(node.Mode), 8),
 				Data:  contents,
-			})
+			}
+			mode := strconv.FormatInt(int64(node.Mode), 8)
+			if mode != "0" {
+				fc.Mode = mode
+			}
+
+			files = append(files, fc)
 		case FSNodeDir:
-			dirs = append(dirs, int.DirectoryCustomization{
+			fc := int.DirectoryCustomization{
 				Path:          node.Path,
 				User:          parseUGIDstr(node.User),
 				Group:         parseUGIDstr(node.Group),
 				Mode:          strconv.FormatInt(int64(node.Mode), 8),
 				EnsureParents: node.EnsureParents,
-			})
+			}
+			mode := strconv.FormatInt(int64(node.Mode), 8)
+			if mode != "0" {
+				fc.Mode = mode
+			}
+
+			dirs = append(dirs, fc)
 		default:
 			e.log.Printf("unknown node type %d: %q", i, node.Type)
 			continue

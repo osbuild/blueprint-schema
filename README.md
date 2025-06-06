@@ -62,7 +62,7 @@ Usage of image-builder-blueprint:
 Example validation:
 
 ```
-go run github.com/osbuild/blueprint-schema/cmd/image-builder-blueprint/ -validate -input testdata/valid-000-all-fields.in.yaml
+go run github.com/osbuild/blueprint-schema/cmd/image-builder-blueprint/ -validate -input testdata/all-fields.in.yaml
 ```
 
 The return value is non-zero when validation fails and error is printed on the standard error. Example export:

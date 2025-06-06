@@ -12,6 +12,7 @@ import (
 	"github.com/BurntSushi/toml"
 	"github.com/google/go-cmp/cmp"
 	"github.com/osbuild/blueprint-schema/pkg/ptr"
+	ib "github.com/osbuild/blueprint/pkg/blueprint"
 )
 
 var writeFixtures = os.Getenv("WRITE_FIXTURES") != ""
@@ -131,7 +132,7 @@ func TestFix(t *testing.T) {
 		})
 	}
 
-	exportTOMLtest := func(t *testing.T, input, output string) {
+	conversionTest := func(t *testing.T, input, output string) {
 		t.Run("Valid/"+input, func(t *testing.T) {
 			inputFile, err := os.Open(input)
 			if err != nil {
@@ -145,34 +146,54 @@ func TestFix(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			var inputBlueprint *Blueprint
-			if strings.HasSuffix(input, ".json") {
-				b, err := unmarshalJSON(inputBuf.Bytes())
+			var convErrs error
+			var got []byte
+			if strings.HasSuffix(input, ".json") || strings.HasSuffix(input, ".yaml") {
+				var inputBlueprint *Blueprint
+				if strings.HasSuffix(input, ".json") {
+					b, err := unmarshalJSON(inputBuf.Bytes())
+					if err != nil {
+						t.Fatal(err)
+					}
+					inputBlueprint = b
+				}
+				if strings.HasSuffix(input, ".yaml") {
+					b, err := UnmarshalYAML(inputBuf.Bytes())
+					if err != nil {
+						t.Fatal(err)
+					}
+					inputBlueprint = b
+				}
+
+				exporter := NewInternalExporter(inputBlueprint)
+				convErrs = exporter.Export()
+				result := exporter.Result()
+				result.Version = "1.0.0"
+				got, err = toml.Marshal(result)
 				if err != nil {
 					t.Fatal(err)
 				}
-				inputBlueprint = b
-			} else if strings.HasSuffix(input, ".yaml") {
-				b, err := UnmarshalYAML(inputBuf.Bytes())
+			} else if strings.HasSuffix(input, ".toml") {
+				inputBlueprint := &ib.Blueprint{}
+				err := toml.Unmarshal(inputBuf.Bytes(), inputBlueprint)
 				if err != nil {
 					t.Fatal(err)
 				}
-				inputBlueprint = b
+				importer := NewInternalImporter(inputBlueprint)
+				convErrs = importer.Import()
+				result := importer.Result()
+				var buf bytes.Buffer
+				err = WriteYAML(result, &buf)
+				if err != nil {
+					t.Fatal(err)
+				}
+				got = buf.Bytes()
 			} else {
 				t.Fatalf("Unknown fixture extension: %s", input)
 			}
 
-			exporter := NewInternalExporter(inputBlueprint)
-			exportErrors := exporter.Export()
-			resultBlueprint := exporter.Result()
-			resultBlueprint.Version = "1.0.0"
-			got, err := toml.Marshal(resultBlueprint)
-			if err != nil {
-				t.Fatal(err)
-			}
-
 			if writeFixtures {
-				writeFile(t, output, ptr.To(unwrapErrorsAsComments(exportErrors)), ptr.To(got))
+				writeFile(t, output, ptr.To(unwrapErrorsAsComments(convErrs)), ptr.To(got))
 			} else {
 				want := []byte{}
 
@@ -188,7 +209,7 @@ func TestFix(t *testing.T) {
 					}
 				}
 
-				if diff := cmp.Diff(want, append(unwrapErrorsAsComments(exportErrors), got...)); diff != "" {
+				if diff := cmp.Diff(want, append(unwrapErrorsAsComments(convErrs), got...)); diff != "" {
 					t.Errorf("validity mismatch (-want +got):\n%s", diff)
 				}
 			}
@@ -208,10 +229,16 @@ func TestFix(t *testing.T) {
 		fileWithoutFormat := file[0 : len(file)-len(format)]
 		direction := filepath.Ext(fileWithoutFormat)
 		baseFile := file[0 : len(fileWithoutFormat)-len(direction)]
-		validFile := baseFile + ".validator.out"
-		tomlFile := baseFile + ".out.toml"
 
-		validationTest(t, file, validFile)
-		exportTOMLtest(t, file, tomlFile)
+		if strings.HasSuffix(file, ".in.yaml") {
+			validFile := baseFile + ".validator.out"
+			validationTest(t, file, validFile)
+
+			suffix := baseFile + ".out.toml"
+			conversionTest(t, file, suffix)
+		} else if strings.HasSuffix(file, ".in.toml") {
+			suffix := baseFile + ".out.yaml"
+			conversionTest(t, file, suffix)
+		}
 	}
 }

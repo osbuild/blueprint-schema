@@ -1,0 +1,99 @@
+# error parsing architecture "": invalid architecture
+# error parsing file mode "644" for file "/var/tmp/dir/file1": parsing error: string "644" is not a valid octal number, using default
+# error parsing file mode "755" for dir "/var/tmp/dir": parsing error: string "755" is not a valid octal number, using default
+# error parsing firewall port "53/udp": firewall parse error: invalid port '53/udp': strconv.ParseUint: parsing "53/udp": invalid syntax, ignoring
+# error parsing firewall port range "60000-60010/udp": firewall parse error: invalid to port '60010/udp': strconv.ParseUint: parsing "60010/udp": invalid syntax, ignoring
+
+accounts:
+  groups:
+  - gid: 1042
+    name: operators
+  users:
+  - expires: "2050-05-13T00:00:00Z"
+    force_password_change: false
+    gid: 1001
+    groups:
+    - wheel
+    - operators
+    home: /home/lzap
+    name: lzap
+    password: ""
+    shell: /usr/bin/bash
+    ssh_keys:
+    - ssh-key 1234
+    uid: 1001
+cacerts:
+- pem: pem encoded cert
+containers:
+- local_storage: true
+  name: fedora
+  source: quay.io/fedora/fedora:latest
+  tls_verify: true
+description: A complete example of a blueprint with all possible fields
+dnf:
+  groups:
+  - virtualization
+  import_keys:
+  - file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
+  packages:
+  - vim-enhanced
+  - vim-enhanced-9.1.866-1
+  - vim-enhanced-9.1.866-1.fc41.x86_64
+  - '@virtualization-'
+  repositories:
+  - gpg_check_repo: false
+    gpg_keys:
+    - file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
+    id: fedora-cisco-openh264
+    name: Fedora $releasever openh264 (From Cisco) - $basearch
+    ssl_verify: true
+    usage:
+      configure: true
+  - id: empty-repo
+    ssl_verify: true
+    usage:
+      configure: true
+fips:
+  enabled: true
+fsnodes:
+- contents:
+    text: '---'
+  group: lzap
+  path: /var/tmp/dir/file1
+  type: file
+  user: lzap
+- contents:
+    text: test
+  path: /var/tmp/dir/file2
+  type: file
+- ensure_parents: true
+  group: lzap
+  path: /var/tmp/dir
+  type: dir
+  user: lzap
+hostname: worker.example.com
+ignition:
+  url: https://ignition.example.com/firstboot
+installer:
+  anaconda:
+    disabled_modules:
+    - org.fedoraproject.Anaconda.Modules.Timezone
+    enabled_modules:
+    - org.fedoraproject.Anaconda.Modules.Subscription
+    kickstart: '# some kickstart data'
+    sudo_nopasswd:
+    - lzap
+    unattended: true
+kernel:
+  cmdline_append:
+  - nosmt=force
+  package: kernel-debug-6.11.5-300
+locale:
+  languages:
+  - cz-qwerty
+name: Blueprint example
+network:
+  firewall:
+    services:
+    - service: ssh
+    - service: dhcp

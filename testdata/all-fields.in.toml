@@ -131,7 +131,6 @@ version = "1.0.0"
 
   [[customizations.files]]
     path = "/var/tmp/dir/file2"
-    mode = "0"
     data = "test"
 
   [[customizations.repositories]]
