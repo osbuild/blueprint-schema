@@ -104,3 +104,10 @@ openscap:
   tailoring:
     unselected:
     - xccdf_org.ssgproject.content_rule_grub2_password
+registration:
+  redhat:
+    subscription_manager:
+      auto_registration: true
+      enabled: true
+      product_plugin_enabled: true
+      repository_management: true

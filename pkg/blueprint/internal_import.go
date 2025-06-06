@@ -44,6 +44,7 @@ func (e *InternalImporter) Import() error {
 	to.Name = e.from.Name
 	to.Network = e.importNetwork()
 	to.OpenSCAP = e.importOpenSCAP()
+	to.Registration = e.importRegistration()
 
 	e.to = to
 	return e.log.Errors()
@@ -463,6 +464,30 @@ func (e *InternalImporter) importOpenSCAP() *OpenSCAP {
 	}
 
 	if reflect.DeepEqual(to, OpenSCAP{}) {
+		return nil // omitzero
+	}
+
+	return &to
+}
+
+func (e *InternalImporter) importRegistration() *Registration {
+	if e.from.Customizations == nil || e.from.Customizations.RHSM == nil || e.from.Customizations.RHSM.Config == nil {
+		return nil
+	}
+
+	to := Registration{
+		RegistrationRedHat: &RegistrationRedHat{
+			RegistrationRHSM: &RegistrationRHSM{
+				AutoEnable:           e.from.Customizations.RHSM.Config.SubscriptionManager.RHSMConfig.AutoEnableYumPlugins,
+				RepositoryManagement: e.from.Customizations.RHSM.Config.SubscriptionManager.RHSMConfig.ManageRepos,
+				AutoRegistration:     e.from.Customizations.RHSM.Config.SubscriptionManager.RHSMCertdConfig.AutoRegistration,
+				Enabled:              e.from.Customizations.RHSM.Config.DNFPlugins.SubscriptionManager.Enabled,
+				ProductPluginEnabled: e.from.Customizations.RHSM.Config.DNFPlugins.ProductID.Enabled,
+			},
+		},
+	}
+
+	if reflect.DeepEqual(to, Registration{}) {
 		return nil // omitzero
 	}
 
