@@ -133,3 +133,17 @@ storage:
       name: name
     type: btrfs
   type: gpt
+systemd:
+  disabled:
+  - tuned
+  - cupsd
+  enabled:
+  - sshd.service
+  - backup.timer
+  masked:
+  - masked.service
+timedate:
+  ntp_servers:
+  - 0.north-america.pool.ntp.org
+  - 1.north-america.pool.ntp.org
+  timezone: Europe/Prague

@@ -46,6 +46,8 @@ func (e *InternalImporter) Import() error {
 	to.OpenSCAP = e.importOpenSCAP()
 	to.Registration = e.importRegistration()
 	to.Storage = e.importStorage()
+	to.Systemd = e.importSystemd()
+	to.Timedate = e.importTimedate()
 
 	e.to = to
 	return e.log.Errors()
@@ -559,6 +561,41 @@ func (e *InternalImporter) importStorage() *Storage {
 		}
 	}
 	if reflect.DeepEqual(to, Storage{}) {
+		return nil // omitzero
+	}
+
+	return &to
+}
+
+func (e *InternalImporter) importSystemd() *Systemd {
+	if e.from.Customizations == nil || e.from.Customizations.Services == nil {
+		return nil
+	}
+
+	to := Systemd{
+		Enabled:  e.from.Customizations.Services.Enabled,
+		Disabled: e.from.Customizations.Services.Disabled,
+		Masked:   e.from.Customizations.Services.Masked,
+	}
+
+	if reflect.DeepEqual(to, Systemd{}) {
+		return nil // omitzero
+	}
+
+	return &to
+}
+
+func (e *InternalImporter) importTimedate() *TimeDate {
+	if e.from.Customizations == nil || e.from.Customizations.Timezone == nil {
+		return nil
+	}
+
+	to := TimeDate{
+		Timezone:   ptr.ValueOrEmpty(e.from.Customizations.Timezone.Timezone),
+		NTPServers: e.from.Customizations.Timezone.NTPServers,
+	}
+
+	if reflect.DeepEqual(to, TimeDate{}) {
 		return nil // omitzero
 	}
 
