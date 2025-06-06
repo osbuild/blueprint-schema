@@ -3,5 +3,5 @@ version = "1.0.0"
 
 [customizations]
   [customizations.firewall]
-    ports = ["1301/tcp"]
+    ports = ["1301:tcp"]
     [customizations.firewall.services]

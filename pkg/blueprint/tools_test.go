@@ -94,11 +94,11 @@ func TestParseOctalString(t *testing.T) {
 		{"", 0, ""},
 		{"0", 0, ""},
 		{"01", 1, ""},
+		{"1", 1, ""},
 		{"07", 7, ""},
 		{"010", 8, ""},
 		{"0777", 511, ""},
-		{"1000", 0, `parsing error: string "1000" is not a valid octal number`},
-		{"1234", 0, `parsing error: string "1234" is not a valid octal number`},
+		{"x", 0, `parsing error: string "x" is not a valid octal number`},
 	}
 
 	for _, test := range tests {

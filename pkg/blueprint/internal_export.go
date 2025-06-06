@@ -271,7 +271,7 @@ func (e *InternalExporter) exportFirewallCustomization() *int.FirewallCustomizat
 			if fp.Protocol != "" {
 				proto = fp.Protocol.String()
 			}
-			srv := fmt.Sprintf("%d/%s", fp.Port, proto)
+			srv := fmt.Sprintf("%d:%s", fp.Port, proto)
 
 			if fp.Enabled == nil || *fp.Enabled {
 				to.Ports = append(to.Ports, srv)
@@ -283,7 +283,7 @@ func (e *InternalExporter) exportFirewallCustomization() *int.FirewallCustomizat
 			if fft.Protocol != "" {
 				proto = fft.Protocol.String()
 			}
-			srv := fmt.Sprintf("%d-%d/%s", fft.From, fft.To, proto)
+			srv := fmt.Sprintf("%d-%d:%s", fft.From, fft.To, proto)
 
 			if fft.Enabled == nil || *fft.Enabled {
 				to.Ports = append(to.Ports, srv)

@@ -26,13 +26,9 @@ func NewInternalImporter(inputBlueprint *int.Blueprint) *InternalImporter {
 // Import converts the internal representation to the blueprint.
 func (e *InternalImporter) Import() error {
 	to := &Blueprint{}
-	var err error
 
 	to.Accounts = e.importAccounts()
-	to.Architecture, err = ParseArch(e.from.Arch)
-	if err != nil {
-		e.log.Printf("error parsing architecture %q: %v", e.from.Arch, err)
-	}
+	to.Architecture = e.importArchitecture()
 	to.CACerts = e.importCACerts()
 	to.Containers = e.importContainers()
 	to.DNF = e.importDNF()
@@ -54,6 +50,19 @@ func (e *InternalImporter) Import() error {
 
 func (e *InternalImporter) Result() *Blueprint {
 	return e.to
+}
+
+func (e *InternalImporter) importArchitecture() Arch {
+	if e.from.Arch == "" {
+		return ArchUnset
+	}
+
+	result, err := ParseArch(e.from.Arch)
+	if err != nil {
+		e.log.Printf("error parsing architecture %q: %v", e.from.Arch, err)
+	}
+
+	return result
 }
 
 func (e *InternalImporter) importDNF() *DNF {

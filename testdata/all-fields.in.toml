@@ -1,6 +1,6 @@
 # only one keyboard layout supported, selecting first one
 # network service 4 error: port number 1313 cannot be disabled
-# Registration not converted
+# registration not converted
 
 name = "Blueprint example"
 description = "A complete example of a blueprint with all possible fields"
@@ -63,7 +63,7 @@ version = "1.0.0"
     languages = ["en_US.UTF-8", "cs_CZ.UTF-8"]
     keyboard = "cz-qwerty"
   [customizations.firewall]
-    ports = ["53/udp", "60000-60010/udp"]
+    ports = ["53:udp", "60000-60010:udp"]
     [customizations.firewall.services]
       enabled = ["ssh", "dhcp"]
       disabled = ["cups"]

@@ -5,6 +5,8 @@ import (
 	"strings"
 )
 
+const ArchUnset Arch = ""
+
 func (boa Arch) String() string {
 	return string(boa)
 }
