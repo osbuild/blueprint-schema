@@ -114,3 +114,27 @@ func TestParseOctalString(t *testing.T) {
 		}
 	}
 }
+
+func TestJoinNonEmptyStrings(t *testing.T) {
+	tests := []struct {
+		input    []string
+		expected string
+	}{
+		{[]string{}, ""},
+		{[]string{""}, ""},
+		{[]string{"a"}, "a"},
+		{[]string{"a", ""}, "a"},
+		{[]string{"", "b"}, "b"},
+		{[]string{"a", "b"}, "a-b"},
+		{[]string{"a", "", "b"}, "a-b"},
+		{[]string{"", "a", "b"}, "a-b"},
+	}
+
+	for _, test := range tests {
+		result := joinNonEmpty("-", test.input...)
+
+		if diff := cmp.Diff(test.expected, result); diff != "" {
+			t.Errorf("joinNonEmpty(%v) mismatch (-want +got):\n%s", test.input, diff)
+		}
+	}
+}

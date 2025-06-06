@@ -81,7 +81,7 @@ network:
 accounts:
   users:
     - name: "lzap"
-      description: ""
+      description: "Lukas Zapletal"
       password: ""
       force_password_change: false
       ssh_keys:

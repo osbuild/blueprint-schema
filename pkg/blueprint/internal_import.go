@@ -1,7 +1,6 @@
 package blueprint
 
 import (
-	"fmt"
 	"reflect"
 	"strings"
 
@@ -92,7 +91,7 @@ func (e *InternalImporter) importPackages() []string {
 
 	s := make([]string, len(e.from.Packages))
 	for i, pkg := range e.from.Packages {
-		s[i] = fmt.Sprintf("%s-%s", pkg.Name, pkg.Version)
+		s[i] = joinNonEmpty("-", pkg.Name, pkg.Version)
 	}
 
 	return s
@@ -103,9 +102,9 @@ func (e *InternalImporter) importModules() []string {
 		return nil
 	}
 
-	s := make([]string, len(e.from.EnabledModules))
+	s := make([]string, len(e.from.Modules))
 	for i, pkg := range e.from.Modules {
-		s[i] = fmt.Sprintf("%s-%s", pkg.Name, pkg.Version)
+		s[i] = joinNonEmpty("-", pkg.Name, pkg.Version)
 	}
 
 	return s

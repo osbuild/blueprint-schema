@@ -87,3 +87,16 @@ func parseOctalString(str string) (int, error) {
 
 	return int(value), nil
 }
+
+func joinNonEmpty(delimiter string, parts ...string) string {
+	var sb strings.Builder
+	for _, part := range parts {
+		if part != "" {
+			if sb.Len() > 0 {
+				sb.WriteString(delimiter)
+			}
+			sb.WriteString(part)
+		}
+	}
+	return sb.String()
+}
