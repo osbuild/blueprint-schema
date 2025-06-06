@@ -111,3 +111,25 @@ registration:
       enabled: true
       product_plugin_enabled: true
       repository_management: true
+storage:
+  minsize: "161061273600"
+  partitions:
+  - fs_type: ext4
+    label: label
+    minsize: "53687091200"
+    mountpoint: /
+    type: plain
+  - logical_volumes:
+    - fs_type: ext4
+      label: label
+      minsize: "53687091200"
+      mountpoint: /var
+      name: lv_name
+    minsize: "53687091200"
+    type: lvm
+  - minsize: "53687091200"
+    subvolumes:
+    - mountpoint: /opt/name
+      name: name
+    type: btrfs
+  type: gpt

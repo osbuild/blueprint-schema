@@ -1,6 +1,9 @@
 package blueprint
 
-import "testing"
+import (
+	"encoding/json"
+	"testing"
+)
 
 func TestByteSize(t *testing.T) {
 	tests := []struct {
@@ -40,6 +43,55 @@ func TestByteSize(t *testing.T) {
 			}
 			if result != test.expected {
 				t.Errorf("expected %v, got %v", test.expected, result)
+			}
+		})
+	}
+}
+
+func TestMarshalJSON(t *testing.T) {
+	tests := []struct {
+		input    ByteSize
+		expected string
+	}{
+		{0, `"0"`},
+		{1, `"1"`},
+		{1000, `"1000"`},
+		{1500, `"1500"`},
+	}
+
+	for _, test := range tests {
+		t.Run(test.expected, func(t *testing.T) {
+			data, err := json.Marshal(test.input)
+			if err != nil {
+				t.Errorf("unexpected error: %v", err)
+			}
+			if string(data) != test.expected {
+				t.Errorf("expected %s, got %s", test.expected, data)
+			}
+		})
+	}
+}
+
+func TestUnarshalJSON(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected ByteSize
+	}{
+		{`"0B"`, 0},
+		{`"1B"`, 1},
+		{`"1500B"`, 1500},
+		{`"10kB"`, 10000},
+		{`"10KiB"`, 10240},
+	}
+
+	for _, test := range tests {
+		t.Run(test.input, func(t *testing.T) {
+			var result ByteSize
+			if err := json.Unmarshal([]byte(test.input), &result); err != nil {
+				t.Errorf("unexpected error on unmarshal: %v", err)
+			}
+			if result != test.expected {
+				t.Errorf("expected %v, got %v", test.input, result)
 			}
 		})
 	}

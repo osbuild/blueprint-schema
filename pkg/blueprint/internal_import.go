@@ -45,6 +45,7 @@ func (e *InternalImporter) Import() error {
 	to.Network = e.importNetwork()
 	to.OpenSCAP = e.importOpenSCAP()
 	to.Registration = e.importRegistration()
+	to.Storage = e.importStorage()
 
 	e.to = to
 	return e.log.Errors()
@@ -488,6 +489,76 @@ func (e *InternalImporter) importRegistration() *Registration {
 	}
 
 	if reflect.DeepEqual(to, Registration{}) {
+		return nil // omitzero
+	}
+
+	return &to
+}
+
+func (e *InternalImporter) importStorage() *Storage {
+	if e.from.Customizations == nil || e.from.Customizations.Disk == nil {
+		return nil
+	}
+
+	to := Storage{
+		Type: StorageType(e.from.Customizations.Disk.Type),
+	}
+
+	if e.from.Customizations.Disk.MinSize > 0 {
+		to.Minsize = ToByteSize(e.from.Customizations.Disk.MinSize)
+	}
+
+	for _, part := range e.from.Customizations.Disk.Partitions {
+		switch strings.ToLower(part.Type) {
+		case "plain":
+			fst, err := ParseFSType(part.FSType)
+			if err != nil {
+				e.log.Printf("error parsing filesystem type %q for partition %q: %v, using default", part.FSType, part.Name, err)
+			}
+			np := PartitionPlain{
+				Type:       PartTypePlain,
+				FSType:     fst,
+				Label:      part.Label,
+				Minsize:    ToByteSize(part.MinSize),
+				Mountpoint: part.Mountpoint,
+			}
+			to.Partitions = append(to.Partitions, StoragePartitionFromPlain(np))
+		case "btrfs":
+			np := PartitionBTRFS{
+				Type:    PartTypeBTRFS,
+				Minsize: ToByteSize(part.MinSize),
+			}
+			for _, sv := range part.Subvolumes {
+				nsv := PartitionSubvolumes{
+					Name:       sv.Name,
+					Mountpoint: sv.Mountpoint,
+				}
+				np.Subvolumes = append(np.Subvolumes, nsv)
+			}
+			to.Partitions = append(to.Partitions, StoragePartitionFromBTRFS(np))
+		case "lvm":
+			np := PartitionLVM{
+				Type:    PartTypeLVM,
+				Minsize: ToByteSize(part.MinSize),
+			}
+			for _, lv := range part.LogicalVolumes {
+				fst, err := ParseFSType(part.FSType)
+				if err != nil {
+					e.log.Printf("error parsing filesystem type %q for lv %q: %v, using default", part.FSType, lv.Name, err)
+				}
+				nlv := PartitionLV{
+					Name:       lv.Name,
+					Label:      lv.Label,
+					FSType:     fst,
+					Minsize:    ToByteSize(lv.MinSize),
+					Mountpoint: lv.Mountpoint,
+				}
+				np.LogicalVolumes = append(np.LogicalVolumes, nlv)
+			}
+			to.Partitions = append(to.Partitions, StoragePartitionFromLVM(np))
+		}
+	}
+	if reflect.DeepEqual(to, Storage{}) {
 		return nil // omitzero
 	}
 

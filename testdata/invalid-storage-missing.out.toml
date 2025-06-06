@@ -1,5 +1,3 @@
-# error parsing parition size "": expected number: ""
-
 name = "Blueprint example: missing required properties for storage"
 version = "1.0.0"
 
@@ -7,3 +5,7 @@ version = "1.0.0"
   [customizations.disk]
     type = "gpt"
     minsize = 590558003200
+
+    [[customizations.disk.partitions]]
+      type = "plain"
+      fs_type = "ext4"

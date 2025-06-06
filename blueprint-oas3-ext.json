@@ -1352,10 +1352,7 @@
         "nullable": true,
         "properties": {
           "minsize": {
-            "description": "Minimum size of the storage device. When not set, the image size is acquired\nfrom image request.\n\nSize must be formatted as an integer followed by whitespace and then either\na decimal unit (B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB,\nTiB, PiB, EiB).\n",
-            "pattern": "^\\d+\\s*[BKkMGTPE]i?[BKMGTPE]?$",
-            "type": "string",
-            "x-go-type-skip-optional-pointer": true
+            "$ref": "#/components/schemas/storage_minsize"
           },
           "partitions": {
             "description": "Partitions of the following types: plain (default), lvm, or btrfs.\n",
@@ -1399,10 +1396,9 @@
         "x-go-type-skip-optional-pointer": true
       },
       "storage_minsize": {
-        "description": "Minimum size of the volume.\n\nSize must be formatted as an integer followed by whitespace and then either a\ndecimal unit (B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB,\nTiB, PiB, EiB).\n",
+        "description": "Minimum size of the disk or partition.\n\nSize must be formatted as an integer followed by whitespace and then either a\ndecimal unit (B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB,\nTiB, PiB, EiB).\n\nIf unit is ommited, it is assumed to be in bytes.\n",
         "pattern": "^\\d+\\s*[BKkMGTPE]i?[BKMGTPE]?$",
-        "type": "string",
-        "x-go-type-name": "StorageMinSize",
+        "x-go-type": "ByteSize",
         "x-go-type-skip-optional-pointer": true
       },
       "storage_mountpoint": {

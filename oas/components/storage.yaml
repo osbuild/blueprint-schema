@@ -29,16 +29,7 @@ properties:
   type:
     "$ref": "storage_type.yaml"
   minsize:
-    description: |
-      Minimum size of the storage device. When not set, the image size is acquired
-      from image request.
-
-      Size must be formatted as an integer followed by whitespace and then either
-      a decimal unit (B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB,
-      TiB, PiB, EiB).
-    type: string
-    pattern: "^\\d+\\s*[BKkMGTPE]i?[BKMGTPE]?$"
-    x-go-type-skip-optional-pointer: true
+    "$ref": "storage_minsize.yaml"
   partitions:
     description: |
       Partitions of the following types: plain (default), lvm, or btrfs.

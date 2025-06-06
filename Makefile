@@ -27,14 +27,21 @@ pkg-go-dev-update: ## Schedule https://pkg.go.dev/github.com/osbuild/blueprint-s
 test: ## Run all tests
 	@go test -count=1 . ./pkg/blueprint
 
+.PHONY: image-builder-blueprint
+image-builder-blueprint: $(SOURCES) $(SCHEMA_SRC) ## Build the image-builder-blueprint binary
+	go build -o image-builder-blueprint ./cmd/image-builder-blueprint
+
+SCHEMA_BUILD_CLI=go run ./cmd/image-builder-blueprint
+# If you find yourself in a loop being unable to build the CLI, switch to the "main" branch
+# and build the CLI command via "make image-builder-blueprint" and use it.
 blueprint-oas3.yaml: $(SCHEMA_SRC) $(SOURCES)
-	go run ./cmd/image-builder-blueprint -print-yaml-schema > blueprint-oas3.yaml
+	$(SCHEMA_BUILD_CLI) -print-yaml-schema > blueprint-oas3.yaml
 
 blueprint-oas3.json: $(SCHEMA_SRC) $(SOURCES)
-	go run ./cmd/image-builder-blueprint -print-json-schema > blueprint-oas3.json
+	$(SCHEMA_BUILD_CLI) -print-json-schema > blueprint-oas3.json
 
 blueprint-oas3-ext.json: $(SCHEMA_SRC) $(SOURCES)
-	go run ./cmd/image-builder-blueprint -print-json-extended-schema > blueprint-oas3-ext.json
+	$(SCHEMA_BUILD_CLI) -print-json-extended-schema > blueprint-oas3-ext.json
 
 .PHONY: schema-bundle
 schema-bundle: blueprint-oas3.yaml blueprint-oas3.json blueprint-oas3-ext.json ## Bundle OpenAPI schema

@@ -1,12 +1,17 @@
 package blueprint
 
 import (
+	"encoding/json"
 	"fmt"
 	"strconv"
 	"strings"
 )
 
 type ByteSize uint64
+
+func (b ByteSize) Uint64() uint64 {
+	return uint64(b)
+}
 
 func (b ByteSize) Bytes() uint64 {
 	return uint64(b)
@@ -84,6 +89,10 @@ func NewSizeFloat(bytes float64) ByteSize {
 	return ByteSize(uint64(bytes))
 }
 
+func ToByteSize(size uint64) ByteSize {
+	return ByteSize(size)
+}
+
 func ParseSize(size string) (ByteSize, error) {
 	sizeStr := strings.ToUpper(strings.TrimSpace(size))
 	var numStr string
@@ -133,4 +142,24 @@ func ParseSize(size string) (ByteSize, error) {
 	}
 
 	return ByteSize(bytes), nil
+}
+
+func (bs *ByteSize) UnmarshalJSON(data []byte) error {
+	var sizeStr string
+	if err := json.Unmarshal(data, &sizeStr); err != nil {
+		return fmt.Errorf("unmarshalling bytesize: %w", err)
+	}
+
+	size, err := ParseSize(sizeStr)
+	if err != nil {
+		return fmt.Errorf("parsing bytesize: %w", err)
+	}
+
+	*bs = size
+	return nil
+}
+
+func (bs ByteSize) MarshalJSON() ([]byte, error) {
+	sizeStr := fmt.Sprintf("%d", bs.Bytes())
+	return json.Marshal(sizeStr)
 }

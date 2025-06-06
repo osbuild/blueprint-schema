@@ -1,11 +1,11 @@
-# error parsing device size : expected number: ""
-
 version = "1.0.0"
 
 [customizations]
 
   [[customizations.user]]
     name = "user"
+  [customizations.disk]
+    type = "gpt"
 
   [[customizations.repositories]]
     id = "one"

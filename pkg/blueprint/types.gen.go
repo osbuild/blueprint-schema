@@ -765,11 +765,13 @@ type PartitionBtrfs = PartitionBTRFS
 
 // PartitionBTRFS defines model for .
 type PartitionBTRFS struct {
-	// Minsize Minimum size of the volume.
+	// Minsize Minimum size of the disk or partition.
 	//
 	// Size must be formatted as an integer followed by whitespace and then either a
 	// decimal unit (B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB,
 	// TiB, PiB, EiB).
+	//
+	// If unit is ommited, it is assumed to be in bytes.
 	Minsize StorageMinsize `json:"minsize,omitempty"`
 
 	// Subvolumes BTRFS subvolumes to create.
@@ -792,11 +794,13 @@ type PartitionLV struct {
 	// Label Optional label of the partition.
 	Label string `json:"label,omitempty"`
 
-	// Minsize Minimum size of the volume.
+	// Minsize Minimum size of the disk or partition.
 	//
 	// Size must be formatted as an integer followed by whitespace and then either a
 	// decimal unit (B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB,
 	// TiB, PiB, EiB).
+	//
+	// If unit is ommited, it is assumed to be in bytes.
 	Minsize StorageMinsize `json:"minsize,omitempty"`
 
 	// Mountpoint Mount point of the partition. Must start with a slash.
@@ -814,11 +818,13 @@ type PartitionLVM struct {
 	// LogicalVolumes LVM logical volumes to create within the volume group.
 	LogicalVolumes []PartitionLv `json:"logical_volumes,omitempty"`
 
-	// Minsize Minimum size of the volume.
+	// Minsize Minimum size of the disk or partition.
 	//
 	// Size must be formatted as an integer followed by whitespace and then either a
 	// decimal unit (B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB,
 	// TiB, PiB, EiB).
+	//
+	// If unit is ommited, it is assumed to be in bytes.
 	Minsize StorageMinsize `json:"minsize,omitempty"`
 
 	// Name Optional name of the volume group. Will be generated automatically if not specified.
@@ -838,11 +844,13 @@ type PartitionPlain struct {
 	// Label Optional label of the partition.
 	Label string `json:"label,omitempty"`
 
-	// Minsize Minimum size of the volume.
+	// Minsize Minimum size of the disk or partition.
 	//
 	// Size must be formatted as an integer followed by whitespace and then either a
 	// decimal unit (B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB,
 	// TiB, PiB, EiB).
+	//
+	// If unit is ommited, it is assumed to be in bytes.
 	Minsize StorageMinsize `json:"minsize,omitempty"`
 
 	// Mountpoint Mount point of the partition. Must start with a slash.
@@ -972,13 +980,14 @@ type RegistrationRHSM struct {
 // partition table. Logical Volumes are not grown to fill the space in the Volume
 // Group since they are trivial to grow on a live system.
 type Storage struct {
-	// Minsize Minimum size of the storage device. When not set, the image size is acquired
-	// from image request.
+	// Minsize Minimum size of the disk or partition.
 	//
-	// Size must be formatted as an integer followed by whitespace and then either
-	// a decimal unit (B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB,
+	// Size must be formatted as an integer followed by whitespace and then either a
+	// decimal unit (B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB,
 	// TiB, PiB, EiB).
-	Minsize string `json:"minsize"`
+	//
+	// If unit is ommited, it is assumed to be in bytes.
+	Minsize StorageMinsize `json:"minsize"`
 
 	// Partitions Partitions of the following types: plain (default), lvm, or btrfs.
 	Partitions []StoragePartition `json:"partitions"`
@@ -992,12 +1001,14 @@ type Storage struct {
 // Relevant for partition types: plain.
 type FSType string
 
-// StorageMinsize Minimum size of the volume.
+// StorageMinsize Minimum size of the disk or partition.
 //
 // Size must be formatted as an integer followed by whitespace and then either a
 // decimal unit (B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB,
 // TiB, PiB, EiB).
-type StorageMinsize = string
+//
+// If unit is ommited, it is assumed to be in bytes.
+type StorageMinsize = ByteSize
 
 // StorageMountpoint Mount point of the partition. Must start with a slash.
 type StorageMountpoint = string

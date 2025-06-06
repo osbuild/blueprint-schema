@@ -319,12 +319,7 @@ func (e *InternalExporter) exportStorage() *int.DiskCustomization {
 
 	to := &int.DiskCustomization{}
 	to.Type = e.from.Storage.Type.String()
-	size, err := ParseSize(e.from.Storage.Minsize)
-	if err != nil {
-		e.log.Printf("error parsing device size %s: %v", e.from.Storage.Minsize, err)
-	} else {
-		to.MinSize = size.Bytes()
-	}
+	to.MinSize = e.from.Storage.Minsize.Bytes()
 
 	for i, p := range e.from.Storage.Partitions {
 		pp, pl, pb, err := p.SelectUnion()
@@ -334,15 +329,9 @@ func (e *InternalExporter) exportStorage() *int.DiskCustomization {
 		}
 
 		if pp.Type == PartTypePlain {
-			size, err := ParseSize(pp.Minsize)
-			if err != nil {
-				e.log.Printf("error parsing parition size %q: %v", pp.Minsize, err)
-				continue
-			}
-
 			part := &int.PartitionCustomization{
 				Type:    "plain",
-				MinSize: size.Bytes(),
+				MinSize: pp.Minsize.Bytes(),
 				FilesystemTypedCustomization: int.FilesystemTypedCustomization{
 					Label:      pp.Label,
 					Mountpoint: pp.Mountpoint,
@@ -352,29 +341,18 @@ func (e *InternalExporter) exportStorage() *int.DiskCustomization {
 
 			to.Partitions = append(to.Partitions, *part)
 		} else if pl.Type == PartTypeLVM {
-			size, err := ParseSize(pl.Minsize)
-			if err != nil {
-				e.log.Printf("error parsing volume size %q: %v", pl.Minsize, err)
-				continue
-			}
-
 			part := &int.PartitionCustomization{
 				Type:    "lvm",
-				MinSize: size.Bytes(),
+				MinSize: pl.Minsize.Bytes(),
 				VGCustomization: int.VGCustomization{
 					Name: pl.Name,
 				},
 			}
 
 			for _, lv := range pl.LogicalVolumes {
-				lvSize, err := ParseSize(lv.Minsize)
-				if err != nil {
-					e.log.Printf("error parsing LVM size %q: %v", lv.Minsize, err)
-					continue
-				}
 				lvc := int.LVCustomization{
 					Name:    lv.Name,
-					MinSize: lvSize.Bytes(),
+					MinSize: lv.Minsize.Bytes(),
 					FilesystemTypedCustomization: int.FilesystemTypedCustomization{
 						Label:      lv.Label,
 						Mountpoint: lv.Mountpoint,
@@ -386,15 +364,9 @@ func (e *InternalExporter) exportStorage() *int.DiskCustomization {
 
 			to.Partitions = append(to.Partitions, *part)
 		} else if pb.Type == PartTypeBTRFS {
-			size, err := ParseSize(pb.Minsize)
-			if err != nil {
-				e.log.Printf("error parsing BTRFS size %q: %v", pb.Minsize, err)
-				continue
-			}
-
 			part := &int.PartitionCustomization{
 				Type:                     "btrfs",
-				MinSize:                  size.Bytes(),
+				MinSize:                  pb.Minsize.Bytes(),
 				BtrfsVolumeCustomization: int.BtrfsVolumeCustomization{},
 			}
 

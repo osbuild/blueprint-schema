@@ -27,3 +27,9 @@ storage:
       subvolumes:
         - name: "root"
           mountpoint: "/var/backups"
+    - type: "plain"
+      label: "plain-bytes"
+      minsize: "1000000000"
+    - type: "plain"
+      label: "plain-mib"
+      minsize: "100 MiB"
