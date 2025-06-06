@@ -43,6 +43,7 @@ func (e *InternalImporter) Import() error {
 	to.Locale = e.importLocale()
 	to.Name = e.from.Name
 	to.Network = e.importNetwork()
+	to.OpenSCAP = e.importOpenSCAP()
 
 	e.to = to
 	return e.log.Errors()
@@ -426,6 +427,42 @@ func (e *InternalImporter) importNetwork() *Network {
 	}
 
 	if reflect.DeepEqual(to.Firewall, NetworkFirewall{}) {
+		return nil // omitzero
+	}
+
+	return &to
+}
+
+func (e *InternalImporter) importOpenSCAP() *OpenSCAP {
+	if e.from.Customizations == nil || e.from.Customizations.OpenSCAP == nil {
+		return nil
+	}
+
+	to := OpenSCAP{
+		ProfileID:  e.from.Customizations.OpenSCAP.ProfileID,
+		Datastream: e.from.Customizations.OpenSCAP.DataStream,
+	}
+
+	if e.from.Customizations.OpenSCAP.PolicyID != "" {
+		// https://github.com/osbuild/blueprint-schema/issues/29
+		e.log.Printf("policy ID %q is not supported, ignoring", e.from.Customizations.OpenSCAP.PolicyID)
+	}
+
+	if e.from.Customizations.OpenSCAP.JSONTailoring != nil {
+		to.Tailoring = OpenSCAPTailoringFromJSON(TailoringJSON{
+			JSONProfileID: e.from.Customizations.OpenSCAP.JSONTailoring.ProfileID,
+			JSONFilePath:  e.from.Customizations.OpenSCAP.JSONTailoring.Filepath,
+		})
+	}
+
+	if e.from.Customizations.OpenSCAP.Tailoring != nil {
+		to.Tailoring = OpenSCAPTailoringFromProfiles(TailoringProfiles{
+			Selected:   e.from.Customizations.OpenSCAP.Tailoring.Selected,
+			Unselected: e.from.Customizations.OpenSCAP.Tailoring.Unselected,
+		})
+	}
+
+	if reflect.DeepEqual(to, OpenSCAP{}) {
 		return nil // omitzero
 	}
 

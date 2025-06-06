@@ -17,3 +17,13 @@ func (ost OpenSCAPTailoring) SelectUnion() (TailoringProfiles, TailoringJSON, er
 
 	return tp, tj, nil
 }
+
+func OpenSCAPTailoringFromProfiles(node TailoringProfiles) *OpenSCAPTailoring {
+	u, _ := json.Marshal(node)
+	return &OpenSCAPTailoring{union: u}
+}
+
+func OpenSCAPTailoringFromJSON(node TailoringJSON) *OpenSCAPTailoring {
+	u, _ := json.Marshal(node)
+	return &OpenSCAPTailoring{union: u}
+}

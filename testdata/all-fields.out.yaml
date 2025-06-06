@@ -98,3 +98,9 @@ network:
     - from: 60000
       protocol: udp
       to: 60010
+openscap:
+  datastream: /usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml
+  profile_id: xccdf_org.ssgproject.content_profile_cis
+  tailoring:
+    unselected:
+    - xccdf_org.ssgproject.content_rule_grub2_password
