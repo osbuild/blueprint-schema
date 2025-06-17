@@ -182,11 +182,7 @@ func (e *InternalExporter) exportUserCustomization() []int.UserCustomization {
 			uc.GID = ptr.ToNilIfEmpty(u.GID)
 		}
 		if u.Expires != nil {
-			expireDate, err := ExpireDateToEpochDays(*u.Expires)
-			if err != nil {
-				e.log.Printf("error converting expire date for user %s: %v", u.Name, err)
-			}
-			uc.ExpireDate = ptr.To(expireDate)
+			uc.ExpireDate = ptr.To(u.Expires.Days())
 		}
 		if u.ForcePasswordChange != nil {
 			uc.ForcePasswordReset = u.ForcePasswordChange

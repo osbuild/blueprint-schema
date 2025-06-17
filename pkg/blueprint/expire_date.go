@@ -1,36 +1,64 @@
 package blueprint
 
 import (
+	"encoding/json"
 	"strings"
 	"time"
 
 	"github.com/osbuild/blueprint-schema/pkg/ptr"
 )
 
-// Convert date in format YYYY-MM-DD or RFC3339 date to amount of days since epoch.
-// Can be refactored to ExpireDate method once https://github.com/oapi-codegen/oapi-codegen/pull/1987 is merged.
-func ExpireDateToEpochDays(date ExpireDate) (int, error) {
+// EpochDays represents a date as the number of days since the Unix epoch (1970-01-01).
+type EpochDays int
+
+// Days returns the number of days since the Unix epoch.
+func (e EpochDays) Days() int {
+	return int(e)
+}
+
+// NewStringEpochDays converts date in format YYYY-MM-DD or RFC3339 date to amount of days since epoch.
+func NewStringEpochDays(date string) (*EpochDays, error) {
 	if date == "" {
-		return 0, nil
+		return nil, nil
 	}
 
 	// Convert to RFC3339 format if not already in that format
-	if !strings.Contains(string(date), "T") {
-		date = ExpireDate(date + "T00:00:00Z")
+	if !strings.Contains(date, "T") {
+		date = date + "T00:00:00Z"
 	}
 
-	t, err := time.Parse(time.RFC3339, string(date))
+	t, err := time.Parse(time.RFC3339, date)
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
-	return int(t.Unix() / (24 * 60 * 60)), nil
+	return ptr.To(EpochDays(t.UTC().Unix() / (24 * 60 * 60))), nil
 }
 
-func ParseExpireDate(epochDays *int) *ExpireDate {
-	if epochDays == nil || *epochDays < 0 {
+// NewIntEpochDays creates a new EpochDays from an integer representing the number of days since the epoch.
+func NewIntEpochDays(epochDays int) *EpochDays {
+	return ptr.To(EpochDays(epochDays))
+}
+
+func (e *EpochDays) UnmarshalJSON(data []byte) error {
+	if len(data) == 0 || string(data) == `""` {
 		return nil
 	}
 
-	t := time.Unix(int64(*epochDays)*24*60*60, 0).UTC()
-	return ptr.To(ExpireDate(t.Format(time.RFC3339)))
+	var dateStr string
+	if err := json.Unmarshal(data, &dateStr); err != nil {
+		return err
+	}
+
+	ed, err := NewStringEpochDays(dateStr)
+	if err != nil {
+		return err
+	}
+
+	*e = *ed
+	return nil
+}
+
+func (e EpochDays) MarshalJSON() ([]byte, error) {
+	t := time.Unix(int64(e.Days())*(24*60*60), 0).UTC()
+	return json.Marshal(t.Format("2006-01-02"))
 }

@@ -198,7 +198,7 @@ func (e *InternalImporter) importAccounts() *Accounts {
 			GID:                 ptr.ValueOr(user.GID, 0),
 			Groups:              user.Groups,
 			Password:            user.Password,
-			Expires:             ParseExpireDate(user.ExpireDate),
+			Expires:             NewIntEpochDays(ptr.ValueOrEmpty(user.ExpireDate)),
 			ForcePasswordChange: user.ForcePasswordReset,
 			Shell:               ptr.ValueOrEmpty(user.Shell),
 		}

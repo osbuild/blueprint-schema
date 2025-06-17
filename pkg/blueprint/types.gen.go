@@ -109,7 +109,7 @@ type AccountsUsers struct {
 	// String-based type which accepts date (YYYY-MM-DD) or date-time (RFC3339)
 	// format and only marshals into date format. This is needed for JSON/YAML compatibility
 	// since YAML automatically converts strings which look like dates into time.Time.
-	Expires *ExpireDate `json:"expires,omitempty"`
+	Expires *EpochDays `json:"expires,omitempty"`
 
 	// ForcePasswordChange If set to true, the user will be forced to change their password
 	// on first login.
@@ -460,13 +460,6 @@ type DNFSourceMirrorlist struct {
 
 // Error defines model for error.
 type Error = string
-
-// ExpireDate The expiration date in the format YYYY-MM-DD. Leave empty to never expire.
-//
-// String-based type which accepts date (YYYY-MM-DD) or date-time (RFC3339)
-// format and only marshals into date format. This is needed for JSON/YAML compatibility
-// since YAML automatically converts strings which look like dates into time.Time.
-type ExpireDate = string
 
 // FIPS FIPS details, optional.
 type FIPS struct {

@@ -19,7 +19,14 @@ properties:
     maxLength: 4096
     x-go-type-skip-optional-pointer: true
   expires:
-    "$ref": "expire_date.yaml"
+    description: |
+      The expiration date in the format YYYY-MM-DD. Leave empty to never expire.
+
+      String-based type which accepts date (YYYY-MM-DD) or date-time (RFC3339)
+      format and only marshals into date format. This is needed for JSON/YAML compatibility
+      since YAML automatically converts strings which look like dates into time.Time.
+    x-go-type-skip-optional-pointer: false
+    x-go-type: EpochDays
   gid:
     description: |
       The primary group ID (GID) of the user. Value of zero (or ommited

@@ -43,6 +43,7 @@ version = "1.0.0"
 
   [[customizations.user]]
     name = "lzap"
+    description = "Lukas Zapletal"
     password = ""
     key = "ssh-key 1234"
     home = "/home/lzap"

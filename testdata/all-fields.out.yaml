@@ -3,7 +3,7 @@ accounts:
   - gid: 1042
     name: operators
   users:
-  - expires: "2050-05-13T00:00:00Z"
+  - expires: "2050-05-13"
     force_password_change: false
     gid: 1001
     groups:
@@ -33,7 +33,7 @@ dnf:
   - vim-enhanced
   - vim-enhanced-9.1.866-1
   - vim-enhanced-9.1.866-1.fc41.x86_64
-  - '@virtualization-'
+  - '@virtualization'
   repositories:
   - gpg_check_repo: false
     gpg_keys:
