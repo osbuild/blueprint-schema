@@ -113,22 +113,22 @@ registration:
       product_plugin_enabled: true
       repository_management: true
 storage:
-  minsize: "161061273600"
+  minsize: 150 GiB
   partitions:
   - fs_type: ext4
     label: label
-    minsize: "53687091200"
+    minsize: 50 GiB
     mountpoint: /
     type: plain
   - logical_volumes:
     - fs_type: ext4
       label: label
-      minsize: "53687091200"
+      minsize: 50 GiB
       mountpoint: /var
       name: lv_name
-    minsize: "53687091200"
+    minsize: 50 GiB
     type: lvm
-  - minsize: "53687091200"
+  - minsize: 50 GiB
     subvolumes:
     - mountpoint: /opt/name
       name: name

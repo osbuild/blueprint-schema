@@ -2,6 +2,7 @@ package blueprint
 
 import (
 	"encoding/json"
+	"fmt"
 	"testing"
 )
 
@@ -48,6 +49,36 @@ func TestByteSize(t *testing.T) {
 	}
 }
 
+func TestByteSizeHuman(t *testing.T) {
+	tests := []struct {
+		input    uint64
+		expected string
+	}{
+		{0, "0"},
+		{1, "1"},
+		{1000, "1 KB"},
+		{1024, "1 KiB"},
+		{1025, "1025"},
+		{4096, "4 KiB"},
+		{10000, "10 KB"},
+		{100000000, "100 MB"},
+		{100000000000, "100 GB"},
+		{53687091200, "50 GiB"},
+		{1099511627776, "1 TiB"},
+	}
+
+	for _, test := range tests {
+		t.Run(fmt.Sprintf("%d", test.input), func(t *testing.T) {
+			bs := ByteSize(test.input)
+			result := bs.HumanFriendly()
+
+			if result != test.expected {
+				t.Errorf("expected %v, got %v", test.expected, result)
+			}
+		})
+	}
+}
+
 func TestMarshalJSON(t *testing.T) {
 	tests := []struct {
 		input    ByteSize
@@ -55,8 +86,13 @@ func TestMarshalJSON(t *testing.T) {
 	}{
 		{0, `"0"`},
 		{1, `"1"`},
-		{1000, `"1000"`},
+		{1000, `"1 KB"`},
 		{1500, `"1500"`},
+		{10240, `"10 KiB"`},
+		{1048576, `"1 MiB"`},
+		{1073741824, `"1 GiB"`},
+		{1099511627776, `"1 TiB"`},
+		{100000000000, `"100 GB"`},
 	}
 
 	for _, test := range tests {

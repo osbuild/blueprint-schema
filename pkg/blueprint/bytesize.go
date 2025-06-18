@@ -9,6 +9,32 @@ import (
 
 type ByteSize uint64
 
+// HumanFriendly returns a human-readable representation of the byte size.
+// Returns the largest possible unit as integer number and it uses binary units (e.g., KiB, MiB, GiB).
+// Never returns a float.
+func (b ByteSize) HumanFriendly() string {
+	switch {
+	case b%(1024*1024*1024*1024) == 0 && b >= (1024*1024*1024*1024):
+		return fmt.Sprintf("%d TiB", b.IntTiB())
+	case b%(1000*1000*1000*1000) == 0 && b >= (1000*1000*1000*1000):
+		return fmt.Sprintf("%d TB", b.IntTB())
+	case b%(1024*1024*1024) == 0 && b >= (1024*1024*1024):
+		return fmt.Sprintf("%d GiB", b.IntGiB())
+	case b%(1000*1000*1000) == 0 && b >= (1000*1000*1000):
+		return fmt.Sprintf("%d GB", b.IntGB())
+	case b%(1024*1024) == 0 && b >= (1024*1024):
+		return fmt.Sprintf("%d MiB", b.IntMiB())
+	case b%(1000*1000) == 0 && b >= (1000*1000):
+		return fmt.Sprintf("%d MB", b.IntMB())
+	case b%(1024) == 0 && b >= (1024):
+		return fmt.Sprintf("%d KiB", b.IntKiB())
+	case b%(1000) == 0 && b >= (1000):
+		return fmt.Sprintf("%d KB", b.IntKB())
+	default:
+		return fmt.Sprintf("%d", b)
+	}
+}
+
 func (b ByteSize) Uint64() uint64 {
 	return uint64(b)
 }
@@ -160,6 +186,5 @@ func (bs *ByteSize) UnmarshalJSON(data []byte) error {
 }
 
 func (bs ByteSize) MarshalJSON() ([]byte, error) {
-	sizeStr := fmt.Sprintf("%d", bs.Bytes())
-	return json.Marshal(sizeStr)
+	return json.Marshal(bs.HumanFriendly())
 }
