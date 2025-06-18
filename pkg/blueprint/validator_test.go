@@ -3,6 +3,7 @@ package blueprint
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -220,9 +221,12 @@ func TestFix(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, file := range files {
+
+	processFile := func(file string) bool {
+		t.Logf("Processing %s", file)
+
 		if s, err := os.Stat(file); err != nil || s.IsDir() {
-			continue
+			return false
 		}
 
 		format := filepath.Ext(file)
@@ -240,5 +244,55 @@ func TestFix(t *testing.T) {
 			suffix := baseFile + ".out.yaml"
 			conversionTest(t, file, suffix)
 		}
+
+		return true
 	}
+
+	for _, file := range files {
+		if !processFile(file) {
+			t.Errorf("Failed to process file: %s", file)
+		}
+	}
+
+	if writeFixtures {
+		// copy some files in the testdata directory so we can close the loop and test it all
+		copies := []string{
+			"../../testdata/all-fields.out.toml", "../../testdata/all-fields.in.toml",
+		}
+
+		for i := 0; i < len(copies); i += 2 {
+			src := copies[i]
+			dst := copies[i+1]
+			t.Logf("Copying %q to %q", src, dst)
+
+			if _, err := os.Stat(dst); err == nil {
+				os.Remove(dst)
+			}
+
+			err := copy(src, dst)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			if !processFile(dst) {
+				t.Errorf("Failed to process file: %s", dst)
+			}
+		}
+	}
+}
+
+func copy(src, dst string) error {
+	input, err := os.ReadFile(src)
+	if err != nil {
+		return err
+	}
+
+	header := fmt.Sprintf("# file is a copy from %q, do not edit it directly\n", src)
+	input = append([]byte(header), input...)
+	err = os.WriteFile(dst, input, 0644)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

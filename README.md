@@ -126,3 +126,11 @@ func main() {
 ### Extensions
 
 Various advanced validation rules do not work well with Go code generator, therefore these are kept separate in `oas/extensions` directory and are only applied to `blueprint-oas3-ext.json` bundled schema. This schema must be only used for validation purposes and not for code generation.
+
+### Tests
+
+To run tests against fixtures: `make test`
+
+To regenerate fixtures: `make write-fixtures`
+
+To print diff between two YAML files via round-trip conversion `UBP-YAML > TOML > UBP-YAML`: `make test-diff`

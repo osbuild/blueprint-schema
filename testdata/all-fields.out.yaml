@@ -3,7 +3,8 @@ accounts:
   - gid: 1042
     name: operators
   users:
-  - expires: "2050-05-13"
+  - description: Lukas Zapletal
+    expires: "2050-05-13"
     force_password_change: false
     gid: 1001
     groups:

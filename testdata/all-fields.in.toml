@@ -1,3 +1,4 @@
+# file is a copy from "../../testdata/all-fields.out.toml", do not edit it directly
 # only one keyboard layout supported, selecting first one
 # network service 4 error: port number 1313 cannot be disabled
 # registration not converted
@@ -43,6 +44,7 @@ version = "1.0.0"
 
   [[customizations.user]]
     name = "lzap"
+    description = "Lukas Zapletal"
     password = ""
     key = "ssh-key 1234"
     home = "/home/lzap"
