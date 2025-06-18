@@ -357,6 +357,12 @@ func (e *InternalImporter) importInstaller() *Installer {
 		}
 	}
 
+	if e.from.Customizations.InstallationDevice != "" {
+		to.CoreOS = &InstallerCoreOS{
+			InstallationDevice: e.from.Customizations.InstallationDevice,
+		}
+	}
+
 	if reflect.DeepEqual(to, Installer{}) {
 		return nil // omitzero
 	}
@@ -540,6 +546,7 @@ func (e *InternalImporter) importStorage() *Storage {
 		case "lvm":
 			np := PartitionLVM{
 				Type:    PartTypeLVM,
+				Name:    part.Name,
 				Minsize: ToByteSize(part.MinSize),
 			}
 			for _, lv := range part.LogicalVolumes {

@@ -81,6 +81,8 @@ installer:
     sudo_nopasswd:
     - lzap
     unattended: true
+  coreos:
+    installation_device: /dev/vda
 kernel:
   cmdline_append:
   - nosmt=force
@@ -103,6 +105,8 @@ openscap:
   datastream: /usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml
   profile_id: xccdf_org.ssgproject.content_profile_cis
   tailoring:
+    selected:
+    - xccdf_org.ssgproject.content_rule_md5_check
     unselected:
     - xccdf_org.ssgproject.content_rule_grub2_password
 registration:
@@ -127,6 +131,7 @@ storage:
       mountpoint: /var
       name: lv_name
     minsize: 50 GiB
+    name: vg_name
     type: lvm
   - minsize: 50 GiB
     subvolumes:
