@@ -11,7 +11,6 @@ import (
 
 // Defines values for NetworkProtocol.
 const (
-	ProtocolAny  NetworkProtocol = "any"
 	ProtocolICMP NetworkProtocol = "icmp"
 	ProtocolTCP  NetworkProtocol = "tcp"
 	ProtocolUDP  NetworkProtocol = "udp"
@@ -75,7 +74,7 @@ const (
 
 // NetworkProtocol The network protocol used for the connection. This can be either TCP, UDP, ICMP or ANY protocol.
 //
-// Empty value is equivalent to `any` for port definitions or is ignored for service definitions.
+// Empty value is equivalent to `any` for port definitions. Protocol is ignored for service definitions.
 type NetworkProtocol string
 
 // FirewallEnabled Whether the firewall rule is enabled or not. Defaults to true.
@@ -473,7 +472,7 @@ type FIPS struct {
 type FirewallFromTo struct {
 	// Protocol The network protocol used for the connection. This can be either TCP, UDP, ICMP or ANY protocol.
 	//
-	// Empty value is equivalent to `any` for port definitions or is ignored for service definitions.
+	// Empty value is equivalent to `any` for port definitions. Protocol is ignored for service definitions.
 	Protocol NetworkProtocol `json:"protocol,omitempty"`
 
 	// Enabled Whether the firewall rule is enabled or not. Defaults to true.
@@ -490,7 +489,7 @@ type FirewallFromTo struct {
 type FirewallPort struct {
 	// Protocol The network protocol used for the connection. This can be either TCP, UDP, ICMP or ANY protocol.
 	//
-	// Empty value is equivalent to `any` for port definitions or is ignored for service definitions.
+	// Empty value is equivalent to `any` for port definitions. Protocol is ignored for service definitions.
 	Protocol NetworkProtocol `json:"protocol,omitempty"`
 
 	// Enabled Whether the firewall rule is enabled or not. Defaults to true.
@@ -504,7 +503,7 @@ type FirewallPort struct {
 type FirewallService struct {
 	// Protocol The network protocol used for the connection. This can be either TCP, UDP, ICMP or ANY protocol.
 	//
-	// Empty value is equivalent to `any` for port definitions or is ignored for service definitions.
+	// Empty value is equivalent to `any` for port definitions. Protocol is ignored for service definitions.
 	Protocol NetworkProtocol `json:"protocol,omitempty"`
 
 	// Enabled Whether the firewall rule is enabled or not. Defaults to true.

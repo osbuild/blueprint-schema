@@ -1,5 +1,3 @@
-# only one keyboard layout supported, selecting first one
-# network service 4 error: port number 1313 cannot be disabled
 # registration not converted
 
 name = "Blueprint example"
@@ -62,12 +60,11 @@ version = "1.0.0"
     ntpservers = ["0.north-america.pool.ntp.org", "1.north-america.pool.ntp.org"]
   [customizations.locale]
     languages = ["en_US.UTF-8", "cs_CZ.UTF-8"]
-    keyboard = "cz-qwerty"
+    keyboard = "cz"
   [customizations.firewall]
-    ports = ["53:udp", "60000-60010:udp"]
+    ports = ["53:udp", "1313", "60000-60010:udp"]
     [customizations.firewall.services]
       enabled = ["ssh", "dhcp"]
-      disabled = ["cups"]
   [customizations.services]
     enabled = ["sshd.service", "backup.timer"]
     disabled = ["tuned", "cupsd"]

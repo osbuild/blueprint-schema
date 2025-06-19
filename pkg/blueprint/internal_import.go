@@ -378,7 +378,7 @@ func (e *InternalImporter) importLocale() *Locale {
 	to := Locale{}
 	to.Languages = append(to.Languages, e.from.Customizations.Locale.Languages...)
 	if e.from.Customizations.Locale.Keyboard != nil {
-		to.Languages = []string{*e.from.Customizations.Locale.Keyboard}
+		to.Keyboards = []string{*e.from.Customizations.Locale.Keyboard}
 	}
 
 	if reflect.DeepEqual(to, Locale{}) {

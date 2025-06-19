@@ -65,16 +65,12 @@ network:
   firewall:
     services:
       - service: "ssh"
-        protocol: "tcp"
-        enabled: true
+        # enabled: true # can be omitted
       - service: "dhcp"
-      - service: "cups"
-        enabled: false
       - port: 53
         protocol: "udp"
       - port: 1313
-        protocol: "any"
-        enabled: false
+        # enabled: false # unsupported by TOML
       - from: 60000
         to: 60010
         protocol: "udp"
@@ -100,15 +96,15 @@ timedate:
   ntp_servers: ["0.north-america.pool.ntp.org", "1.north-america.pool.ntp.org"]
 locale:
   languages: ["en_US.UTF-8", "cs_CZ.UTF-8"]
-  keyboards: ["cz-qwerty", "cz", "us"]
+  keyboards: ["cz"]
 systemd:
   enabled: ["sshd.service", "backup.timer"]
   disabled: ["tuned", "cupsd"]
   masked: ["masked.service"]
 fsnodes:
   - path: "/var/tmp/dir/file1"
-    type: "file" # could be ommited
-    mode: "0644" # could be ommited
+    type: "file" # can be ommited
+    mode: "0644" # can be ommited
     user: "lzap"
     group: "lzap"
   - path: "/var/tmp/dir/file2"

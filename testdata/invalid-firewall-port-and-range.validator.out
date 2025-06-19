@@ -25,7 +25,6 @@ Value:
     "enabled": true,
     "from": 1302,
     "port": 1301,
-    "protocol": "any",
     "to": 1303
   }
  Or property "from" is unsupported
@@ -56,7 +55,6 @@ Value:
     "enabled": true,
     "from": 1302,
     "port": 1301,
-    "protocol": "any",
     "to": 1303
   }
  Or property "port" is unsupported
@@ -95,6 +93,5 @@ Value:
     "enabled": true,
     "from": 1302,
     "port": 1301,
-    "protocol": "any",
     "to": 1303
   }

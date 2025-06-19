@@ -1,7 +1,6 @@
 package blueprint
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 	"time"
@@ -236,7 +235,7 @@ func (e *InternalExporter) exportLocaleCustomization() *int.LocaleCustomization 
 			e.log.Println("only one keyboard layout supported, selecting first one")
 		}
 	}
-	to.Languages = e.from.Locale.Languages
+	to.Languages = append(to.Languages, e.from.Locale.Languages...)
 
 	return to
 }
@@ -256,7 +255,6 @@ func (e *InternalExporter) exportFirewallCustomization() *int.FirewallCustomizat
 			continue
 		}
 
-		proto := "tcp"
 		if fs.Service != "" {
 			if fs.Enabled == nil || *fs.Enabled {
 				to.Services.Enabled = append(to.Services.Enabled, fs.Service)
@@ -264,10 +262,7 @@ func (e *InternalExporter) exportFirewallCustomization() *int.FirewallCustomizat
 				to.Services.Disabled = append(to.Services.Disabled, fs.Service)
 			}
 		} else if fp.Port != 0 {
-			if fp.Protocol != "" {
-				proto = fp.Protocol.String()
-			}
-			srv := fmt.Sprintf("%d:%s", fp.Port, proto)
+			srv := PortProtoToFirewalld(fp.Port, fp.Protocol)
 
 			if fp.Enabled == nil || *fp.Enabled {
 				to.Ports = append(to.Ports, srv)
@@ -276,10 +271,7 @@ func (e *InternalExporter) exportFirewallCustomization() *int.FirewallCustomizat
 				continue
 			}
 		} else if fft.From != 0 && fft.To != 0 {
-			if fft.Protocol != "" {
-				proto = fft.Protocol.String()
-			}
-			srv := fmt.Sprintf("%d-%d:%s", fft.From, fft.To, proto)
+			srv := PortsProtoToFirewalld(fft.From, fft.To, fp.Protocol)
 
 			if fft.Enabled == nil || *fft.Enabled {
 				to.Ports = append(to.Ports, srv)

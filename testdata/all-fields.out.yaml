@@ -90,8 +90,11 @@ kernel:
   - nosmt=force
   package: kernel-debug-6.11.5-300
 locale:
+  keyboards:
+  - cz
   languages:
-  - cz-qwerty
+  - en_US.UTF-8
+  - cs_CZ.UTF-8
 name: Blueprint example
 network:
   firewall:
@@ -100,6 +103,7 @@ network:
     - service: dhcp
     - port: 53
       protocol: udp
+    - port: 1313
     - from: 60000
       protocol: udp
       to: 60010

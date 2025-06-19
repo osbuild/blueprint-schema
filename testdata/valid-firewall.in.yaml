@@ -8,7 +8,6 @@ network:
       - service: "ssh"
         protocol: tcp
       - port: 53
-        protocol: "any"
         enabled: false
       - from: 60000
         to: 60010

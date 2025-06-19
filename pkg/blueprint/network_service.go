@@ -8,8 +8,36 @@ import (
 	"strings"
 )
 
+// ProtocolAny represents any network protocol.
+const ProtocolAny NetworkProtocol = ""
+
 func (np NetworkProtocol) String() string {
 	return string(np)
+}
+
+// UnmarshalJSON handles default values.
+func (np *NetworkProtocol) UnmarshalJSON(data []byte) error {
+	var proto string
+	if err := json.Unmarshal(data, &proto); err != nil {
+		return fmt.Errorf("unmarshalling network protocol: %w", err)
+	}
+
+	parsedProto, err := ParseNetworkProtocol(proto)
+	if err != nil {
+		return fmt.Errorf("parsing network protocol %q: %w", proto, err)
+	}
+
+	*np = parsedProto
+	return nil
+}
+
+// MarshalJSON handles default values.
+func (np NetworkProtocol) MarshalJSON() ([]byte, error) {
+	if np == ProtocolAny {
+		return json.Marshal("")
+	}
+
+	return json.Marshal(string(np))
 }
 
 func (t NetworkService) SelectUnion() (FirewallService, FirewallPort, FirewallFromTo, error) {
@@ -37,8 +65,7 @@ func (t NetworkService) SelectUnion() (FirewallService, FirewallPort, FirewallFr
 var ErrInvalidNetworkProtocol = errors.New("invalid network protocol")
 
 func ParseNetworkProtocol(s string) (NetworkProtocol, error) {
-	proto := s
-	switch proto {
+	switch strings.ToLower(s) {
 	case "", "any":
 		return ProtocolAny, nil
 	case "tcp":
@@ -48,7 +75,7 @@ func ParseNetworkProtocol(s string) (NetworkProtocol, error) {
 	case "icmp":
 		return ProtocolICMP, nil
 	default:
-		return "", ErrInvalidNetworkProtocol
+		return "", fmt.Errorf("%w: %q", ErrInvalidNetworkProtocol, s)
 	}
 }
 
@@ -133,4 +160,22 @@ func ParseFirewalldFromTo(port string) (FirewallFromTo, error) {
 		To:       int(to),
 		Protocol: proto,
 	}, nil
+}
+
+// PortProtoToFirewalld converts a port and protocol to the firewalld format: PORT[:PROTOCOL]
+func PortProtoToFirewalld(port int, proto NetworkProtocol) string {
+	if proto == ProtocolAny || proto == "" {
+		return strconv.Itoa(port)
+	}
+
+	return fmt.Sprintf("%d:%s", port, proto)
+}
+
+// PortsProtoToFirewalld converts a range of ports and protocol to the firewalld format: FROM-TO[:PROTOCOL]
+func PortsProtoToFirewalld(from int, to int, proto NetworkProtocol) string {
+	if proto == ProtocolAny || proto == "" {
+		return fmt.Sprintf("%d-%d", from, to)
+	}
+
+	return fmt.Sprintf("%d-%d:%s", from, to, proto)
 }
