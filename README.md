@@ -123,6 +123,39 @@ func main() {
 }
 ```
 
+### Default values
+
+Default values need to be handled via `UnmarshalJSON` method with a temporary custom type:
+
+```go
+// UnmarshalJSON handles default values
+func (node *FSNode) UnmarshalJSON(data []byte) error {
+	type tmpType FSNode
+	tmp := tmpType{}
+
+	if err := json.Unmarshal(data, &tmp); err != nil {
+		return err
+	}
+
+	if tmp.Mode == 0 {
+		if tmp.Type.IsDir() {
+			tmp.Mode = 0755
+		} else {
+			tmp.Mode = 0644
+		}
+	}
+
+	*node = FSNode(tmp)
+	return nil
+}
+```
+
+### Conversion limitations
+
+Conversion from/to TOML has some limitations:
+
+* File system node `Mode` cannot be marshaled to octal number since the underlying JSON format does not support that despite YAML can do it.
+
 ### Extensions
 
 Various advanced validation rules do not work well with Go code generator, therefore these are kept separate in `oas/extensions` directory and are only applied to `blueprint-oas3-ext.json` bundled schema. This schema must be only used for validation purposes and not for code generation.

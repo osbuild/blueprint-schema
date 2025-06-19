@@ -125,6 +125,10 @@ version = "1.0.0"
     mode = "755"
     ensure_parents = true
 
+  [[customizations.directories]]
+    path = "/var/tmp/dir"
+    mode = "755"
+
   [[customizations.files]]
     path = "/var/tmp/dir/file1"
     user = "lzap"
@@ -134,6 +138,7 @@ version = "1.0.0"
 
   [[customizations.files]]
     path = "/var/tmp/dir/file2"
+    mode = "644"
     data = "test"
 
   [[customizations.repositories]]

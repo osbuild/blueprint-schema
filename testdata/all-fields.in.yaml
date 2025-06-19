@@ -106,17 +106,10 @@ systemd:
   disabled: ["tuned", "cupsd"]
   masked: ["masked.service"]
 fsnodes:
-  - path: "/var/tmp/dir"
-    type: "dir"
-    state: "present"
-    mode: 0755
-    user: "lzap"
-    group: "lzap"
-    ensure_parents: true
   - path: "/var/tmp/dir/file1"
     type: "file"
     state: "present"
-    mode: 0644
+    mode: 0o644
     user: "lzap"
     group: "lzap"
     contents:
@@ -124,6 +117,16 @@ fsnodes:
   - path: "/var/tmp/dir/file2"
     contents:
       text: "test" # useful for text
+  - path: "/var/tmp/dir"
+    type: "dir"
+    state: "present"
+    mode: 0o755
+    user: "lzap"
+    group: "lzap"
+    ensure_parents: true
+  - path: "/var/tmp/dir"
+    type: "dir"
+    state: "absent"
 ignition:
   url: "https://ignition.example.com/firstboot"
   #text: ""

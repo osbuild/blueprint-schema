@@ -5,8 +5,8 @@ version = "1.0.0"
 
   [[customizations.directories]]
     path = "/var/tmp/dir"
-    mode = "0"
+    mode = "755"
 
   [[customizations.directories]]
     path = "/var/tmp/dir"
-    mode = "0"
+    mode = "755"

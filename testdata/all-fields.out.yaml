@@ -60,6 +60,7 @@ fsnodes:
   user: lzap
 - contents:
     text: test
+  mode: 420
   path: /var/tmp/dir/file2
   type: file
 - ensure_parents: true
@@ -68,6 +69,9 @@ fsnodes:
   path: /var/tmp/dir
   type: dir
   user: lzap
+- mode: 493
+  path: /var/tmp/dir
+  type: dir
 hostname: worker.example.com
 ignition:
   url: https://ignition.example.com/firstboot

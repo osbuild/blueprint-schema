@@ -12,6 +12,7 @@ version = "1.0.0"
 
   [[customizations.files]]
     path = "/var/tmp/file1"
+    mode = "644"
 
   [[customizations.files]]
     path = "/var/tmp/dir/file1"
@@ -20,4 +21,5 @@ version = "1.0.0"
 
   [[customizations.files]]
     path = "/var/tmp/dir/file2"
+    mode = "644"
     data = "test"
