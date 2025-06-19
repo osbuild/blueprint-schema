@@ -593,8 +593,10 @@ func (e *InternalExporter) exportRepositories() ([]int.RepositoryCustomization, 
 			continue
 		}
 
-		if repo.Usage == nil {
-			repo.Usage = &DNFRepoUsage{}
+		var configure, install *bool
+		if repo.Usage != nil {
+			configure = repo.Usage.Configure
+			install = repo.Usage.Install
 		}
 
 		repos = append(repos, int.RepositoryCustomization{
@@ -604,24 +606,24 @@ func (e *InternalExporter) exportRepositories() ([]int.RepositoryCustomization, 
 			Metalink:       bmeta.Metalink,
 			Mirrorlist:     bmirror.Mirrorlist,
 			Priority:       ptr.ToNilIfEmpty(repo.Priority),
-			Enabled:        ptr.OrTo(repo.Usage.Configure, true),
+			Enabled:        ptr.OrTo(configure, true),
 			SSLVerify:      ptr.OrTo(repo.SSLVerify, true),
 			GPGKeys:        repo.GPGKeys,
 			GPGCheck:       repo.GPGCheck,
 			RepoGPGCheck:   repo.GPGCheckRepo,
 			ModuleHotfixes: ptr.ToNilIfEmpty(repo.ModuleHotfixes),
 			Filename:       repo.Filename,
-			InstallFrom:    ptr.ValueOr(repo.Usage.Install, true),
+			InstallFrom:    ptr.ValueOr(install, true),
 		})
 
-		if len(repo.GPGKeys) > 0 {
+		if len(e.from.DNF.ImportKeys) > 0 {
 			if rpm == nil {
 				rpm = &int.RPMCustomization{
-					ImportKeys: &int.RPMImportKeys{},
+					ImportKeys: &int.RPMImportKeys{
+						Files: e.from.DNF.ImportKeys,
+					},
 				}
 			}
-
-			rpm.ImportKeys.Files = append(rpm.ImportKeys.Files, repo.GPGKeys...)
 		}
 	}
 

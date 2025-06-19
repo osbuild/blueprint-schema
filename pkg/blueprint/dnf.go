@@ -29,3 +29,18 @@ func (s *DNFSource) SelectUnion() (DNFSourceBaseURLs, DNFSourceMetalink, DNFSour
 
 	return burl, bmeta, bmirror, nil
 }
+
+func DNFSourceFromBaseURLs(node DNFSourceBaseURLs) *DNFSource {
+	u, _ := json.Marshal(node)
+	return &DNFSource{union: u}
+}
+
+func DNFSourceFromMetalink(node DNFSourceMetalink) *DNFSource {
+	u, _ := json.Marshal(node)
+	return &DNFSource{union: u}
+}
+
+func DNFSourceFromMirrorlist(node DNFSourceMirrorlist) *DNFSource {
+	u, _ := json.Marshal(node)
+	return &DNFSource{union: u}
+}

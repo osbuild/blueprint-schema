@@ -75,8 +75,11 @@ func (e *InternalImporter) importDNF() *DNF {
 	to.Packages = e.importPackages()
 	to.Modules = e.importModules()
 	to.Groups = e.importGroups()
-	to.ImportKeys = e.from.Customizations.RPM.ImportKeys.Files
 	to.Repositories = e.importRepositories()
+
+	for _, keyFile := range e.from.Customizations.RPM.ImportKeys.Files {
+		to.ImportKeys = append(to.ImportKeys, strings.TrimPrefix(keyFile, "file://"))
+	}
 
 	if reflect.DeepEqual(to, DNF{}) {
 		return nil // omitzero
@@ -142,8 +145,26 @@ func (e *InternalImporter) importRepositories() []DNFRepository {
 			Priority:       ptr.ValueOr(repo.Priority, 0),
 			SSLVerify:      repo.SSLVerify,
 			Usage: &DnfRepositoryUsage{
-				Configure: ptr.To(true),
+				Configure: repo.Enabled,
+				Install:   &repo.InstallFrom,
 			},
+		}
+
+		if repo.BaseURLs != nil {
+			repos[i].Source = DNFSourceFromBaseURLs(DNFSourceBaseURLs{
+				URLs: repo.BaseURLs,
+			})
+		} else if repo.Metalink != "" {
+			repos[i].Source = DNFSourceFromMetalink(DNFSourceMetalink{
+				Metalink: repo.Metalink,
+			})
+		} else if repo.Mirrorlist != "" {
+			repos[i].Source = DNFSourceFromMirrorlist(DNFSourceMirrorlist{
+				Mirrorlist: repo.Mirrorlist,
+			})
+		} else {
+			e.log.Printf("repository %q has no source defined", repo.Id)
+			continue
 		}
 	}
 

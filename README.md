@@ -128,25 +128,51 @@ func main() {
 Default values need to be handled via `UnmarshalJSON` method with a temporary custom type:
 
 ```go
-// UnmarshalJSON handles default values
-func (node *FSNode) UnmarshalJSON(data []byte) error {
-	type tmpType FSNode
-	tmp := tmpType{}
+func (dr *DNFRepoUsage) UnmarshalJSON(data []byte) error {
+	type tmpType DNFRepoUsage
+	tmp := tmpType(*dr)
 
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err
 	}
 
-	if tmp.Mode == 0 {
-		if tmp.Type.IsDir() {
-			tmp.Mode = 0755
-		} else {
-			tmp.Mode = 0644
-		}
+	if tmp.Configure == nil {
+		tmp.Configure = ptr.To(true)
 	}
 
-	*node = FSNode(tmp)
+	if tmp.Install == nil {
+		tmp.Install = ptr.To(true)
+	}
+
+	*dr = DNFRepoUsage(tmp)
 	return nil
+}
+```
+
+Note pointer receiver, for MarshalJSON a value receiver must be used in order to prevent modifying:
+
+```go
+func (dr DNFRepoUsage) MarshalJSON() ([]byte, error) {
+	type tmpType DNFRepoUsage
+	tmp := tmpType(dr)
+
+	if tmp.Configure != nil && *tmp.Configure {
+		tmp.Configure = nil
+	}
+
+	if tmp.Install != nil && *tmp.Install {
+		tmp.Install = nil
+	}
+
+	return json.Marshal(tmp)
+}
+```
+
+For Go 1.24+ `IsZero` should be used as well:
+
+```go
+func (dr DNFRepoUsage) IsZero() bool {
+	return (dr.Configure == nil || *dr.Configure) && (dr.Install == nil || *dr.Install)
 }
 ```
 

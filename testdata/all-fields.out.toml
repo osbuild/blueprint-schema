@@ -141,16 +141,16 @@ version = "1.0.0"
     gpgkeys = ["file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch"]
     metalink = "https://mirrors.fedoraproject.org/metalink?repo=fedora-cisco-openh264-$releasever&arch=$basearch"
     name = "Fedora $releasever openh264 (From Cisco) - $basearch"
-    enabled = true
+    enabled = false
     repo_gpgcheck = false
     sslverify = true
     install_from = true
 
   [[customizations.repositories]]
     id = "empty-repo"
-    enabled = true
+    enabled = false
     sslverify = true
-    install_from = true
+    install_from = false
   [customizations.installer]
     unattended = true
     sudo-nopasswd = ["lzap"]
@@ -161,7 +161,7 @@ version = "1.0.0"
       disable = ["org.fedoraproject.Anaconda.Modules.Timezone"]
   [customizations.rpm]
     [customizations.rpm.import_keys]
-      files = ["file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch"]
+      files = ["/etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-18-primary"]
   [customizations.rhsm]
     [customizations.rhsm.config]
       [customizations.rhsm.config.dnf_plugins]

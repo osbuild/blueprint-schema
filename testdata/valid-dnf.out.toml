@@ -30,4 +30,4 @@ version = "1.0.0"
     install_from = true
   [customizations.rpm]
     [customizations.rpm.import_keys]
-      files = ["file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch"]
+      files = ["/etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-41-primary"]

@@ -1,3 +1,5 @@
+# repository "empty-repo" has no source defined
+
 accounts:
   groups:
   - gid: 1042
@@ -29,7 +31,7 @@ dnf:
   groups:
   - virtualization
   import_keys:
-  - file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
+  - /etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-18-primary
   packages:
   - vim-enhanced
   - vim-enhanced-9.1.866-1
@@ -41,13 +43,14 @@ dnf:
     - file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
     id: fedora-cisco-openh264
     name: Fedora $releasever openh264 (From Cisco) - $basearch
-    ssl_verify: true
+    source:
+      metalink: https://mirrors.fedoraproject.org/metalink?repo=fedora-cisco-openh264-$releasever&arch=$basearch
     usage:
-      configure: true
+      configure: false
   - id: empty-repo
-    ssl_verify: true
     usage:
-      configure: true
+      configure: false
+      install: false
 fips:
   enabled: true
 fsnodes:
