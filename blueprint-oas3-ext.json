@@ -707,8 +707,8 @@
             "x-go-type-skip-optional-pointer": true
           },
           "mode": {
-            "description": "Mode is the file system node permissions. Defaults to 0644 for\nfiles and 0755 for directories.\n",
-            "type": "integer",
+            "description": "Mode is the file system node permissions. Defaults to 0644 for\nfiles and 0755 for directories. Must be a valid octal number as a string.\n",
+            "x-go-type": "FSNodeMode",
             "x-go-type-skip-optional-pointer": true
           },
           "path": {

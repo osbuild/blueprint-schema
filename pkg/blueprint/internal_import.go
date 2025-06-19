@@ -264,7 +264,7 @@ func (e *InternalImporter) importFSNodes() []FSNode {
 
 	var res []FSNode
 	for _, file := range e.from.Customizations.Files {
-		mode, err := parseOctalString(file.Mode)
+		mode, err := ParseFSNodeMode(file.Mode)
 		if err != nil {
 			e.log.Printf("error parsing file mode %q for file %q: %v, using default", file.Mode, file.Path, err)
 		}
@@ -287,7 +287,7 @@ func (e *InternalImporter) importFSNodes() []FSNode {
 	}
 
 	for _, dir := range e.from.Customizations.Directories {
-		mode, err := parseOctalString(dir.Mode)
+		mode, err := ParseFSNodeMode(dir.Mode)
 		if err != nil {
 			e.log.Printf("error parsing file mode %q for dir %q: %v, using default", dir.Mode, dir.Path, err)
 		}

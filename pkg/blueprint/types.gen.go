@@ -529,8 +529,8 @@ type FSNode struct {
 	Group string `json:"group,omitempty"`
 
 	// Mode Mode is the file system node permissions. Defaults to 0644 for
-	// files and 0755 for directories.
-	Mode int `json:"mode,omitempty"`
+	// files and 0755 for directories. Must be a valid octal number as a string.
+	Mode FSNodeMode `json:"mode,omitempty"`
 
 	// Path Path is the absolute path to the file or directory.
 	Path string `json:"path"`

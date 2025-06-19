@@ -50,8 +50,8 @@ properties:
   mode:
     description: |
       Mode is the file system node permissions. Defaults to 0644 for
-      files and 0755 for directories.
-    type: integer
+      files and 0755 for directories. Must be a valid octal number as a string.
+    x-go-type: FSNodeMode
     x-go-type-skip-optional-pointer: true
   path:
     description: Path is the absolute path to the file or directory.

@@ -85,36 +85,6 @@ func TestParseUGID(t *testing.T) {
 	}
 }
 
-func TestParseOctalString(t *testing.T) {
-	tests := []struct {
-		input    string
-		expected int
-		err      string
-	}{
-		{"", 0, ""},
-		{"0", 0, ""},
-		{"01", 1, ""},
-		{"1", 1, ""},
-		{"07", 7, ""},
-		{"010", 8, ""},
-		{"0777", 511, ""},
-		{"x", 0, `parsing error: string "x" is not a valid octal number`},
-	}
-
-	for _, test := range tests {
-		result, err := parseOctalString(test.input)
-
-		if err != nil && test.err != err.Error() {
-			t.Errorf("parseOctalString(%q) error mismatch: got %v, want %v", test.input, err, test.err)
-			continue
-		}
-
-		if result != test.expected {
-			t.Errorf("parseOctalString(%q) mismatch: got %d, want %d", test.input, result, test.expected)
-		}
-	}
-}
-
 func TestJoinNonEmptyStrings(t *testing.T) {
 	tests := []struct {
 		input    []string

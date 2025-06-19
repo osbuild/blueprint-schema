@@ -51,25 +51,23 @@ dnf:
 fips:
   enabled: true
 fsnodes:
-- contents:
-    text: '---'
-  group: lzap
-  mode: 420
+- group: lzap
+  mode: "0644"
   path: /var/tmp/dir/file1
   type: file
   user: lzap
 - contents:
     text: test
-  mode: 420
+  mode: "0644"
   path: /var/tmp/dir/file2
   type: file
 - ensure_parents: true
   group: lzap
-  mode: 493
+  mode: "0755"
   path: /var/tmp/dir
   type: dir
   user: lzap
-- mode: 493
+- mode: "0755"
   path: /var/tmp/dir
   type: dir
 hostname: worker.example.com

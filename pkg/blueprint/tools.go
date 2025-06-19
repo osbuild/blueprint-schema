@@ -66,28 +66,6 @@ func parseUGIDany(a any) string {
 	return ""
 }
 
-// parseOctalString parses a string as an octal number and returns the integer value.
-// It parses strings not starting with '0' as valid octal numbers.
-func parseOctalString(str string) (int, error) {
-	if str == "" {
-		return 0, nil
-	}
-
-	var s string
-	if !strings.HasPrefix(str, "0") {
-		s = "0" + str
-	} else {
-		s = str
-	}
-
-	value, err := strconv.ParseInt(s, 8, 0)
-	if err != nil {
-		return 0, fmt.Errorf("%w: string %q is not a valid octal number", ErrParsing, str)
-	}
-
-	return int(value), nil
-}
-
 func joinNonEmpty(delimiter string, parts ...string) string {
 	var sb strings.Builder
 	for _, part := range parts {

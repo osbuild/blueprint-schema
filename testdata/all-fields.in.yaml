@@ -107,26 +107,25 @@ systemd:
   masked: ["masked.service"]
 fsnodes:
   - path: "/var/tmp/dir/file1"
-    type: "file"
-    state: "present"
-    mode: 0o644
+    type: "file" # could be ommited
+    mode: "0644" # could be ommited
     user: "lzap"
     group: "lzap"
-    contents:
-      base64: "LS0t" # useful for binaries
   - path: "/var/tmp/dir/file2"
+    type: "file"
+    mode: "0644"
     contents:
-      text: "test" # useful for text
+      text: "test"
   - path: "/var/tmp/dir"
     type: "dir"
-    state: "present"
-    mode: 0o755
+    mode: "0755"
     user: "lzap"
     group: "lzap"
     ensure_parents: true
   - path: "/var/tmp/dir"
+    mode: "0755"
     type: "dir"
-    state: "absent"
+    #state: "absent" # unsupported by TOML
 ignition:
   url: "https://ignition.example.com/firstboot"
   #text: ""

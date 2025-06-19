@@ -134,7 +134,6 @@ version = "1.0.0"
     user = "lzap"
     group = "lzap"
     mode = "644"
-    data = "---"
 
   [[customizations.files]]
     path = "/var/tmp/dir/file2"
