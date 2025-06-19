@@ -1,6 +1,7 @@
 package blueprint
 
 import (
+	"fmt"
 	"reflect"
 	"strings"
 
@@ -493,6 +494,22 @@ func (e *InternalImporter) importRegistration() *Registration {
 				ProductPluginEnabled: e.from.Customizations.RHSM.Config.DNFPlugins.ProductID.Enabled,
 			},
 		},
+	}
+
+	if e.from.Customizations.FDO != nil {
+		var insecure bool
+		_, err := fmt.Sscanf(e.from.Customizations.FDO.DiunPubKeyInsecure, "%t", &insecure)
+		if err != nil {
+			e.log.Printf("cannot parse DiunPubKeyInsecure %q: %v, using default false", e.from.Customizations.FDO.DiunPubKeyInsecure, err)
+		}
+
+		to.RegistrationFDO = &RegistrationFDO{
+			ManufacturingServerURL:  e.from.Customizations.FDO.ManufacturingServerURL,
+			DiMfgStringTypeMacIface: e.from.Customizations.FDO.DiMfgStringTypeMacIface,
+			DiunPubKeyHash:          e.from.Customizations.FDO.DiunPubKeyHash,
+			DiunPubKeyInsecure:      insecure,
+			DiunPubKeyRootCerts:     e.from.Customizations.FDO.DiunPubKeyRootCerts,
+		}
 	}
 
 	if reflect.DeepEqual(to, Registration{}) {

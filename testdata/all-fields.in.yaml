@@ -44,17 +44,11 @@ kernel:
     - "nosmt=force"
 registration:
   redhat:
-    activation_key: "123456789"
-    organization: "123456"
     subscription_manager:
       enabled: true
       product_plugin_enabled: true
       repository_management: true
       auto_registration: true
-    insights:
-      enabled: true
-    connector:
-      enabled: true
   fdo:
     manufacturing_server_url: "https://fdo.example.com/manufacturing"
     #diun_pub_key_root_certs: ""

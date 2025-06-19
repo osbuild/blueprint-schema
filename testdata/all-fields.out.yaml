@@ -116,6 +116,11 @@ openscap:
     unselected:
     - xccdf_org.ssgproject.content_rule_grub2_password
 registration:
+  fdo:
+    di_mfg_string_type_mac_iface: enp0s3
+    diun_pub_key_hash: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
+    diun_pub_key_insecure: true
+    manufacturing_server_url: https://fdo.example.com/manufacturing
   redhat:
     subscription_manager:
       auto_registration: true
