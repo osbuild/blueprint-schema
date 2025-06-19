@@ -36,7 +36,9 @@ func (e *InternalImporter) Import() error {
 	to.Distribution = e.from.Distro
 	to.FIPS = e.importFIPS()
 	to.FSNodes = e.importFSNodes()
-	to.Hostname = ptr.ValueOrEmpty(e.from.Customizations.Hostname)
+	if e.from.Customizations != nil {
+		to.Hostname = ptr.ValueOrEmpty(e.from.Customizations.Hostname)
+	}
 	to.Ignition = e.importIgnition()
 	to.Installer = e.importInstaller()
 	to.Kernel = e.importKernel()
@@ -71,14 +73,20 @@ func (e *InternalImporter) importArchitecture() Arch {
 }
 
 func (e *InternalImporter) importDNF() *DNF {
+	if e.from.Customizations == nil || e.from.Customizations.RPM == nil {
+		return nil
+	}
+
 	to := DNF{}
 	to.Packages = e.importPackages()
 	to.Modules = e.importModules()
 	to.Groups = e.importGroups()
 	to.Repositories = e.importRepositories()
 
-	for _, keyFile := range e.from.Customizations.RPM.ImportKeys.Files {
-		to.ImportKeys = append(to.ImportKeys, strings.TrimPrefix(keyFile, "file://"))
+	if e.from.Customizations.RPM.ImportKeys != nil {
+		for _, keyFile := range e.from.Customizations.RPM.ImportKeys.Files {
+			to.ImportKeys = append(to.ImportKeys, strings.TrimPrefix(keyFile, "file://"))
+		}
 	}
 
 	if reflect.DeepEqual(to, DNF{}) {

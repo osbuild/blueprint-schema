@@ -1310,7 +1310,6 @@ components:
         TiB, PiB, EiB).
 
         If unit is ommited, it is assumed to be in bytes.
-      pattern: ^\d+\s*[BKkMGTPE]i?[BKMGTPE]?$
       x-go-type: ByteSize
       x-go-type-skip-optional-pointer: true
     storage_mountpoint:

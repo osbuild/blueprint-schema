@@ -1367,7 +1367,6 @@
       },
       "storage_minsize": {
         "description": "Minimum size of the disk or partition.\n\nSize must be formatted as an integer followed by whitespace and then either a\ndecimal unit (B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB,\nTiB, PiB, EiB).\n\nIf unit is ommited, it is assumed to be in bytes.\n",
-        "pattern": "^\\d+\\s*[BKkMGTPE]i?[BKMGTPE]?$",
         "x-go-type": "ByteSize",
         "x-go-type-skip-optional-pointer": true
       },
