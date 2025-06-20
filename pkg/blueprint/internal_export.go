@@ -88,7 +88,7 @@ func (e *InternalExporter) exportModules() []int.EnabledModule {
 
 	var s []int.EnabledModule
 	for _, pkg := range e.from.DNF.Modules {
-		p := splitStringEmptyN(pkg, "-", 2)
+		p := splitStringEmptyN(pkg, ":", 2)
 
 		s = append(s, int.EnabledModule{
 			Name:   p[0],

@@ -349,13 +349,17 @@ type DNF struct {
 	// must be present in the image. Does not support importing from URLs.
 	ImportKeys []string `json:"import_keys,omitempty"`
 
-	// Modules Modules to enable or disable
+	// Modules Modules to enable or disable. This field only supports native DNF module names, not the full module stream name. For example, to enable the 'nodejs' module, use 'nodejs' as the value. To enable a specific stream, use 'nodejs:20'.
+	// Software Collections (SCL) modules must be enabled via the packages field.
 	Modules []string `json:"modules,omitempty"`
 
 	// Packages Packages to install. Package name or NVRA is accepted as long
 	// as DNF can resolve it. Examples: vim-enhanced, vim-enhanced-9.1.866-1
 	// or vim-enhanced-9.1.866-1.fc41.x86_64. The packages can also be specified
 	// as @group_name to install all packages in the group.
+	//
+	// Software Collections (SCL) modules can be enabled via this field. For native DNF
+	// modules, use the modules field instead.
 	Packages []string `json:"packages,omitempty"`
 
 	// Repositories Third-party repositories are supported by the blueprint customizations.

@@ -20,7 +20,8 @@ version = "1.0.0"
   name = "@virtualization"
 
 [[enabled_modules]]
-  name = "postgres:16/server"
+  name = "postgres"
+  stream = "16/server"
 
 [[groups]]
   name = "virtualization"

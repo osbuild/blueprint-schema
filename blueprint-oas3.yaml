@@ -392,7 +392,9 @@ components:
           x-go-type-skip-optional-pointer: true
           x-omitempty: true
         modules:
-          description: Modules to enable or disable
+          description: |-
+            Modules to enable or disable. This field only supports native DNF module names, not the full module stream name. For example, to enable the 'nodejs' module, use 'nodejs' as the value. To enable a specific stream, use 'nodejs:20'.
+            Software Collections (SCL) modules must be enabled via the packages field.
           items:
             type: string
           nullable: true
@@ -405,6 +407,9 @@ components:
             as DNF can resolve it. Examples: vim-enhanced, vim-enhanced-9.1.866-1
             or vim-enhanced-9.1.866-1.fc41.x86_64. The packages can also be specified
             as @group_name to install all packages in the group.
+
+            Software Collections (SCL) modules can be enabled via this field. For native DNF
+            modules, use the modules field instead.
           items:
             type: string
           nullable: true

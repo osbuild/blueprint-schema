@@ -32,6 +32,8 @@ dnf:
   - virtualization
   import_keys:
   - /etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-18-primary
+  modules:
+  - postgres:16/server
   packages:
   - vim-enhanced
   - vim-enhanced-9.1.866-1

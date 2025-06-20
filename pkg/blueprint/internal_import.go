@@ -101,8 +101,12 @@ func (e *InternalImporter) importPackages() []string {
 		return nil
 	}
 
-	s := make([]string, len(e.from.Packages))
+	// Combine packages and modules into a single slice.
+	s := make([]string, len(e.from.Packages)+len(e.from.Modules))
 	for i, pkg := range e.from.Packages {
+		s[i] = joinNonEmpty("-", pkg.Name, pkg.Version)
+	}
+	for i, pkg := range e.from.Modules {
 		s[i] = joinNonEmpty("-", pkg.Name, pkg.Version)
 	}
 
@@ -110,13 +114,17 @@ func (e *InternalImporter) importPackages() []string {
 }
 
 func (e *InternalImporter) importModules() []string {
-	if e.from.Modules == nil {
+	if e.from.EnabledModules == nil {
 		return nil
 	}
 
-	s := make([]string, len(e.from.Modules))
-	for i, pkg := range e.from.Modules {
-		s[i] = joinNonEmpty("-", pkg.Name, pkg.Version)
+	s := make([]string, len(e.from.EnabledModules))
+	for i, pkg := range e.from.EnabledModules {
+		if pkg.Stream != "" {
+			s[i] = fmt.Sprintf("%s:%s", pkg.Name, pkg.Stream)
+		} else {
+			s[i] = pkg.Name
+		}
 	}
 
 	return s

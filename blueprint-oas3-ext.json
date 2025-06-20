@@ -374,7 +374,7 @@
             "x-omitempty": true
           },
           "modules": {
-            "description": "Modules to enable or disable",
+            "description": "Modules to enable or disable. This field only supports native DNF module names, not the full module stream name. For example, to enable the 'nodejs' module, use 'nodejs' as the value. To enable a specific stream, use 'nodejs:20'.\nSoftware Collections (SCL) modules must be enabled via the packages field.",
             "items": {
               "type": "string"
             },
@@ -384,7 +384,7 @@
             "x-omitempty": true
           },
           "packages": {
-            "description": "Packages to install. Package name or NVRA is accepted as long\nas DNF can resolve it. Examples: vim-enhanced, vim-enhanced-9.1.866-1\nor vim-enhanced-9.1.866-1.fc41.x86_64. The packages can also be specified\nas @group_name to install all packages in the group.\n",
+            "description": "Packages to install. Package name or NVRA is accepted as long\nas DNF can resolve it. Examples: vim-enhanced, vim-enhanced-9.1.866-1\nor vim-enhanced-9.1.866-1.fc41.x86_64. The packages can also be specified\nas @group_name to install all packages in the group.\n\nSoftware Collections (SCL) modules can be enabled via this field. For native DNF\nmodules, use the modules field instead.\n",
             "items": {
               "type": "string"
             },
