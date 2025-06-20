@@ -10,7 +10,8 @@ import (
 
 	"github.com/BurntSushi/toml"
 	"github.com/gabriel-vasile/mimetype"
-	"github.com/osbuild/blueprint-schema/pkg/blueprint"
+	"github.com/osbuild/blueprint-schema/pkg/conv"
+	"github.com/osbuild/blueprint-schema/pkg/parse"
 )
 
 func main() {
@@ -36,7 +37,7 @@ func main() {
 		defer in.Close()
 	}
 
-	schema, err := blueprint.CompileSourceSchema()
+	schema, err := parse.CompileSourceSchema()
 	if err != nil {
 		panic(err)
 	}
@@ -82,7 +83,7 @@ func main() {
 
 		return
 	} else if *validate {
-		schema, err = blueprint.CompileBundledSchema()
+		schema, err = parse.CompileBundledSchema()
 		if err != nil {
 			panic(err)
 		}
@@ -110,12 +111,12 @@ func main() {
 			panic(err)
 		}
 
-		b, err := blueprint.UnmarshalYAML(inBuf)
+		b, err := parse.UnmarshalYAML(inBuf)
 		if err != nil {
 			panic(err)
 		}
 
-		exporter := blueprint.NewInternalExporter(b)
+		exporter := conv.NewInternalExporter(b)
 		if logs := exporter.Export(); logs != nil {
 			fmt.Fprintln(os.Stderr, logs)
 		}

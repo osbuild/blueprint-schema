@@ -1,4 +1,4 @@
-package blueprint
+package parse
 
 import (
 	"bytes"
@@ -7,6 +7,8 @@ import (
 	"io"
 
 	"sigs.k8s.io/yaml"
+
+	ubp "github.com/osbuild/blueprint-schema/pkg/blueprint"
 )
 
 // UnmarshalYAML loads a blueprint from YAML data. It converts YAML into JSON first,
@@ -15,8 +17,8 @@ import (
 //
 // Uses sigs.k8s.io/yaml package for YAML parsing, for the API guarantees and
 // compatibility read https://pkg.go.dev/sigs.k8s.io/yaml#Unmarshal.
-func UnmarshalYAML(buf []byte) (*Blueprint, error) {
-	b := new(Blueprint)
+func UnmarshalYAML(buf []byte) (*ubp.Blueprint, error) {
+	b := new(ubp.Blueprint)
 
 	if err := yaml.Unmarshal(buf, b); err != nil {
 		return nil, fmt.Errorf("failed to unmarshal YAML blueprint: %w", err)
@@ -26,7 +28,7 @@ func UnmarshalYAML(buf []byte) (*Blueprint, error) {
 }
 
 // ReadYAML reads into a buffer and calls UnmarshalYAML. Read UnmarshalYAML for more details.
-func ReadYAML(reader io.Reader) (*Blueprint, error) {
+func ReadYAML(reader io.Reader) (*ubp.Blueprint, error) {
 	var buf bytes.Buffer
 
 	_, err := buf.ReadFrom(reader)
@@ -41,12 +43,12 @@ func ReadYAML(reader io.Reader) (*Blueprint, error) {
 //
 // Uses sigs.k8s.io/yaml package for YAML encoding, for the API guarantees and
 // compatibility read https://pkg.go.dev/sigs.k8s.io/yaml#Unmarshal.
-func MarshalYAML(b *Blueprint) ([]byte, error) {
+func MarshalYAML(b *ubp.Blueprint) ([]byte, error) {
 	return yaml.Marshal(b)
 }
 
 // WriteYAML calls MarshalYAML and writes the result to the writer.
-func WriteYAML(b *Blueprint, writer io.Writer) error {
+func WriteYAML(b *ubp.Blueprint, writer io.Writer) error {
 	data, err := yaml.Marshal(b)
 	if err != nil {
 		return err
@@ -56,13 +58,13 @@ func WriteYAML(b *Blueprint, writer io.Writer) error {
 }
 
 // unmarshalJSON uses JSON decoder to unmarshal into an object.
-func unmarshalJSON(data []byte) (*Blueprint, error) {
-	b := new(Blueprint)
+func unmarshalJSON(data []byte) (*ubp.Blueprint, error) {
+	b := new(ubp.Blueprint)
 	return b, json.Unmarshal(data, b)
 }
 
 // readJSON calls UnmarshalJSON after reading into a buffer.
-func readJSON(reader io.Reader) (*Blueprint, error) {
+func readJSON(reader io.Reader) (*ubp.Blueprint, error) {
 	var buf bytes.Buffer
 
 	_, err := buf.ReadFrom(reader)
@@ -74,7 +76,7 @@ func readJSON(reader io.Reader) (*Blueprint, error) {
 
 // marshalJSON uses JSON encoder to marshal the object into JSON.
 // Output can be optionaly indented.
-func marshalJSON(b *Blueprint, indent bool) ([]byte, error) {
+func marshalJSON(b *ubp.Blueprint, indent bool) ([]byte, error) {
 	if indent {
 		return json.MarshalIndent(b, "", "  ")
 	}
@@ -84,7 +86,7 @@ func marshalJSON(b *Blueprint, indent bool) ([]byte, error) {
 
 // writeJSON calls MarshalJSON and writes the result to the writer.
 // Output can be optionaly indented.
-func writeJSON(b *Blueprint, writer io.Writer, indent bool) error {
+func writeJSON(b *ubp.Blueprint, writer io.Writer, indent bool) error {
 	data, err := marshalJSON(b, indent)
 	if err != nil {
 		return err

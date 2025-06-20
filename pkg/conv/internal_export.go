@@ -1,22 +1,23 @@
-package blueprint
+package conv
 
 import (
 	"strconv"
 	"strings"
 	"time"
 
+	ubp "github.com/osbuild/blueprint-schema/pkg/blueprint"
 	"github.com/osbuild/blueprint-schema/pkg/ptr"
 	int "github.com/osbuild/blueprint/pkg/blueprint"
 )
 
 // InternalExporter is used to convert a blueprint to the internal representation.
 type InternalExporter struct {
-	from *Blueprint
+	from *ubp.Blueprint
 	to   *int.Blueprint
 	log  *logs
 }
 
-func NewInternalExporter(inputBlueprint *Blueprint) *InternalExporter {
+func NewInternalExporter(inputBlueprint *ubp.Blueprint) *InternalExporter {
 	return &InternalExporter{
 		from: inputBlueprint,
 		log:  newCollector(),
@@ -266,7 +267,7 @@ func (e *InternalExporter) exportFirewallCustomization() *int.FirewallCustomizat
 				to.Services.Disabled = append(to.Services.Disabled, fs.Service)
 			}
 		} else if fp.Port != 0 {
-			srv := PortProtoToFirewalld(fp.Port, fp.Protocol)
+			srv := ubp.PortProtoToFirewalld(fp.Port, fp.Protocol)
 
 			if fp.Enabled == nil || *fp.Enabled {
 				to.Ports = append(to.Ports, srv)
@@ -275,7 +276,7 @@ func (e *InternalExporter) exportFirewallCustomization() *int.FirewallCustomizat
 				continue
 			}
 		} else if fft.From != 0 && fft.To != 0 {
-			srv := PortsProtoToFirewalld(fft.From, fft.To, fp.Protocol)
+			srv := ubp.PortsProtoToFirewalld(fft.From, fft.To, fp.Protocol)
 
 			if fft.Enabled == nil || *fft.Enabled {
 				to.Ports = append(to.Ports, srv)
@@ -320,7 +321,7 @@ func (e *InternalExporter) exportStorage() *int.DiskCustomization {
 			continue
 		}
 
-		if pp.Type == PartTypePlain {
+		if pp.Type == ubp.PartTypePlain {
 			part := &int.PartitionCustomization{
 				Type:    "plain",
 				MinSize: pp.Minsize.Bytes(),
@@ -332,7 +333,7 @@ func (e *InternalExporter) exportStorage() *int.DiskCustomization {
 			}
 
 			to.Partitions = append(to.Partitions, *part)
-		} else if pl.Type == PartTypeLVM {
+		} else if pl.Type == ubp.PartTypeLVM {
 			part := &int.PartitionCustomization{
 				Type:    "lvm",
 				MinSize: pl.Minsize.Bytes(),
@@ -355,7 +356,7 @@ func (e *InternalExporter) exportStorage() *int.DiskCustomization {
 			}
 
 			to.Partitions = append(to.Partitions, *part)
-		} else if pb.Type == PartTypeBTRFS {
+		} else if pb.Type == ubp.PartTypeBTRFS {
 			part := &int.PartitionCustomization{
 				Type:                     "btrfs",
 				MinSize:                  pb.Minsize.Bytes(),
@@ -533,7 +534,7 @@ func (e *InternalExporter) exportFSNodes() ([]int.FileCustomization, []int.Direc
 	for i, node := range e.from.FSNodes {
 
 		switch node.Type {
-		case FSNodeFile, "":
+		case ubp.FSNodeFile, "":
 			var contents string
 			var err error
 			if node.Contents != nil {
@@ -560,7 +561,7 @@ func (e *InternalExporter) exportFSNodes() ([]int.FileCustomization, []int.Direc
 			}
 
 			files = append(files, fc)
-		case FSNodeDir:
+		case ubp.FSNodeDir:
 			fc := int.DirectoryCustomization{
 				Path:          node.Path,
 				User:          parseUGIDstr(node.User),

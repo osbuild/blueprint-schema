@@ -1,4 +1,4 @@
-package blueprint
+package parse
 
 import (
 	"bytes"

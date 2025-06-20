@@ -101,10 +101,10 @@ Example:
 ```go
 package main
 
-import "github.com/osbuild/blueprint-schema/pkg/blueprint"
+import "github.com/osbuild/blueprint-schema/pkg/parse"
 
 func main() {
-    blueprint, err := schema.ReadYAML(os.Stdin)
+    blueprint, err := parse.ReadYAML(os.Stdin)
 }
 ```
 
@@ -115,10 +115,10 @@ To validate JSON or YAML buffers, use `CompileBundledSchema` function:
 ```go
 package main
 
-import "github.com/osbuild/blueprint-schema/pkg/blueprint"
+import "github.com/osbuild/blueprint-schema/pkg/parse"
 
 func main() {
-    schema = blueprint.CompileBundledSchema()
+    schema = parse.CompileBundledSchema()
     err = schema.ValidateYAML(context.Background(), buffer)
 }
 ```

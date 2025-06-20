@@ -1,4 +1,4 @@
-package blueprint
+package parse
 
 import (
 	"bytes"
@@ -12,6 +12,8 @@ import (
 
 	"github.com/BurntSushi/toml"
 	"github.com/google/go-cmp/cmp"
+	ubp "github.com/osbuild/blueprint-schema/pkg/blueprint"
+	"github.com/osbuild/blueprint-schema/pkg/conv"
 	"github.com/osbuild/blueprint-schema/pkg/ptr"
 	ib "github.com/osbuild/blueprint/pkg/blueprint"
 )
@@ -150,7 +152,7 @@ func TestFix(t *testing.T) {
 			var convErrs error
 			var got []byte
 			if strings.HasSuffix(input, ".json") || strings.HasSuffix(input, ".yaml") {
-				var inputBlueprint *Blueprint
+				var inputBlueprint *ubp.Blueprint
 				if strings.HasSuffix(input, ".json") {
 					b, err := unmarshalJSON(inputBuf.Bytes())
 					if err != nil {
@@ -166,7 +168,7 @@ func TestFix(t *testing.T) {
 					inputBlueprint = b
 				}
 
-				exporter := NewInternalExporter(inputBlueprint)
+				exporter := conv.NewInternalExporter(inputBlueprint)
 				convErrs = exporter.Export()
 				result := exporter.Result()
 				result.Version = "1.0.0"
@@ -180,7 +182,7 @@ func TestFix(t *testing.T) {
 				if err != nil {
 					t.Fatal(err)
 				}
-				importer := NewInternalImporter(inputBlueprint)
+				importer := conv.NewInternalImporter(inputBlueprint)
 				convErrs = importer.Import()
 				result := importer.Result()
 				var buf bytes.Buffer
@@ -210,7 +212,7 @@ func TestFix(t *testing.T) {
 					}
 				}
 
-				if diff := cmp.Diff(want, append(unwrapErrorsAsComments(convErrs), got...)); diff != "" {
+				if diff := cmp.Diff(string(want), string(append(unwrapErrorsAsComments(convErrs), got...))); diff != "" {
 					t.Errorf("validity mismatch (-want +got):\n%s", diff)
 				}
 			}

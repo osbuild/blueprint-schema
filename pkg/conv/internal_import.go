@@ -1,10 +1,11 @@
-package blueprint
+package conv
 
 import (
 	"fmt"
 	"reflect"
 	"strings"
 
+	ubp "github.com/osbuild/blueprint-schema/pkg/blueprint"
 	"github.com/osbuild/blueprint-schema/pkg/ptr"
 	int "github.com/osbuild/blueprint/pkg/blueprint"
 )
@@ -12,7 +13,7 @@ import (
 // InternalImporter is used to convert a blueprint to the internal representation.
 type InternalImporter struct {
 	from *int.Blueprint
-	to   *Blueprint
+	to   *ubp.Blueprint
 	log  *logs
 }
 
@@ -25,7 +26,7 @@ func NewInternalImporter(inputBlueprint *int.Blueprint) *InternalImporter {
 
 // Import converts the internal representation to the blueprint.
 func (e *InternalImporter) Import() error {
-	to := &Blueprint{}
+	to := &ubp.Blueprint{}
 
 	to.Accounts = e.importAccounts()
 	to.Architecture = e.importArchitecture()
@@ -55,16 +56,16 @@ func (e *InternalImporter) Import() error {
 	return e.log.Errors()
 }
 
-func (e *InternalImporter) Result() *Blueprint {
+func (e *InternalImporter) Result() *ubp.Blueprint {
 	return e.to
 }
 
-func (e *InternalImporter) importArchitecture() Arch {
+func (e *InternalImporter) importArchitecture() ubp.Arch {
 	if e.from.Arch == "" {
-		return ArchUnset
+		return ubp.ArchUnset
 	}
 
-	result, err := ParseArch(e.from.Arch)
+	result, err := ubp.ParseArch(e.from.Arch)
 	if err != nil {
 		e.log.Printf("error parsing architecture %q: %v", e.from.Arch, err)
 	}
@@ -72,12 +73,12 @@ func (e *InternalImporter) importArchitecture() Arch {
 	return result
 }
 
-func (e *InternalImporter) importDNF() *DNF {
+func (e *InternalImporter) importDNF() *ubp.DNF {
 	if e.from.Customizations == nil || e.from.Customizations.RPM == nil {
 		return nil
 	}
 
-	to := DNF{}
+	to := ubp.DNF{}
 	to.Packages = e.importPackages()
 	to.Modules = e.importModules()
 	to.Groups = e.importGroups()
@@ -89,7 +90,7 @@ func (e *InternalImporter) importDNF() *DNF {
 		}
 	}
 
-	if reflect.DeepEqual(to, DNF{}) {
+	if reflect.DeepEqual(to, ubp.DNF{}) {
 		return nil // omitzero
 	}
 
@@ -143,14 +144,14 @@ func (e *InternalImporter) importGroups() []string {
 	return s
 }
 
-func (e *InternalImporter) importRepositories() []DNFRepository {
+func (e *InternalImporter) importRepositories() []ubp.DNFRepository {
 	if e.from.Customizations == nil || e.from.Customizations.Repositories == nil {
 		return nil
 	}
 
-	repos := make([]DNFRepository, len(e.from.Customizations.Repositories))
+	repos := make([]ubp.DNFRepository, len(e.from.Customizations.Repositories))
 	for i, repo := range e.from.Customizations.Repositories {
-		repos[i] = DNFRepository{
+		repos[i] = ubp.DNFRepository{
 			Name:           repo.Name,
 			ID:             repo.Id,
 			Filename:       repo.Filename,
@@ -160,22 +161,22 @@ func (e *InternalImporter) importRepositories() []DNFRepository {
 			ModuleHotfixes: ptr.ValueOr(repo.ModuleHotfixes, false),
 			Priority:       ptr.ValueOr(repo.Priority, 0),
 			SSLVerify:      repo.SSLVerify,
-			Usage: &DnfRepositoryUsage{
+			Usage: &ubp.DnfRepositoryUsage{
 				Configure: repo.Enabled,
 				Install:   &repo.InstallFrom,
 			},
 		}
 
 		if repo.BaseURLs != nil {
-			repos[i].Source = DNFSourceFromBaseURLs(DNFSourceBaseURLs{
+			repos[i].Source = ubp.DNFSourceFromBaseURLs(ubp.DNFSourceBaseURLs{
 				URLs: repo.BaseURLs,
 			})
 		} else if repo.Metalink != "" {
-			repos[i].Source = DNFSourceFromMetalink(DNFSourceMetalink{
+			repos[i].Source = ubp.DNFSourceFromMetalink(ubp.DNFSourceMetalink{
 				Metalink: repo.Metalink,
 			})
 		} else if repo.Mirrorlist != "" {
-			repos[i].Source = DNFSourceFromMirrorlist(DNFSourceMirrorlist{
+			repos[i].Source = ubp.DNFSourceFromMirrorlist(ubp.DNFSourceMirrorlist{
 				Mirrorlist: repo.Mirrorlist,
 			})
 		} else {
@@ -187,14 +188,14 @@ func (e *InternalImporter) importRepositories() []DNFRepository {
 	return repos
 }
 
-func (e *InternalImporter) importContainers() []Container {
+func (e *InternalImporter) importContainers() []ubp.Container {
 	if e.from.Containers == nil {
 		return nil
 	}
 
-	containers := make([]Container, len(e.from.Containers))
+	containers := make([]ubp.Container, len(e.from.Containers))
 	for i, container := range e.from.Containers {
-		containers[i] = Container{
+		containers[i] = ubp.Container{
 			Name:         container.Name,
 			LocalStorage: container.LocalStorage,
 			Source:       container.Source,
@@ -205,12 +206,12 @@ func (e *InternalImporter) importContainers() []Container {
 	return containers
 }
 
-func (e *InternalImporter) importKernel() *Kernel {
+func (e *InternalImporter) importKernel() *ubp.Kernel {
 	if e.from.Customizations == nil || e.from.Customizations.Kernel == nil {
 		return nil
 	}
 
-	r := &Kernel{
+	r := &ubp.Kernel{
 		Package: e.from.Customizations.Kernel.Name,
 	}
 
@@ -221,14 +222,14 @@ func (e *InternalImporter) importKernel() *Kernel {
 	return r
 }
 
-func (e *InternalImporter) importAccounts() *Accounts {
+func (e *InternalImporter) importAccounts() *ubp.Accounts {
 	if e.from.Customizations == nil {
 		return nil
 	}
 
-	to := Accounts{}
+	to := ubp.Accounts{}
 	for _, user := range e.from.Customizations.User {
-		u := AccountsUsers{
+		u := ubp.AccountsUsers{
 			Name:                user.Name,
 			Description:         ptr.ValueOrEmpty(user.Description),
 			Home:                ptr.ValueOrEmpty(user.Home),
@@ -236,7 +237,7 @@ func (e *InternalImporter) importAccounts() *Accounts {
 			GID:                 ptr.ValueOr(user.GID, 0),
 			Groups:              user.Groups,
 			Password:            user.Password,
-			Expires:             NewIntEpochDays(ptr.ValueOrEmpty(user.ExpireDate)),
+			Expires:             ubp.NewIntEpochDays(ptr.ValueOrEmpty(user.ExpireDate)),
 			ForcePasswordChange: user.ForcePasswordReset,
 			Shell:               ptr.ValueOrEmpty(user.Shell),
 		}
@@ -249,7 +250,7 @@ func (e *InternalImporter) importAccounts() *Accounts {
 	}
 
 	for _, group := range e.from.Customizations.Group {
-		g := AccountsGroups{
+		g := ubp.AccountsGroups{
 			Name: group.Name,
 			GID:  ptr.ValueOr(group.GID, 0),
 		}
@@ -257,21 +258,21 @@ func (e *InternalImporter) importAccounts() *Accounts {
 		to.Groups = append(to.Groups, g)
 	}
 
-	if reflect.DeepEqual(to, Accounts{}) {
+	if reflect.DeepEqual(to, ubp.Accounts{}) {
 		return nil // omitzero
 	}
 
 	return &to
 }
 
-func (e *InternalImporter) importCACerts() []CACert {
+func (e *InternalImporter) importCACerts() []ubp.CACert {
 	if e.from.Customizations == nil || e.from.Customizations.CACerts == nil || e.from.Customizations.CACerts.PEMCerts == nil {
 		return nil
 	}
 
-	caCerts := make([]CACert, len(e.from.Customizations.CACerts.PEMCerts))
+	caCerts := make([]ubp.CACert, len(e.from.Customizations.CACerts.PEMCerts))
 	for i, cert := range e.from.Customizations.CACerts.PEMCerts {
-		caCerts[i] = CACert{
+		caCerts[i] = ubp.CACert{
 			PEM: cert,
 		}
 	}
@@ -279,36 +280,36 @@ func (e *InternalImporter) importCACerts() []CACert {
 	return caCerts
 }
 
-func (e *InternalImporter) importFIPS() *FIPS {
+func (e *InternalImporter) importFIPS() *ubp.FIPS {
 	if e.from.Customizations == nil || e.from.Customizations.FIPS == nil {
 		return nil
 	}
 
-	fips := FIPS{
+	fips := ubp.FIPS{
 		Enabled: ptr.ValueOr(e.from.Customizations.FIPS, false),
 	}
 
-	if reflect.DeepEqual(fips, FIPS{}) {
+	if reflect.DeepEqual(fips, ubp.FIPS{}) {
 		return nil // omitzero
 	}
 
 	return &fips
 }
 
-func (e *InternalImporter) importFSNodes() []FSNode {
+func (e *InternalImporter) importFSNodes() []ubp.FSNode {
 	if e.from.Customizations == nil {
 		return nil
 	}
 
-	var res []FSNode
+	var res []ubp.FSNode
 	for _, file := range e.from.Customizations.Files {
-		mode, err := ParseFSNodeMode(file.Mode)
+		mode, err := ubp.ParseFSNodeMode(file.Mode)
 		if err != nil {
 			e.log.Printf("error parsing file mode %q for file %q: %v, using default", file.Mode, file.Path, err)
 		}
 
-		n := FSNode{
-			Type:  FSNodeFile,
+		n := ubp.FSNode{
+			Type:  ubp.FSNodeFile,
 			Path:  file.Path,
 			User:  parseUGIDany(file.User),
 			Group: parseUGIDany(file.Group),
@@ -316,7 +317,7 @@ func (e *InternalImporter) importFSNodes() []FSNode {
 		}
 
 		if file.Data != "" {
-			n.Contents = FSNodeContentsFromText(FSNodeContentsText{
+			n.Contents = ubp.FSNodeContentsFromText(ubp.FSNodeContentsText{
 				Text: file.Data,
 			})
 		}
@@ -325,13 +326,13 @@ func (e *InternalImporter) importFSNodes() []FSNode {
 	}
 
 	for _, dir := range e.from.Customizations.Directories {
-		mode, err := ParseFSNodeMode(dir.Mode)
+		mode, err := ubp.ParseFSNodeMode(dir.Mode)
 		if err != nil {
 			e.log.Printf("error parsing file mode %q for dir %q: %v, using default", dir.Mode, dir.Path, err)
 		}
 
-		n := FSNode{
-			Type:          FSNodeDir,
+		n := ubp.FSNode{
+			Type:          ubp.FSNodeDir,
 			Path:          dir.Path,
 			User:          parseUGIDany(dir.User),
 			Group:         parseUGIDany(dir.Group),
@@ -344,20 +345,20 @@ func (e *InternalImporter) importFSNodes() []FSNode {
 	return res
 }
 
-func (e *InternalImporter) importIgnition() *Ignition {
+func (e *InternalImporter) importIgnition() *ubp.Ignition {
 	if e.from.Customizations == nil || e.from.Customizations.Ignition == nil {
 		return nil
 	}
 
-	var res *Ignition
+	var res *ubp.Ignition
 	if e.from.Customizations.Ignition.FirstBoot != nil {
-		res = IgnitionFromURL(IgnitionURL{
+		res = ubp.IgnitionFromURL(ubp.IgnitionURL{
 			URL: e.from.Customizations.Ignition.FirstBoot.ProvisioningURL,
 		})
 	}
 
 	if e.from.Customizations.Ignition.Embedded != nil {
-		res = IgnitionFromText(IgnitionText{
+		res = ubp.IgnitionFromText(ubp.IgnitionText{
 			Text: e.from.Customizations.Ignition.Embedded.Config,
 		})
 	}
@@ -365,13 +366,13 @@ func (e *InternalImporter) importIgnition() *Ignition {
 	return res
 }
 
-func (e *InternalImporter) importInstaller() *Installer {
+func (e *InternalImporter) importInstaller() *ubp.Installer {
 	if e.from.Customizations == nil || e.from.Customizations.Installer == nil {
 		return nil
 	}
 
-	to := Installer{
-		Anaconda: &InstallerAnaconda{
+	to := ubp.Installer{
+		Anaconda: &ubp.InstallerAnaconda{
 			Unattended:   e.from.Customizations.Installer.Unattended,
 			SudoNOPASSWD: e.from.Customizations.Installer.SudoNopasswd,
 		},
@@ -383,64 +384,64 @@ func (e *InternalImporter) importInstaller() *Installer {
 
 	if e.from.Customizations.Installer.Modules != nil {
 		for _, m := range e.from.Customizations.Installer.Modules.Enable {
-			if pm := ParseAnacondaModule(m); pm != "" {
+			if pm := ubp.ParseAnacondaModule(m); pm != "" {
 				to.Anaconda.EnabledModules = append(to.Anaconda.EnabledModules, pm)
 			}
 		}
 
 		for _, m := range e.from.Customizations.Installer.Modules.Disable {
-			if pm := ParseAnacondaModule(m); pm != "" {
+			if pm := ubp.ParseAnacondaModule(m); pm != "" {
 				to.Anaconda.DisabledModules = append(to.Anaconda.DisabledModules, pm)
 			}
 		}
 	}
 
 	if e.from.Customizations.InstallationDevice != "" {
-		to.CoreOS = &InstallerCoreOS{
+		to.CoreOS = &ubp.InstallerCoreOS{
 			InstallationDevice: e.from.Customizations.InstallationDevice,
 		}
 	}
 
-	if reflect.DeepEqual(to, Installer{}) {
+	if reflect.DeepEqual(to, ubp.Installer{}) {
 		return nil // omitzero
 	}
 
 	return &to
 }
 
-func (e *InternalImporter) importLocale() *Locale {
+func (e *InternalImporter) importLocale() *ubp.Locale {
 	if e.from.Customizations == nil || e.from.Customizations.Locale == nil {
 		return nil
 	}
 
-	to := Locale{}
+	to := ubp.Locale{}
 	to.Languages = append(to.Languages, e.from.Customizations.Locale.Languages...)
 	if e.from.Customizations.Locale.Keyboard != nil {
 		to.Keyboards = []string{*e.from.Customizations.Locale.Keyboard}
 	}
 
-	if reflect.DeepEqual(to, Locale{}) {
+	if reflect.DeepEqual(to, ubp.Locale{}) {
 		return nil // omitzero
 	}
 
 	return &to
 }
 
-func (e *InternalImporter) importNetwork() *Network {
+func (e *InternalImporter) importNetwork() *ubp.Network {
 	if e.from.Customizations == nil || e.from.Customizations.Firewall == nil {
 		return nil
 	}
 
-	to := Network{
-		Firewall: &NetworkFirewall{},
+	to := ubp.Network{
+		Firewall: &ubp.NetworkFirewall{},
 	}
 
 	if e.from.Customizations.Firewall.Services != nil {
 		for _, srv := range e.from.Customizations.Firewall.Services.Enabled {
-			ns := FirewallService{
+			ns := ubp.FirewallService{
 				Service: srv,
 			}
-			if service := NetworkServiceFromService(ns); service != nil {
+			if service := ubp.NetworkServiceFromService(ns); service != nil {
 				to.Firewall.Services = append(to.Firewall.Services, *service)
 			}
 		}
@@ -448,23 +449,23 @@ func (e *InternalImporter) importNetwork() *Network {
 
 	for _, port := range e.from.Customizations.Firewall.Ports {
 		if strings.Contains(port, "-") {
-			fromTo, err := ParseFirewalldFromTo(port)
+			fromTo, err := ubp.ParseFirewalldFromTo(port)
 			if err != nil {
 				e.log.Printf("error parsing firewall port range %q: %v, ignoring", port, err)
 				continue
 			}
 
-			ns := NetworkServiceFromFromTo(fromTo)
+			ns := ubp.NetworkServiceFromFromTo(fromTo)
 			to.Firewall.Services = append(to.Firewall.Services, *ns)
 			continue
 		} else {
-			firewallPort, err := ParseFirewalldPort(port)
+			firewallPort, err := ubp.ParseFirewalldPort(port)
 			if err != nil {
 				e.log.Printf("error parsing firewall port %q: %v, ignoring", port, err)
 				continue
 			}
 
-			ns := NetworkServiceFromPort(firewallPort)
+			ns := ubp.NetworkServiceFromPort(firewallPort)
 			to.Firewall.Services = append(to.Firewall.Services, *ns)
 		}
 	}
@@ -473,19 +474,19 @@ func (e *InternalImporter) importNetwork() *Network {
 		e.log.Printf("firewall zones are not supported, ignoring")
 	}
 
-	if reflect.DeepEqual(to.Firewall, NetworkFirewall{}) {
+	if reflect.DeepEqual(to.Firewall, ubp.NetworkFirewall{}) {
 		return nil // omitzero
 	}
 
 	return &to
 }
 
-func (e *InternalImporter) importOpenSCAP() *OpenSCAP {
+func (e *InternalImporter) importOpenSCAP() *ubp.OpenSCAP {
 	if e.from.Customizations == nil || e.from.Customizations.OpenSCAP == nil {
 		return nil
 	}
 
-	to := OpenSCAP{
+	to := ubp.OpenSCAP{
 		ProfileID:  e.from.Customizations.OpenSCAP.ProfileID,
 		Datastream: e.from.Customizations.OpenSCAP.DataStream,
 	}
@@ -496,34 +497,34 @@ func (e *InternalImporter) importOpenSCAP() *OpenSCAP {
 	}
 
 	if e.from.Customizations.OpenSCAP.JSONTailoring != nil {
-		to.Tailoring = OpenSCAPTailoringFromJSON(TailoringJSON{
+		to.Tailoring = ubp.OpenSCAPTailoringFromJSON(ubp.TailoringJSON{
 			JSONProfileID: e.from.Customizations.OpenSCAP.JSONTailoring.ProfileID,
 			JSONFilePath:  e.from.Customizations.OpenSCAP.JSONTailoring.Filepath,
 		})
 	}
 
 	if e.from.Customizations.OpenSCAP.Tailoring != nil {
-		to.Tailoring = OpenSCAPTailoringFromProfiles(TailoringProfiles{
+		to.Tailoring = ubp.OpenSCAPTailoringFromProfiles(ubp.TailoringProfiles{
 			Selected:   e.from.Customizations.OpenSCAP.Tailoring.Selected,
 			Unselected: e.from.Customizations.OpenSCAP.Tailoring.Unselected,
 		})
 	}
 
-	if reflect.DeepEqual(to, OpenSCAP{}) {
+	if reflect.DeepEqual(to, ubp.OpenSCAP{}) {
 		return nil // omitzero
 	}
 
 	return &to
 }
 
-func (e *InternalImporter) importRegistration() *Registration {
+func (e *InternalImporter) importRegistration() *ubp.Registration {
 	if e.from.Customizations == nil || e.from.Customizations.RHSM == nil || e.from.Customizations.RHSM.Config == nil {
 		return nil
 	}
 
-	to := Registration{
-		RegistrationRedHat: &RegistrationRedHat{
-			RegistrationRHSM: &RegistrationRHSM{
+	to := ubp.Registration{
+		RegistrationRedHat: &ubp.RegistrationRedHat{
+			RegistrationRHSM: &ubp.RegistrationRHSM{
 				AutoEnable:           e.from.Customizations.RHSM.Config.SubscriptionManager.RHSMConfig.AutoEnableYumPlugins,
 				RepositoryManagement: e.from.Customizations.RHSM.Config.SubscriptionManager.RHSMConfig.ManageRepos,
 				AutoRegistration:     e.from.Customizations.RHSM.Config.SubscriptionManager.RHSMCertdConfig.AutoRegistration,
@@ -540,7 +541,7 @@ func (e *InternalImporter) importRegistration() *Registration {
 			e.log.Printf("cannot parse DiunPubKeyInsecure %q: %v, using default false", e.from.Customizations.FDO.DiunPubKeyInsecure, err)
 		}
 
-		to.RegistrationFDO = &RegistrationFDO{
+		to.RegistrationFDO = &ubp.RegistrationFDO{
 			ManufacturingServerURL:  e.from.Customizations.FDO.ManufacturingServerURL,
 			DiMfgStringTypeMacIface: e.from.Customizations.FDO.DiMfgStringTypeMacIface,
 			DiunPubKeyHash:          e.from.Customizations.FDO.DiunPubKeyHash,
@@ -549,113 +550,113 @@ func (e *InternalImporter) importRegistration() *Registration {
 		}
 	}
 
-	if reflect.DeepEqual(to, Registration{}) {
+	if reflect.DeepEqual(to, ubp.Registration{}) {
 		return nil // omitzero
 	}
 
 	return &to
 }
 
-func (e *InternalImporter) importStorage() *Storage {
+func (e *InternalImporter) importStorage() *ubp.Storage {
 	if e.from.Customizations == nil || e.from.Customizations.Disk == nil {
 		return nil
 	}
 
-	to := Storage{
-		Type: StorageType(e.from.Customizations.Disk.Type),
+	to := ubp.Storage{
+		Type: ubp.StorageType(e.from.Customizations.Disk.Type),
 	}
 
 	if e.from.Customizations.Disk.MinSize > 0 {
-		to.Minsize = ToByteSize(e.from.Customizations.Disk.MinSize)
+		to.Minsize = ubp.ToByteSize(e.from.Customizations.Disk.MinSize)
 	}
 
 	for _, part := range e.from.Customizations.Disk.Partitions {
 		switch strings.ToLower(part.Type) {
 		case "plain":
-			fst, err := ParseFSType(part.FSType)
+			fst, err := ubp.ParseFSType(part.FSType)
 			if err != nil {
 				e.log.Printf("error parsing filesystem type %q for partition %q: %v, using default", part.FSType, part.Name, err)
 			}
-			np := PartitionPlain{
-				Type:       PartTypePlain,
+			np := ubp.PartitionPlain{
+				Type:       ubp.PartTypePlain,
 				FSType:     fst,
 				Label:      part.Label,
-				Minsize:    ToByteSize(part.MinSize),
+				Minsize:    ubp.ToByteSize(part.MinSize),
 				Mountpoint: part.Mountpoint,
 			}
-			to.Partitions = append(to.Partitions, StoragePartitionFromPlain(np))
+			to.Partitions = append(to.Partitions, ubp.StoragePartitionFromPlain(np))
 		case "btrfs":
-			np := PartitionBTRFS{
-				Type:    PartTypeBTRFS,
-				Minsize: ToByteSize(part.MinSize),
+			np := ubp.PartitionBTRFS{
+				Type:    ubp.PartTypeBTRFS,
+				Minsize: ubp.ToByteSize(part.MinSize),
 			}
 			for _, sv := range part.Subvolumes {
-				nsv := PartitionSubvolumes{
+				nsv := ubp.PartitionSubvolumes{
 					Name:       sv.Name,
 					Mountpoint: sv.Mountpoint,
 				}
 				np.Subvolumes = append(np.Subvolumes, nsv)
 			}
-			to.Partitions = append(to.Partitions, StoragePartitionFromBTRFS(np))
+			to.Partitions = append(to.Partitions, ubp.StoragePartitionFromBTRFS(np))
 		case "lvm":
-			np := PartitionLVM{
-				Type:    PartTypeLVM,
+			np := ubp.PartitionLVM{
+				Type:    ubp.PartTypeLVM,
 				Name:    part.Name,
-				Minsize: ToByteSize(part.MinSize),
+				Minsize: ubp.ToByteSize(part.MinSize),
 			}
 			for _, lv := range part.LogicalVolumes {
-				fst, err := ParseFSType(part.FSType)
+				fst, err := ubp.ParseFSType(part.FSType)
 				if err != nil {
 					e.log.Printf("error parsing filesystem type %q for lv %q: %v, using default", part.FSType, lv.Name, err)
 				}
-				nlv := PartitionLV{
+				nlv := ubp.PartitionLV{
 					Name:       lv.Name,
 					Label:      lv.Label,
 					FSType:     fst,
-					Minsize:    ToByteSize(lv.MinSize),
+					Minsize:    ubp.ToByteSize(lv.MinSize),
 					Mountpoint: lv.Mountpoint,
 				}
 				np.LogicalVolumes = append(np.LogicalVolumes, nlv)
 			}
-			to.Partitions = append(to.Partitions, StoragePartitionFromLVM(np))
+			to.Partitions = append(to.Partitions, ubp.StoragePartitionFromLVM(np))
 		}
 	}
-	if reflect.DeepEqual(to, Storage{}) {
+	if reflect.DeepEqual(to, ubp.Storage{}) {
 		return nil // omitzero
 	}
 
 	return &to
 }
 
-func (e *InternalImporter) importSystemd() *Systemd {
+func (e *InternalImporter) importSystemd() *ubp.Systemd {
 	if e.from.Customizations == nil || e.from.Customizations.Services == nil {
 		return nil
 	}
 
-	to := Systemd{
+	to := ubp.Systemd{
 		Enabled:  e.from.Customizations.Services.Enabled,
 		Disabled: e.from.Customizations.Services.Disabled,
 		Masked:   e.from.Customizations.Services.Masked,
 	}
 
-	if reflect.DeepEqual(to, Systemd{}) {
+	if reflect.DeepEqual(to, ubp.Systemd{}) {
 		return nil // omitzero
 	}
 
 	return &to
 }
 
-func (e *InternalImporter) importTimedate() *TimeDate {
+func (e *InternalImporter) importTimedate() *ubp.TimeDate {
 	if e.from.Customizations == nil || e.from.Customizations.Timezone == nil {
 		return nil
 	}
 
-	to := TimeDate{
+	to := ubp.TimeDate{
 		Timezone:   ptr.ValueOrEmpty(e.from.Customizations.Timezone.Timezone),
 		NTPServers: e.from.Customizations.Timezone.NTPServers,
 	}
 
-	if reflect.DeepEqual(to, TimeDate{}) {
+	if reflect.DeepEqual(to, ubp.TimeDate{}) {
 		return nil // omitzero
 	}
 
