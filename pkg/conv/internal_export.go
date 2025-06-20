@@ -5,15 +5,15 @@ import (
 	"strings"
 	"time"
 
-	ubp "github.com/osbuild/blueprint-schema/pkg/blueprint"
 	"github.com/osbuild/blueprint-schema/pkg/ptr"
-	int "github.com/osbuild/blueprint/pkg/blueprint"
+	ubp "github.com/osbuild/blueprint-schema/pkg/ubp"
+	bp "github.com/osbuild/blueprint/pkg/blueprint"
 )
 
 // InternalExporter is used to convert a blueprint to the internal representation.
 type InternalExporter struct {
 	from *ubp.Blueprint
-	to   *int.Blueprint
+	to   *bp.Blueprint
 	log  *logs
 }
 
@@ -26,7 +26,7 @@ func NewInternalExporter(inputBlueprint *ubp.Blueprint) *InternalExporter {
 
 // ExportInternal converts the blueprint to the internal representation.
 func (e *InternalExporter) Export() error {
-	to := &int.Blueprint{}
+	to := &bp.Blueprint{}
 
 	if e.from == nil {
 		return nil
@@ -49,20 +49,20 @@ func (e *InternalExporter) Export() error {
 	return e.log.Errors()
 }
 
-func (e *InternalExporter) Result() *int.Blueprint {
+func (e *InternalExporter) Result() *bp.Blueprint {
 	return e.to
 }
 
-func (e *InternalExporter) exportPackages() []int.Package {
+func (e *InternalExporter) exportPackages() []bp.Package {
 	if e.from.DNF == nil || e.from.DNF.Packages == nil {
 		return nil
 	}
 
-	var s []int.Package
+	var s []bp.Package
 	for _, pkg := range e.from.DNF.Packages {
 		p := splitStringEmptyN(pkg, "-", 2)
 
-		s = append(s, int.Package{
+		s = append(s, bp.Package{
 			Name:    p[0],
 			Version: p[1],
 		})
@@ -71,14 +71,14 @@ func (e *InternalExporter) exportPackages() []int.Package {
 	return s
 }
 
-func (e *InternalExporter) exportGroups() []int.Group {
+func (e *InternalExporter) exportGroups() []bp.Group {
 	if e.from.DNF == nil || e.from.DNF.Groups == nil {
 		return nil
 	}
 
-	var s []int.Group
+	var s []bp.Group
 	for _, pkg := range e.from.DNF.Groups {
-		s = append(s, int.Group{
+		s = append(s, bp.Group{
 			Name: pkg,
 		})
 	}
@@ -86,16 +86,16 @@ func (e *InternalExporter) exportGroups() []int.Group {
 	return s
 }
 
-func (e *InternalExporter) exportModules() []int.EnabledModule {
+func (e *InternalExporter) exportModules() []bp.EnabledModule {
 	if e.from.DNF == nil || e.from.DNF.Modules == nil {
 		return nil
 	}
 
-	var s []int.EnabledModule
+	var s []bp.EnabledModule
 	for _, pkg := range e.from.DNF.Modules {
 		p := splitStringEmptyN(pkg, ":", 2)
 
-		s = append(s, int.EnabledModule{
+		s = append(s, bp.EnabledModule{
 			Name:   p[0],
 			Stream: p[1],
 		})
@@ -104,11 +104,11 @@ func (e *InternalExporter) exportModules() []int.EnabledModule {
 	return s
 }
 
-func (e *InternalExporter) exportContainers() []int.Container {
-	var s []int.Container
+func (e *InternalExporter) exportContainers() []bp.Container {
+	var s []bp.Container
 
 	for _, container := range e.from.Containers {
-		s = append(s, int.Container{
+		s = append(s, bp.Container{
 			Name:         container.Name,
 			Source:       container.Source,
 			TLSVerify:    container.TLSVerify,
@@ -119,8 +119,8 @@ func (e *InternalExporter) exportContainers() []int.Container {
 	return s
 }
 
-func (e *InternalExporter) exportCustomizations() *int.Customizations {
-	to := &int.Customizations{}
+func (e *InternalExporter) exportCustomizations() *bp.Customizations {
+	to := &bp.Customizations{}
 
 	to.Hostname = ptr.ToNilIfEmpty(e.from.Hostname)
 	to.Kernel = e.exportKernel()
@@ -145,12 +145,12 @@ func (e *InternalExporter) exportCustomizations() *int.Customizations {
 	return to
 }
 
-func (e *InternalExporter) exportKernel() *int.KernelCustomization {
+func (e *InternalExporter) exportKernel() *bp.KernelCustomization {
 	if e.from.Kernel == nil {
 		return nil
 	}
 
-	to := &int.KernelCustomization{}
+	to := &bp.KernelCustomization{}
 	to.Name = e.from.Kernel.Package
 	if len(e.from.Kernel.CmdlineAppend) > 0 {
 		to.Append = strings.Join(e.from.Kernel.CmdlineAppend, " ")
@@ -159,14 +159,14 @@ func (e *InternalExporter) exportKernel() *int.KernelCustomization {
 	return ptr.EmptyToNil(to)
 }
 
-func (e *InternalExporter) exportUserCustomization() []int.UserCustomization {
+func (e *InternalExporter) exportUserCustomization() []bp.UserCustomization {
 	if e.from.Accounts == nil || e.from.Accounts.Users == nil {
 		return nil
 	}
 
-	var s []int.UserCustomization
+	var s []bp.UserCustomization
 	for _, u := range e.from.Accounts.Users {
-		uc := int.UserCustomization{}
+		uc := bp.UserCustomization{}
 		uc.Name = u.Name
 		uc.Description = ptr.ToNilIfEmpty(u.Description)
 		uc.Password = u.Password
@@ -198,14 +198,14 @@ func (e *InternalExporter) exportUserCustomization() []int.UserCustomization {
 	return s
 }
 
-func (e *InternalExporter) exportGroupCustomization() []int.GroupCustomization {
+func (e *InternalExporter) exportGroupCustomization() []bp.GroupCustomization {
 	if e.from.Accounts == nil || e.from.Accounts.Groups == nil {
 		return nil
 	}
 
-	var s []int.GroupCustomization
+	var s []bp.GroupCustomization
 	for _, g := range e.from.Accounts.Groups {
-		gc := int.GroupCustomization{}
+		gc := bp.GroupCustomization{}
 		gc.Name = g.Name
 		if g.GID != 0 {
 			gc.GID = ptr.ToNilIfEmpty(g.GID)
@@ -216,24 +216,24 @@ func (e *InternalExporter) exportGroupCustomization() []int.GroupCustomization {
 	return s
 }
 
-func (e *InternalExporter) exportTimezoneCustomization() *int.TimezoneCustomization {
+func (e *InternalExporter) exportTimezoneCustomization() *bp.TimezoneCustomization {
 	if e.from.Timedate == nil {
 		return nil
 	}
 
-	to := &int.TimezoneCustomization{}
+	to := &bp.TimezoneCustomization{}
 	to.Timezone = ptr.ToNilIfEmpty(e.from.Timedate.Timezone)
 	to.NTPServers = e.from.Timedate.NTPServers
 
 	return to
 }
 
-func (e *InternalExporter) exportLocaleCustomization() *int.LocaleCustomization {
+func (e *InternalExporter) exportLocaleCustomization() *bp.LocaleCustomization {
 	if e.from.Locale == nil {
 		return nil
 	}
 
-	to := &int.LocaleCustomization{}
+	to := &bp.LocaleCustomization{}
 	if len(e.from.Locale.Keyboards) > 0 {
 		to.Keyboard = ptr.ToNilIfEmpty(e.from.Locale.Keyboards[0])
 		if len(e.from.Locale.Keyboards) > 1 {
@@ -245,13 +245,13 @@ func (e *InternalExporter) exportLocaleCustomization() *int.LocaleCustomization 
 	return to
 }
 
-func (e *InternalExporter) exportFirewallCustomization() *int.FirewallCustomization {
+func (e *InternalExporter) exportFirewallCustomization() *bp.FirewallCustomization {
 	if e.from.Network == nil || e.from.Network.Firewall == nil || len(e.from.Network.Firewall.Services) == 0 {
 		return nil
 	}
 
-	to := &int.FirewallCustomization{
-		Services: &int.FirewallServicesCustomization{},
+	to := &bp.FirewallCustomization{
+		Services: &bp.FirewallServicesCustomization{},
 	}
 	for i, s := range e.from.Network.Firewall.Services {
 		fs, fp, fft, err := s.SelectUnion()
@@ -292,12 +292,12 @@ func (e *InternalExporter) exportFirewallCustomization() *int.FirewallCustomizat
 	return to
 }
 
-func (e *InternalExporter) exportSystemdCustomization() *int.ServicesCustomization {
+func (e *InternalExporter) exportSystemdCustomization() *bp.ServicesCustomization {
 	if e.from.Systemd == nil {
 		return nil
 	}
 
-	to := &int.ServicesCustomization{}
+	to := &bp.ServicesCustomization{}
 	to.Enabled = e.from.Systemd.Enabled
 	to.Disabled = e.from.Systemd.Disabled
 	to.Masked = e.from.Systemd.Masked
@@ -305,12 +305,12 @@ func (e *InternalExporter) exportSystemdCustomization() *int.ServicesCustomizati
 	return to
 }
 
-func (e *InternalExporter) exportStorage() *int.DiskCustomization {
+func (e *InternalExporter) exportStorage() *bp.DiskCustomization {
 	if e.from.Storage == nil {
 		return nil
 	}
 
-	to := &int.DiskCustomization{}
+	to := &bp.DiskCustomization{}
 	to.Type = e.from.Storage.Type.String()
 	to.MinSize = e.from.Storage.Minsize.Bytes()
 
@@ -322,10 +322,10 @@ func (e *InternalExporter) exportStorage() *int.DiskCustomization {
 		}
 
 		if pp.Type == ubp.PartTypePlain {
-			part := &int.PartitionCustomization{
+			part := &bp.PartitionCustomization{
 				Type:    "plain",
 				MinSize: pp.Minsize.Bytes(),
-				FilesystemTypedCustomization: int.FilesystemTypedCustomization{
+				FilesystemTypedCustomization: bp.FilesystemTypedCustomization{
 					Label:      pp.Label,
 					Mountpoint: pp.Mountpoint,
 					FSType:     pp.FSType.String(),
@@ -334,19 +334,19 @@ func (e *InternalExporter) exportStorage() *int.DiskCustomization {
 
 			to.Partitions = append(to.Partitions, *part)
 		} else if pl.Type == ubp.PartTypeLVM {
-			part := &int.PartitionCustomization{
+			part := &bp.PartitionCustomization{
 				Type:    "lvm",
 				MinSize: pl.Minsize.Bytes(),
-				VGCustomization: int.VGCustomization{
+				VGCustomization: bp.VGCustomization{
 					Name: pl.Name,
 				},
 			}
 
 			for _, lv := range pl.LogicalVolumes {
-				lvc := int.LVCustomization{
+				lvc := bp.LVCustomization{
 					Name:    lv.Name,
 					MinSize: lv.Minsize.Bytes(),
-					FilesystemTypedCustomization: int.FilesystemTypedCustomization{
+					FilesystemTypedCustomization: bp.FilesystemTypedCustomization{
 						Label:      lv.Label,
 						Mountpoint: lv.Mountpoint,
 						FSType:     lv.FSType.String(),
@@ -357,14 +357,14 @@ func (e *InternalExporter) exportStorage() *int.DiskCustomization {
 
 			to.Partitions = append(to.Partitions, *part)
 		} else if pb.Type == ubp.PartTypeBTRFS {
-			part := &int.PartitionCustomization{
+			part := &bp.PartitionCustomization{
 				Type:                     "btrfs",
 				MinSize:                  pb.Minsize.Bytes(),
-				BtrfsVolumeCustomization: int.BtrfsVolumeCustomization{},
+				BtrfsVolumeCustomization: bp.BtrfsVolumeCustomization{},
 			}
 
 			for _, sv := range pb.Subvolumes {
-				svc := int.BtrfsSubvolumeCustomization{
+				svc := bp.BtrfsSubvolumeCustomization{
 					Name:       sv.Name,
 					Mountpoint: sv.Mountpoint,
 				}
@@ -384,21 +384,21 @@ func (e *InternalExporter) exportStorage() *int.DiskCustomization {
 	return to
 }
 
-func (e *InternalExporter) exportInstaller() (string, *int.InstallerCustomization) {
+func (e *InternalExporter) exportInstaller() (string, *bp.InstallerCustomization) {
 	var installationDevice string
 	if e.from.Installer == nil {
 		return installationDevice, nil
 	}
 
-	var to *int.InstallerCustomization
+	var to *bp.InstallerCustomization
 	if e.from.Installer.Anaconda != nil {
-		to = &int.InstallerCustomization{
-			Modules: &int.AnacondaModules{},
+		to = &bp.InstallerCustomization{
+			Modules: &bp.AnacondaModules{},
 		}
 		to.Unattended = e.from.Installer.Anaconda.Unattended
 		to.SudoNopasswd = e.from.Installer.Anaconda.SudoNOPASSWD
 		if e.from.Installer.Anaconda.Kickstart != "" {
-			to.Kickstart = &int.Kickstart{Contents: e.from.Installer.Anaconda.Kickstart}
+			to.Kickstart = &bp.Kickstart{Contents: e.from.Installer.Anaconda.Kickstart}
 		}
 
 		if len(e.from.Installer.Anaconda.EnabledModules) > 0 {
@@ -421,15 +421,15 @@ func (e *InternalExporter) exportInstaller() (string, *int.InstallerCustomizatio
 	return installationDevice, to
 }
 
-func (e *InternalExporter) exportRegistration() (*int.RHSMCustomization, *int.FDOCustomization) {
+func (e *InternalExporter) exportRegistration() (*bp.RHSMCustomization, *bp.FDOCustomization) {
 	if e.from.Registration == nil {
 		return nil, nil
 	}
 	r := e.from.Registration
 
-	var fdo *int.FDOCustomization
+	var fdo *bp.FDOCustomization
 	if r.RegistrationFDO != nil {
-		fdo = &int.FDOCustomization{}
+		fdo = &bp.FDOCustomization{}
 		fdo.DiMfgStringTypeMacIface = r.RegistrationFDO.DiMfgStringTypeMacIface
 		fdo.DiunPubKeyHash = r.RegistrationFDO.DiunPubKeyHash
 		fdo.DiunPubKeyInsecure = strconv.FormatBool(r.RegistrationFDO.DiunPubKeyInsecure)
@@ -437,24 +437,24 @@ func (e *InternalExporter) exportRegistration() (*int.RHSMCustomization, *int.FD
 		fdo.ManufacturingServerURL = r.RegistrationFDO.ManufacturingServerURL
 	}
 
-	var rhsm *int.RHSMCustomization
+	var rhsm *bp.RHSMCustomization
 	if r.RegistrationRedHat != nil && r.RegistrationRedHat.RegistrationRHSM != nil {
-		rhsm = &int.RHSMCustomization{
-			Config: &int.RHSMConfig{
-				SubscriptionManager: &int.SubManConfig{
-					RHSMConfig: &int.SubManRHSMConfig{
+		rhsm = &bp.RHSMCustomization{
+			Config: &bp.RHSMConfig{
+				SubscriptionManager: &bp.SubManConfig{
+					RHSMConfig: &bp.SubManRHSMConfig{
 						ManageRepos:          r.RegistrationRedHat.RegistrationRHSM.RepositoryManagement,
 						AutoEnableYumPlugins: r.RegistrationRedHat.RegistrationRHSM.AutoEnable,
 					},
-					RHSMCertdConfig: &int.SubManRHSMCertdConfig{
+					RHSMCertdConfig: &bp.SubManRHSMCertdConfig{
 						AutoRegistration: r.RegistrationRedHat.RegistrationRHSM.AutoRegistration,
 					},
 				},
-				DNFPlugins: &int.SubManDNFPluginsConfig{
-					ProductID: &int.DNFPluginConfig{
+				DNFPlugins: &bp.SubManDNFPluginsConfig{
+					ProductID: &bp.DNFPluginConfig{
 						Enabled: r.RegistrationRedHat.RegistrationRHSM.ProductPluginEnabled,
 					},
-					SubscriptionManager: &int.DNFPluginConfig{
+					SubscriptionManager: &bp.DNFPluginConfig{
 						Enabled: r.RegistrationRedHat.RegistrationRHSM.Enabled,
 					},
 				},
@@ -466,12 +466,12 @@ func (e *InternalExporter) exportRegistration() (*int.RHSMCustomization, *int.FD
 	return ptr.EmptyToNil(rhsm), ptr.EmptyToNil(fdo)
 }
 
-func (e *InternalExporter) exportOpenSCAP() *int.OpenSCAPCustomization {
+func (e *InternalExporter) exportOpenSCAP() *bp.OpenSCAPCustomization {
 	if e.from.OpenSCAP == nil {
 		return nil
 	}
 
-	to := &int.OpenSCAPCustomization{}
+	to := &bp.OpenSCAPCustomization{}
 	to.DataStream = e.from.OpenSCAP.Datastream
 	to.ProfileID = e.from.OpenSCAP.ProfileID
 
@@ -482,12 +482,12 @@ func (e *InternalExporter) exportOpenSCAP() *int.OpenSCAPCustomization {
 		}
 
 		if tj.JSONProfileID != "" || tj.JSONFilePath != "" {
-			to.JSONTailoring = &int.OpenSCAPJSONTailoringCustomizations{
+			to.JSONTailoring = &bp.OpenSCAPJSONTailoringCustomizations{
 				ProfileID: tj.JSONProfileID,
 				Filepath:  tj.JSONFilePath,
 			}
 		} else if len(tp.Selected) > 0 || len(tp.Unselected) > 0 {
-			to.Tailoring = &int.OpenSCAPTailoringCustomizations{
+			to.Tailoring = &bp.OpenSCAPTailoringCustomizations{
 				Selected:   tp.Selected,
 				Unselected: tp.Unselected,
 			}
@@ -499,22 +499,22 @@ func (e *InternalExporter) exportOpenSCAP() *int.OpenSCAPCustomization {
 	return ptr.EmptyToNil(to)
 }
 
-func (e *InternalExporter) exportIgnition() *int.IgnitionCustomization {
+func (e *InternalExporter) exportIgnition() *bp.IgnitionCustomization {
 	if e.from.Ignition == nil {
 		return nil
 	}
 
-	to := &int.IgnitionCustomization{}
+	to := &bp.IgnitionCustomization{}
 	iu, ie, err := e.from.Ignition.SelectUnion()
 	if err != nil {
 		e.log.Printf("could not parse ignition: %v", err)
 	}
 	if ie.Text != "" {
-		to.Embedded = &int.EmbeddedIgnitionCustomization{
+		to.Embedded = &bp.EmbeddedIgnitionCustomization{
 			Config: ie.Text,
 		}
 	} else if iu.URL != "" {
-		to.FirstBoot = &int.FirstBootIgnitionCustomization{
+		to.FirstBoot = &bp.FirstBootIgnitionCustomization{
 			ProvisioningURL: iu.URL,
 		}
 	} else {
@@ -524,13 +524,13 @@ func (e *InternalExporter) exportIgnition() *int.IgnitionCustomization {
 	return ptr.EmptyToNil(to)
 }
 
-func (e *InternalExporter) exportFSNodes() ([]int.FileCustomization, []int.DirectoryCustomization) {
+func (e *InternalExporter) exportFSNodes() ([]bp.FileCustomization, []bp.DirectoryCustomization) {
 	if e.from.FSNodes == nil {
 		return nil, nil
 	}
 
-	var files []int.FileCustomization
-	var dirs []int.DirectoryCustomization
+	var files []bp.FileCustomization
+	var dirs []bp.DirectoryCustomization
 	for i, node := range e.from.FSNodes {
 
 		switch node.Type {
@@ -549,7 +549,7 @@ func (e *InternalExporter) exportFSNodes() ([]int.FileCustomization, []int.Direc
 				continue
 			}
 
-			fc := int.FileCustomization{
+			fc := bp.FileCustomization{
 				Path:  node.Path,
 				User:  parseUGIDstr(node.User),
 				Group: parseUGIDstr(node.Group),
@@ -562,7 +562,7 @@ func (e *InternalExporter) exportFSNodes() ([]int.FileCustomization, []int.Direc
 
 			files = append(files, fc)
 		case ubp.FSNodeDir:
-			fc := int.DirectoryCustomization{
+			fc := bp.DirectoryCustomization{
 				Path:          node.Path,
 				User:          parseUGIDstr(node.User),
 				Group:         parseUGIDstr(node.Group),
@@ -584,13 +584,13 @@ func (e *InternalExporter) exportFSNodes() ([]int.FileCustomization, []int.Direc
 	return files, dirs
 }
 
-func (e *InternalExporter) exportRepositories() ([]int.RepositoryCustomization, *int.RPMCustomization) {
+func (e *InternalExporter) exportRepositories() ([]bp.RepositoryCustomization, *bp.RPMCustomization) {
 	if e.from.DNF == nil || e.from.DNF.Repositories == nil {
 		return nil, nil
 	}
 
-	var repos []int.RepositoryCustomization
-	var rpm *int.RPMCustomization
+	var repos []bp.RepositoryCustomization
+	var rpm *bp.RPMCustomization
 	for _, repo := range e.from.DNF.Repositories {
 		burl, bmeta, bmirror, err := repo.Source.SelectUnion()
 		if err != nil {
@@ -604,7 +604,7 @@ func (e *InternalExporter) exportRepositories() ([]int.RepositoryCustomization, 
 			install = repo.Usage.Install
 		}
 
-		repos = append(repos, int.RepositoryCustomization{
+		repos = append(repos, bp.RepositoryCustomization{
 			Id:             repo.ID,
 			Name:           repo.Name,
 			BaseURLs:       burl.URLs,
@@ -623,8 +623,8 @@ func (e *InternalExporter) exportRepositories() ([]int.RepositoryCustomization, 
 
 		if len(e.from.DNF.ImportKeys) > 0 {
 			if rpm == nil {
-				rpm = &int.RPMCustomization{
-					ImportKeys: &int.RPMImportKeys{
+				rpm = &bp.RPMCustomization{
+					ImportKeys: &bp.RPMImportKeys{
 						Files: e.from.DNF.ImportKeys,
 					},
 				}
@@ -635,14 +635,14 @@ func (e *InternalExporter) exportRepositories() ([]int.RepositoryCustomization, 
 	return repos, ptr.EmptyToNil(rpm)
 }
 
-func (e *InternalExporter) exportCACerts() *int.CACustomization {
+func (e *InternalExporter) exportCACerts() *bp.CACustomization {
 	if e.from.CACerts == nil {
 		return nil
 	}
 
-	var to *int.CACustomization
+	var to *bp.CACustomization
 	if len(e.from.CACerts) > 0 {
-		to = &int.CACustomization{}
+		to = &bp.CACustomization{}
 		for _, cert := range e.from.CACerts {
 			if cert.PEM == "" {
 				continue

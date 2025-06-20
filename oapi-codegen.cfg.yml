@@ -1,5 +1,5 @@
 ---
-package: blueprint
+package: ubp
 output-options:
   # https://github.com/oapi-codegen/oapi-codegen/pull/1987
   disable-type-aliases-for-type:

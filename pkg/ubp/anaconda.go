@@ -1,4 +1,4 @@
-package blueprint
+package ubp
 
 func ParseAnacondaModule(m string) AnacondaModules {
 	switch m {

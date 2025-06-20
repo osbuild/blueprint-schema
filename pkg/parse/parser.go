@@ -8,7 +8,7 @@ import (
 
 	"sigs.k8s.io/yaml"
 
-	ubp "github.com/osbuild/blueprint-schema/pkg/blueprint"
+	"github.com/osbuild/blueprint-schema/pkg/ubp"
 )
 
 // UnmarshalYAML loads a blueprint from YAML data. It converts YAML into JSON first,

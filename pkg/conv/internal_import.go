@@ -5,19 +5,19 @@ import (
 	"reflect"
 	"strings"
 
-	ubp "github.com/osbuild/blueprint-schema/pkg/blueprint"
 	"github.com/osbuild/blueprint-schema/pkg/ptr"
-	int "github.com/osbuild/blueprint/pkg/blueprint"
+	ubp "github.com/osbuild/blueprint-schema/pkg/ubp"
+	bp "github.com/osbuild/blueprint/pkg/blueprint"
 )
 
 // InternalImporter is used to convert a blueprint to the internal representation.
 type InternalImporter struct {
-	from *int.Blueprint
+	from *bp.Blueprint
 	to   *ubp.Blueprint
 	log  *logs
 }
 
-func NewInternalImporter(inputBlueprint *int.Blueprint) *InternalImporter {
+func NewInternalImporter(inputBlueprint *bp.Blueprint) *InternalImporter {
 	return &InternalImporter{
 		from: inputBlueprint,
 		log:  newCollector(),

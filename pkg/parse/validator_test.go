@@ -12,10 +12,10 @@ import (
 
 	"github.com/BurntSushi/toml"
 	"github.com/google/go-cmp/cmp"
-	ubp "github.com/osbuild/blueprint-schema/pkg/blueprint"
 	"github.com/osbuild/blueprint-schema/pkg/conv"
 	"github.com/osbuild/blueprint-schema/pkg/ptr"
-	ib "github.com/osbuild/blueprint/pkg/blueprint"
+	"github.com/osbuild/blueprint-schema/pkg/ubp"
+	bp "github.com/osbuild/blueprint/pkg/blueprint"
 )
 
 var writeFixtures = os.Getenv("WRITE_FIXTURES") != ""
@@ -177,7 +177,7 @@ func TestFix(t *testing.T) {
 					t.Fatal(err)
 				}
 			} else if strings.HasSuffix(input, ".toml") {
-				inputBlueprint := &ib.Blueprint{}
+				inputBlueprint := &bp.Blueprint{}
 				err := toml.Unmarshal(inputBuf.Bytes(), inputBlueprint)
 				if err != nil {
 					t.Fatal(err)
