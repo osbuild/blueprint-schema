@@ -27,6 +27,10 @@ func NewInternalExporter(inputBlueprint *Blueprint) *InternalExporter {
 func (e *InternalExporter) Export() error {
 	to := &int.Blueprint{}
 
+	if e.from == nil {
+		return nil
+	}
+
 	// Create monotonic incremental version number based on miliseconds
 	to.Version = int64ToVersion(uint64(time.Now().UTC().UnixMilli()))
 
