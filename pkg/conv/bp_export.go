@@ -352,7 +352,7 @@ func (e *InternalExporter) exportStorage() *bp.DiskCustomization {
 						FSType:     lv.FSType.String(),
 					},
 				}
-				part.VGCustomization.LogicalVolumes = append(part.VGCustomization.LogicalVolumes, lvc)
+				part.LogicalVolumes = append(part.LogicalVolumes, lvc)
 			}
 
 			to.Partitions = append(to.Partitions, *part)
@@ -368,7 +368,7 @@ func (e *InternalExporter) exportStorage() *bp.DiskCustomization {
 					Name:       sv.Name,
 					Mountpoint: sv.Mountpoint,
 				}
-				part.BtrfsVolumeCustomization.Subvolumes = append(part.BtrfsVolumeCustomization.Subvolumes, svc)
+				part.Subvolumes = append(part.Subvolumes, svc)
 			}
 
 			to.Partitions = append(to.Partitions, *part)

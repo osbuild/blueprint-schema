@@ -34,7 +34,9 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
-		defer in.Close()
+		defer func() {
+			_ = in.Close()
+		}()
 	}
 
 	schema, err := parse.CompileSourceSchema()
@@ -59,14 +61,14 @@ func main() {
 				panic(err)
 			}
 
-			os.Stdout.Write(buf)
+			_, _ = os.Stdout.Write(buf)
 		} else if *printJSONSchema {
 			buf, err := schema.MarshalJSON()
 			if err != nil {
 				panic(err)
 			}
 
-			os.Stdout.Write(buf)
+			_, _ = os.Stdout.Write(buf)
 		} else if *printJSONExtendedSchema {
 			err := schema.ApplyExtensions(ctx)
 			if err != nil {
@@ -78,7 +80,7 @@ func main() {
 				panic(err)
 			}
 
-			os.Stdout.Write(buf)
+			_, _ = os.Stdout.Write(buf)
 		}
 
 		return
@@ -130,7 +132,7 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
-		os.Stdout.Write(buf)
+		_, _ = os.Stdout.Write(buf)
 	}
 
 	_ = inBuf

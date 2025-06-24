@@ -25,7 +25,9 @@ func writeFile(t *testing.T, output string, buffers ...*[]byte) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer outFile.Close()
+	defer func() {
+		_ = outFile.Close()
+	}()
 
 	for _, buf := range buffers {
 		if buf == nil || *buf == nil {
@@ -75,7 +77,9 @@ func TestFix(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			defer inputFile.Close()
+			defer func() {
+				_ = inputFile.Close()
+			}()
 
 			inputBuf := bytes.Buffer{}
 			_, err = inputBuf.ReadFrom(inputFile)
@@ -109,7 +113,7 @@ func TestFix(t *testing.T) {
 						t.Fatal(err)
 					}
 					want, err = io.ReadAll(inFile)
-					inFile.Close()
+					_ = inFile.Close()
 					if err != nil {
 						t.Fatal(err)
 					}
@@ -141,7 +145,9 @@ func TestFix(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			defer inputFile.Close()
+			defer func() {
+				_ = inputFile.Close()
+			}()
 
 			inputBuf := bytes.Buffer{}
 			_, err = inputBuf.ReadFrom(inputFile)
@@ -206,7 +212,7 @@ func TestFix(t *testing.T) {
 						t.Fatal(err)
 					}
 					want, err = io.ReadAll(inFile)
-					inFile.Close()
+					_ = inFile.Close()
 					if err != nil {
 						t.Fatal(err)
 					}
@@ -268,7 +274,7 @@ func TestFix(t *testing.T) {
 			t.Logf("Copying %q to %q", src, dst)
 
 			if _, err := os.Stat(dst); err == nil {
-				os.Remove(dst)
+				_ = os.Remove(dst)
 			}
 
 			err := copy(src, dst)

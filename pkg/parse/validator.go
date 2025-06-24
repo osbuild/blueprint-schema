@@ -164,7 +164,7 @@ func (s *Schema) ApplyExtensions(ctx context.Context) error {
 		}
 
 		b, err := io.ReadAll(f)
-		f.Close()
+		_ = f.Close()
 		if err != nil {
 			return err
 		}
@@ -175,7 +175,10 @@ func (s *Schema) ApplyExtensions(ctx context.Context) error {
 		}
 
 		var ts openapi3.Schema
-		ts.UnmarshalJSON(j)
+		err = ts.UnmarshalJSON(j)
+		if err != nil {
+			return fmt.Errorf("%w: %v", ErrUnmarshal, err)
+		}
 
 		schemaName := strings.TrimSuffix(filepath.Base(file.Name()), ".yaml")
 		if _, ok := s.doc.Components.Schemas[schemaName]; ok {

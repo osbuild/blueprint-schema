@@ -17,7 +17,9 @@ func SchemaSource() []byte {
 	if err != nil {
 		panic(err)
 	}
-	defer buf.Close()
+	defer func() {
+		_ = buf.Close()
+	}()
 
 	schema, err := io.ReadAll(buf)
 	if err != nil {
@@ -32,7 +34,9 @@ func BundledSchema() []byte {
 	if err != nil {
 		panic(err)
 	}
-	defer buf.Close()
+	defer func() {
+		_ = buf.Close()
+	}()
 
 	schema, err := io.ReadAll(buf)
 	if err != nil {
