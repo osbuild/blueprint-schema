@@ -1,6 +1,7 @@
 ---
+# The cmd/wasm directory requires JS build flags, do not run "./..."
 version: "2"
 linters:
   exclusions:
     paths:
-      - "cmd/wasm"
+      - cmd/wasm/.*

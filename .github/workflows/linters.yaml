@@ -23,7 +23,8 @@ jobs:
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v8
         with:
-          args: --config=.golangci.yaml
+          path: ./pkg
+          args: --config=.golangci.yaml ./pkg/...
 
       - uses: ibiqlik/action-yamllint@v3
         with:
