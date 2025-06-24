@@ -16,7 +16,7 @@ $(DISTDIR):
 .PHONY: write-fixtures
 write-fixtures: ## Write new test fixtures
 	@rm -f ./testdata/*.out.yaml ./testdata/*.validator.out ./testdata/*.validator.out
-	@WRITE_FIXTURES=1 go test -count=1 ./...
+	@WRITE_FIXTURES=1 go test -count=1 . ./pkg/...
 
 .PHONY: pkg-go-dev-update
 pkg-go-dev-update: ## Schedule https://pkg.go.dev/github.com/osbuild/blueprint-schema for update
@@ -24,7 +24,7 @@ pkg-go-dev-update: ## Schedule https://pkg.go.dev/github.com/osbuild/blueprint-s
 
 .PHONY: test
 test: ## Run all tests
-	@go test -count=1 ./...
+	@go test -count=1 . ./pkg/...
 
 .PHONY: test-diff
 test-diff: ## Diff all fields test data
