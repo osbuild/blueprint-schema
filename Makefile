@@ -1,4 +1,3 @@
-TINYGO?=tinygo
 SOURCES=$(shell find . \( -name '*.go' -not -name '*.gen.go' \) -or -name 'go.*' -or -name 'Makefile')
 SCHEMA_SRC=$(shell find ./oas -name '*.yaml')
 DISTDIR=dist
@@ -58,26 +57,7 @@ pkg/blueprint/http.gen.go: blueprint-oas3.yaml blueprint-oas3.json blueprint-oas
 
 schema: pkg/blueprint/types.gen.go pkg/blueprint/http.gen.go ## Generate bundled schema and Go code
 
-.PHONY: run-web-editor-json
-run-web-editor-json: ## show a demo-web editor for the json format
-	xdg-open ./web/src/json.html
-
-# Just set this in your environment or call directly:
-# make WEB_EDITOR_HOST=hostname run-editor
-export WEB_EDITOR_HOST?=localhost
-
-.PHONY: run-editor
-run-editor: ## Build, run webserver and open a demo-web editor
-	cd web && npm clean-install
-	cd web && npm run start
-
-.PHONY: build-editor
-build-editor: ## Build the demo-web editor
-	cd web && npm clean-install
-	cd web && npm run build
-
 .PHONY: clean
 clean: ## Clean up all build artifacts
 	rm -rf $(DISTDIR) blueprint-oas3*.{yaml,json}
 	rm -f ./testdata/*.out.{yaml,toml,json} ./testdata/*.validator.out
-	rm -rf web/node_modules web/dist
