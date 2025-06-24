@@ -1,5 +1,9 @@
 ---
-# The cmd/wasm directory requires JS build flags, do not run "./..."
+#
+# The cmd/wasm directory requires JS build flags, you must run:
+#
+#   golangci-lint run --config=.golangci.yaml ./pkg/...
+#
 version: "2"
 linters:
   exclusions:

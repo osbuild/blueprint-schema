@@ -77,6 +77,14 @@ run-wasm: cmd/wasm/blueprint.wasm cmd/wasm/wasm_exec.js ## Run the WASM binary
 	@echo "Open http://localhost:8080 and Ctrl+C to stop the server"
 	@python3 -m http.server 8080 --directory cmd/wasm
 
+.PHONY: golint
+golint: ## Run golint on the codebase
+	@golangci-lint run --config=.golangci.yaml ./pkg/...
+
+.PHONY: golint-podman
+golint-podman: ## Run golint via podman on the codebase
+	@podman run -t --rm -v $(shell pwd):/app:ro -v ~/.cache:/root/.cache -w /app golangci/golangci-lint:latest golangci-lint run -v ./pkg/...
+
 .PHONY: clean
 clean: ## Clean up all build artifacts
 	rm -rf $(DISTDIR) blueprint-oas3*.{yaml,json}
