@@ -2,8 +2,8 @@
 type: object
 x-omitempty: true
 required:
-- name
-- source
+  - name
+  - source
 properties:
   local_storage:
     description: Whether to pull the container image from the host's local-storage.

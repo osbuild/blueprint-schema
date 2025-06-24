@@ -6,12 +6,12 @@ description: |
 nullable: true
 x-omitempty: true
 required:
-- timezone
+  - timezone
 properties:
   timezone:
     description: |
       System time zone. Defaults to UTC. To list available time zones run:
-      
+
       timedatectl list-timezones
     default: UTC
     type: string

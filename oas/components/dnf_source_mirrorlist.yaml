@@ -1,7 +1,7 @@
 ---
 type: object
 required:
-- mirrorlist
+  - mirrorlist
 properties:
   mirrorlist:
     description: Mirror list for the repository.

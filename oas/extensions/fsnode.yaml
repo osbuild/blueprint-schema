@@ -8,4 +8,4 @@ anyOf:
         - type
   - not:
       required:
-      - contents
+        - contents

@@ -2,7 +2,7 @@
 type: object
 description: Red Hat console.redhat.com connector (rhc) details.
 required:
-- enabled
+  - enabled
 properties:
   enabled:
     description: Enables rhc (Red Hat Connector) during boot.

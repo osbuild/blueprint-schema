@@ -5,7 +5,7 @@ description: |
 x-go-name: CACert
 x-omitempty: true
 required:
-- pem
+  - pem
 properties:
   pem:
     description: The PEM-encoded certificate.

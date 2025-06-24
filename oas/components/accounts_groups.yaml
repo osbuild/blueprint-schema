@@ -2,7 +2,7 @@
 type: object
 description: Operating system group accounts to be created on the image.
 required:
-- name
+  - name
 properties:
   gid:
     description: The group ID (GID) of the group. Must be non-zero.

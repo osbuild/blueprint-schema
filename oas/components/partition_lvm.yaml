@@ -2,8 +2,8 @@
 type: object
 x-go-type-name: PartitionLVM
 required:
-- type
-- logical_volumes
+  - type
+  - logical_volumes
 properties:
   type:
     "$ref": "partition_type.yaml"

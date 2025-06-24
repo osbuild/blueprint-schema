@@ -2,7 +2,7 @@
 type: object
 description: Red Hat Insights client details.
 required:
-- enabled
+  - enabled
 properties:
   enabled:
     description: Enables insights client during boot.

@@ -4,9 +4,9 @@ x-go-type-skip-optional-pointer: true
 description: 'Partition type: plain (default), lvm, or btrfs.'
 default: plain
 enum:
-- plain
-- lvm
-- btrfs
+  - plain
+  - lvm
+  - btrfs
 x-enum-varnames:
   - PartTypePlain
   - PartTypeLVM

@@ -2,8 +2,8 @@
 type: object
 x-go-type-name: PartitionBTRFS
 required:
-- type
-- subvolumes
+  - type
+  - subvolumes
 properties:
   type:
     "$ref": "partition_type.yaml"

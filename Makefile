@@ -57,6 +57,10 @@ pkg/ubp/http.gen.go: blueprint-oas3.yaml blueprint-oas3.json blueprint-oas3-ext.
 
 schema: pkg/ubp/types.gen.go pkg/ubp/http.gen.go ## Generate bundled schema and Go code
 
+.PHONY: yamllint
+yamllint: ## Lint YAML files
+	@yamllint -c .yamllint.yaml oas/
+
 .PHONY: clean
 clean: ## Clean up all build artifacts
 	rm -rf $(DISTDIR) blueprint-oas3*.{yaml,json}

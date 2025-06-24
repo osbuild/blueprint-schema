@@ -6,7 +6,7 @@ description: |
   iot-simplified-installer image types.
 x-go-name: RegistrationFDO
 required:
-- manufacturing_server_url
+  - manufacturing_server_url
 properties:
   di_mfg_string_type_mac_iface:
     description: Optional interface name for the MAC address.

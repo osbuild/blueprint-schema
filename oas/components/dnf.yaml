@@ -42,7 +42,7 @@ properties:
       module names, not the full module stream name. For example, to enable the
       'nodejs' module, use 'nodejs' as the value. To enable a specific stream,
       use 'nodejs:20'.
-      
+
       Software Collections (SCL) modules must be enabled via the packages field.
     type: array
     items:

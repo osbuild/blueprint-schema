@@ -22,9 +22,9 @@ description: |
 nullable: true
 x-omitempty: true
 required:
-- type
-- minsize
-- partitions
+  - type
+  - minsize
+  - partitions
 properties:
   type:
     "$ref": "storage_type.yaml"

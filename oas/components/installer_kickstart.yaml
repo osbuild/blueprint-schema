@@ -1,12 +1,12 @@
 ---
 type: object
 oneOf:
-- title: kickstart_text
-  required:
-  - text
-- title: kickstart_base64
-  required:
-  - base64
+  - title: kickstart_text
+    required:
+      - text
+  - title: kickstart_base64
+    required:
+      - base64
 properties:
   base64:
     description: Kickstart file formatted in base64.
