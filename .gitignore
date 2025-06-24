@@ -1,3 +1,5 @@
 /dist
 node_modules
 /image-builder-blueprint
+/cmd/wasm/wasm_exec.js
+/cmd/wasm/blueprint.wasm

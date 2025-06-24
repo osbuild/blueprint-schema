@@ -59,7 +59,23 @@ schema: pkg/ubp/types.gen.go pkg/ubp/http.gen.go ## Generate bundled schema and 
 
 .PHONY: yamllint
 yamllint: ## Lint YAML files
-	@yamllint -c .yamllint.yaml oas/
+	yamllint -c .yamllint.yaml oas/
+
+cmd/wasm/wasm_exec.js:
+# will not work until Go 1.24+ download instead
+# @cp "$(shell go env GOROOT)/lib/wasm/wasm_exec.js" cmd/wasm/wasm_exec.js
+	@curl -sSL https://raw.githubusercontent.com/golang/go/master/lib/wasm/wasm_exec.js -o cmd/wasm/wasm_exec.js
+
+cmd/wasm/blueprint.wasm: $(SCHEMA_SRC) $(SOURCES) cmd/wasm/wasm_exec.js cmd/wasm/index.html
+	GOOS=js GOARCH=wasm go build -o cmd/wasm/blueprint.wasm ./cmd/wasm
+
+.PHONY: wasm
+wasm: cmd/wasm/blueprint.wasm cmd/wasm/wasm_exec.js ## Build the WASM binary
+
+.PHONY: run-wasm
+run-wasm: cmd/wasm/blueprint.wasm cmd/wasm/wasm_exec.js ## Run the WASM binary
+	@echo "Open http://localhost:8080 and Ctrl+C to stop the server"
+	@python3 -m http.server 8080 --directory cmd/wasm
 
 .PHONY: clean
 clean: ## Clean up all build artifacts
