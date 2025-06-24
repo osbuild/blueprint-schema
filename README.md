@@ -4,7 +4,7 @@ This repository contains the common blueprint JSON Schema and Go types for Image
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/osbuild/blueprint-schema.svg)](https://pkg.go.dev/github.com/osbuild/blueprint-schema)
 
-**WORK IN PROGRESS**
+Test PR
 
 ### Terminology
 
