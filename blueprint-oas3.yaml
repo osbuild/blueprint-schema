@@ -459,7 +459,10 @@ components:
           description: |
             GPG keys for the repository.
 
-            The blueprint accepts both inline GPG keys and GPG key urls. If an inline GPG key is provided it will be saved to the /etc/pki/rpm-gpg directory and will be referenced accordingly in the repository configuration. GPG keys are not imported to the RPM database and will only be imported when first installing a package from the third-party repository.
+            The blueprint accepts both inline GPG keys and GPG key urls. If an inline GPG key is provided it
+            will be saved to the /etc/pki/rpm-gpg directory and will be referenced accordingly in the repository
+            configuration. GPG keys are not imported to the RPM database and will only be imported when first
+            installing a package from the third-party repository.
           items:
             type: string
           type: array
@@ -477,7 +480,8 @@ components:
           description: |
             Enable module hotfixes for the repository. Disabled by default.
 
-            Adds module_hotfixes flag to all repo types so it can be used during osbuild. This enables users to disable modularity filtering on specific repositories.
+            Adds module_hotfixes flag to all repo types so it can be used during osbuild. This enables users
+            to disable modularity filtering on specific repositories.
           type: boolean
           x-go-type-skip-optional-pointer: true
         name:

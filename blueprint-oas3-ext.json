@@ -431,7 +431,7 @@
             "x-go-name": "GPGCheckRepo"
           },
           "gpg_keys": {
-            "description": "GPG keys for the repository.\n\nThe blueprint accepts both inline GPG keys and GPG key urls. If an inline GPG key is provided it will be saved to the /etc/pki/rpm-gpg directory and will be referenced accordingly in the repository configuration. GPG keys are not imported to the RPM database and will only be imported when first installing a package from the third-party repository.\n",
+            "description": "GPG keys for the repository.\n\nThe blueprint accepts both inline GPG keys and GPG key urls. If an inline GPG key is provided it\nwill be saved to the /etc/pki/rpm-gpg directory and will be referenced accordingly in the repository\nconfiguration. GPG keys are not imported to the RPM database and will only be imported when first\ninstalling a package from the third-party repository.\n",
             "items": {
               "type": "string"
             },
@@ -449,7 +449,7 @@
           },
           "module_hotfixes": {
             "default": false,
-            "description": "Enable module hotfixes for the repository. Disabled by default.\n\nAdds module_hotfixes flag to all repo types so it can be used during osbuild. This enables users to disable modularity filtering on specific repositories.\n",
+            "description": "Enable module hotfixes for the repository. Disabled by default.\n\nAdds module_hotfixes flag to all repo types so it can be used during osbuild. This enables users\nto disable modularity filtering on specific repositories.\n",
             "type": "boolean",
             "x-go-type-skip-optional-pointer": true
           },

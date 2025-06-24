@@ -49,13 +49,13 @@ blueprint-oas3-ext.json: $(SCHEMA_SRC) $(SOURCES)
 .PHONY: schema-bundle
 schema-bundle: blueprint-oas3.yaml blueprint-oas3.json blueprint-oas3-ext.json ## Bundle OpenAPI schema
 
-pkg/blueprint/types.gen.go: blueprint-oas3.yaml blueprint-oas3.json blueprint-oas3-ext.json oapi-codegen.cfg.yml
-	oapi-codegen -config oapi-codegen.cfg.yml -generate types -o pkg/ubp/types.gen.go blueprint-oas3.json
+pkg/ubp/types.gen.go: blueprint-oas3.yaml blueprint-oas3.json blueprint-oas3-ext.json oapi-codegen.cfg.yml
+	go run github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest -config oapi-codegen.cfg.yml -generate types -o pkg/ubp/types.gen.go blueprint-oas3.json
 
-pkg/blueprint/http.gen.go: blueprint-oas3.yaml blueprint-oas3.json blueprint-oas3-ext.json oapi-codegen.cfg.yml
-	oapi-codegen -config oapi-codegen.cfg.yml -generate std-http -o pkg/ubp/http.gen.go blueprint-oas3.json
+pkg/ubp/http.gen.go: blueprint-oas3.yaml blueprint-oas3.json blueprint-oas3-ext.json oapi-codegen.cfg.yml
+	go run github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest -config oapi-codegen.cfg.yml -generate std-http -o pkg/ubp/http.gen.go blueprint-oas3.json
 
-schema: pkg/blueprint/types.gen.go pkg/blueprint/http.gen.go ## Generate bundled schema and Go code
+schema: pkg/ubp/types.gen.go pkg/ubp/http.gen.go ## Generate bundled schema and Go code
 
 .PHONY: clean
 clean: ## Clean up all build artifacts

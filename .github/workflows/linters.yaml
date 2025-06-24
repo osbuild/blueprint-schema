@@ -1,4 +1,5 @@
-name: golint
+name: linters
+
 on:
   push:
     branches:
@@ -12,12 +13,18 @@ permissions:
 
 jobs:
   golangci:
-    name: "Go linters"
+    name: "Linters"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-go@v5
         with:
           go-version: stable
+
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v8
+
+      - uses: ibiqlik/action-yamllint@v3
+        with:
+          file_or_dir: oas/
