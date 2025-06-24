@@ -36,7 +36,8 @@ jobs:
   deploy:
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      #url: ${{ steps.deployment.outputs.page_url }}
+      url: "http://osbuild.org/ubp"
     runs-on: ubuntu-latest
     needs: build
     steps:
