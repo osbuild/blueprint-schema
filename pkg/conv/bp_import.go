@@ -14,13 +14,13 @@ import (
 type InternalImporter struct {
 	from *bp.Blueprint
 	to   *ubp.Blueprint
-	log  *logs
+	log  *errs
 }
 
 func NewInternalImporter(inputBlueprint *bp.Blueprint) *InternalImporter {
 	return &InternalImporter{
 		from: inputBlueprint,
-		log:  newCollector(),
+		log:  newErrorCollector(),
 	}
 }
 

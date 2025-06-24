@@ -24,7 +24,7 @@ func TestReadYAMLWriteJSON(t *testing.T) {
 		t.Fatalf("Expected 'test', got '%s'", b.Name)
 	}
 
-	out, err := marshalJSON(b, true)
+	out, err := MarshalJSON(b, true)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -47,7 +47,7 @@ func TestReadJSONWriteYAML(t *testing.T) {
 	in := "{\n  \"name\": \"test\"\n}"
 	want := "name: test\n"
 
-	b, err := readJSON(bytes.NewBufferString(in))
+	b, err := ReadJSON(bytes.NewBufferString(in))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -69,7 +69,7 @@ func TestReadJSONWriteYAML(t *testing.T) {
 		t.Fatalf("Unexpected YAML output: %s", out)
 	}
 
-	out, err = marshalJSON(b, true)
+	out, err = MarshalJSON(b, true)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -78,7 +78,7 @@ func TestReadJSONWriteYAML(t *testing.T) {
 		t.Fatalf("Unexpected JSON output: %s", out)
 	}
 
-	err = writeJSON(b, bytes.NewBufferString(""), true)
+	err = WriteJSON(b, bytes.NewBufferString(""), true)
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -6,32 +6,25 @@ import (
 	"strings"
 )
 
+type errs struct {
+	msgs []string
+}
+
 type Logger interface {
 	Printf(format string, args ...any)
 	Println(args ...any)
 }
 
-type Exporter interface {
-	Export() error
-}
+var _ Logger = (*errs)(nil)
 
-type Importer interface {
-	Import() error
-}
-
-type logs struct {
-	msgs []string
-}
-
-var _ Logger = (*logs)(nil)
-
-func newCollector() *logs {
-	return &logs{
+func newErrorCollector() *errs {
+	return &errs{
 		msgs: make([]string, 0),
 	}
 }
 
-func (c *logs) Printf(format string, args ...any) {
+// Printf formats its arguments according to the format and appends the result to the error collector.
+func (c *errs) Printf(format string, args ...any) {
 	c.msgs = append(c.msgs, fmt.Sprintf(format, args...))
 }
 
@@ -50,11 +43,13 @@ func toStringSlice(args []any) []string {
 	return strs
 }
 
-func (c *logs) Println(args ...any) {
+// Println formats its arguments using fmt.Sprint and appends the result to the error collector.
+func (c *errs) Println(args ...any) {
 	c.msgs = append(c.msgs, strings.Join(toStringSlice(args), " "))
 }
 
-func (c *logs) Errors() error {
+// Error returns a single error that contains all collected messages. Individual errors can be unwrapped.
+func (c *errs) Errors() error {
 	if len(c.msgs) == 0 {
 		return nil
 	}

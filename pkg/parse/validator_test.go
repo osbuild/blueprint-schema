@@ -154,7 +154,7 @@ func TestFix(t *testing.T) {
 			if strings.HasSuffix(input, ".json") || strings.HasSuffix(input, ".yaml") {
 				var inputBlueprint *ubp.Blueprint
 				if strings.HasSuffix(input, ".json") {
-					b, err := unmarshalJSON(inputBuf.Bytes())
+					b, err := UnmarshalJSON(inputBuf.Bytes())
 					if err != nil {
 						t.Fatal(err)
 					}

@@ -57,26 +57,32 @@ func WriteYAML(b *ubp.Blueprint, writer io.Writer) error {
 	return err
 }
 
-// unmarshalJSON uses JSON decoder to unmarshal into an object.
-func unmarshalJSON(data []byte) (*ubp.Blueprint, error) {
+// UnmarshalJSON uses JSON decoder to unmarshal into an object.
+//
+// Do not use this function for user-facing data.
+func UnmarshalJSON(data []byte) (*ubp.Blueprint, error) {
 	b := new(ubp.Blueprint)
 	return b, json.Unmarshal(data, b)
 }
 
-// readJSON calls UnmarshalJSON after reading into a buffer.
-func readJSON(reader io.Reader) (*ubp.Blueprint, error) {
+// ReadJSON calls UnmarshalJSON after reading into a buffer.
+//
+// Do not use this function for user-facing data.
+func ReadJSON(reader io.Reader) (*ubp.Blueprint, error) {
 	var buf bytes.Buffer
 
 	_, err := buf.ReadFrom(reader)
 	if err != nil {
 		return nil, err
 	}
-	return unmarshalJSON(buf.Bytes())
+	return UnmarshalJSON(buf.Bytes())
 }
 
-// marshalJSON uses JSON encoder to marshal the object into JSON.
+// MarshalJSON uses JSON encoder to marshal the object into JSON.
 // Output can be optionaly indented.
-func marshalJSON(b *ubp.Blueprint, indent bool) ([]byte, error) {
+//
+// Do not use this function for user-facing data.
+func MarshalJSON(b *ubp.Blueprint, indent bool) ([]byte, error) {
 	if indent {
 		return json.MarshalIndent(b, "", "  ")
 	}
@@ -84,10 +90,12 @@ func marshalJSON(b *ubp.Blueprint, indent bool) ([]byte, error) {
 	return json.Marshal(b)
 }
 
-// writeJSON calls MarshalJSON and writes the result to the writer.
+// WriteJSON calls MarshalJSON and writes the result to the writer.
 // Output can be optionaly indented.
-func writeJSON(b *ubp.Blueprint, writer io.Writer, indent bool) error {
-	data, err := marshalJSON(b, indent)
+//
+// Do not use this function for user-facing data.
+func WriteJSON(b *ubp.Blueprint, writer io.Writer, indent bool) error {
+	data, err := MarshalJSON(b, indent)
 	if err != nil {
 		return err
 	}
