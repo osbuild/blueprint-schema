@@ -176,7 +176,7 @@ func (dr DNFRepoUsage) IsZero() bool {
 }
 ```
 
-### Conversion limitations
+### Conversion limitations
 
 Conversion from/to TOML has some limitations:
 
