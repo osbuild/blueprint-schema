@@ -32,7 +32,7 @@ func wasmValidateUBP(this js.Value, p []js.Value) interface{} {
 	}
 
 	return map[string]interface{}{
-		"toml": result,
+		"report": result,
 	}
 }
 

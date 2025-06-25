@@ -171,15 +171,15 @@
             go.run(result.instance);
             wasmReady = true;
 
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('success').style.display = 'block';
-
             document.getElementById('ubpText').disabled = false;
             document.getElementById('validBtn').disabled = false;
             document.getElementById('tomlBtn').disabled = false;
             document.getElementById('jsonBtn').disabled = false;
             document.getElementById('loadBtn').disabled = false;
             document.getElementById('clearBtn').disabled = false;
+
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('success').style.display = 'block';
         }).catch((err) => {
             document.getElementById('loading').style.display = 'none';
             showError("Failed to load WASM module: " + err.message);
@@ -206,6 +206,15 @@
                 });
         }
 
+        function show(message) {
+            console.info(message);
+            document.getElementById('error').style.display = 'none';
+
+            const errorDiv = document.getElementById('success');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+
         function showError(message) {
             console.error(message);
             document.getElementById('success').style.display = 'none';
@@ -213,10 +222,6 @@
             const errorDiv = document.getElementById('error');
             errorDiv.textContent = message;
             errorDiv.style.display = 'block';
-        }
-
-        function hideError() {
-            document.getElementById('error').style.display = 'none';
         }
 
         function checkWasmReady() {
@@ -229,7 +234,7 @@
 
         function validateUBP() {            
             checkWasmReady();
-            hideError();
+            show("Validating...");
 
             const ubpText = document.getElementById('ubpText').value;
             if (!ubpText.trim()) {
@@ -242,7 +247,8 @@
                 if (result.error) {
                     showError(result.error);
                 } else {
-                    document.getElementById('bpText').value = result.toml;
+                    show(result.report);
+                    document.getElementById('bpText').value = result.report;
                 }
             } catch (err) {
                 showError("Conversion failed: " + err.message);
@@ -251,7 +257,7 @@
 
         function convertUBPtoBP() {            
             checkWasmReady();
-            hideError();
+            show("Converting UBP to BP...");
 
             const ubpText = document.getElementById('ubpText').value;
             if (!ubpText.trim()) {
@@ -265,6 +271,7 @@
                     showError(result.error);
                 } else {
                     document.getElementById('bpText').value = result.toml;
+                    show("Conversion to BP successful!");
                 }
             } catch (err) {
                 showError("Conversion failed: " + err.message);
@@ -273,7 +280,7 @@
 
         function convertBPtoUBP() {
             checkWasmReady();
-            hideError();
+            show("Converting BP to UBP...");
 
             const ubpText = document.getElementById('ubpText').value;
             if (!ubpText.trim()) {
@@ -287,6 +294,7 @@
                     showError(result.error);
                 } else {
                     document.getElementById('bpText').value = result.json;
+                    show("Conversion to UBP successful!");
                 }
             } catch (err) {
                 showError("Conversion failed: " + err.message);
@@ -296,7 +304,7 @@
         function clearAll() {
             document.getElementById('ubpText').value = '';
             document.getElementById('bpText').value = '';
-            hideError();
+            show("Ready.");
         }
     </script>
 </body>
