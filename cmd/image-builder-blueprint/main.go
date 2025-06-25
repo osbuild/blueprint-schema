@@ -9,7 +9,6 @@ import (
 	"os"
 
 	"github.com/BurntSushi/toml"
-	"github.com/gabriel-vasile/mimetype"
 	"github.com/osbuild/blueprint-schema/pkg/conv"
 	"github.com/osbuild/blueprint-schema/pkg/parse"
 )
@@ -95,18 +94,10 @@ func main() {
 			panic(err)
 		}
 
-		mime := mimetype.Detect(inBuf)
-		if mime.Is("application/json") {
-			err = schema.ValidateJSON(ctx, inBuf)
-		} else if mime.Is("application/x-yaml") || mime.Is("text/yaml") || mime.Is("text/plain") {
-			err = schema.ValidateYAML(ctx, inBuf)
-		} else {
-			err = fmt.Errorf("unsupported format: %s, only JSON and YAML are supported", mime.String())
-		}
+		err = schema.ValidateAny(ctx, inBuf)
 		if err != nil {
 			panic(err)
 		}
-
 	} else if *exportTOML || *exportJSON {
 		inBuf, err = io.ReadAll(in)
 		if err != nil {

@@ -6,10 +6,20 @@ import (
 	"fmt"
 	"io"
 
-	"sigs.k8s.io/yaml"
-
 	"github.com/osbuild/blueprint-schema/pkg/ubp"
+	"sigs.k8s.io/yaml"
 )
+
+// UnmarshalAny detects UBP YAML/JSON or BP TOML/JSON and returns UBP.
+func UnmarshalAny(buf []byte) (*ubp.Blueprint, error) {
+	b := new(ubp.Blueprint)
+
+	if err := yaml.Unmarshal(buf, b); err != nil {
+		return nil, fmt.Errorf("failed to unmarshal YAML blueprint: %w", err)
+	}
+
+	return b, nil
+}
 
 // UnmarshalYAML loads a blueprint from YAML data. It converts YAML into JSON first,
 // and then unmarshals it into a Blueprint object. This is done to ensure that the

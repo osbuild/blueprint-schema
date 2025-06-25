@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            margin: 10px;
             background-color: #f5f5f5;
         }
 
@@ -139,17 +139,19 @@
 
         <div class="flex-row">
             <div class="textarea-col">
-                <h3>Universal Blueprnt (YAML/JSON)</h3>
-                <textarea id="ubpText" placeholder="YAML or JSON" disabled></textarea>
+                <h3>Unified Blueprint (YAML/JSON)</h3>
+                <textarea id="ubpText" placeholder="Unified Blueprint YAML/JSON" disabled></textarea>
             </div>
             <div class="button-col">
-                <button id="tomlBtn" onclick="convertUBPtoBP()" disabled>&RightArrow;</button>
-                <button id="jsonBtn" onclick="convertBPtoUBP()" disabled>&LeftArrow;</button>
-                <button id="clearBtn" onclick="clearAll()" disabled>&circlearrowleft;</button>
+                <button id="validBtn" onclick="validateUBP()" disabled title="Validate UBP against schema">&check;</button>
+                <button id="tomlBtn" onclick="convertUBPtoBP()" disabled title="Convert UBP to BP">&RightArrow;</button>
+                <button id="jsonBtn" onclick="convertBPtoUBP()" disabled title="Convert BP to UBP">&LeftArrow;</button>
+                <button id="loadBtn" onclick="loadUBP()" disabled title="Load UBP example">&downdownarrows;</button>
+                <button id="clearBtn" onclick="clearAll()" disabled title="Clear input and output">&circlearrowleft;</button>
             </div>
             <div class="textarea-col">
-                <h3>Legacy Blueprnt (TOML/JSON)</h3>
-                <textarea id="bpText" readonly placeholder="TOML or JSON"></textarea>
+                <h3>Legacy Blueprint (TOML/JSON)</h3>
+                <textarea id="bpText" readonly placeholder="Legacy Blueprint TOML/JSON or validator output"></textarea>
             </div>
         </div>
 
@@ -173,8 +175,10 @@
             document.getElementById('success').style.display = 'block';
 
             document.getElementById('ubpText').disabled = false;
+            document.getElementById('validBtn').disabled = false;
             document.getElementById('tomlBtn').disabled = false;
             document.getElementById('jsonBtn').disabled = false;
+            document.getElementById('loadBtn').disabled = false;
             document.getElementById('clearBtn').disabled = false;
         }).catch((err) => {
             document.getElementById('loading').style.display = 'none';
@@ -182,6 +186,10 @@
         });
 
         document.addEventListener('DOMContentLoaded', () => {
+            loadUBP();
+        });
+
+        function loadUBP() {
             const ubpText = document.getElementById('ubpText');
             fetch('https://raw.githubusercontent.com/osbuild/blueprint-schema/refs/heads/main/testdata/all-fields.in.yaml')
                 .then(response => {
@@ -194,9 +202,9 @@
                     ubpText.value = data;
                 })
                 .catch(err => {
-                    showError("Failed to load example YAML: " + err.message);
+                    showError("Failed to load example UBP: " + err.message);
                 });
-        });
+        }
 
         function showError(message) {
             console.error(message);
@@ -219,18 +227,40 @@
             return true;
         }
 
-        function convertUBPtoBP() {            
+        function validateUBP() {            
             checkWasmReady();
             hideError();
-            const ubpText = document.getElementById('ubpText').value;
 
+            const ubpText = document.getElementById('ubpText').value;
             if (!ubpText.trim()) {
-                showError("Please enter some YAML input");
+                showError("Please enter some Unified Blueprint input (Legacy Blueprint cannot be validated)");
                 return;
             }
 
             try {
-                const result = exportTOML(ubpText);
+                const result = wasmValidateUBP(ubpText);
+                if (result.error) {
+                    showError(result.error);
+                } else {
+                    document.getElementById('bpText').value = result.toml;
+                }
+            } catch (err) {
+                showError("Conversion failed: " + err.message);
+            }
+        }
+
+        function convertUBPtoBP() {            
+            checkWasmReady();
+            hideError();
+
+            const ubpText = document.getElementById('ubpText').value;
+            if (!ubpText.trim()) {
+                showError("Please enter some Unified Blueprint input");
+                return;
+            }
+
+            try {
+                const result = wasmExportTOML(ubpText);
                 if (result.error) {
                     showError(result.error);
                 } else {
@@ -244,15 +274,15 @@
         function convertBPtoUBP() {
             checkWasmReady();
             hideError();
-            const ubpText = document.getElementById('ubpText').value;
 
+            const ubpText = document.getElementById('ubpText').value;
             if (!ubpText.trim()) {
-                showError("Please enter some YAML input");
+                showError("Please enter some Legacy Blueprint input");
                 return;
             }
 
             try {
-                const result = exportJSON(ubpText);
+                const result = wasmExportJSON(ubpText);
                 if (result.error) {
                     showError(result.error);
                 } else {

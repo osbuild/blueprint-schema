@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"syscall/js"
@@ -10,19 +11,39 @@ import (
 	"github.com/osbuild/blueprint-schema/pkg/parse"
 )
 
-// exportTOML converts YAML blueprint input to TOML format
-func exportTOML(this js.Value, p []js.Value) interface{} {
+func wasmValidateUBP(this js.Value, p []js.Value) interface{} {
 	if len(p) != 1 {
 		return map[string]interface{}{
-			"error": "exportTOML expects exactly one argument (YAML string)",
+			"error": "Validation expects exactly one argument (UBP string)",
 		}
 	}
 
-	yamlInput := p[0].String()
-	inBuf := []byte(yamlInput)
+	schema, err := parse.CompileBundledSchema()
+	if err != nil {
+		return map[string]interface{}{
+			"error": fmt.Sprintf("Failed to compile schema: %v", err),
+		}
+	}
 
-	// Parse the YAML input
-	b, err := parse.UnmarshalYAML(inBuf)
+	result := "Validation succeeded"
+	err = schema.ValidateAny(context.Background(), []byte(p[0].String()))
+	if err != nil {
+		result = fmt.Sprintf("Validation failed:\n%s", err)
+	}
+
+	return map[string]interface{}{
+		"toml": result,
+	}
+}
+
+func wasmExportTOML(this js.Value, p []js.Value) interface{} {
+	if len(p) != 1 {
+		return map[string]interface{}{
+			"error": "Export TOML expects exactly one argument (UBP string)",
+		}
+	}
+
+	b, err := parse.UnmarshalYAML([]byte(p[0].String()))
 	if err != nil {
 		return map[string]interface{}{
 			"error": fmt.Sprintf("Failed to unmarshal YAML: %v", err),
@@ -48,11 +69,10 @@ func exportTOML(this js.Value, p []js.Value) interface{} {
 	}
 }
 
-// exportJSON converts YAML blueprint input to JSON format
-func exportJSON(this js.Value, p []js.Value) interface{} {
+func wasmExportJSON(this js.Value, p []js.Value) interface{} {
 	if len(p) != 1 {
 		return map[string]interface{}{
-			"error": "exportJSON expects exactly one argument (YAML string)",
+			"error": "Export JSON expects exactly one argument (UBP string)",
 		}
 	}
 
@@ -87,9 +107,9 @@ func exportJSON(this js.Value, p []js.Value) interface{} {
 }
 
 func main() {
-	// Register the WASM functions
-	js.Global().Set("exportTOML", js.FuncOf(exportTOML))
-	js.Global().Set("exportJSON", js.FuncOf(exportJSON))
+	js.Global().Set("wasmValidateUBP", js.FuncOf(wasmValidateUBP))
+	js.Global().Set("wasmExportTOML", js.FuncOf(wasmExportTOML))
+	js.Global().Set("wasmExportJSON", js.FuncOf(wasmExportJSON))
 
 	// Keep the program running
 	select {}

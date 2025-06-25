@@ -12,6 +12,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/gabriel-vasile/mimetype"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3filter"
 	"github.com/osbuild/blueprint-schema"
@@ -103,6 +104,23 @@ func (s *Schema) MarshalJSON() ([]byte, error) {
 // MarshalYAML marshals the schema to YAML.
 func (s *Schema) MarshalYAML() ([]byte, error) {
 	return yaml.Marshal(s.doc)
+}
+
+// ValidateAny reads data and performs validation based on the detected file type.
+// It supports both JSON and YAML formats. If the format is not supported,
+// it returns an error.
+func (s *Schema) ValidateAny(ctx context.Context, data []byte) error {
+	var err error
+
+	mime := mimetype.Detect(data)
+	if mime.Is("application/json") {
+		err = s.ValidateJSON(ctx, data)
+	} else if mime.Is("application/x-yaml") || mime.Is("text/yaml") || mime.Is("text/plain") {
+		err = s.ValidateYAML(ctx, data)
+	} else {
+		err = fmt.Errorf("unsupported format: %q, only JSON and YAML are supported", mime.String())
+	}
+	return err
 }
 
 // ValidateJSON reads JSON and performs validation.
