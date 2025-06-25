@@ -31,72 +31,48 @@ func wasmValidateUBP(this js.Value, p []js.Value) any {
 
 func wasmExportTOML(this js.Value, p []js.Value) any {
 	if len(p) != 1 {
-		return map[string]any{
-			"error": "Export TOML expects exactly one argument (UBP string)",
-		}
+		return js.ValueOf([]any{"", "Export TOML expects exactly one argument (UBP string)"})
 	}
 
-	b, err := parse.UnmarshalYAML([]byte(p[0].String()))
+	b, err := parse.UnmarshalAny([]byte(p[0].String()))
 	if err != nil {
-		return map[string]any{
-			"error": fmt.Sprintf("Failed to unmarshal YAML: %v", err),
-		}
+		return js.ValueOf([]any{"", fmt.Sprintf("Failed to unmarshal YAML: %v", err)})
 	}
 
-	// Export using the internal exporter
 	exporter := conv.NewInternalExporter(b)
 	if logs := exporter.Export(); logs != nil {
 		js.Global().Get("console").Call("warn", logs.Error())
 	}
 
-	// Marshal to TOML
 	buf, err := toml.Marshal(exporter.Result())
 	if err != nil {
-		return map[string]any{
-			"error": fmt.Sprintf("Failed to marshal TOML: %v", err),
-		}
+		return js.ValueOf([]any{"", fmt.Sprintf("Failed to marshal TOML: %v", err)})
 	}
 
-	return map[string]any{
-		"toml": string(buf),
-	}
+	return js.ValueOf([]any{string(buf), ""})
 }
 
 func wasmExportJSON(this js.Value, p []js.Value) any {
 	if len(p) != 1 {
-		return map[string]any{
-			"error": "Export JSON expects exactly one argument (UBP string)",
-		}
+		return js.ValueOf([]any{"", "Export TOML expects exactly one argument (UBP string)"})
 	}
 
-	yamlInput := p[0].String()
-	inBuf := []byte(yamlInput)
-
-	// Parse the YAML input
-	b, err := parse.UnmarshalYAML(inBuf)
+	b, err := parse.UnmarshalAny([]byte(p[0].String()))
 	if err != nil {
-		return map[string]any{
-			"error": fmt.Sprintf("Failed to unmarshal YAML: %v", err),
-		}
+		return js.ValueOf([]any{"", fmt.Sprintf("Failed to unmarshal YAML: %v", err)})
 	}
 
-	// Export using the internal exporter
 	exporter := conv.NewInternalExporter(b)
 	if logs := exporter.Export(); logs != nil {
 		js.Global().Get("console").Call("warn", logs.Error())
 	}
 
-	// Marshal to JSON
 	buf, err := json.MarshalIndent(exporter.Result(), "", "  ")
 	if err != nil {
-		return map[string]any{
-			"error": fmt.Sprintf("Failed to marshal JSON: %v", err),
-		}
+		return js.ValueOf([]any{"", fmt.Sprintf("Failed to marshal TOML: %v", err)})
 	}
 
-	return map[string]any{
-		"json": string(buf),
-	}
+	return js.ValueOf([]any{string(buf), ""})
 }
 
 func main() {

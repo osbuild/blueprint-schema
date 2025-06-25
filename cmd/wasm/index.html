@@ -251,7 +251,7 @@
                     document.getElementById('bpText').value = result;
                 }
             } catch (err) {
-                showError("Error during validation: " + err);
+                showError("Error during validation: " + err.message);
             }
         }
 
@@ -266,11 +266,11 @@
             }
 
             try {
-                const result = wasmExportTOML(ubpText);
-                if (result.error) {
-                    showError(result.error);
+                const [result, err] = wasmExportTOML(ubpText);
+                if (err !== "") {
+                    showError(err);
                 } else {
-                    document.getElementById('bpText').value = result.toml;
+                    document.getElementById('bpText').value = result;
                     show("Conversion to BP TOML successful!");
                 }
             } catch (err) {
@@ -278,22 +278,22 @@
             }
         }
 
-        function exportJSON() {
+        function exportJSON() {            
             checkWasmReady();
-            show("Converting UBP to BP JSON...");
+            show("Converting UBP to BP TOML...");
 
             const ubpText = document.getElementById('ubpText').value;
             if (!ubpText.trim()) {
-                showError("Please enter some Legacy Blueprint input");
+                showError("Please enter some Unified Blueprint input");
                 return;
             }
 
             try {
-                const result = wasmExportJSON(ubpText);
-                if (result.error) {
-                    showError(result.error);
+                const [result, err] = wasmExportJSON(ubpText);
+                if (err !== "") {
+                    showError(err);
                 } else {
-                    document.getElementById('bpText').value = result.json;
+                    document.getElementById('bpText').value = result;
                     show("Conversion to BP JSON successful!");
                 }
             } catch (err) {
