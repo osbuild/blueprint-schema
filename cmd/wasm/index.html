@@ -69,8 +69,7 @@
             margin: 20px 0;
         }
 
-        h1,
-        h2 {
+        h1,h2,h3 {
             color: #333;
         }
 
@@ -100,18 +99,15 @@
     <a href="https://github.com/osbuild/blueprint-schema" class="github-link">View on GitHub</a>
 
     <div class="container">
-        <h1>Image Builder Blueprint Converter</h1>
-
-        <p>This tool converts YAML blueprint files to TOML or JSON format using WebAssembly. It runs entirely in your
-            browser with no server-side processing required.</p>
+        <h1>Image Builder Blueprint Validator and Converter</h1>
 
         <div id="loading" class="loading">Loading WASM module...</div>
-        <div id="success" class="success" style="display: none;">WASM module loaded successfully! You can now convert
-            blueprints.</div>
+        <div id="success" class="success" style="display: none;">WASM module loaded successfully!
+            You can now convert blueprints.</div>
 
         <div class="section">
-            <h2>Input (YAML Blueprint)</h2>
-            <textarea id="yamlInput" placeholder="Paste your YAML blueprint here..." disabled></textarea>
+            <h3>Universal Blueprnt (YAML/JSON)</h3>
+            <textarea id="yamlInput" placeholder="YAML or JSON" disabled></textarea>
         </div>
 
         <div class="section">
@@ -123,8 +119,8 @@
         <div id="error" class="error" style="display: none;"></div>
 
         <div class="section">
-            <h2>Output</h2>
-            <textarea id="output" readonly placeholder="Converted output will appear here..."></textarea>
+            <h3>Legacy Blueprnt (TOML/JSON)</h3>
+            <textarea id="output" readonly placeholder="TOML or JSON"></textarea>
         </div>
 
         <div class="section">
@@ -132,14 +128,6 @@
             <p>This converter is part of the <a href="https://github.com/osbuild/blueprint-schema">blueprint-schema</a>
                 project. It uses the same conversion logic as the command-line tool but runs entirely in your browser
                 using WebAssembly.</p>
-
-            <h3>Features:</h3>
-            <ul>
-                <li>Convert YAML blueprints to TOML format (legacy)</li>
-                <li>Convert YAML blueprints to JSON format</li>
-                <li>Client-side processing - no data sent to servers</li>
-                <li>Same validation and conversion logic as the CLI tool</li>
-            </ul>
         </div>
     </div>
 
@@ -171,7 +159,7 @@
             fetch('https://raw.githubusercontent.com/osbuild/blueprint-schema/refs/heads/main/testdata/all-fields.in.yaml')
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error("Failed to load example YAML");
+                        throw new Error("Response not OK: " + response.statusText);
                     }
                     return response.text();
                 })
@@ -194,12 +182,16 @@
             document.getElementById('error').style.display = 'none';
         }
 
-        function convertToTOML() {
+        function checkWasmReady() {
             if (!wasmReady) {
                 showError("WASM module not loaded yet. Please wait and try again.");
-                return;
+                return false;
             }
+            return true;
+        }
 
+        function convertToTOML() {            
+            checkWasmReady();
             hideError();
             const yamlInput = document.getElementById('yamlInput').value;
 
@@ -221,11 +213,7 @@
         }
 
         function convertToJSON() {
-            if (!wasmReady) {
-                showError("WASM module not loaded yet. Please wait and try again.");
-                return;
-            }
-
+            checkWasmReady();
             hideError();
             const yamlInput = document.getElementById('yamlInput').value;
 
