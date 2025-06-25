@@ -20,8 +20,9 @@
         }
 
         textarea {
-            width: 100%;
-            height: 200px;
+            height: 60vh;
+            min-height: 200px;
+            max-height: 90vh;
             font-family: 'Courier New', monospace;
             border: 1px solid #ddd;
             border-radius: 4px;
@@ -91,6 +92,37 @@
         .github-link:hover {
             background-color: #555;
         }
+
+        .flex-row {
+            display: flex;
+            align-items: stretch;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .textarea-col {
+            flex: 1 1 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .button-col {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 10px;
+            min-width: 30px;
+        }
+        @media (max-width: 900px) {
+            .flex-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            .button-col {
+                flex-direction: row;
+                justify-content: flex-start;
+                min-width: unset;
+                margin: 10px 0;
+            }
+        }
     </style>
 </head>
 
@@ -103,23 +135,22 @@
         <div id="loading" class="loading">Loading WASM module...</div>
         <div id="success" class="success" style="display: none;">WASM module loaded successfully!
             You can now convert blueprints.</div>
-
-        <div class="section">
-            <h3>Universal Blueprnt (YAML/JSON)</h3>
-            <textarea id="ubpText" placeholder="YAML or JSON" disabled></textarea>
-        </div>
-
-        <div class="section">
-            <button id="tomlBtn" onclick="convertUBPtoBP()" disabled>UBP &RightArrow; BP</button>
-            <button id="jsonBtn" onclick="convertBPtoUBP()" disabled>UBP &LeftArrow; BP</button>
-            <button id="clearBtn" onclick="clearAll()" disabled>Clear</button>
-        </div>
-
         <div id="error" class="error" style="display: none;"></div>
 
-        <div class="section">
-            <h3>Legacy Blueprnt (TOML/JSON)</h3>
-            <textarea id="bpText" readonly placeholder="TOML or JSON"></textarea>
+        <div class="flex-row">
+            <div class="textarea-col">
+                <h3>Universal Blueprnt (YAML/JSON)</h3>
+                <textarea id="ubpText" placeholder="YAML or JSON" disabled></textarea>
+            </div>
+            <div class="button-col">
+                <button id="tomlBtn" onclick="convertUBPtoBP()" disabled>&RightArrow;</button>
+                <button id="jsonBtn" onclick="convertBPtoUBP()" disabled>&LeftArrow;</button>
+                <button id="clearBtn" onclick="clearAll()" disabled>&circlearrowleft;</button>
+            </div>
+            <div class="textarea-col">
+                <h3>Legacy Blueprnt (TOML/JSON)</h3>
+                <textarea id="bpText" readonly placeholder="TOML or JSON"></textarea>
+            </div>
         </div>
 
         <div class="section">
@@ -145,10 +176,7 @@
             document.getElementById('tomlBtn').disabled = false;
             document.getElementById('jsonBtn').disabled = false;
             document.getElementById('clearBtn').disabled = false;
-
-            console.log("WASM module loaded successfully");
         }).catch((err) => {
-            console.error("Failed to load WASM module:", err);
             document.getElementById('loading').style.display = 'none';
             showError("Failed to load WASM module: " + err.message);
         });
@@ -166,12 +194,14 @@
                     ubpText.value = data;
                 })
                 .catch(err => {
-                    console.error("Error loading example YAML:", err);
                     showError("Failed to load example YAML: " + err.message);
                 });
         });
 
         function showError(message) {
+            console.error(message);
+            document.getElementById('success').style.display = 'none';
+
             const errorDiv = document.getElementById('error');
             errorDiv.textContent = message;
             errorDiv.style.display = 'block';
