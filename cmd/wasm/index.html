@@ -12,7 +12,6 @@
         }
 
         .container {
-            max-width: 1200px;
             margin: 0 auto;
             background-color: white;
             padding: 20px;
@@ -80,8 +79,8 @@
 
         .github-link {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 40px;
+            right: 40px;
             background-color: #333;
             color: white;
             padding: 10px 15px;
@@ -107,12 +106,12 @@
 
         <div class="section">
             <h3>Universal Blueprnt (YAML/JSON)</h3>
-            <textarea id="yamlInput" placeholder="YAML or JSON" disabled></textarea>
+            <textarea id="ubpText" placeholder="YAML or JSON" disabled></textarea>
         </div>
 
         <div class="section">
-            <button id="tomlBtn" onclick="convertToTOML()" disabled>Convert to TOML</button>
-            <button id="jsonBtn" onclick="convertToJSON()" disabled>Convert to JSON</button>
+            <button id="tomlBtn" onclick="convertUBPtoBP()" disabled>UBP &RightArrow; BP</button>
+            <button id="jsonBtn" onclick="convertBPtoUBP()" disabled>UBP &LeftArrow; BP</button>
             <button id="clearBtn" onclick="clearAll()" disabled>Clear</button>
         </div>
 
@@ -120,7 +119,7 @@
 
         <div class="section">
             <h3>Legacy Blueprnt (TOML/JSON)</h3>
-            <textarea id="output" readonly placeholder="TOML or JSON"></textarea>
+            <textarea id="bpText" readonly placeholder="TOML or JSON"></textarea>
         </div>
 
         <div class="section">
@@ -142,7 +141,7 @@
             document.getElementById('loading').style.display = 'none';
             document.getElementById('success').style.display = 'block';
 
-            document.getElementById('yamlInput').disabled = false;
+            document.getElementById('ubpText').disabled = false;
             document.getElementById('tomlBtn').disabled = false;
             document.getElementById('jsonBtn').disabled = false;
             document.getElementById('clearBtn').disabled = false;
@@ -155,7 +154,7 @@
         });
 
         document.addEventListener('DOMContentLoaded', () => {
-            const yamlInput = document.getElementById('yamlInput');
+            const ubpText = document.getElementById('ubpText');
             fetch('https://raw.githubusercontent.com/osbuild/blueprint-schema/refs/heads/main/testdata/all-fields.in.yaml')
                 .then(response => {
                     if (!response.ok) {
@@ -164,7 +163,7 @@
                     return response.text();
                 })
                 .then(data => {
-                    yamlInput.value = data;
+                    ubpText.value = data;
                 })
                 .catch(err => {
                     console.error("Error loading example YAML:", err);
@@ -190,44 +189,44 @@
             return true;
         }
 
-        function convertToTOML() {            
+        function convertUBPtoBP() {            
             checkWasmReady();
             hideError();
-            const yamlInput = document.getElementById('yamlInput').value;
+            const ubpText = document.getElementById('ubpText').value;
 
-            if (!yamlInput.trim()) {
+            if (!ubpText.trim()) {
                 showError("Please enter some YAML input");
                 return;
             }
 
             try {
-                const result = exportTOML(yamlInput);
+                const result = exportTOML(ubpText);
                 if (result.error) {
                     showError(result.error);
                 } else {
-                    document.getElementById('output').value = result.toml;
+                    document.getElementById('bpText').value = result.toml;
                 }
             } catch (err) {
                 showError("Conversion failed: " + err.message);
             }
         }
 
-        function convertToJSON() {
+        function convertBPtoUBP() {
             checkWasmReady();
             hideError();
-            const yamlInput = document.getElementById('yamlInput').value;
+            const ubpText = document.getElementById('ubpText').value;
 
-            if (!yamlInput.trim()) {
+            if (!ubpText.trim()) {
                 showError("Please enter some YAML input");
                 return;
             }
 
             try {
-                const result = exportJSON(yamlInput);
+                const result = exportJSON(ubpText);
                 if (result.error) {
                     showError(result.error);
                 } else {
-                    document.getElementById('output').value = result.json;
+                    document.getElementById('bpText').value = result.json;
                 }
             } catch (err) {
                 showError("Conversion failed: " + err.message);
@@ -235,8 +234,8 @@
         }
 
         function clearAll() {
-            document.getElementById('yamlInput').value = '';
-            document.getElementById('output').value = '';
+            document.getElementById('ubpText').value = '';
+            document.getElementById('bpText').value = '';
             hideError();
         }
     </script>

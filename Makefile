@@ -72,8 +72,8 @@ cmd/wasm/blueprint.wasm: $(SCHEMA_SRC) $(SOURCES) cmd/wasm/wasm_exec.js cmd/wasm
 .PHONY: wasm
 wasm: cmd/wasm/blueprint.wasm cmd/wasm/wasm_exec.js ## Build the WASM binary
 
-.PHONY: run-wasm
-run-wasm: cmd/wasm/blueprint.wasm cmd/wasm/wasm_exec.js ## Run the WASM binary
+.PHONY: wasm-browser
+wasm-browser: wasm ## Run the WASM binary
 	@echo "Open http://localhost:8080 and Ctrl+C to stop the server"
 	@python3 -m http.server 8080 --directory cmd/wasm
 
