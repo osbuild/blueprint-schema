@@ -11,41 +11,34 @@ import (
 	"github.com/osbuild/blueprint-schema/pkg/parse"
 )
 
-func wasmValidateUBP(this js.Value, p []js.Value) interface{} {
+func wasmValidateUBP(this js.Value, p []js.Value) any {
 	if len(p) != 1 {
-		return map[string]interface{}{
-			"error": "Validation expects exactly one argument (UBP string)",
-		}
+		return js.ValueOf("Validation expects exactly one argument (UBP string)")
 	}
 
 	schema, err := parse.CompileBundledSchema()
 	if err != nil {
-		return map[string]interface{}{
-			"error": fmt.Sprintf("Failed to compile schema: %v", err),
-		}
+		return js.ValueOf(fmt.Sprintf("Failed to compile schema: %v", err))
 	}
 
-	result := "Validation succeeded"
 	err = schema.ValidateAny(context.Background(), []byte(p[0].String()))
 	if err != nil {
-		result = fmt.Sprintf("Validation failed:\n%s", err)
+		return js.ValueOf(fmt.Sprintf("Validation failed:\n\n%s", err.Error()))
 	}
 
-	return map[string]interface{}{
-		"report": result,
-	}
+	return js.ValueOf("")
 }
 
-func wasmExportTOML(this js.Value, p []js.Value) interface{} {
+func wasmExportTOML(this js.Value, p []js.Value) any {
 	if len(p) != 1 {
-		return map[string]interface{}{
+		return map[string]any{
 			"error": "Export TOML expects exactly one argument (UBP string)",
 		}
 	}
 
 	b, err := parse.UnmarshalYAML([]byte(p[0].String()))
 	if err != nil {
-		return map[string]interface{}{
+		return map[string]any{
 			"error": fmt.Sprintf("Failed to unmarshal YAML: %v", err),
 		}
 	}
@@ -59,19 +52,19 @@ func wasmExportTOML(this js.Value, p []js.Value) interface{} {
 	// Marshal to TOML
 	buf, err := toml.Marshal(exporter.Result())
 	if err != nil {
-		return map[string]interface{}{
+		return map[string]any{
 			"error": fmt.Sprintf("Failed to marshal TOML: %v", err),
 		}
 	}
 
-	return map[string]interface{}{
+	return map[string]any{
 		"toml": string(buf),
 	}
 }
 
-func wasmExportJSON(this js.Value, p []js.Value) interface{} {
+func wasmExportJSON(this js.Value, p []js.Value) any {
 	if len(p) != 1 {
-		return map[string]interface{}{
+		return map[string]any{
 			"error": "Export JSON expects exactly one argument (UBP string)",
 		}
 	}
@@ -82,7 +75,7 @@ func wasmExportJSON(this js.Value, p []js.Value) interface{} {
 	// Parse the YAML input
 	b, err := parse.UnmarshalYAML(inBuf)
 	if err != nil {
-		return map[string]interface{}{
+		return map[string]any{
 			"error": fmt.Sprintf("Failed to unmarshal YAML: %v", err),
 		}
 	}
@@ -96,12 +89,12 @@ func wasmExportJSON(this js.Value, p []js.Value) interface{} {
 	// Marshal to JSON
 	buf, err := json.MarshalIndent(exporter.Result(), "", "  ")
 	if err != nil {
-		return map[string]interface{}{
+		return map[string]any{
 			"error": fmt.Sprintf("Failed to marshal JSON: %v", err),
 		}
 	}
 
-	return map[string]interface{}{
+	return map[string]any{
 		"json": string(buf),
 	}
 }

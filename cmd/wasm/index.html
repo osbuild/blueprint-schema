@@ -244,14 +244,14 @@
 
             try {
                 const result = wasmValidateUBP(ubpText);
-                if (result.error) {
-                    showError(result.error);
+                if (result == "") {
+                    show("Validation succeeded");
                 } else {
-                    show(result.report);
-                    document.getElementById('bpText').value = result.report;
+                    showError("Validation failed");
+                    document.getElementById('bpText').value = result;
                 }
             } catch (err) {
-                showError("Conversion failed: " + err.message);
+                showError("Error during validation: " + err);
             }
         }
 
@@ -274,7 +274,7 @@
                     show("Conversion to BP TOML successful!");
                 }
             } catch (err) {
-                showError("Conversion failed: " + err.message);
+                showError("Error during conversion: " + err.message);
             }
         }
 
@@ -297,7 +297,7 @@
                     show("Conversion to BP JSON successful!");
                 }
             } catch (err) {
-                showError("Conversion failed: " + err.message);
+                showError("Error during conversion: " + err.message);
             }
         }
 
