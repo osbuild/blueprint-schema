@@ -144,8 +144,9 @@
             </div>
             <div class="button-col">
                 <button id="validBtn" onclick="validateUBP()" disabled title="Validate UBP against schema">&check;</button>
-                <button id="tomlBtn" onclick="convertUBPtoBP()" disabled title="Convert UBP to BP">&RightArrow;</button>
-                <button id="jsonBtn" onclick="convertBPtoUBP()" disabled title="Convert BP to UBP">&LeftArrow;</button>
+                <button id="exportTomlBtn" onclick="exportTOML()" disabled title="Convert UBP to BP TOML">&RightArrow; T</button>
+                <button id="exportJsonBtn" onclick="exportJSON()" disabled title="Convert UBP to BP JSON">&RightArrow; J</button>
+                <button id="importYamlBtn" onclick="importYAML()" disabled title="Convert BP to UBP">Y &LeftArrow;</button>
                 <button id="loadBtn" onclick="loadUBP()" disabled title="Load UBP example">&downdownarrows;</button>
                 <button id="clearBtn" onclick="clearAll()" disabled title="Clear input and output">&circlearrowleft;</button>
             </div>
@@ -171,12 +172,11 @@
             go.run(result.instance);
             wasmReady = true;
 
-            document.getElementById('ubpText').disabled = false;
-            document.getElementById('validBtn').disabled = false;
-            document.getElementById('tomlBtn').disabled = false;
-            document.getElementById('jsonBtn').disabled = false;
-            document.getElementById('loadBtn').disabled = false;
-            document.getElementById('clearBtn').disabled = false;
+            // Generalized button enable code
+            ["ubpText", "validBtn", "exportTomlBtn", "exportJsonBtn", "importYamlBtn", "loadBtn", "clearBtn"].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.disabled = false;
+            });
 
             document.getElementById('loading').style.display = 'none';
             document.getElementById('success').style.display = 'block';
@@ -255,9 +255,9 @@
             }
         }
 
-        function convertUBPtoBP() {            
+        function exportTOML() {            
             checkWasmReady();
-            show("Converting UBP to BP...");
+            show("Converting UBP to BP TOML...");
 
             const ubpText = document.getElementById('ubpText').value;
             if (!ubpText.trim()) {
@@ -271,16 +271,16 @@
                     showError(result.error);
                 } else {
                     document.getElementById('bpText').value = result.toml;
-                    show("Conversion to BP successful!");
+                    show("Conversion to BP TOML successful!");
                 }
             } catch (err) {
                 showError("Conversion failed: " + err.message);
             }
         }
 
-        function convertBPtoUBP() {
+        function exportJSON() {
             checkWasmReady();
-            show("Converting BP to UBP...");
+            show("Converting UBP to BP JSON...");
 
             const ubpText = document.getElementById('ubpText').value;
             if (!ubpText.trim()) {
@@ -294,7 +294,7 @@
                     showError(result.error);
                 } else {
                     document.getElementById('bpText').value = result.json;
-                    show("Conversion to UBP successful!");
+                    show("Conversion to BP JSON successful!");
                 }
             } catch (err) {
                 showError("Conversion failed: " + err.message);
