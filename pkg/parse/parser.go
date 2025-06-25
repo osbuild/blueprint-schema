@@ -6,19 +6,49 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/BurntSushi/toml"
+	"github.com/osbuild/blueprint-schema/pkg/conv"
 	"github.com/osbuild/blueprint-schema/pkg/ubp"
+	bp "github.com/osbuild/blueprint/pkg/blueprint"
 	"sigs.k8s.io/yaml"
 )
 
 // UnmarshalAny detects UBP YAML/JSON or BP TOML/JSON and returns UBP.
-func UnmarshalAny(buf []byte) (*ubp.Blueprint, error) {
-	b := new(ubp.Blueprint)
+func UnmarshalAny(buf []byte) (*ubp.Blueprint, error, error) {
 
-	if err := yaml.Unmarshal(buf, b); err != nil {
-		return nil, fmt.Errorf("failed to unmarshal YAML blueprint: %w", err)
+	df, dataMap := detectFormat(buf)
+	if df == formatUnknown {
+		return nil, fmt.Errorf("unknown format: %s", df), nil
 	}
 
-	return b, nil
+	ds := detectStruct(dataMap)
+	if df == formatYAML && ds == structUBP {
+		ubp, err := UnmarshalYAML(buf)
+		return ubp, err, nil
+	} else if df == formatJSON && ds == structUBP {
+		ubp, err := UnmarshalJSON(buf)
+		return ubp, err, nil
+	} else if ds == structBP {
+		bp := new(bp.Blueprint)
+		switch df {
+		case formatJSON:
+			err := json.Unmarshal(buf, bp)
+			if err != nil {
+				return nil, fmt.Errorf("failed to unmarshal JSON blueprint: %w", err), nil
+			}
+		case formatTOML:
+			err := toml.Unmarshal(buf, bp)
+			if err != nil {
+				return nil, fmt.Errorf("failed to unmarshal TOML blueprint: %w", err), nil
+			}
+		}
+
+		importer := conv.NewInternalImporter(bp)
+		warn := importer.Import()
+		return importer.Result(), nil, warn
+	}
+
+	return nil, fmt.Errorf("unsupported format: %s structure: %s", df, ds), nil
 }
 
 // UnmarshalYAML loads a blueprint from YAML data. It converts YAML into JSON first,

@@ -1,0 +1,6 @@
+{
+  "name": "Blueprint example",
+  "fips": {
+    "enabled": true
+  }
+}

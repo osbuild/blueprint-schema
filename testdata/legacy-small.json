@@ -1,0 +1,11 @@
+{
+  "name": "Blueprint example",
+  "version": "408.42877.5381",
+  "packages": null,
+  "modules": null,
+  "enabled_modules": null,
+  "groups": null,
+  "customizations": {
+    "fips": true
+  }
+}
