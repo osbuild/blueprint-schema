@@ -13,7 +13,11 @@ import (
 	"sigs.k8s.io/yaml"
 )
 
-// UnmarshalAny detects UBP YAML/JSON or BP TOML/JSON and returns UBP.
+// UnmarshalAny detects UBP YAML/JSON or BP TOML/JSON and returns UBP, error, and warning.
+// If the format is not recognized, it returns an error.
+// If the format is recognized but the structure is not UBP, it returns an error.
+// If the format is recognized and the structure is UBP, it unmarshals the data
+// into a UBP object and returns it along with any warnings.
 func UnmarshalAny(buf []byte) (*ubp.Blueprint, error, error) {
 
 	df, dataMap := detectFormat(buf)
