@@ -134,6 +134,17 @@ var cmpTransformerForRawMessage = cmp.Transformer("RawMessage", func(in json.Raw
 	return out
 })
 
+// cleanDiff removes intentional non-printable characters from the diff
+// output: https://github.com/google/go-cmp/issues/344
+func cleanDiff(diff string) string {
+	return strings.Map(func(r rune) rune {
+		if r == 0x00a0 {
+			return ' '
+		}
+		return r
+	}, diff)
+}
+
 func TestFix(t *testing.T) {
 	convert := func(t *testing.T, input, output string) *ubp.Blueprint {
 		var result *ubp.Blueprint
@@ -229,7 +240,7 @@ func TestFix(t *testing.T) {
 				ubp.StoragePartition{},
 			))
 			if diff != "" {
-				diffBuf.WriteString(diff)
+				diffBuf.WriteString(cleanDiff(diff))
 			}
 
 			if writeFixtures {
