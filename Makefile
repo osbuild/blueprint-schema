@@ -26,7 +26,6 @@ pkg-go-dev-update: ## Schedule https://pkg.go.dev/github.com/osbuild/blueprint-s
 test: ## Run all tests
 	@go test -count=1 . ./pkg/...
 
-.PHONY: image-builder-blueprint
 image-builder-blueprint: $(SOURCES) $(SCHEMA_SRC) ## Build the image-builder-blueprint binary
 	go build -o image-builder-blueprint ./cmd/image-builder-blueprint
 
@@ -67,6 +66,9 @@ cmd/wasm/blueprint.wasm: $(SCHEMA_SRC) $(SOURCES) cmd/wasm/wasm_exec.js cmd/wasm
 
 .PHONY: wasm
 wasm: cmd/wasm/blueprint.wasm cmd/wasm/wasm_exec.js ## Build the WASM binary
+
+.PHONY: build
+build: image-builder-blueprint wasm ## Build wasm and cmd
 
 .PHONY: wasm-browser
 wasm-browser: wasm ## Run the WASM binary

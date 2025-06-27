@@ -20,9 +20,9 @@ jobs:
         with:
           go-version: '1.22'
 
-      - name: Build schema and run tests
+      - name: Build cmd, wasm, schema and run tests
         run: |
-          make schema write-fixtures test test-diff
+          make build schema write-fixtures test
 
       - name: Check for code generation changes
         run: |
