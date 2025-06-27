@@ -1,14 +1,14 @@
-  &ubp.Blueprint{
-  	... // 13 identical fields
-  	Locale: nil,
-  	Name:   "Firewall example - missing to",
-- 	Network: &ubp.Network{
-- 		Firewall: &ubp.NetworkFirewall{
-- 			Services: []ubp.NetworkService{{union: json.RawMessage(`{"from":60000,"protocol":"udp"}`)}},
-- 		},
-- 	},
-+ 	Network:      &ubp.Network{Firewall: &ubp.NetworkFirewall{}},
-  	OpenSCAP:     nil,
-  	Registration: nil,
-  	... // 3 identical fields
-  }
+  &ubp.Blueprint{
+  	... // 13 identical fields
+  	Locale: nil,
+  	Name:   "Firewall example - missing to",
+- 	Network: &ubp.Network{
+- 		Firewall: &ubp.NetworkFirewall{
+- 			Services: []ubp.NetworkService{{union: json.RawMessage(`{"from":60000,"protocol":"udp"}`)}},
+- 		},
+- 	},
++ 	Network:      &ubp.Network{Firewall: &ubp.NetworkFirewall{}},
+  	OpenSCAP:     nil,
+  	Registration: nil,
+  	... // 3 identical fields
+  }

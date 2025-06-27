@@ -1,10 +1,10 @@
-  &ubp.Blueprint{
-  	... // 8 identical fields
-  	FSNodes:   nil,
-  	Hostname:  "",
-- 	Ignition:  &ubp.Ignition{union: json.RawMessage(`{"embedded":{"text":""},"firstboot_url":""}`)},
-+ 	Ignition:  nil,
-  	Installer: nil,
-  	Kernel:    nil,
-  	... // 8 identical fields
-  }
+  &ubp.Blueprint{
+  	... // 8 identical fields
+  	FSNodes:   nil,
+  	Hostname:  "",
+- 	Ignition:  &ubp.Ignition{union: json.RawMessage(`{"embedded":{"text":""},"firstboot_url":""}`)},
++ 	Ignition:  nil,
+  	Installer: nil,
+  	Kernel:    nil,
+  	... // 8 identical fields
+  }
