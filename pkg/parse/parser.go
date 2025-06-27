@@ -64,48 +64,6 @@ func UnmarshalAny(buf []byte) (*ubp.Blueprint, *bp.Blueprint, error, error) {
 	}
 }
 
-// UnmarshalAny detects UBP YAML/JSON or BP TOML/JSON and returns UBP, error, and warning.
-// If the format is not recognized, it returns an error.
-// If the format is recognized but the structure is not UBP, it returns an error.
-// If the format is recognized and the structure is UBP, it unmarshals the data
-// into a UBP object and returns it along with any warnings.
-func UnmarshalAny2(buf []byte) (*ubp.Blueprint, error, error) {
-
-	df, dataMap := detectFormat(buf)
-	if df == formatUnknown {
-		return nil, fmt.Errorf("unknown format: %s", df), nil
-	}
-
-	ds := DetectType(dataMap)
-	if df == formatYAML && ds == TypeUBP {
-		ubp, err := UnmarshalYAML(buf)
-		return ubp, err, nil
-	} else if df == formatJSON && ds == TypeUBP {
-		ubp, err := UnmarshalJSON(buf)
-		return ubp, err, nil
-	} else if ds == TypeBP {
-		bp := new(bp.Blueprint)
-		switch df {
-		case formatJSON:
-			err := json.Unmarshal(buf, bp)
-			if err != nil {
-				return nil, fmt.Errorf("failed to unmarshal JSON blueprint: %w", err), nil
-			}
-		case formatTOML:
-			err := toml.Unmarshal(buf, bp)
-			if err != nil {
-				return nil, fmt.Errorf("failed to unmarshal TOML blueprint: %w", err), nil
-			}
-		}
-
-		importer := conv.NewInternalImporter(bp)
-		warn := importer.Import()
-		return importer.Result(), nil, warn
-	}
-
-	return nil, fmt.Errorf("unsupported format: %s structure: %s", df, ds), nil
-}
-
 // UnmarshalYAML loads a blueprint from YAML data. It converts YAML into JSON first,
 // and then unmarshals it into a Blueprint object. This is done to ensure that the
 // YAML representation is consistent with the JSON representation.

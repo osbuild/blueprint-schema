@@ -2,12 +2,14 @@ package parse
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
 	"os"
 	"path/filepath"
 	"regexp"
+	"strings"
 	"testing"
 
 	"github.com/BurntSushi/toml"
@@ -264,6 +266,59 @@ func TestFix(t *testing.T) {
 		})
 	}
 
+	validate := func(t *testing.T, input, output string) {
+		t.Run("Validate/"+input, func(t *testing.T) {
+			inputFile, err := os.Open(input)
+			if err != nil {
+				t.Fatal(err)
+			}
+			defer func() {
+				_ = inputFile.Close()
+			}()
+
+			inputBuf := bytes.Buffer{}
+			_, err = inputBuf.ReadFrom(inputFile)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			schema, err := CompileSourceSchema()
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			validationOutput := schema.ValidateAny(context.Background(), inputBuf.Bytes())
+
+			if writeFixtures {
+				if validationOutput != nil {
+					writeFile(t, output, ptr.To([]byte(validationOutput.Error())))
+				}
+			} else {
+				want := []byte{}
+
+				if _, err := os.Stat(output); err == nil {
+					inFile, err := os.Open(output)
+					if err != nil {
+						t.Fatal(err)
+					}
+					want, err = io.ReadAll(inFile)
+					_ = inFile.Close()
+					if err != nil {
+						t.Fatal(err)
+					}
+				}
+
+				var got string
+				if validationOutput != nil {
+					got = validationOutput.Error()
+				}
+				if diff := cmp.Diff(string(want), got); diff != "" {
+					t.Errorf("validity mismatch (-want +got):\n%s", diff)
+				}
+			}
+		})
+	}
+
 	files, err := filepath.Glob("../../testdata/*.in.*")
 	if err != nil {
 		t.Fatal(err)
@@ -278,6 +333,11 @@ func TestFix(t *testing.T) {
 		if !extRegesp.MatchString(file) {
 			t.Logf("Skipping file %q, does not match filename test pattern", file)
 			return false
+		}
+
+		if strings.HasSuffix(file, ".in.yaml") {
+			valid := extRegesp.ReplaceAllString(file, ".validator.out.txt")
+			validate(t, file, valid)
 		}
 
 		out1 := extRegesp.ReplaceAllString(file, ".out1.txt")

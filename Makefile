@@ -26,10 +26,6 @@ pkg-go-dev-update: ## Schedule https://pkg.go.dev/github.com/osbuild/blueprint-s
 test: ## Run all tests
 	@go test -count=1 . ./pkg/...
 
-.PHONY: test-diff
-test-diff: ## Diff all fields test data
-	@go run github.com/homeport/dyff/cmd/dyff@latest between testdata/all-fields.in.yaml testdata/all-fields.out.yaml
-
 .PHONY: image-builder-blueprint
 image-builder-blueprint: $(SOURCES) $(SCHEMA_SRC) ## Build the image-builder-blueprint binary
 	go build -o image-builder-blueprint ./cmd/image-builder-blueprint

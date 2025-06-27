@@ -1,0 +1,97 @@
+request body has an error: doesn't match schema #/components/schemas/blueprint: Error at "/network/firewall/services/0": doesn't match schema due to: property "from" is unsupported
+Schema:
+  {
+    "additionalProperties": false,
+    "properties": {
+      "enabled": {
+        "$ref": "firewall_enabled.yaml"
+      },
+      "protocol": {
+        "$ref": "network_protocol.yaml"
+      },
+      "service": {
+        "description": "The name of the IANA service name. This is the name of the service as defined in\nthe /etc/services file.\n",
+        "minLength": 2,
+        "type": "string",
+        "x-go-type-skip-optional-pointer": true,
+        "x-omitempty": true
+      }
+    },
+    "type": "object"
+  }
+
+Value:
+  {
+    "enabled": true,
+    "from": 1302,
+    "port": 1301,
+    "to": 1303
+  }
+ Or property "from" is unsupported
+Schema:
+  {
+    "additionalProperties": false,
+    "properties": {
+      "enabled": {
+        "$ref": "firewall_enabled.yaml"
+      },
+      "port": {
+        "description": "The port number, must be between 1 and 65535.\n",
+        "maximum": 65535,
+        "minimum": 1,
+        "type": "integer",
+        "x-go-type-skip-optional-pointer": true,
+        "x-omitempty": true
+      },
+      "protocol": {
+        "$ref": "network_protocol.yaml"
+      }
+    },
+    "type": "object"
+  }
+
+Value:
+  {
+    "enabled": true,
+    "from": 1302,
+    "port": 1301,
+    "to": 1303
+  }
+ Or property "port" is unsupported
+Schema:
+  {
+    "additionalProperties": false,
+    "properties": {
+      "enabled": {
+        "$ref": "firewall_enabled.yaml"
+      },
+      "from": {
+        "description": "The from port number, must be between 1 and 65535.\n",
+        "maximum": 65535,
+        "minimum": 1,
+        "type": "integer",
+        "x-go-type-skip-optional-pointer": true,
+        "x-omitempty": true
+      },
+      "protocol": {
+        "$ref": "network_protocol.yaml"
+      },
+      "to": {
+        "description": "The to port number, must be between 1 and 65535.\n",
+        "maximum": 65535,
+        "minimum": 1,
+        "type": "integer",
+        "x-go-type-skip-optional-pointer": true,
+        "x-omitempty": true
+      }
+    },
+    "type": "object"
+  }
+
+Value:
+  {
+    "enabled": true,
+    "from": 1302,
+    "port": 1301,
+    "to": 1303
+  }

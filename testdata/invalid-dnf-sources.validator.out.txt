@@ -1,0 +1,103 @@
+request body has an error: doesn't match schema #/components/schemas/blueprint: Error at "/dnf/repositories/0": property "base_urls" is unsupported
+Schema:
+  {
+    "additionalProperties": false,
+    "properties": {
+      "filename": {
+        "description": "Repository filename to use for the repository configuration file.\nIf not provided, the ID is used. Filename must be provided without the .repo\nextension.\n",
+        "maxLength": 256,
+        "pattern": "^[a-zA-Z0-9_-]+$",
+        "type": "string",
+        "x-go-type-skip-optional-pointer": true
+      },
+      "gpg_check": {
+        "default": true,
+        "description": "Enable GPG check for the repository. GPG key(s) must be provided. Disabled by default.",
+        "type": "boolean",
+        "x-go-name": "GPGCheck"
+      },
+      "gpg_check_repo": {
+        "default": true,
+        "description": "Enable GPG check for the repository metadata. Disabled by default. This is different from gpg_check, which is for the packages.\nThis is useful for third-party repositories that do not provide GPG keys for the repository metadata.",
+        "type": "boolean",
+        "x-go-name": "GPGCheckRepo"
+      },
+      "gpg_keys": {
+        "description": "GPG keys for the repository.\n\nThe blueprint accepts both inline GPG keys and GPG key urls. If an inline GPG key is provided it\nwill be saved to the /etc/pki/rpm-gpg directory and will be referenced accordingly in the repository\nconfiguration. GPG keys are not imported to the RPM database and will only be imported when first\ninstalling a package from the third-party repository.\n",
+        "items": {
+          "type": "string"
+        },
+        "type": "array",
+        "x-go-name": "GPGKeys",
+        "x-go-type-skip-optional-pointer": true
+      },
+      "id": {
+        "description": "Repository ID. Required.",
+        "maxLength": 256,
+        "pattern": "^[a-zA-Z0-9_-]+$",
+        "type": "string",
+        "x-go-name": "ID",
+        "x-go-type-skip-optional-pointer": true
+      },
+      "module_hotfixes": {
+        "default": false,
+        "description": "Enable module hotfixes for the repository. Disabled by default.\n\nAdds module_hotfixes flag to all repo types so it can be used during osbuild. This enables users\nto disable modularity filtering on specific repositories.\n",
+        "type": "boolean",
+        "x-go-type-skip-optional-pointer": true
+      },
+      "name": {
+        "description": "Repository name.",
+        "type": "string",
+        "x-go-type-skip-optional-pointer": true
+      },
+      "priority": {
+        "default": 99,
+        "description": "Repository priority.",
+        "type": "integer",
+        "x-go-type-skip-optional-pointer": true
+      },
+      "source": {
+        "description": "Repository source.",
+        "oneOf": [
+          {
+            "$ref": "dnf_source_base_urls.yaml"
+          },
+          {
+            "$ref": "dnf_source_metalink.yaml"
+          },
+          {
+            "$ref": "dnf_source_mirrorlist.yaml"
+          }
+        ],
+        "x-go-type-name": "DNFSource"
+      },
+      "ssl_verify": {
+        "default": true,
+        "description": "Enable SSL verification for the repository. Enabled by default.",
+        "type": "boolean",
+        "x-go-name": "SSLVerify"
+      },
+      "usage": {
+        "$ref": "dnf_repository_usage.yaml"
+      }
+    },
+    "required": [
+      "id"
+    ],
+    "type": "object",
+    "x-go-name": "DNFRepository"
+  }
+
+Value:
+  {
+    "base_urls": [
+      "https://mirror.fedora.example.com/fedora/$releasever/$basearch/cisco-openh264"
+    ],
+    "gpg_check": true,
+    "gpg_check_repo": true,
+    "id": "fedora-cisco-openh264",
+    "metalink": "https://mirrors.fedoraproject.org/metalink?repo=fedora-cisco-openh264-$releasever\u0026arch=$basearch",
+    "module_hotfixes": false,
+    "priority": 99,
+    "ssl_verify": true
+  }

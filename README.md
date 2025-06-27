@@ -127,7 +127,13 @@ func main() {
 
 ### Validation
 
-To validate JSON or YAML buffers, use `CompileBundledSchema` function:
+To validate JSON or YAML buffers, use `CompileBundledSchema` function alongside with:
+
+* `ValidateYAML`
+* `ValidateJSON`
+* `ValidateAny` - detects YAML/JSON and performs validation
+
+All functions use `oapi-codegen` OpenAPI validator.
 
 ```go
 package main
@@ -205,10 +211,8 @@ Various advanced validation rules do not work well with Go code generator, there
 
 ### Tests
 
-To run tests against fixtures: `make test`
-
-To regenerate fixtures: `make write-fixtures`
-
-To print diff between two YAML files via round-trip conversion `UBP-YAML > TOML > UBP-YAML`: `make test-diff`
+To run tests against fixtures: `make test` and to regenerate fixtures: `make write-fixtures`
 
 For every `filename.in.xxx` where `xxx` can be `yaml`, `toml` or `json` the test suite will load the file via `UnmarshalAny` and convert it either UBP>BP or BP>UBP and stores the result as `filename.out1.txt`. Then it does again and stores `filename.out2.txt`. And finally, it performs semantic UBP struct diff between `filename.in.xxx` and `filename.out2.txt`. If there are no differences, no `out.diff` file is ever created. These diff files are not subject of testing, `make test` will not error out if difference is different because diff-of-diff is hardly readable.
+
+Additionally, every `filename.in.yaml` input file can have `filename.validator.out.txt` output if OpenAPI Schema validator returned any error. The output is compared when `make test` is executed for any difference.

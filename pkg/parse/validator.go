@@ -165,6 +165,8 @@ func (s *Schema) ReadAndValidateYAML(ctx context.Context, reader io.Reader) erro
 	return s.ValidateYAML(ctx, buf.Bytes())
 }
 
+// ApplyExtensions applies extensions to the schema. It reads all files
+// from the oas/extensions directory and applies them to the schema.
 func (s *Schema) ApplyExtensions(ctx context.Context) error {
 	dir, err := blueprint.SchemaFS.ReadDir("oas/extensions")
 	if err != nil {
