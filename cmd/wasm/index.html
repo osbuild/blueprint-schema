@@ -147,6 +147,7 @@
                 <button id="exportTomlBtn" onclick="exportTOML()" disabled title="Convert UBP to BP TOML">&RightArrow; T</button>
                 <button id="exportJsonBtn" onclick="exportJSON()" disabled title="Convert UBP to BP JSON">&RightArrow; J</button>
                 <button id="importYamlBtn" onclick="importYAML()" disabled title="Convert BP to UBP">Y &LeftArrow;</button>
+                <button id="importJsonBtn" onclick="importJSON()" disabled title="Convert BP to UBP">J &LeftArrow;</button>
                 <button id="loadBtn" onclick="loadUBP()" disabled title="Load UBP example">&downdownarrows;</button>
                 <button id="clearBtn" onclick="clearAll()" disabled title="Clear input and output">&circlearrowleft;</button>
             </div>
@@ -173,7 +174,7 @@
             wasmReady = true;
 
             // Generalized button enable code
-            ["ubpText", "validBtn", "exportTomlBtn", "exportJsonBtn", "importYamlBtn", "loadBtn", "clearBtn"].forEach(id => {
+            ["ubpText", "validBtn", "exportTomlBtn", "exportJsonBtn", "importYamlBtn", "importJsonBtn", "loadBtn", "clearBtn"].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.disabled = false;
             });
@@ -295,6 +296,52 @@
                 } else {
                     document.getElementById('bpText').value = result;
                     show("Conversion to BP JSON successful!");
+                }
+            } catch (err) {
+                showError("Error during conversion: " + err.message);
+            }
+        }
+
+        function importYAML() {            
+            checkWasmReady();
+            show("Converting BP to UBP YAML...");
+
+            const bpText = document.getElementById('bpText').value;
+            if (!bpText.trim()) {
+                showError("Please enter some Blueprint input");
+                return;
+            }
+
+            try {
+                const [result, err] = wasmImportYAML(bpText);
+                if (err !== "") {
+                    showError(err);
+                } else {
+                    document.getElementById('ubpText').value = result;
+                    show("Conversion to UBP YAML successful!");
+                }
+            } catch (err) {
+                showError("Error during conversion: " + err.message);
+            }
+        }
+
+        function importJSON() {            
+            checkWasmReady();
+            show("Converting BP to UBP JSON...");
+
+            const bpText = document.getElementById('bpText').value;
+            if (!bpText.trim()) {
+                showError("Please enter some Blueprint input");
+                return;
+            }
+
+            try {
+                const [result, err] = wasmImportJSON(bpText);
+                if (err !== "") {
+                    showError(err);
+                } else {
+                    document.getElementById('ubpText').value = result;
+                    show("Conversion to UBP JSON successful!");
                 }
             } catch (err) {
                 showError("Error during conversion: " + err.message);
