@@ -304,7 +304,10 @@ func (e *InternalImporter) importFSNodes() []ubp.FSNode {
 	var res []ubp.FSNode
 	for _, file := range e.from.Customizations.Files {
 		mode, err := ubp.ParseFSNodeMode(file.Mode)
-		if err != nil {
+		if mode == 0 {
+			mode = ubp.FSNodeMode(0644)
+		}
+		if err != nil && file.Mode != "" {
 			e.log.Printf("error parsing file mode %q for file %q: %v, using default", file.Mode, file.Path, err)
 		}
 
@@ -327,7 +330,10 @@ func (e *InternalImporter) importFSNodes() []ubp.FSNode {
 
 	for _, dir := range e.from.Customizations.Directories {
 		mode, err := ubp.ParseFSNodeMode(dir.Mode)
-		if err != nil {
+		if mode == 0 {
+			mode = ubp.FSNodeMode(0755)
+		}
+		if err != nil && dir.Mode != "" {
 			e.log.Printf("error parsing file mode %q for dir %q: %v, using default", dir.Mode, dir.Path, err)
 		}
 
@@ -524,14 +530,22 @@ func (e *InternalImporter) importRegistration() *ubp.Registration {
 
 	to := ubp.Registration{
 		RegistrationRedHat: &ubp.RegistrationRedHat{
-			RegistrationRHSM: &ubp.RegistrationRHSM{
-				AutoEnable:           e.from.Customizations.RHSM.Config.SubscriptionManager.RHSMConfig.AutoEnableYumPlugins,
-				RepositoryManagement: e.from.Customizations.RHSM.Config.SubscriptionManager.RHSMConfig.ManageRepos,
-				AutoRegistration:     e.from.Customizations.RHSM.Config.SubscriptionManager.RHSMCertdConfig.AutoRegistration,
-				Enabled:              e.from.Customizations.RHSM.Config.DNFPlugins.SubscriptionManager.Enabled,
-				ProductPluginEnabled: e.from.Customizations.RHSM.Config.DNFPlugins.ProductID.Enabled,
-			},
+			RegistrationRHSM: &ubp.RegistrationRHSM{},
 		},
+	}
+
+	if e.from.Customizations.RHSM.Config.SubscriptionManager.RHSMConfig != nil {
+		to.RegistrationRedHat.RegistrationRHSM.AutoEnable = e.from.Customizations.RHSM.Config.SubscriptionManager.RHSMConfig.AutoEnableYumPlugins
+		to.RegistrationRedHat.RegistrationRHSM.RepositoryManagement = e.from.Customizations.RHSM.Config.SubscriptionManager.RHSMConfig.ManageRepos
+	}
+
+	if e.from.Customizations.RHSM.Config.SubscriptionManager.RHSMCertdConfig != nil {
+		to.RegistrationRedHat.RegistrationRHSM.AutoRegistration = e.from.Customizations.RHSM.Config.SubscriptionManager.RHSMCertdConfig.AutoRegistration
+	}
+
+	if e.from.Customizations.RHSM.Config.DNFPlugins != nil {
+		to.RegistrationRedHat.RegistrationRHSM.Enabled = e.from.Customizations.RHSM.Config.DNFPlugins.SubscriptionManager.Enabled
+		to.RegistrationRedHat.RegistrationRHSM.ProductPluginEnabled = e.from.Customizations.RHSM.Config.DNFPlugins.ProductID.Enabled
 	}
 
 	if e.from.Customizations.FDO != nil {

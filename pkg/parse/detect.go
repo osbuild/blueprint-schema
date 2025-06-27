@@ -19,13 +19,13 @@ const (
 	formatUnknown detectedFormat = "unknown"
 )
 
-// detectedStruct represents the detected structure type.
-type detectedStruct string
+// Type represents the detected structure type.
+type Type string
 
 const (
-	structUBP     detectedStruct = "ubp"
-	structBP      detectedStruct = "bp"
-	structUnknown detectedStruct = "unknown"
+	TypeUBP     Type = "ubp"
+	TypeBP      Type = "bp"
+	TypeUnknown Type = "unknown"
 )
 
 // detectFormat analyzes a byte slice and returns whether it is likely
@@ -33,23 +33,23 @@ const (
 // JSON is also valid YAML.
 func detectFormat(data []byte) (detectedFormat, map[string]any) {
 	obj := make(map[string]any)
-	trimmedData := bytes.TrimSpace(data)
-	if len(trimmedData) == 0 {
+	tdata := bytes.TrimSpace(data)
+	if len(tdata) == 0 {
 		return formatUnknown, obj
 	}
 
 	obj = make(map[string]any)
-	if json.Unmarshal(trimmedData, &obj) == nil && len(obj) > 0 {
+	if json.Unmarshal(tdata, &obj) == nil && len(obj) > 0 {
 		return formatJSON, obj
 	}
 
 	obj = make(map[string]any)
-	if err := toml.Unmarshal(trimmedData, &obj); err == nil && len(obj) > 0 {
+	if err := toml.Unmarshal(tdata, &obj); err == nil && len(obj) > 0 {
 		return formatTOML, obj
 	}
 
 	obj = make(map[string]any)
-	if yaml.Unmarshal(trimmedData, &obj) == nil && len(obj) > 0 {
+	if yaml.Unmarshal(tdata, &obj) == nil && len(obj) > 0 {
 		return formatYAML, obj
 	}
 
@@ -95,23 +95,23 @@ func init() {
 	}
 }
 
-// detectStruct analyzes a map and returns whether it is likely
+// DetectType analyzes a map and returns whether it is likely
 // a UBP or BP structure based on the presence of unique keys.
 // It uses a naive approach to check for the presence of top-level
 // keys that are unique to each structure type. It is not 100% accurate.
-func detectStruct(data map[string]any) detectedStruct {
+func DetectType(data map[string]any) Type {
 	for _, key := range uniqueUBPKeys {
 		if _, exists := data[key]; exists {
 			//println("matched UBP key:", key)
-			return structUBP
+			return TypeUBP
 		}
 	}
 	for _, key := range uniqueBPKeys {
 		if _, exists := data[key]; exists {
 			//println("matched BP key:", key)
-			return structBP
+			return TypeBP
 		}
 	}
 
-	return structUnknown
+	return TypeUnknown
 }

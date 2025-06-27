@@ -1,0 +1,6 @@
+{
+  "customizations": {
+    "fips": true,
+    "installation_device": "/dev/vda"
+  }
+}

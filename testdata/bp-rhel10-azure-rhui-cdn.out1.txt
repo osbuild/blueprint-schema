@@ -1,0 +1,4 @@
+registration:
+  redhat:
+    subscription_manager:
+      auto_enable: false

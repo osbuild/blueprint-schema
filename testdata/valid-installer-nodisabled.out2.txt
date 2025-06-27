@@ -1,0 +1,6 @@
+installer:
+  anaconda:
+    enabled_modules:
+    - org.fedoraproject.Anaconda.Modules.Network
+    unattended: true
+name: 'Blueprint example: installer'

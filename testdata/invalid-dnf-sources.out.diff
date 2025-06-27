@@ -1,0 +1,12 @@
+  &ubp.Blueprint{
+  	... // 4 identical fields
+  	Description:  "",
+  	Distribution: "",
+- 	DNF: &ubp.DNF{
+- 		Repositories: []ubp.DNFRepository{{ID: "fedora-cisco-openh264", SSLVerify: &true}},
+- 	},
++ 	DNF:     nil,
+  	FIPS:    nil,
+  	FSNodes: nil,
+  	... // 12 identical fields
+  }

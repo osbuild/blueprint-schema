@@ -1,0 +1,7 @@
+locale:
+  keyboards:
+  - cz-qwerty
+  languages:
+  - en_US.UTF-8
+  - cs_CZ.UTF-8
+name: 'Blueprint example: locale'

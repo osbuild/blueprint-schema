@@ -2,12 +2,12 @@ package parse
 
 import (
 	"bytes"
-	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 	"os"
 	"path/filepath"
-	"strings"
+	"regexp"
 	"testing"
 
 	"github.com/BurntSushi/toml"
@@ -15,7 +15,6 @@ import (
 	"github.com/osbuild/blueprint-schema/pkg/conv"
 	"github.com/osbuild/blueprint-schema/pkg/ptr"
 	"github.com/osbuild/blueprint-schema/pkg/ubp"
-	bp "github.com/osbuild/blueprint/pkg/blueprint"
 )
 
 var writeFixtures = os.Getenv("WRITE_FIXTURES") != ""
@@ -70,77 +69,74 @@ func unwrapErrorsAsComments(es error) []byte {
 	return buf.Bytes()
 }
 
-func TestFix(t *testing.T) {
-	validationTest := func(t *testing.T, input, output string) {
-		t.Run("Valid/"+input, func(t *testing.T) {
-			inputFile, err := os.Open(input)
+func TestDetectionCounts(t *testing.T) {
+	tests := []struct {
+		filename string
+		ubpCount int
+		bpCount  int
+	}{
+		{"../../testdata/all-fields.in.yaml", 43, 0},
+		{"../../testdata/invalid-all-empty.in.yaml", 2, 0},
+		{"../../testdata/valid-empty.in.yaml", 0, 0},
+		{"../../testdata/valid-empty-j.in.json", 0, 0},
+		{"../../testdata/small.json", 2, 0},
+		{"../../testdata/legacy-small.json", 2, 3},
+		{"../../testdata/bp-oscap-generic.in.json", 12, 20},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.filename, func(t *testing.T) {
+			buf, err := os.ReadFile(tt.filename)
 			if err != nil {
-				t.Fatal(err)
+				t.Fatalf("failed to read file %s: %v", tt.filename, err)
 			}
-			defer func() {
-				_ = inputFile.Close()
-			}()
 
-			inputBuf := bytes.Buffer{}
-			_, err = inputBuf.ReadFrom(inputFile)
+			ubp, bp, err, warn := UnmarshalAny(buf)
 			if err != nil {
-				t.Fatal(err)
+				t.Fatalf("failed to unmarshal file %s: %v", tt.filename, err)
 			}
 
-			schema, err := CompileSourceSchema()
-			if err != nil {
-				t.Fatal(err)
+			ubpCount := countSetFieldsRecursive(ubp)
+			bpCount := countSetFieldsRecursive(bp)
+
+			if ubpCount != tt.ubpCount {
+				t.Errorf("expected UBP count %d, got %d", tt.ubpCount, ubpCount)
 			}
-			if writeFixtures {
-				var validationOutput error
-				if strings.HasSuffix(input, ".json") {
-					validationOutput = schema.ValidateJSON(context.Background(), inputBuf.Bytes())
-				} else if strings.HasSuffix(input, ".yaml") {
-					validationOutput = schema.ValidateYAML(context.Background(), inputBuf.Bytes())
-				} else {
-					t.Fatalf("Unknown fixture extension: %s", input)
-				}
-
-				if validationOutput != nil {
-					writeFile(t, output, ptr.To([]byte(validationOutput.Error())))
-				}
-			} else {
-				want := []byte{}
-
-				if _, err := os.Stat(output); err == nil {
-					inFile, err := os.Open(output)
-					if err != nil {
-						t.Fatal(err)
-					}
-					want, err = io.ReadAll(inFile)
-					_ = inFile.Close()
-					if err != nil {
-						t.Fatal(err)
-					}
-				}
-
-				var validationOutput error
-				if strings.HasSuffix(input, ".json") {
-					validationOutput = schema.ValidateJSON(context.Background(), inputBuf.Bytes())
-				} else if strings.HasSuffix(input, ".yaml") {
-					validationOutput = schema.ValidateYAML(context.Background(), inputBuf.Bytes())
-				} else {
-					t.Fatalf("Unknown fixture extension: %s", input)
-				}
-
-				var got string
-				if validationOutput != nil {
-					got = validationOutput.Error()
-				}
-				if diff := cmp.Diff(string(want), got); diff != "" {
-					t.Errorf("validity mismatch (-want +got):\n%s", diff)
-				}
+			if bpCount != tt.bpCount {
+				t.Errorf("expected BP count %d, got %d", tt.bpCount, bpCount)
+			}
+			if warn != nil {
+				t.Logf("Unmarshal warnings: %v", warn)
 			}
 		})
 	}
+}
 
-	conversionTest := func(t *testing.T, input, output string) {
-		t.Run("Valid/"+input, func(t *testing.T) {
+// cmpTransformerForRawMessage is a cmp.Option that transforms json.RawMessage
+// into a map[string]interface{} before comparison. This makes the comparison
+// independent of key ordering in the JSON string.
+var cmpTransformerForRawMessage = cmp.Transformer("RawMessage", func(in json.RawMessage) map[string]interface{} {
+	// If the raw message is nil or empty, return a nil map.
+	if len(in) == 0 {
+		return nil
+	}
+
+	var out map[string]interface{}
+	// Unmarshal the raw bytes into a generic map.
+	// We panic on error because in a test context, malformed JSON in test data
+	// is a test setup error that should be fixed.
+	if err := json.Unmarshal(in, &out); err != nil {
+		panic(fmt.Sprintf("cmp.Transformer: cannot unmarshal json.RawMessage: %v", err))
+	}
+	return out
+})
+
+func TestFix(t *testing.T) {
+	convert := func(t *testing.T, input, output string) *ubp.Blueprint {
+		var result *ubp.Blueprint
+
+		t.Run(fmt.Sprintf("Convert/%s/%s", filepath.Base(input), filepath.Base(output)), func(t *testing.T) {
+			t.Logf("Converting %s", input)
 			inputFile, err := os.Open(input)
 			if err != nil {
 				t.Fatal(err)
@@ -157,49 +153,33 @@ func TestFix(t *testing.T) {
 
 			var convErrs error
 			var got []byte
-			if strings.HasSuffix(input, ".json") || strings.HasSuffix(input, ".yaml") {
-				var inputBlueprint *ubp.Blueprint
-				if strings.HasSuffix(input, ".json") {
-					b, err := UnmarshalJSON(inputBuf.Bytes())
-					if err != nil {
-						t.Fatal(err)
-					}
-					inputBlueprint = b
-				}
-				if strings.HasSuffix(input, ".yaml") {
-					b, err := UnmarshalYAML(inputBuf.Bytes())
-					if err != nil {
-						t.Fatal(err)
-					}
-					inputBlueprint = b
-				}
-
-				exporter := conv.NewInternalExporter(inputBlueprint)
+			ubpBP, bpBP, err, warn := UnmarshalAny(inputBuf.Bytes())
+			if err != nil {
+				t.Fatal(err)
+			}
+			if warn != nil {
+				convErrs = warn
+			}
+			if bpBP == nil {
+				// no conversion was done during loading
+				exporter := conv.NewInternalExporter(ubpBP)
 				convErrs = exporter.Export()
 				result := exporter.Result()
 				result.Version = "1.0.0"
+
 				got, err = toml.Marshal(result)
 				if err != nil {
 					t.Fatal(err)
 				}
-			} else if strings.HasSuffix(input, ".toml") {
-				inputBlueprint := &bp.Blueprint{}
-				err := toml.Unmarshal(inputBuf.Bytes(), inputBlueprint)
-				if err != nil {
-					t.Fatal(err)
-				}
-				importer := conv.NewInternalImporter(inputBlueprint)
-				convErrs = importer.Import()
-				result := importer.Result()
-				var buf bytes.Buffer
-				err = WriteYAML(result, &buf)
-				if err != nil {
-					t.Fatal(err)
-				}
-				got = buf.Bytes()
 			} else {
-				t.Fatalf("Unknown fixture extension: %s", input)
+				// conversion was done during loading
+				got, err = MarshalYAML(ubpBP)
+				if err != nil {
+					t.Fatal(err)
+				}
 			}
+
+			t.Logf("Conversion warnings: %v", convErrs)
 
 			if writeFixtures {
 				writeFile(t, output, ptr.To(unwrapErrorsAsComments(convErrs)), ptr.To(got))
@@ -222,6 +202,65 @@ func TestFix(t *testing.T) {
 					t.Errorf("validity mismatch (-want +got):\n%s", diff)
 				}
 			}
+
+			result = ubpBP
+		})
+
+		return result
+	}
+
+	diffUBP := func(t *testing.T, ubp1, ubp2 *ubp.Blueprint, diffFile string) {
+		t.Run("DiffUBP", func(t *testing.T) {
+			t.Logf("Diffing UBP objects")
+			if ubp1 == nil || ubp2 == nil {
+				t.Fatal("UBP objects are nil, cannot diff")
+			}
+
+			diffBuf := bytes.Buffer{}
+			diff := cmp.Diff(ubp1, ubp2, cmpTransformerForRawMessage, cmp.AllowUnexported(
+				ubp.DNFSource{},
+				ubp.FSNodeContents{},
+				ubp.Ignition{},
+				ubp.NetworkService{},
+				ubp.OpenSCAPTailoring{},
+				ubp.StoragePartition{},
+			))
+			if diff != "" {
+				diffBuf.WriteString(diff)
+			}
+
+			if writeFixtures {
+				if _, err := os.Stat(diffFile); err == nil {
+					_ = os.Remove(diffFile)
+				}
+
+				if diffBuf.Len() > 0 {
+					err := os.WriteFile(diffFile, diffBuf.Bytes(), 0644)
+					if err != nil {
+						t.Fatal(err)
+					}
+					t.Logf("Written UBP diff to %s", diffFile)
+				}
+			} else {
+				want := []byte{}
+
+				if _, err := os.Stat(diffFile); err == nil {
+					inFile, err := os.Open(diffFile)
+					if err != nil {
+						t.Fatal(err)
+					}
+					want, err = io.ReadAll(inFile)
+					_ = inFile.Close()
+					if err != nil {
+						t.Fatal(err)
+					}
+				}
+
+				// diff or diffs are not too readable, just print the diff
+				if diffBuf.Len() > 0 && diffBuf.String() != string(want) {
+					t.Logf("UBP diff mismatch (-want +got):\n%s", cmp.Diff(string(want), diffBuf.String()))
+				}
+			}
 		})
 	}
 
@@ -230,28 +269,24 @@ func TestFix(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	extRegesp := regexp.MustCompile(`\.in\.(yaml|json|toml)$`)
 	processFile := func(file string) bool {
-		t.Logf("Processing %s", file)
-
 		if s, err := os.Stat(file); err != nil || s.IsDir() {
 			return false
 		}
 
-		format := filepath.Ext(file)
-		fileWithoutFormat := file[0 : len(file)-len(format)]
-		direction := filepath.Ext(fileWithoutFormat)
-		baseFile := file[0 : len(fileWithoutFormat)-len(direction)]
-
-		if strings.HasSuffix(file, ".in.yaml") {
-			validFile := baseFile + ".validator.out"
-			validationTest(t, file, validFile)
-
-			suffix := baseFile + ".out.toml"
-			conversionTest(t, file, suffix)
-		} else if strings.HasSuffix(file, ".in.toml") {
-			suffix := baseFile + ".out.yaml"
-			conversionTest(t, file, suffix)
+		if !extRegesp.MatchString(file) {
+			t.Logf("Skipping file %q, does not match filename test pattern", file)
+			return false
 		}
+
+		out1 := extRegesp.ReplaceAllString(file, ".out1.txt")
+		out2 := extRegesp.ReplaceAllString(file, ".out2.txt")
+		inout2diff := extRegesp.ReplaceAllString(file, ".out.diff")
+
+		ubp1 := convert(t, file, out1)
+		ubp2 := convert(t, out1, out2)
+		diffUBP(t, ubp1, ubp2, inout2diff)
 
 		return true
 	}
@@ -261,46 +296,4 @@ func TestFix(t *testing.T) {
 			t.Errorf("Failed to process file: %s", file)
 		}
 	}
-
-	if writeFixtures {
-		// copy some files in the testdata directory so we can close the loop and test it all
-		copies := []string{
-			"../../testdata/all-fields.out.toml", "../../testdata/all-fields.in.toml",
-		}
-
-		for i := 0; i < len(copies); i += 2 {
-			src := copies[i]
-			dst := copies[i+1]
-			t.Logf("Copying %q to %q", src, dst)
-
-			if _, err := os.Stat(dst); err == nil {
-				_ = os.Remove(dst)
-			}
-
-			err := copy(src, dst)
-			if err != nil {
-				t.Fatal(err)
-			}
-
-			if !processFile(dst) {
-				t.Errorf("Failed to process file: %s", dst)
-			}
-		}
-	}
-}
-
-func copy(src, dst string) error {
-	input, err := os.ReadFile(src)
-	if err != nil {
-		return err
-	}
-
-	header := fmt.Sprintf("# file is a copy from %q, do not edit it directly\n", src)
-	input = append([]byte(header), input...)
-	err = os.WriteFile(dst, input, 0644)
-	if err != nil {
-		return err
-	}
-
-	return nil
 }

@@ -1,0 +1,53 @@
+version = "1.0.0"
+
+[customizations]
+  [customizations.disk]
+    type = "gpt"
+
+    [[customizations.disk.partitions]]
+      type = "plain"
+      minsize = 1073741824
+      mountpoint = "/data"
+      fs_type = "xfs"
+
+    [[customizations.disk.partitions]]
+      type = "btrfs"
+      minsize = 10737418240
+
+      [[customizations.disk.partitions.subvolumes]]
+        name = "subvol-home"
+        mountpoint = "/home"
+
+      [[customizations.disk.partitions.subvolumes]]
+        name = "subvol-shadowman"
+        mountpoint = "/home/shadowman"
+
+      [[customizations.disk.partitions.subvolumes]]
+        name = "subvol-foo"
+        mountpoint = "/foo"
+
+      [[customizations.disk.partitions.subvolumes]]
+        name = "subvol-usr"
+        mountpoint = "/usr"
+
+      [[customizations.disk.partitions.subvolumes]]
+        name = "subvol-opt"
+        mountpoint = "/opt"
+
+      [[customizations.disk.partitions.subvolumes]]
+        name = "subvol-media"
+        mountpoint = "/media"
+
+      [[customizations.disk.partitions.subvolumes]]
+        name = "subvol-root"
+        mountpoint = "/root"
+
+      [[customizations.disk.partitions.subvolumes]]
+        name = "subvol-srv"
+        mountpoint = "/srv"
+
+    [[customizations.disk.partitions]]
+      type = "plain"
+      minsize = 1073741824
+      label = "swap-part"
+      fs_type = "swap"

@@ -1,0 +1,19 @@
+  &ubp.Blueprint{
+  	... // 9 identical fields
+  	Hostname: "",
+  	Ignition: nil,
+  	Installer: &ubp.Installer{
+  		Anaconda: &ubp.InstallerAnaconda{
+  			DisabledModules: nil,
+- 			EnabledModules:  []ubp.AnacondaModules{"org.fedoraproject.xxx"},
++ 			EnabledModules:  nil,
+  			Kickstart:       "",
+  			SudoNOPASSWD:    {"invalid username"},
+  			Unattended:      false,
+  		},
+  		CoreOS: nil,
+  	},
+  	Kernel: nil,
+  	Locale: nil,
+  	... // 7 identical fields
+  }

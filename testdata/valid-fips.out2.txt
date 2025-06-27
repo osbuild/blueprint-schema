@@ -1,0 +1,3 @@
+fips:
+  enabled: true
+name: 'Blueprint example: FIPS'

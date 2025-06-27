@@ -1,0 +1,19 @@
+  &ubp.Blueprint{
+  	... // 14 identical fields
+  	Name:    "OpenSCAP example with profile selection",
+  	Network: nil,
+  	OpenSCAP: &ubp.OpenSCAP{
+  		Datastream: "/usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml",
+  		ProfileID:  "xccdf_org.ssgproject.content_profile_cis",
+  		Tailoring: &ubp.OpenSCAPTailoring{
+  			union: json.RawMessage(Inverse(RawMessage, map[string]any{
+  				"json_filepath":   string("/some/path/tailoring-file.json"),
+  				"json_profile_id": string("name-of-profile-used-in-json-tailoring-file"),
+- 				"selected":        []any{string("xccdf_org.ssgproject.content_bind_crypto_policy")},
+  			})),
+  		},
+  	},
+  	Registration: nil,
+  	Storage:      nil,
+  	... // 2 identical fields
+  }

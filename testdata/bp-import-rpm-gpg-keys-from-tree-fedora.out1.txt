@@ -1,0 +1,3 @@
+dnf:
+  import_keys:
+  - /etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-18-primary

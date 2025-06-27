@@ -1,0 +1,31 @@
+storage:
+  minsize: "0"
+  partitions:
+  - fs_type: xfs
+    minsize: 1 GiB
+    mountpoint: /data
+    type: plain
+  - minsize: 10 GiB
+    subvolumes:
+    - mountpoint: /home
+      name: subvol-home
+    - mountpoint: /home/shadowman
+      name: subvol-shadowman
+    - mountpoint: /foo
+      name: subvol-foo
+    - mountpoint: /usr
+      name: subvol-usr
+    - mountpoint: /opt
+      name: subvol-opt
+    - mountpoint: /media
+      name: subvol-media
+    - mountpoint: /root
+      name: subvol-root
+    - mountpoint: /srv
+      name: subvol-srv
+    type: btrfs
+  - fs_type: swap
+    label: swap-part
+    minsize: 1 GiB
+    type: plain
+  type: ""

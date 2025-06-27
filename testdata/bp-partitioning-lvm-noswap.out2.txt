@@ -1,0 +1,66 @@
+version = "1.0.0"
+
+[customizations]
+  [customizations.disk]
+    type = "gpt"
+
+    [[customizations.disk.partitions]]
+      type = "plain"
+      minsize = 1073741824
+      mountpoint = "/data"
+      label = "data"
+      fs_type = "ext4"
+
+    [[customizations.disk.partitions]]
+      type = "lvm"
+      minsize = 10737418240
+      name = "testvg"
+
+      [[customizations.disk.partitions.logical_volumes]]
+        name = "homelv"
+        minsize = 2147483648
+        mountpoint = "/home"
+        label = "home"
+        fs_type = "ext4"
+
+      [[customizations.disk.partitions.logical_volumes]]
+        name = "shadowmanlv"
+        minsize = 5368709120
+        mountpoint = "/home/shadowman"
+        fs_type = "ext4"
+
+      [[customizations.disk.partitions.logical_volumes]]
+        name = "foolv"
+        minsize = 1073741824
+        mountpoint = "/foo"
+        fs_type = "ext4"
+
+      [[customizations.disk.partitions.logical_volumes]]
+        name = "usrlv"
+        minsize = 4294967296
+        mountpoint = "/usr"
+        fs_type = "ext4"
+
+      [[customizations.disk.partitions.logical_volumes]]
+        name = "optlv"
+        minsize = 1073741824
+        mountpoint = "/opt"
+        fs_type = "ext4"
+
+      [[customizations.disk.partitions.logical_volumes]]
+        name = "medialv"
+        minsize = 1073741824
+        mountpoint = "/media"
+        fs_type = "ext4"
+
+      [[customizations.disk.partitions.logical_volumes]]
+        name = "roothomelv"
+        minsize = 1073741824
+        mountpoint = "/root"
+        fs_type = "ext4"
+
+      [[customizations.disk.partitions.logical_volumes]]
+        name = "srvlv"
+        minsize = 1073741824
+        mountpoint = "/srv"
+        fs_type = "ext4"

@@ -1,0 +1,38 @@
+version = "1.0.0"
+
+[customizations]
+  [customizations.services]
+    enabled = ["custom.service"]
+
+  [[customizations.directories]]
+    path = "/etc/systemd/system/custom.service.d"
+    mode = "755"
+
+  [[customizations.directories]]
+    path = "/etc/custom_dir"
+    user = 1020
+    group = 1050
+    mode = "770"
+
+  [[customizations.files]]
+    path = "/etc/systemd/system/custom.service"
+    mode = "644"
+    data = "[Unit]\nDescription=Custom service\n\n[Service]\nExecStart=/usr/bin/false\n\n[Install]\nWantedBy=multi-user.target\n"
+
+  [[customizations.files]]
+    path = "/etc/systemd/system/custom.service.d/override.conf"
+    mode = "644"
+    data = "[Service]\nExecStart=\nExecStart=/usr/bin/cat /etc/custom_file.txt\n"
+
+  [[customizations.files]]
+    path = "/etc/custom_file.txt"
+    user = "root"
+    group = "root"
+    mode = "644"
+    data = "image builder is the best"
+
+  [[customizations.files]]
+    path = "/etc/empty_file.txt"
+    user = 0
+    group = 0
+    mode = "644"

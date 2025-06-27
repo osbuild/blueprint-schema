@@ -1,0 +1,15 @@
+version = "1.0.0"
+
+[customizations]
+
+  [[customizations.user]]
+    name = "osbuild"
+    key = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNebAh6SjpAn8wB53K4695cGnHGuCtl4RdaX3futZgJUultHyzeYHnzMO7d4++qnRL+Rworew62LKP560uvtncc= github.com/osbuild/images"
+    groups = ["wheel"]
+    uid = 1001
+    gid = 1002
+    expiredate = 0
+
+  [[customizations.group]]
+    name = "osbuild"
+    gid = 1002

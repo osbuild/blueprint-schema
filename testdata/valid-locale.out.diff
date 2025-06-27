@@ -1,0 +1,16 @@
+  &ubp.Blueprint{
+  	... // 11 identical fields
+  	Installer: nil,
+  	Kernel:    nil,
+  	Locale: &ubp.Locale{
+  		Keyboards: []string{
+  			"cz-qwerty",
+- 			"cz",
+- 			"us",
+  		},
+  		Languages: {"en_US.UTF-8", "cs_CZ.UTF-8"},
+  	},
+  	Name:    "Blueprint example: locale",
+  	Network: nil,
+  	... // 5 identical fields
+  }

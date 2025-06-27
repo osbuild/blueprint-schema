@@ -1,0 +1,37 @@
+{
+  "customizations": {
+    "user": [
+      {
+        "groups": [
+          "wheel"
+        ],
+        "key": "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNebAh6SjpAn8wB53K4695cGnHGuCtl4RdaX3futZgJUultHyzeYHnzMO7d4++qnRL+Rworew62LKP560uvtncc= github.com/osbuild/images",
+        "name": "osbuild"
+      }
+    ],
+    "locale": {
+      "languages": [
+        "en_GB.UTF-8"
+      ],
+      "keyboard": "uk"
+    },
+    "timezone": {
+      "timezone": "Europe/Berlin"
+    },
+    "installer": {
+      "unattended": true,
+      "sudo-nopasswd": [
+        "%wheel",
+        "%sudo"
+      ],
+      "modules": {
+        "enable": [
+          "org.fedoraproject.Anaconda.Modules.Users",
+          "org.fedoraproject.Anaconda.Modules.Localization",
+          "org.fedoraproject.Anaconda.Modules.Network",
+          "org.fedoraproject.Anaconda.Modules.Services"
+        ]
+      }
+    }
+  }
+}

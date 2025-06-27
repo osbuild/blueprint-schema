@@ -88,4 +88,14 @@ golint-podman: ## Run golint via podman on the codebase
 .PHONY: clean
 clean: ## Clean up all build artifacts
 	rm -rf $(DISTDIR) blueprint-oas3*.{yaml,json}
-	rm -f ./testdata/*.out.{yaml,toml,json} ./testdata/*.validator.out
+	rm -f ./testdata/*.{out,out1,out2}.*
+
+IMAGES_DIR := ../images/test/configs
+TESTDATA_SRC := $(wildcard $(IMAGES_DIR)/*.json)
+TESTDATA_DST := $(patsubst $(IMAGES_DIR)/%.json,testdata/bp-%.in.json,$(TESTDATA_SRC))
+
+testdata/bp-%.in.json: $(IMAGES_DIR)/%.json
+	jq .blueprint $< > $@
+
+.PHONY: testdata # Copies testdata from images directory (IMAGES_DIR)
+testdata: $(TESTDATA_DST)

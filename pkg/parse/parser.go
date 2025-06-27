@@ -3,6 +3,7 @@ package parse
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 
@@ -13,26 +14,76 @@ import (
 	"sigs.k8s.io/yaml"
 )
 
+var ErrParsingExplanation = errors.New("parsing errors, some are false positives")
+
+func UnmarshalAny(buf []byte) (*ubp.Blueprint, *bp.Blueprint, error, error) {
+	// Try UBP YAML
+	ubpYAML, ubpErrYAML := UnmarshalYAML(buf)
+	ubpCountYAML := countSetFieldsRecursive(ubpYAML)
+
+	// Try UBP JSON
+	ubpJSON, ubpErrJSON := UnmarshalJSON(buf)
+	ubpCountJSON := countSetFieldsRecursive(ubpJSON)
+
+	// Try BP TOML
+	bpTempTOML := new(bp.Blueprint)
+	bpErrTOML := toml.Unmarshal(buf, bpTempTOML)
+	imTOML := conv.NewInternalImporter(bpTempTOML)
+	bpWarnTOML := imTOML.Import()
+	bpTOML := imTOML.Result()
+	bpCountTOML := countSetFieldsRecursive(bpTOML)
+
+	// Try BP JSON
+	bpTempJSON := new(bp.Blueprint)
+	bpErrJSON := json.Unmarshal(buf, bpTempJSON)
+	imJSON := conv.NewInternalImporter(bpTempJSON)
+	bpWarnJSON := imJSON.Import()
+	bpJSON := imJSON.Result()
+	bpCountJSON := countSetFieldsRecursive(bpJSON)
+
+	maxCount := max(ubpCountYAML, ubpCountJSON, bpCountTOML, bpCountJSON)
+	err := errors.Join(
+		fmt.Errorf("YAML: %w", ubpErrYAML),
+		fmt.Errorf("JSON: %w", ubpErrJSON),
+		fmt.Errorf("TOML: %w", bpErrTOML),
+		fmt.Errorf("JSON: %w", bpErrJSON),
+	)
+	warn := errors.Join(bpWarnTOML, bpWarnJSON)
+
+	if ubpErrYAML == nil && ubpCountYAML == maxCount {
+		return ubpYAML, nil, nil, warn
+	} else if ubpErrJSON == nil && ubpCountJSON == maxCount {
+		return ubpJSON, nil, nil, warn
+	} else if bpErrTOML == nil && bpCountTOML == maxCount {
+		return bpTOML, bpTempTOML, nil, warn
+	} else if bpErrJSON == nil && bpCountJSON == maxCount {
+		return bpJSON, bpTempJSON, nil, warn
+	} else {
+		countErr := fmt.Errorf("fields set: UBPY:%d UBPJ:%d BPT:%d BPJ:%d", ubpCountYAML, ubpCountJSON, bpCountTOML, bpCountJSON)
+		return nil, nil, errors.Join(ErrParsingExplanation, err, countErr), warn
+	}
+}
+
 // UnmarshalAny detects UBP YAML/JSON or BP TOML/JSON and returns UBP, error, and warning.
 // If the format is not recognized, it returns an error.
 // If the format is recognized but the structure is not UBP, it returns an error.
 // If the format is recognized and the structure is UBP, it unmarshals the data
 // into a UBP object and returns it along with any warnings.
-func UnmarshalAny(buf []byte) (*ubp.Blueprint, error, error) {
+func UnmarshalAny2(buf []byte) (*ubp.Blueprint, error, error) {
 
 	df, dataMap := detectFormat(buf)
 	if df == formatUnknown {
 		return nil, fmt.Errorf("unknown format: %s", df), nil
 	}
 
-	ds := detectStruct(dataMap)
-	if df == formatYAML && ds == structUBP {
+	ds := DetectType(dataMap)
+	if df == formatYAML && ds == TypeUBP {
 		ubp, err := UnmarshalYAML(buf)
 		return ubp, err, nil
-	} else if df == formatJSON && ds == structUBP {
+	} else if df == formatJSON && ds == TypeUBP {
 		ubp, err := UnmarshalJSON(buf)
 		return ubp, err, nil
-	} else if ds == structBP {
+	} else if ds == TypeBP {
 		bp := new(bp.Blueprint)
 		switch df {
 		case formatJSON:

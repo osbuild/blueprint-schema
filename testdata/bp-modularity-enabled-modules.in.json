@@ -1,0 +1,13 @@
+{
+  "enabled_modules": [
+    {
+      "name": "nodejs",
+      "stream": "18"
+    }
+  ],
+  "packages": [
+    {
+      "name": "nodejs"
+    }
+  ]
+}

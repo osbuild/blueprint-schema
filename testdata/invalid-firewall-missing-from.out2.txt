@@ -1,0 +1,3 @@
+name: Firewall example - missing from
+network:
+  firewall: {}

@@ -1,0 +1,7 @@
+registration:
+  redhat:
+    subscription_manager:
+      auto_registration: true
+      enabled: true
+      product_plugin_enabled: true
+      repository_management: true

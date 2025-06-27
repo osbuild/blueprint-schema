@@ -1,0 +1,6 @@
+network:
+  firewall:
+    services:
+    - service: ssh
+    - port: 1080
+      protocol: tcp

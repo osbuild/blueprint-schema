@@ -1,0 +1,20 @@
+installer:
+  anaconda:
+    kickstart: |
+      %post
+
+      echo "=== Custom user kickstart ==="
+
+      echo -e "%sudo\tALL=(ALL)\tNOPASSWD: ALL" > "/etc/sudoers.d/%sudo"
+      chmod 0440 /etc/sudoers.d/%sudo
+      echo -e "%wheel\tALL=(ALL)\tNOPASSWD: ALL" > "/etc/sudoers.d/%wheel"
+      chmod 0440 /etc/sudoers.d/%wheel
+      restorecon -rvF /etc/sudoers.d
+      %end
+locale:
+  keyboards:
+  - uk
+  languages:
+  - en_GB.UTF-8
+timedate:
+  timezone: Europe/Berlin

@@ -1,0 +1,10 @@
+dnf:
+  import_keys:
+  - /etc/pki/rpm-gpg/RPM-GPG-KEY-microsoft-azure-release
+  packages:
+  - rhui-azure-rhel9
+  - redhat-cloud-client-configuration-cdn
+registration:
+  redhat:
+    subscription_manager:
+      auto_enable: false

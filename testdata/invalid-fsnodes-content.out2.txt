@@ -1,0 +1,8 @@
+fsnodes:
+- mode: "0755"
+  path: /var/tmp/dir
+  type: dir
+- mode: "0755"
+  path: /var/tmp/dir
+  type: dir
+name: 'Blueprint example: fsnodes'

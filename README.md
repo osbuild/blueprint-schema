@@ -95,6 +95,23 @@ Blueprint types have only JSON Go struct tags because mixing them with other tag
 * UnmarshalYAML
 * MarshalJSON
 * UnmarshalJSON
+* UnmarshalAny
+
+The `UnmarshalAny` function performs detection of any of the following formats:
+
+* UBP YAML
+* UBP JSON
+* BP TOML
+* BP JSON
+
+It case BP format is detected, it automatically converts the data structure to UBP. The function returns the following:
+
+* UBP (original or converted data)
+* BP (original BP data or nil if no conversion was necessary)
+* error (wrapped errors)
+* error (wrapped warnings if conversion ran into something)
+
+When fatal parsing error occurs, wrapped errors are prefixed with `YAML`, `JSON` or `TOML` respectively and some of them will be false positives because the implementation tries to load the buffer via all three unmarshalers. Conversion warnings shall be always ignored, they are only informative.
 
 Example:
 
@@ -193,3 +210,5 @@ To run tests against fixtures: `make test`
 To regenerate fixtures: `make write-fixtures`
 
 To print diff between two YAML files via round-trip conversion `UBP-YAML > TOML > UBP-YAML`: `make test-diff`
+
+For every `filename.in.xxx` where `xxx` can be `yaml`, `toml` or `json` the test suite will load the file via `UnmarshalAny` and convert it either UBP>BP or BP>UBP and stores the result as `filename.out1.txt`. Then it does again and stores `filename.out2.txt`. And finally, it performs semantic UBP struct diff between `filename.in.xxx` and `filename.out2.txt`. If there are no differences, no `out.diff` file is ever created. These diff files are not subject of testing, `make test` will not error out if difference is different because diff-of-diff is hardly readable.

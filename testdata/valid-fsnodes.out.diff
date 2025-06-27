@@ -1,0 +1,54 @@
+  &ubp.Blueprint{
+  	... // 6 identical fields
+  	DNF:  nil,
+  	FIPS: nil,
+  	FSNodes: []ubp.FSNode{
+  		{
+  			... // 4 identical fields
+  			Path:  "/var/tmp/file1",
+  			State: nil,
+- 			Type:  s"",
++ 			Type:  s"file",
+  			User:  "",
+  		},
+- 		{
+- 			EnsureParents: true,
+- 			Group:         "lzap",
+- 			Mode:          s"0o0oAAAB6A==",
+- 			Path:          "/var/tmp/dir",
+- 			State:         s"present",
+- 			Type:          s"dir",
+- 			User:          "lzap",
+- 		},
+  		{
+  			Contents: &ubp.FSNodeContents{
+  				union: json.RawMessage(Inverse(RawMessage, map[string]any{
+- 					"base64": string("LS0t"),
++ 					"text":   string("---"),
+  				})),
+  			},
+  			EnsureParents: false,
+  			Group:         "",
+  			... // 5 identical fields
+  		},
+  		{
+  			... // 4 identical fields
+  			Path:  "/var/tmp/dir/file2",
+  			State: nil,
+- 			Type:  s"",
++ 			Type:  s"file",
+  			User:  "",
+  		},
++ 		{
++ 			EnsureParents: true,
++ 			Group:         "lzap",
++ 			Mode:          s"0o0oAAAB6A==",
++ 			Path:          "/var/tmp/dir",
++ 			Type:          s"dir",
++ 			User:          "lzap",
++ 		},
+  	},
+  	Hostname: "",
+  	Ignition: nil,
+  	... // 10 identical fields
+  }

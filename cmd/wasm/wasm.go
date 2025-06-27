@@ -34,7 +34,7 @@ func wasmExportTOML(this js.Value, p []js.Value) any {
 		return js.ValueOf([]any{"", "Export TOML expects exactly one argument (UBP string)"})
 	}
 
-	b, err, warn := parse.UnmarshalAny([]byte(p[0].String()))
+	b, _, err, warn := parse.UnmarshalAny([]byte(p[0].String()))
 	if err != nil {
 		return js.ValueOf([]any{"", fmt.Sprintf("Failed to unmarshal YAML: %v", err)})
 	}
@@ -60,7 +60,7 @@ func wasmExportJSON(this js.Value, p []js.Value) any {
 		return js.ValueOf([]any{"", "Export TOML expects exactly one argument (UBP string)"})
 	}
 
-	b, err, warn := parse.UnmarshalAny([]byte(p[0].String()))
+	b, _, err, warn := parse.UnmarshalAny([]byte(p[0].String()))
 	if err != nil {
 		return js.ValueOf([]any{"", fmt.Sprintf("Failed to unmarshal YAML: %v", err)})
 	}

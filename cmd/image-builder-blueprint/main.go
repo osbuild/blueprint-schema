@@ -148,7 +148,7 @@ func main() {
 				die("%s: %s", arg, err)
 			}
 
-			b, err, warn := parse.UnmarshalAny(inBuf)
+			b, _, err, warn := parse.UnmarshalAny(inBuf)
 			if err != nil {
 				die("%s: %s", arg, err)
 			}

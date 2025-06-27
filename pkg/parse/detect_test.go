@@ -60,29 +60,29 @@ func TestDetectObject(t *testing.T) {
 func TestDetectUBP(t *testing.T) {
 	tests := []struct {
 		input    map[string]any
-		expected detectedStruct
+		expected Type
 	}{
 		{
-			map[string]any{}, structUnknown,
+			map[string]any{}, TypeUnknown,
 		},
 		{
-			map[string]any{"key": "value"}, structUnknown,
+			map[string]any{"key": "value"}, TypeUnknown,
 		},
 		{
 			map[string]any{
 				"distribution": "fedora-13",
-			}, structUBP,
+			}, TypeUBP,
 		},
 		{
 			map[string]any{
 				"distro": "fedora-13",
-			}, structBP,
+			}, TypeBP,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(string(tt.expected), func(t *testing.T) {
-			result := detectStruct(tt.input)
+			result := DetectType(tt.input)
 			if result != tt.expected {
 				t.Errorf("expected struct type %s, got %s", tt.expected, result)
 			}
@@ -94,15 +94,14 @@ func TestDetectFixtures(t *testing.T) {
 	tests := []struct {
 		filename string
 		format   detectedFormat
-		str      detectedStruct
+		str      Type
 	}{
-		{"../../testdata/all-fields.in.yaml", formatYAML, structUBP},
-		{"../../testdata/invalid-all-empty.in.yaml", formatYAML, structUBP},
-		{"../../testdata/valid-empty.in.yaml", formatUnknown, structUnknown},
-		{"../../testdata/valid-empty-j.in.json", formatUnknown, structUnknown},
-		{"../../testdata/all-fields.in.toml", formatTOML, structBP},
-		{"../../testdata/small.json", formatJSON, structUBP},
-		{"../../testdata/legacy-small.json", formatJSON, structBP},
+		{"../../testdata/all-fields.in.yaml", formatYAML, TypeUBP},
+		{"../../testdata/invalid-all-empty.in.yaml", formatYAML, TypeUBP},
+		{"../../testdata/valid-empty.in.yaml", formatUnknown, TypeUnknown},
+		{"../../testdata/valid-empty-j.in.json", formatUnknown, TypeUnknown},
+		{"../../testdata/small.json", formatJSON, TypeUBP},
+		{"../../testdata/legacy-small.json", formatJSON, TypeBP},
 	}
 
 	for _, tt := range tests {
@@ -117,7 +116,7 @@ func TestDetectFixtures(t *testing.T) {
 				t.Errorf("expected format %s, got %s", tt.format, format)
 			}
 
-			str := detectStruct(data)
+			str := DetectType(data)
 			if str != tt.str {
 				t.Errorf("expected struct type %s, got %s, data: %+v", tt.str, str, data)
 			}

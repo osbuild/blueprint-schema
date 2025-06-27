@@ -1,0 +1,7 @@
+version = "1.0.0"
+
+[customizations]
+  [customizations.firewall]
+    ports = ["1080:tcp"]
+    [customizations.firewall.services]
+      enabled = ["ssh"]

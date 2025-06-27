@@ -1,0 +1,40 @@
+  &ubp.Blueprint{
+  	... // 16 identical fields
+  	OpenSCAP:     nil,
+  	Registration: nil,
+  	Storage: &ubp.Storage{
+  		Minsize: 590558003200,
+  		Partitions: []ubp.StoragePartition{
+  			{
+  				union: json.RawMessage(Inverse(RawMessage, map[string]any{
+  					"fs_type": string("ext4"),
+  					"label":   string("boot"),
+- 					"logical_volumes": []any{
+- 						map[string]any{
+- 							"fs_type":    string("xfs"),
+- 							"label":      string("vg_data_var"),
+- 							"minsize":    string("50 GiB"),
+- 							"mountpoint": string("/var"),
+- 							"name":       string("lv_name"),
+- 						},
+- 					},
+  					"minsize":    string("800 MiB"),
+  					"mountpoint": string("/boot"),
+- 					"name":       string("vg_data"),
+  					"type":       string("plain"),
+  				})),
+  			},
+  			{
+  				union: json.RawMessage(Inverse(RawMessage, map[string]any{
++ 					"fs_type":    string("ext4"),
+  					"minsize":    string("50 GiB"),
+- 					"subvolumes": []any{map[string]any{"mountpoint": string("/var/backups"), "name": string("root")}},
+  					"type":       string("plain"),
+  				})),
+  			},
+  		},
+  		Type: s"gpt",
+  	},
+  	Systemd:  nil,
+  	Timedate: nil,
+  }

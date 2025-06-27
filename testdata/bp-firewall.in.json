@@ -1,0 +1,17 @@
+{
+  "customizations": {
+    "firewall": {
+      "ports": [
+        "1080:tcp"
+      ],
+      "services": {
+        "enabled": [
+          "ssh"
+        ],
+        "disabled": [
+          "http"
+        ]
+      }
+    }
+  }
+}

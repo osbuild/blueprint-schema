@@ -1,0 +1,9 @@
+accounts:
+  groups: null
+  users:
+  - expires: "1970-01-01"
+    name: user
+storage:
+  minsize: "0"
+  partitions: null
+  type: gpt

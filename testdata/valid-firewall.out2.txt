@@ -1,0 +1,9 @@
+name: Firewall valid example
+network:
+  firewall:
+    services:
+    - service: dns
+    - service: ssh
+    - from: 60000
+      protocol: udp
+      to: 60010

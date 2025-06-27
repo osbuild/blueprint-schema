@@ -1,0 +1,14 @@
+installer:
+  anaconda:
+    disabled_modules:
+    - org.fedoraproject.Anaconda.Modules.Subscription
+    enabled_modules:
+    - org.fedoraproject.Anaconda.Modules.Network
+    kickstart: '# some kickstart data'
+    sudo_nopasswd:
+    - lzap
+    - '%devops'
+    unattended: true
+  coreos:
+    installation_device: /dev/vda
+name: 'Blueprint example: installer'
