@@ -128,15 +128,16 @@ func main() {
 			}
 
 			exporter := conv.NewInternalExporter(b)
-			if logs := exporter.Export(); logs != nil {
+			result, logs := exporter.Export()
+			if logs != nil {
 				fmt.Fprintln(os.Stderr, logs)
 			}
 
 			var buf []byte
 			if *exportJSON {
-				buf, err = json.MarshalIndent(exporter.Result(), "", "  ")
+				buf, err = json.MarshalIndent(result, "", "  ")
 			} else if *exportTOML {
-				buf, err = toml.Marshal(exporter.Result())
+				buf, err = toml.Marshal(result)
 			}
 			if err != nil {
 				die("%s: %s", arg, err)

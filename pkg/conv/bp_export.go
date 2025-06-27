@@ -13,7 +13,6 @@ import (
 // InternalExporter is used to convert a blueprint to the internal representation.
 type InternalExporter struct {
 	from *ubp.Blueprint
-	to   *bp.Blueprint
 	log  *errs
 }
 
@@ -25,11 +24,11 @@ func NewInternalExporter(inputBlueprint *ubp.Blueprint) *InternalExporter {
 }
 
 // ExportInternal converts the blueprint to the internal representation.
-func (e *InternalExporter) Export() error {
+func (e *InternalExporter) Export() (*bp.Blueprint, error) {
 	to := &bp.Blueprint{}
 
 	if e.from == nil {
-		return nil
+		return nil, nil
 	}
 
 	// Create monotonic incremental version number based on miliseconds
@@ -45,12 +44,7 @@ func (e *InternalExporter) Export() error {
 	to.Distro = e.from.Distribution
 	to.Arch = e.from.Architecture.String()
 
-	e.to = to
-	return e.log.Errors()
-}
-
-func (e *InternalExporter) Result() *bp.Blueprint {
-	return e.to
+	return to, e.log.Errors()
 }
 
 func (e *InternalExporter) exportPackages() []bp.Package {

@@ -1,24 +1,24 @@
-  &ubp.Blueprint{
-  	... // 13 identical fields
-  	Locale: nil,
-  	Name:   "Firewall valid example",
-  	Network: &ubp.Network{
-  		Firewall: &ubp.NetworkFirewall{
-  			Services: []ubp.NetworkService{
-  				{union: Inverse(RawMessage, map[string]any{"service": string("dns")})},
-- 				{union: json.RawMessage(`{"enabled":false,"service":"dhcp"}`)},
-  				{
-  					union: json.RawMessage(Inverse(RawMessage, map[string]any{
-- 						"protocol": string("tcp"),
-  						"service":  string("ssh"),
-  					})),
-  				},
-- 				{union: json.RawMessage(`{"enabled":false,"port":53}`)},
-  				{union: Inverse(RawMessage, map[string]any{"from": float64(60000), "protocol": string("udp"), "to": float64(60010)})},
-  			},
-  		},
-  	},
-  	OpenSCAP:     nil,
-  	Registration: nil,
-  	... // 3 identical fields
-  }
+  &ubp.Blueprint{
+  	... // 13 identical fields
+  	Locale: nil,
+  	Name:   "Firewall valid example",
+  	Network: &ubp.Network{
+  		Firewall: &ubp.NetworkFirewall{
+  			Services: []ubp.NetworkService{
+  				{union: Inverse(RawMessage, map[string]any{"service": string("dns")})},
+- 				{union: json.RawMessage(`{"enabled":false,"service":"dhcp"}`)},
+  				{
+  					union: json.RawMessage(Inverse(RawMessage, map[string]any{
+- 						"protocol": string("tcp"),
+  						"service":  string("ssh"),
+  					})),
+  				},
+- 				{union: json.RawMessage(`{"enabled":false,"port":53}`)},
+  				{union: Inverse(RawMessage, map[string]any{"from": float64(60000), "protocol": string("udp"), "to": float64(60010)})},
+  			},
+  		},
+  	},
+  	OpenSCAP:     nil,
+  	Registration: nil,
+  	... // 3 identical fields
+  }

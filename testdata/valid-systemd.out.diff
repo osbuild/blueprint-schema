@@ -1,12 +1,12 @@
-  &ubp.Blueprint{
-  	... // 17 identical fields
-  	Registration: nil,
-  	Storage:      nil,
-  	Systemd: &ubp.Systemd{
-  		Disabled: {"tuned", "cupsd"},
-  		Enabled:  {"sshd.service", "backup.timer"},
-- 		Masked:   []string{},
-+ 		Masked:   nil,
-  	},
-  	Timedate: nil,
-  }
+  &ubp.Blueprint{
+  	... // 17 identical fields
+  	Registration: nil,
+  	Storage:      nil,
+  	Systemd: &ubp.Systemd{
+  		Disabled: {"tuned", "cupsd"},
+  		Enabled:  {"sshd.service", "backup.timer"},
+- 		Masked:   []string{},
++ 		Masked:   nil,
+  	},
+  	Timedate: nil,
+  }

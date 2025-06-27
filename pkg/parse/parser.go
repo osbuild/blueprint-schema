@@ -29,16 +29,14 @@ func UnmarshalAny(buf []byte) (*ubp.Blueprint, *bp.Blueprint, error, error) {
 	bpTempTOML := new(bp.Blueprint)
 	bpErrTOML := toml.Unmarshal(buf, bpTempTOML)
 	imTOML := conv.NewInternalImporter(bpTempTOML)
-	bpWarnTOML := imTOML.Import()
-	bpTOML := imTOML.Result()
+	bpTOML, bpWarnTOML := imTOML.Import()
 	bpCountTOML := countSetFieldsRecursive(bpTOML)
 
 	// Try BP JSON
 	bpTempJSON := new(bp.Blueprint)
 	bpErrJSON := json.Unmarshal(buf, bpTempJSON)
 	imJSON := conv.NewInternalImporter(bpTempJSON)
-	bpWarnJSON := imJSON.Import()
-	bpJSON := imJSON.Result()
+	bpJSON, bpWarnJSON := imJSON.Import()
 	bpCountJSON := countSetFieldsRecursive(bpJSON)
 
 	maxCount := max(ubpCountYAML, ubpCountJSON, bpCountTOML, bpCountJSON)

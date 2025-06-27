@@ -43,11 +43,12 @@ func wasmExportTOML(this js.Value, p []js.Value) any {
 	}
 
 	exporter := conv.NewInternalExporter(b)
-	if logs := exporter.Export(); logs != nil {
+	result, logs := exporter.Export()
+	if logs != nil {
 		js.Global().Get("console").Call("warn", logs.Error())
 	}
 
-	buf, err := toml.Marshal(exporter.Result())
+	buf, err := toml.Marshal(result)
 	if err != nil {
 		return js.ValueOf([]any{"", fmt.Sprintf("Failed to marshal TOML: %v", err)})
 	}
@@ -69,11 +70,12 @@ func wasmExportJSON(this js.Value, p []js.Value) any {
 	}
 
 	exporter := conv.NewInternalExporter(b)
-	if logs := exporter.Export(); logs != nil {
+	result, logs := exporter.Export()
+	if logs != nil {
 		js.Global().Get("console").Call("warn", logs.Error())
 	}
 
-	buf, err := json.MarshalIndent(exporter.Result(), "", "  ")
+	buf, err := json.MarshalIndent(result, "", "  ")
 	if err != nil {
 		return js.ValueOf([]any{"", fmt.Sprintf("Failed to marshal TOML: %v", err)})
 	}

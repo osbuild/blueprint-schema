@@ -13,7 +13,6 @@ import (
 // InternalImporter is used to convert a blueprint to the internal representation.
 type InternalImporter struct {
 	from *bp.Blueprint
-	to   *ubp.Blueprint
 	log  *errs
 }
 
@@ -25,7 +24,7 @@ func NewInternalImporter(inputBlueprint *bp.Blueprint) *InternalImporter {
 }
 
 // Import converts the internal representation to the blueprint.
-func (e *InternalImporter) Import() error {
+func (e *InternalImporter) Import() (*ubp.Blueprint, error) {
 	to := &ubp.Blueprint{}
 
 	to.Accounts = e.importAccounts()
@@ -52,12 +51,7 @@ func (e *InternalImporter) Import() error {
 	to.Systemd = e.importSystemd()
 	to.Timedate = e.importTimedate()
 
-	e.to = to
-	return e.log.Errors()
-}
-
-func (e *InternalImporter) Result() *ubp.Blueprint {
-	return e.to
+	return to, e.log.Errors()
 }
 
 func (e *InternalImporter) importArchitecture() ubp.Arch {

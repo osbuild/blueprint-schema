@@ -17,6 +17,7 @@ import (
 	"github.com/osbuild/blueprint-schema/pkg/conv"
 	"github.com/osbuild/blueprint-schema/pkg/ptr"
 	"github.com/osbuild/blueprint-schema/pkg/ubp"
+	bp "github.com/osbuild/blueprint/pkg/blueprint"
 )
 
 var writeFixtures = os.Getenv("WRITE_FIXTURES") != ""
@@ -164,9 +165,9 @@ func TestFix(t *testing.T) {
 			}
 			if bpBP == nil {
 				// no conversion was done during loading
+				var result *bp.Blueprint
 				exporter := conv.NewInternalExporter(ubpBP)
-				convErrs = exporter.Export()
-				result := exporter.Result()
+				result, convErrs = exporter.Export()
 				result.Version = "1.0.0"
 
 				got, err = toml.Marshal(result)

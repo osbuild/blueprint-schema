@@ -1,16 +1,16 @@
-  &ubp.Blueprint{
-  	... // 15 identical fields
-  	Network:  nil,
-  	OpenSCAP: nil,
-- 	Registration: &ubp.Registration{
-- 		RegistrationFDO: &ubp.RegistrationFDO{
-- 			DiunPubKeyRootCerts:    "/etc/pki",
-- 			ManufacturingServerURL: "http://192.168.122.122:8080",
-- 		},
-- 		RegistrationRedHat: &ubp.RegistrationRedHat{ActivationKey: "123456789", Organization: "123456"},
-- 	},
-+ 	Registration: nil,
-  	Storage:      nil,
-  	Systemd:      nil,
-  	Timedate:     nil,
-  }
+  &ubp.Blueprint{
+  	... // 15 identical fields
+  	Network:  nil,
+  	OpenSCAP: nil,
+- 	Registration: &ubp.Registration{
+- 		RegistrationFDO: &ubp.RegistrationFDO{
+- 			DiunPubKeyRootCerts:    "/etc/pki",
+- 			ManufacturingServerURL: "http://192.168.122.122:8080",
+- 		},
+- 		RegistrationRedHat: &ubp.RegistrationRedHat{ActivationKey: "123456789", Organization: "123456"},
+- 	},
++ 	Registration: nil,
+  	Storage:      nil,
+  	Systemd:      nil,
+  	Timedate:     nil,
+  }
