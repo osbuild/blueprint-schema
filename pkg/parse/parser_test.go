@@ -89,8 +89,8 @@ func TestReadJSONWriteYAML(t *testing.T) {
 }
 
 func TestConvertJSONtoYAML(t *testing.T) {
-	in := "{\n  \"name\": \"test\"\n}"
-	want := "name: test\n"
+	in := "{\n  \"name_test\": \"test\"\n}"
+	want := "name_test: test\n"
 
 	out, err := ConvertJSONtoYAML([]byte(in))
 	if err != nil {
@@ -103,8 +103,8 @@ func TestConvertJSONtoYAML(t *testing.T) {
 }
 
 func TestConvertYAMLtoJSON(t *testing.T) {
-	in := "name: test\n"
-	want := "{\"name\":\"test\"}"
+	in := "name_test: test\n"
+	want := "{\"name_test\":\"test\"}"
 
 	out, err := ConvertYAMLtoJSON([]byte(in))
 	if err != nil {

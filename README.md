@@ -215,6 +215,12 @@ Various advanced validation rules do not work well with Go code generator, there
 
 To run tests against fixtures: `make test` and to regenerate fixtures: `make write-fixtures`
 
-For every `filename.in.xxx` where `xxx` can be `yaml`, `toml` or `json` the test suite will load the file via `UnmarshalAny` and convert it either UBP>BP or BP>UBP and stores the result as `filename.out1.txt`. Then it does again and stores `filename.out2.txt`. And finally, it performs semantic UBP struct diff between `filename.in.xxx` and `filename.out2.txt`. If there are no differences, no `out.diff` file is ever created. These diff files are not subject of testing, `make test` will not error out if difference is different because diff-of-diff is hardly readable.
+For every `filename.in.xxx` where `xxx` can be `yaml`, `toml` or `json` the test suite will load the file via `UnmarshalAny` and convert it either `UBP>BP` or `BP>UBP` and stores the result as `filename.out1.txt`. Then it performs conversion back and stores `filename.out2.txt`. And finally, it performs semantic UBP struct diff between `filename.in.xxx` and `filename.out2.txt`. If there are no differences, no `out.diff` file is ever created. These diff files are not subject of testing, `make test` will not error out if difference is different because diff-of-diff is hardly readable.
 
-Additionally, every `filename.in.yaml` input file can have `filename.validator.out.txt` output if OpenAPI Schema validator returned any error. The output is compared when `make test` is executed for any difference.
+Additionally, every `filename.in.yaml` input file can have `filename.validator.out.txt` output if OpenAPI Schema validator returned any error. The output is compared when `make test` is executed for any difference. Example:
+
+* `example.in.yaml`: UBP input file
+* `example.out1.txt`: `UBP>BP` converted TOML file
+* `example.out2.txt`: `BP>UBP` converted YAML file
+* `example.validator.out.diff`: validator errors or does not exist if none (only for UBP input files)
+* `example.out.diff`: semantic difference between `in.yaml` and `out2.txt` or does not exist if none

@@ -9,7 +9,7 @@ import (
 	"github.com/BurntSushi/toml"
 	"github.com/osbuild/blueprint-schema/pkg/conv"
 	"github.com/osbuild/blueprint-schema/pkg/parse"
-	"gopkg.in/yaml.v3"
+	"sigs.k8s.io/yaml"
 )
 
 func wasmValidateUBP(this js.Value, p []js.Value) any {
