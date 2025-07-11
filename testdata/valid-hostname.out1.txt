@@ -1,5 +1,4 @@
 name = "Blueprint example: hostname"
-version = "1.0.0"
 
 [customizations]
   hostname = "inst1.example.com"

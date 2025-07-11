@@ -1,0 +1,9 @@
+  &blueprint.Blueprint{
+  	Name:        "Blueprint example",
+  	Description: "A complete example of a blueprint with all possible fields",
+- 	Version:     "1.0.0",
++ 	Version:     "",
+  	Packages:    {{Name: "vim", Version: "enhanced"}, {Name: "vim", Version: "enhanced-9.1.866-1"}, {Name: "vim", Version: "enhanced-9.1.866-1.fc41.x86_64"}, {Name: "@virtualization"}},
+  	Modules:     nil,
+  	... // 7 identical fields
+  }

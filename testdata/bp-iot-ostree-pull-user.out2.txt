@@ -1,5 +1,3 @@
-version = "1.0.0"
-
 [customizations]
 
   [[customizations.user]]
@@ -8,7 +6,6 @@ version = "1.0.0"
     groups = ["wheel"]
     uid = 1001
     gid = 1002
-    expiredate = 0
 
   [[customizations.group]]
     name = "osbuild"

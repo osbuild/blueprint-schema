@@ -1,5 +1,4 @@
 name = "Blueprint example: DNF"
-version = "1.0.0"
 
 [[packages]]
   name = "mosh"

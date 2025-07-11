@@ -1,0 +1,25 @@
+  &blueprint.Blueprint{
+  	... // 6 identical fields
+  	Groups:     nil,
+  	Containers: nil,
+  	Customizations: &blueprint.Customizations{
+  		... // 7 identical fields
+  		Firewall: nil,
+  		Services: nil,
+- 		Filesystem: []blueprint.FilesystemCustomization{
+- 			{Mountpoint: "/data", MinSize: 2147483648},
+- 			{Mountpoint: "/data/extra", MinSize: 2147483648},
+- 			{Mountpoint: "/var/mydata", MinSize: 1073741824},
+- 		},
++ 		Filesystem:         nil,
+  		Disk:               nil,
+- 		InstallationDevice: "/dev/vda",
++ 		InstallationDevice: "",
+  		PartitioningMode:   "",
+  		FDO:                nil,
+  		... // 11 identical fields
+  	},
+  	Distro:  "",
+  	Arch:    "",
+  	Minimal: false,
+  }

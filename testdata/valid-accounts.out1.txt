@@ -1,5 +1,4 @@
 name = "Blueprint example: accounts"
-version = "1.0.0"
 
 [customizations]
 

@@ -1,0 +1,22 @@
+  &blueprint.Blueprint{
+  	... // 6 identical fields
+  	Groups:     nil,
+  	Containers: nil,
+  	Customizations: &blueprint.Customizations{
+  		... // 8 identical fields
+  		Services:   nil,
+  		Filesystem: nil,
+  		Disk: &blueprint.DiskCustomization{
+- 			Type:       "",
++ 			Type:       "gpt",
+  			MinSize:    0,
+  			Partitions: {{Type: "plain", MinSize: 1073741824, FilesystemTypedCustomization: {Mountpoint: "/data", FSType: "ext4"}}, {Type: "plain", MinSize: 2147483648, FilesystemTypedCustomization: {Mountpoint: "/home", Label: "home", FSType: "ext4"}}, {Type: "plain", MinSize: 524288000, FilesystemTypedCustomization: {Mountpoint: "/home/shadowman", FSType: "ext4"}}, {Type: "plain", MinSize: 1073741824, FilesystemTypedCustomization: {Mountpoint: "/foo", FSType: "ext4"}}, ...},
+  		},
+  		InstallationDevice: "",
+  		PartitioningMode:   "",
+  		... // 12 identical fields
+  	},
+  	Distro:  "",
+  	Arch:    "",
+  	Minimal: false,
+  }

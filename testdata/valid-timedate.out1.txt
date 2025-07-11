@@ -1,5 +1,4 @@
 name = "Blueprint example: timedate"
-version = "1.0.0"
 
 [customizations]
   [customizations.timezone]

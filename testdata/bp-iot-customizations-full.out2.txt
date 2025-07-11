@@ -1,5 +1,3 @@
-version = "1.0.0"
-
 [customizations]
 
   [[customizations.user]]
@@ -12,13 +10,11 @@ version = "1.0.0"
     groups = ["group1"]
     uid = 1020
     gid = 1050
-    expiredate = 0
 
   [[customizations.user]]
     name = "user3"
     uid = 1060
     gid = 1060
-    expiredate = 0
 
   [[customizations.group]]
     name = "group1"

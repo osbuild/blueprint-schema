@@ -1,5 +1,4 @@
 name = "Blueprint example: valid storage"
-version = "1.0.0"
 
 [customizations]
   [customizations.disk]

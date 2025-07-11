@@ -1,6 +1,12 @@
 # registration not converted
 
-version = "1.0.0"
+[[packages]]
+  name = "rhui"
+  version = "azure-rhel10"
+
+[[packages]]
+  name = "redhat"
+  version = "cloud-client-configuration-cdn"
 
 [customizations]
   [customizations.rhsm]

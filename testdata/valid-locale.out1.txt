@@ -1,7 +1,6 @@
 # only one keyboard layout supported, selecting first one
 
 name = "Blueprint example: locale"
-version = "1.0.0"
 
 [customizations]
   [customizations.locale]

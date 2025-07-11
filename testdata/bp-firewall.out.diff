@@ -1,0 +1,25 @@
+  &blueprint.Blueprint{
+  	... // 6 identical fields
+  	Groups:     nil,
+  	Containers: nil,
+  	Customizations: &blueprint.Customizations{
+  		... // 5 identical fields
+  		Timezone: nil,
+  		Locale:   nil,
+  		Firewall: &blueprint.FirewallCustomization{
+  			Ports: {"1080:tcp"},
+  			Services: &blueprint.FirewallServicesCustomization{
+  				Enabled:  {"ssh"},
+- 				Disabled: []string{"http"},
++ 				Disabled: nil,
+  			},
+  			Zones: nil,
+  		},
+  		Services:   nil,
+  		Filesystem: nil,
+  		... // 15 identical fields
+  	},
+  	Distro:  "",
+  	Arch:    "",
+  	Minimal: false,
+  }

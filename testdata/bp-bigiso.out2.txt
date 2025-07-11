@@ -1,4 +1,13 @@
-version = "1.0.0"
+[[packages]]
+  name = "httpd"
+  version = "*"
+
+[[packages]]
+  name = "gnome"
+  version = "session-*"
+
+[[groups]]
+  name = "Workstation"
 
 [customizations]
   hostname = "custombase"
@@ -11,4 +20,3 @@ version = "1.0.0"
     home = "/home/admin"
     shell = "/usr/bin/bash"
     groups = ["wheel", "users"]
-    expiredate = 0

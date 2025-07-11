@@ -1,5 +1,4 @@
 name = "Blueprint example: installer"
-version = "1.0.0"
 
 [customizations]
   installation_device = "/dev/vda"

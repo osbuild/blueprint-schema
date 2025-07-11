@@ -1,5 +1,4 @@
 name = "Blueprint example: disallowed properties for storage"
-version = "1.0.0"
 
 [customizations]
   [customizations.disk]

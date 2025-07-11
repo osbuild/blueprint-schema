@@ -1,7 +1,6 @@
 # network service 0 error: one of service, port or from and to present
 
 name = "Firewall example - missing to"
-version = "1.0.0"
 
 [customizations]
   [customizations.firewall]

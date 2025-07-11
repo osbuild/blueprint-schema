@@ -1,5 +1,4 @@
 name = "iot-installer-users"
-version = "1.0.0"
 
 [customizations]
 
@@ -13,7 +12,6 @@ version = "1.0.0"
     groups = ["group1"]
     uid = 1020
     gid = 1050
-    expiredate = 0
 
   [[customizations.group]]
     name = "group1"

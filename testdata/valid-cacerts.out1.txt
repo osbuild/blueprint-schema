@@ -1,5 +1,4 @@
 name = "Blueprint example: cacerts"
-version = "1.0.0"
 
 [customizations]
   [customizations.cacerts]

@@ -1,12 +1,22 @@
-  &ubp.Blueprint{
-  	... // 17 identical fields
-  	Registration: nil,
-  	Storage:      nil,
-  	Systemd: &ubp.Systemd{
-  		Disabled: {"tuned", "cupsd"},
-  		Enabled:  {"sshd.service", "backup.timer"},
-- 		Masked:   []string{},
-+ 		Masked:   nil,
+  &blueprint.Blueprint{
+  	... // 6 identical fields
+  	Groups:     nil,
+  	Containers: nil,
+  	Customizations: &blueprint.Customizations{
+  		... // 6 identical fields
+  		Locale:   nil,
+  		Firewall: nil,
+  		Services: &blueprint.ServicesCustomization{
+  			Enabled:  {"sshd.service", "backup.timer"},
+  			Disabled: {"tuned", "cupsd"},
+- 			Masked:   []string{},
++ 			Masked:   nil,
+  		},
+  		Filesystem: nil,
+  		Disk:       nil,
+  		... // 14 identical fields
   	},
-  	Timedate: nil,
+  	Distro:  "",
+  	Arch:    "",
+  	Minimal: false,
   }

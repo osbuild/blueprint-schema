@@ -84,7 +84,7 @@ func TestDetectionCounts(t *testing.T) {
 		{"../../testdata/valid-empty-j.in.json", 0, 0},
 		{"../../testdata/small.json", 2, 0},
 		{"../../testdata/legacy-small.json", 2, 3},
-		{"../../testdata/bp-oscap-generic.in.json", 12, 20},
+		{"../../testdata/bp-oscap-generic.in.json", 15, 20},
 	}
 
 	for _, tt := range tests {
@@ -180,7 +180,8 @@ func TestFix(t *testing.T) {
 				convErrs = details.Warnings
 			}
 			resultUBP = ubpBP
-			log.WriteString(fmt.Sprintf("%s>%s: INPUT:%s UBPY:%d UBPJ:%d BPT:%d BPJ:%d\n",
+			resultBP = details.Intermediate
+			log.WriteString(fmt.Sprintf("%s>%s: INPUT:%s UBPY:%d UBPJ:%d BPT:%d BPJ:%d TEMP:%d\n",
 				filepath.Base(input),
 				filepath.Base(output),
 				details.Format.String(),
@@ -188,26 +189,27 @@ func TestFix(t *testing.T) {
 				details.ubpCountJSON,
 				details.bpCountTOML,
 				details.bpCountJSON,
+				details.bpCountTemp,
 			))
 
-			if details.Intermediate == nil {
+			if details.Converted {
+				// conversion was done during loading
+				got, err = MarshalYAML(ubpBP)
+				if err != nil {
+					t.Fatal(err)
+				}
+			} else {
 				// no conversion was done during loading
 				var result *bp.Blueprint
 				exporter := conv.NewInternalExporter(ubpBP)
 				result, convErrs = exporter.Export()
-				result.Version = "1.0.0"
+				result.Version = ""
 
 				got, err = toml.Marshal(result)
 				if err != nil {
 					t.Fatal(err)
 				}
 				resultBP = result
-			} else {
-				// conversion was done during loading
-				got, err = MarshalYAML(ubpBP)
-				if err != nil {
-					t.Fatal(err)
-				}
 			}
 
 			t.Logf("Conversion warnings: %v", convErrs)
@@ -407,4 +409,27 @@ func TestFix(t *testing.T) {
 			}
 		}
 	}
+}
+
+func TestImportOneFile(t *testing.T) {
+	inputFile, err := os.Open("../../testdata/bp-all-customizations.in.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer func() {
+		_ = inputFile.Close()
+	}()
+
+	inputBuf := bytes.Buffer{}
+	_, err = inputBuf.ReadFrom(inputFile)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	details := AnyDetails{}
+	_, err = UnmarshalAny(inputBuf.Bytes(), &details)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("Unmarshal details: %+v", details)
 }

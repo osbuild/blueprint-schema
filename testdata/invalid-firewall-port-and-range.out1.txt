@@ -1,5 +1,4 @@
 name = "Firewall example - port and range specified"
-version = "1.0.0"
 
 [customizations]
   [customizations.firewall]

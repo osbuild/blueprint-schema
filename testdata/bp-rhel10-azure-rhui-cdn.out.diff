@@ -1,0 +1,39 @@
+  &blueprint.Blueprint{
+  	Name:        "",
+  	Description: "",
+  	Version:     "",
+  	Packages: []blueprint.Package{
+- 		{Name: "rhui-azure-rhel10"},
++ 		{Name: "rhui", Version: "azure-rhel10"},
+- 		{Name: "redhat-cloud-client-configuration-cdn"},
++ 		{Name: "redhat", Version: "cloud-client-configuration-cdn"},
+  	},
+  	Modules:        nil,
+  	EnabledModules: nil,
+  	Groups:         nil,
+  	Containers:     nil,
+  	Customizations: &blueprint.Customizations{
+  		... // 20 identical fields
+  		Installer: nil,
+  		RPM:       nil,
+  		RHSM: &blueprint.RHSMCustomization{
+  			Config: &blueprint.RHSMConfig{
+- 				DNFPlugins: nil,
++ 				DNFPlugins: &blueprint.SubManDNFPluginsConfig{
++ 					ProductID:           &blueprint.DNFPluginConfig{},
++ 					SubscriptionManager: &blueprint.DNFPluginConfig{},
++ 				},
+  				SubscriptionManager: &blueprint.SubManConfig{
+  					RHSMConfig:      &{AutoEnableYumPlugins: &false},
+- 					RHSMCertdConfig: nil,
++ 					RHSMCertdConfig: &blueprint.SubManRHSMCertdConfig{},
+  				},
+  			},
+  		},
+  		CACerts:           nil,
+  		ContainersStorage: nil,
+  	},
+  	Distro:  "",
+  	Arch:    "",
+  	Minimal: false,
+  }

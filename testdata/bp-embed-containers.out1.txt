@@ -1,5 +1,3 @@
-version = "1.0.0"
-
 [[containers]]
   source = "registry.gitlab.com/redhat/services/products/image-builder/ci/osbuild-composer/fedora-minimal"
 

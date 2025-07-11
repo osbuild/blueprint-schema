@@ -1,6 +1,5 @@
 # could not parse ignition: <nil>
 
 name = "Blueprint example: ingition invalid"
-version = "1.0.0"
 
 [customizations]

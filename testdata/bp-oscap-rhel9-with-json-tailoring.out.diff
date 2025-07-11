@@ -1,0 +1,36 @@
+  &blueprint.Blueprint{
+  	Name:        "",
+  	Description: "",
+  	Version:     "",
+  	Packages: []blueprint.Package{
+  		{Name: "xmlstarlet"},
+- 		{Name: "openscap-utils"},
++ 		{Name: "openscap", Version: "utils"},
+  		{Name: "jq"},
+  	},
+  	Modules:        nil,
+  	EnabledModules: nil,
+  	Groups:         nil,
+  	Containers:     nil,
+  	Customizations: &blueprint.Customizations{
+  		... // 15 identical fields
+  		Ignition:    nil,
+  		Directories: nil,
+  		Files: []blueprint.FileCustomization{
+  			{
+  				Path:  "/oscap_data/tailoring.json",
+  				User:  nil,
+  				Group: nil,
+- 				Mode:  "",
++ 				Mode:  "644",
+  				Data:  `{"profiles":[{"id":"cis","base_profile_id":"cis","rules":{"parti`...,
+  			},
+  		},
+  		Repositories: nil,
+  		FIPS:         nil,
+  		... // 5 identical fields
+  	},
+  	Distro:  "",
+  	Arch:    "",
+  	Minimal: false,
+  }

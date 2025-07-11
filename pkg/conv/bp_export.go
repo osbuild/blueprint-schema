@@ -180,7 +180,7 @@ func (e *InternalExporter) exportUserCustomization() []bp.UserCustomization {
 			uc.GID = ptr.ToNilIfEmpty(u.GID)
 		}
 		if u.Expires != nil {
-			uc.ExpireDate = ptr.To(u.Expires.Days())
+			uc.ExpireDate = ptr.ToNilIfEmpty(u.Expires.Days())
 		}
 		if u.ForcePasswordChange != nil {
 			uc.ForcePasswordReset = u.ForcePasswordChange

@@ -1,0 +1,30 @@
+  &blueprint.Blueprint{
+  	... // 6 identical fields
+  	Groups:     nil,
+  	Containers: nil,
+  	Customizations: &blueprint.Customizations{
+  		... // 18 identical fields
+  		Repositories: nil,
+  		FIPS:         nil,
+  		Installer: &blueprint.InstallerCustomization{
+  			Unattended:   true,
+  			SudoNopasswd: {"%wheel", "%sudo"},
+  			Kickstart:    nil,
+  			Modules: &blueprint.AnacondaModules{
+  				Enable: []string{
+- 					"org.fedoraproject.Anaconda.Modules.Users",
+  					"org.fedoraproject.Anaconda.Modules.Localization",
+  					"org.fedoraproject.Anaconda.Modules.Network",
+  					"org.fedoraproject.Anaconda.Modules.Services",
+  				},
+  				Disable: nil,
+  			},
+  		},
+  		RPM:  nil,
+  		RHSM: nil,
+  		... // 2 identical fields
+  	},
+  	Distro:  "",
+  	Arch:    "",
+  	Minimal: false,
+  }

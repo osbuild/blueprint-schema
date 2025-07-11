@@ -1,0 +1,23 @@
+  &blueprint.Blueprint{
+  	... // 6 identical fields
+  	Groups:     nil,
+  	Containers: nil,
+  	Customizations: &blueprint.Customizations{
+  		... // 18 identical fields
+  		Repositories: nil,
+  		FIPS:         nil,
+  		Installer: &blueprint.InstallerCustomization{
+  			Unattended:   true,
+  			SudoNopasswd: {"%wheel"},
+  			Kickstart:    nil,
+- 			Modules:      nil,
++ 			Modules:      &blueprint.AnacondaModules{},
+  		},
+  		RPM:  nil,
+  		RHSM: nil,
+  		... // 2 identical fields
+  	},
+  	Distro:  "",
+  	Arch:    "",
+  	Minimal: false,
+  }

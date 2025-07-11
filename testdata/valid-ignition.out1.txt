@@ -1,5 +1,4 @@
 name = "Blueprint example: ingition"
-version = "1.0.0"
 
 [customizations]
   [customizations.ignition]

@@ -1,0 +1,18 @@
+  &blueprint.Blueprint{
+  	... // 6 identical fields
+  	Groups:     nil,
+  	Containers: nil,
+  	Customizations: &blueprint.Customizations{
+  		... // 9 identical fields
+  		Filesystem:         nil,
+  		Disk:               nil,
+- 		InstallationDevice: "/dev/vda",
++ 		InstallationDevice: "",
+  		PartitioningMode:   "",
+  		FDO:                nil,
+  		... // 11 identical fields
+  	},
+  	Distro:  "",
+  	Arch:    "",
+  	Minimal: false,
+  }

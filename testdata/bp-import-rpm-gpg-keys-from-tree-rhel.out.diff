@@ -1,0 +1,20 @@
+  &blueprint.Blueprint{
+  	... // 6 identical fields
+  	Groups:     nil,
+  	Containers: nil,
+  	Customizations: &blueprint.Customizations{
+  		... // 19 identical fields
+  		FIPS:      nil,
+  		Installer: nil,
+- 		RPM: &blueprint.RPMCustomization{
+- 			ImportKeys: &blueprint.RPMImportKeys{Files: []string{"/etc/pki/rpm-gpg/RPM-GPG-KEY-red"...}},
+- 		},
++ 		RPM:               nil,
+  		RHSM:              nil,
+  		CACerts:           nil,
+  		ContainersStorage: nil,
+  	},
+  	Distro:  "",
+  	Arch:    "",
+  	Minimal: false,
+  }

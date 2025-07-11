@@ -1,0 +1,13 @@
+  &blueprint.Blueprint{
+  	Name:        "",
+  	Description: "",
+  	Version:     "",
+  	Packages: []blueprint.Package{
+  		{Name: "httpd", Version: "*"},
+- 		{Name: "gnome-session", Version: "*"},
++ 		{Name: "gnome", Version: "session-*"},
+  	},
+  	Modules:        nil,
+  	EnabledModules: nil,
+  	... // 6 identical fields
+  }

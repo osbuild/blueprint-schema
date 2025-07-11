@@ -1,3 +1,7 @@
+dnf:
+  packages:
+  - rhui-azure-rhel10
+  - redhat-cloud-client-configuration
 registration:
   redhat:
     subscription_manager:

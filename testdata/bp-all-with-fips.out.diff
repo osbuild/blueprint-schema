@@ -1,0 +1,102 @@
+  &blueprint.Blueprint{
+  	... // 2 identical fields
+  	Version:        "",
+  	Packages:       {{Name: "bash", Version: "*"}, {Name: "bluez", Version: "*"}},
+- 	Modules:        []blueprint.Package{},
++ 	Modules:        nil,
+  	EnabledModules: nil,
+  	Groups:         {{Name: "core"}},
+  	Containers:     nil,
+  	Customizations: &blueprint.Customizations{
+  		... // 7 identical fields
+  		Firewall: nil,
+  		Services: &{Enabled: {"sshd.service", "custom.service"}, Disabled: {"bluetooth.service"}},
+- 		Filesystem: []blueprint.FilesystemCustomization{
+- 			{Mountpoint: "/home", MinSize: 2147483648},
+- 			{Mountpoint: "/home/shadowman", MinSize: 524288000},
+- 			{Mountpoint: "/foo", MinSize: 1073741824},
+- 			{Mountpoint: "/usr", MinSize: 4294967296},
+- 			{Mountpoint: "/opt", MinSize: 1073741824},
+- 			{Mountpoint: "/media", MinSize: 1073741824},
+- 			{Mountpoint: "/root", MinSize: 1073741824},
+- 			{Mountpoint: "/srv", MinSize: 1073741824},
+- 			{Mountpoint: "/mnt", MinSize: 1073741824},
+- 		},
++ 		Filesystem:         nil,
+  		Disk:               nil,
+  		InstallationDevice: "",
+  		... // 2 identical fields
+  		OpenSCAP: nil,
+  		Ignition: nil,
+  		Directories: []blueprint.DirectoryCustomization{
+  			{
+  				Path:          "/etc/systemd/system/custom.service.d",
+  				User:          nil,
+  				Group:         nil,
+- 				Mode:          "",
++ 				Mode:          "755",
+  				EnsureParents: false,
+  			},
+  			{
+  				Path:          "/etc/custom_dir",
+  				User:          int64(1020),
+  				Group:         int64(1050),
+- 				Mode:          "0770",
++ 				Mode:          "770",
+  				EnsureParents: false,
+  			},
+  		},
+  		Files: []blueprint.FileCustomization{
+  			{
+  				Path:  "/etc/systemd/system/custom.service",
+  				User:  nil,
+  				Group: nil,
+- 				Mode:  "",
++ 				Mode:  "644",
+  				Data:  "[Unit]\nDescription=Custom service\n\n[Service]\nExecStart=/usr/bin/"...,
+  			},
+  			{
+  				Path:  "/etc/systemd/system/custom.service.d/override.conf",
+  				User:  nil,
+  				Group: nil,
+- 				Mode:  "",
++ 				Mode:  "644",
+  				Data:  "[Service]\nExecStart=\nExecStart=/usr/bin/cat /etc/custom_file.txt\n",
+  			},
+  			{
+  				Path:  "/etc/custom_file.txt",
+  				User:  string("root"),
+  				Group: string("root"),
+- 				Mode:  "0644",
++ 				Mode:  "644",
+  				Data:  "image builder is the best",
+  			},
+  			{
+  				Path:  "/etc/empty_file.txt",
+  				User:  int64(0),
+  				Group: int64(0),
+- 				Mode:  "",
++ 				Mode:  "644",
+  				Data:  "",
+  			},
+  		},
+  		Repositories: []blueprint.RepositoryCustomization{
+  			{
+  				... // 8 identical fields
+  				GPGCheck:       &true,
+  				RepoGPGCheck:   &false,
+- 				SSLVerify:      nil,
++ 				SSLVerify:      &true,
+  				ModuleHotfixes: nil,
+  				Filename:       "",
+  				InstallFrom:    false,
+  			},
+  		},
+  		FIPS:      &true,
+  		Installer: nil,
+  		... // 4 identical fields
+  	},
+  	Distro:  "",
+  	Arch:    "",
+  	Minimal: false,
+  }

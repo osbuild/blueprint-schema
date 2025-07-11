@@ -1,5 +1,4 @@
 name = "Blueprint example: fsnodes"
-version = "1.0.0"
 
 [customizations]
 

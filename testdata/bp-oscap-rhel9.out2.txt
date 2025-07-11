@@ -1,4 +1,12 @@
-version = "1.0.0"
+[[packages]]
+  name = "xmlstarlet"
+
+[[packages]]
+  name = "openscap"
+  version = "utils"
+
+[[packages]]
+  name = "jq"
 
 [customizations]
   [customizations.openscap]

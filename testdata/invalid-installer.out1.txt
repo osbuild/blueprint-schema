@@ -1,5 +1,4 @@
 name = "Blueprint example: invalid installer"
-version = "1.0.0"
 
 [customizations]
   [customizations.installer]

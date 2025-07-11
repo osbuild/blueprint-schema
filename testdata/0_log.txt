@@ -1,204 +1,206 @@
-all-fields.in.yaml>all-fields.out1.txt: INPUT:UBP-YAML UBPY:43 UBPJ:0 BPT:0 BPJ:0
-all-fields.out1.txt>all-fields.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:43 BPJ:0
-bp-all-customizations.in.json>bp-all-customizations.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:14
-bp-all-customizations.out1.txt>bp-all-customizations.out2.txt: INPUT:UBP-YAML UBPY:14 UBPJ:0 BPT:0 BPJ:0
-bp-all-with-fips.in.json>bp-all-with-fips.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:12
-bp-all-with-fips.out1.txt>bp-all-with-fips.out2.txt: INPUT:UBP-YAML UBPY:12 UBPJ:0 BPT:0 BPJ:0
-bp-bigiso.in.json>bp-bigiso.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:2
-bp-bigiso.out1.txt>bp-bigiso.out2.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0
-bp-disable-lm_sensors.in.json>bp-disable-lm_sensors.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:1
-bp-disable-lm_sensors.out1.txt>bp-disable-lm_sensors.out2.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0
-bp-ec2-sap-empty.in.json>bp-ec2-sap-empty.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-bp-ec2-sap-empty.out1.txt>bp-ec2-sap-empty.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-bp-edge-ostree-pull-device-fips.in.json>bp-edge-ostree-pull-device-fips.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:1
-bp-edge-ostree-pull-device-fips.out1.txt>bp-edge-ostree-pull-device-fips.out2.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0
-bp-edge-ostree-pull-device.in.json>bp-edge-ostree-pull-device.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-bp-edge-ostree-pull-device.out1.txt>bp-edge-ostree-pull-device.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-bp-edge-ostree-pull-empty.in.json>bp-edge-ostree-pull-empty.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-bp-edge-ostree-pull-empty.out1.txt>bp-edge-ostree-pull-empty.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-bp-edge-ostree-pull-fips.in.json>bp-edge-ostree-pull-fips.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:1
-bp-edge-ostree-pull-fips.out1.txt>bp-edge-ostree-pull-fips.out2.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0
-bp-edge-ostree-pull-user-fips.in.json>bp-edge-ostree-pull-user-fips.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:2
-bp-edge-ostree-pull-user-fips.out1.txt>bp-edge-ostree-pull-user-fips.out2.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0
-bp-edge-ostree-pull-user-minimalenv.in.json>bp-edge-ostree-pull-user-minimalenv.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:1
-bp-edge-ostree-pull-user-minimalenv.out1.txt>bp-edge-ostree-pull-user-minimalenv.out2.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0
-bp-edge-ostree-pull-user.in.json>bp-edge-ostree-pull-user.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:2
-bp-edge-ostree-pull-user.out1.txt>bp-edge-ostree-pull-user.out2.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0
-bp-embed-containers-2.in.json>bp-embed-containers-2.out1.txt: INPUT:UBP-YAML UBPY:1 UBPJ:1 BPT:0 BPJ:1
-bp-embed-containers-2.out1.txt>bp-embed-containers-2.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:1 BPJ:0
-bp-embed-containers.in.json>bp-embed-containers.out1.txt: INPUT:UBP-YAML UBPY:1 UBPJ:1 BPT:0 BPJ:1
-bp-embed-containers.out1.txt>bp-embed-containers.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:1 BPJ:0
-bp-empty-fedora.in.json>bp-empty-fedora.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-bp-empty-fedora.out1.txt>bp-empty-fedora.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-bp-empty-rhel.in.json>bp-empty-rhel.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-bp-empty-rhel.out1.txt>bp-empty-rhel.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-bp-empty.in.json>bp-empty.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-bp-empty.out1.txt>bp-empty.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-bp-file-customizations.in.json>bp-file-customizations.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:2
-bp-file-customizations.out1.txt>bp-file-customizations.out2.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0
-bp-firewall.in.json>bp-firewall.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:1
-bp-firewall.out1.txt>bp-firewall.out2.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0
-bp-import-rpm-gpg-keys-from-tree-fedora.in.json>bp-import-rpm-gpg-keys-from-tree-fedora.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:1
-bp-import-rpm-gpg-keys-from-tree-fedora.out1.txt>bp-import-rpm-gpg-keys-from-tree-fedora.out2.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0
-bp-import-rpm-gpg-keys-from-tree-rhel.in.json>bp-import-rpm-gpg-keys-from-tree-rhel.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:1
-bp-import-rpm-gpg-keys-from-tree-rhel.out1.txt>bp-import-rpm-gpg-keys-from-tree-rhel.out2.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0
-bp-interactive-iso-userkickstart.in.json>bp-interactive-iso-userkickstart.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:4
-bp-interactive-iso-userkickstart.out1.txt>bp-interactive-iso-userkickstart.out2.txt: INPUT:UBP-YAML UBPY:4 UBPJ:0 BPT:0 BPJ:0
-bp-iot-customizations-full.in.json>bp-iot-customizations-full.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:4
-bp-iot-customizations-full.out1.txt>bp-iot-customizations-full.out2.txt: INPUT:UBP-YAML UBPY:4 UBPJ:0 BPT:0 BPJ:0
-bp-iot-ostree-pull-device.in.json>bp-iot-ostree-pull-device.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-bp-iot-ostree-pull-device.out1.txt>bp-iot-ostree-pull-device.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-bp-iot-ostree-pull-empty.in.json>bp-iot-ostree-pull-empty.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-bp-iot-ostree-pull-empty.out1.txt>bp-iot-ostree-pull-empty.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-bp-iot-ostree-pull-user.in.json>bp-iot-ostree-pull-user.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:2
-bp-iot-ostree-pull-user.out1.txt>bp-iot-ostree-pull-user.out2.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0
-bp-kernel-debug.in.json>bp-kernel-debug.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:1
-bp-kernel-debug.out1.txt>bp-kernel-debug.out2.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0
-bp-kernel-rt.in.json>bp-kernel-rt.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:1
-bp-kernel-rt.out1.txt>bp-kernel-rt.out2.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0
-bp-minimal-environment.in.json>bp-minimal-environment.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-bp-minimal-environment.out1.txt>bp-minimal-environment.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-bp-minimal-pkgs.in.json>bp-minimal-pkgs.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-bp-minimal-pkgs.out1.txt>bp-minimal-pkgs.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-bp-minimal.in.json>bp-minimal.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-bp-minimal.out1.txt>bp-minimal.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-bp-modularity-enabled-modules.in.json>bp-modularity-enabled-modules.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-bp-modularity-enabled-modules.out1.txt>bp-modularity-enabled-modules.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-bp-modularity-in-packages.in.json>bp-modularity-in-packages.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-bp-modularity-in-packages.out1.txt>bp-modularity-in-packages.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-bp-oscap-generic.in.json>bp-oscap-generic.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:12
-bp-oscap-generic.out1.txt>bp-oscap-generic.out2.txt: INPUT:UBP-YAML UBPY:12 UBPJ:0 BPT:0 BPJ:0
-bp-oscap-rhel10.in.json>bp-oscap-rhel10.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:2
-bp-oscap-rhel10.out1.txt>bp-oscap-rhel10.out2.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0
-bp-oscap-rhel8.in.json>bp-oscap-rhel8.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:2
-bp-oscap-rhel8.out1.txt>bp-oscap-rhel8.out2.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0
-bp-oscap-rhel9-with-json-tailoring.in.json>bp-oscap-rhel9-with-json-tailoring.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:3
-bp-oscap-rhel9-with-json-tailoring.out1.txt>bp-oscap-rhel9-with-json-tailoring.out2.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0
-bp-oscap-rhel9.in.json>bp-oscap-rhel9.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:2
-bp-oscap-rhel9.out1.txt>bp-oscap-rhel9.out2.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0
-bp-ostree-device.in.json>bp-ostree-device.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-bp-ostree-device.out1.txt>bp-ostree-device.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-bp-ostree-example.in.json>bp-ostree-example.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-bp-ostree-example.out1.txt>bp-ostree-example.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-bp-ostree-filesystem-customizations-installer.in.json>bp-ostree-filesystem-customizations-installer.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:1
-bp-ostree-filesystem-customizations-installer.out1.txt>bp-ostree-filesystem-customizations-installer.out2.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0
-bp-ostree-filesystem-customizations.in.json>bp-ostree-filesystem-customizations.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:1
-bp-ostree-filesystem-customizations.out1.txt>bp-ostree-filesystem-customizations.out2.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0
-bp-ostree-users.in.json>bp-ostree-users.out1.txt: INPUT:BP-JSON UBPY:1 UBPJ:1 BPT:0 BPJ:3
-bp-ostree-users.out1.txt>bp-ostree-users.out2.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0
-bp-ostree.in.json>bp-ostree.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-bp-ostree.out1.txt>bp-ostree.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-bp-partitioning-btrfs.in.json>bp-partitioning-btrfs.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:1
-bp-partitioning-btrfs.out1.txt>bp-partitioning-btrfs.out2.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0
-bp-partitioning-dos-lvm.in.json>bp-partitioning-dos-lvm.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:2
-bp-partitioning-dos-lvm.out1.txt>bp-partitioning-dos-lvm.out2.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0
-bp-partitioning-lvm-noswap.in.json>bp-partitioning-lvm-noswap.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:2
-bp-partitioning-lvm-noswap.out1.txt>bp-partitioning-lvm-noswap.out2.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0
-bp-partitioning-lvm-r8.in.json>bp-partitioning-lvm-r8.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:2
-bp-partitioning-lvm-r8.out1.txt>bp-partitioning-lvm-r8.out2.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0
-bp-partitioning-lvm.in.json>bp-partitioning-lvm.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:2
-bp-partitioning-lvm.out1.txt>bp-partitioning-lvm.out2.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0
-bp-partitioning-plain-r8.in.json>bp-partitioning-plain-r8.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:1
-bp-partitioning-plain-r8.out1.txt>bp-partitioning-plain-r8.out2.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0
-bp-partitioning-plain.in.json>bp-partitioning-plain.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:1
-bp-partitioning-plain.out1.txt>bp-partitioning-plain.out2.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0
-bp-rhel10-azure-rhui-cdn.in.json>bp-rhel10-azure-rhui-cdn.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:1
-bp-rhel10-azure-rhui-cdn.out1.txt>bp-rhel10-azure-rhui-cdn.out2.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0
-bp-rhel10-azure-rhui.in.json>bp-rhel10-azure-rhui.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:1
-bp-rhel10-azure-rhui.out1.txt>bp-rhel10-azure-rhui.out2.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0
-bp-rhel9-azure-rhui-cdn.in.json>bp-rhel9-azure-rhui-cdn.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:3
-bp-rhel9-azure-rhui-cdn.out1.txt>bp-rhel9-azure-rhui-cdn.out2.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0
-bp-rhel9-azure-rhui.in.json>bp-rhel9-azure-rhui.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:3
-bp-rhel9-azure-rhui.out1.txt>bp-rhel9-azure-rhui.out2.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0
-bp-rhsm.in.json>bp-rhsm.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:4
-bp-rhsm.out1.txt>bp-rhsm.out2.txt: INPUT:UBP-YAML UBPY:4 UBPJ:0 BPT:0 BPJ:0
-bp-simplified-installer.in.json>bp-simplified-installer.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-bp-simplified-installer.out1.txt>bp-simplified-installer.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-bp-unattended-iso-edge.in.json>bp-unattended-iso-edge.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:3
-bp-unattended-iso-edge.out1.txt>bp-unattended-iso-edge.out2.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0
-bp-unattended-iso-iot.in.json>bp-unattended-iso-iot.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:3
-bp-unattended-iso-iot.out1.txt>bp-unattended-iso-iot.out2.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0
-bp-unattended-iso.in.json>bp-unattended-iso.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:7
-bp-unattended-iso.out1.txt>bp-unattended-iso.out2.txt: INPUT:UBP-YAML UBPY:7 UBPJ:0 BPT:0 BPJ:0
-bp-user-customizations.in.json>bp-user-customizations.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:1
-bp-user-customizations.out1.txt>bp-user-customizations.out2.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0
-invalid-accounts-groups.in.yaml>invalid-accounts-groups.out1.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0
-invalid-accounts-groups.out1.txt>invalid-accounts-groups.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:2 BPJ:0
-invalid-accounts-users.in.yaml>invalid-accounts-users.out1.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0
-invalid-accounts-users.out1.txt>invalid-accounts-users.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:2 BPJ:0
-invalid-all-empty.in.yaml>invalid-all-empty.out1.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0
-invalid-all-empty.out1.txt>invalid-all-empty.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:2 BPJ:0
-invalid-dnf-sources.in.yaml>invalid-dnf-sources.out1.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0
-invalid-dnf-sources.out1.txt>invalid-dnf-sources.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:1 BPJ:0
-invalid-firewall-missing-from.in.yaml>invalid-firewall-missing-from.out1.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0
-invalid-firewall-missing-from.out1.txt>invalid-firewall-missing-from.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:1 BPJ:0
-invalid-firewall-missing-to.in.yaml>invalid-firewall-missing-to.out1.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0
-invalid-firewall-missing-to.out1.txt>invalid-firewall-missing-to.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:1 BPJ:0
-invalid-firewall-port-and-range.in.yaml>invalid-firewall-port-and-range.out1.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0
-invalid-firewall-port-and-range.out1.txt>invalid-firewall-port-and-range.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:2 BPJ:0
-invalid-fsnodes-content.in.yaml>invalid-fsnodes-content.out1.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0
-invalid-fsnodes-content.out1.txt>invalid-fsnodes-content.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:2 BPJ:0
-invalid-ignition.in.yaml>invalid-ignition.out1.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0
-invalid-ignition.out1.txt>invalid-ignition.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:1 BPJ:0
-invalid-installer.in.yaml>invalid-installer.out1.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0
-invalid-installer.out1.txt>invalid-installer.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:2 BPJ:0
-invalid-openscap-both.in.yaml>invalid-openscap-both.out1.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0
-invalid-openscap-both.out1.txt>invalid-openscap-both.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:3 BPJ:0
-invalid-openscap-json-tailoring.in.yaml>invalid-openscap-json-tailoring.out1.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0
-invalid-openscap-json-tailoring.out1.txt>invalid-openscap-json-tailoring.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:3 BPJ:0
-invalid-openscap-json.in.yaml>invalid-openscap-json.out1.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0
-invalid-openscap-json.out1.txt>invalid-openscap-json.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:3 BPJ:0
-invalid-storage-plain.in.yaml>invalid-storage-plain.out1.txt: INPUT:UBP-YAML UBPY:4 UBPJ:0 BPT:0 BPJ:0
-invalid-storage-plain.out1.txt>invalid-storage-plain.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:4 BPJ:0
-valid-accounts.in.yaml>valid-accounts.out1.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0
-valid-accounts.out1.txt>valid-accounts.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:3 BPJ:0
-valid-cacerts.in.yaml>valid-cacerts.out1.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0
-valid-cacerts.out1.txt>valid-cacerts.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:2 BPJ:0
-valid-containers.in.yaml>valid-containers.out1.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0
-valid-containers.out1.txt>valid-containers.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:2 BPJ:0
-valid-dnf.in.yaml>valid-dnf.out1.txt: INPUT:UBP-YAML UBPY:6 UBPJ:0 BPT:0 BPJ:0
-valid-dnf.out1.txt>valid-dnf.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:6 BPJ:0
-valid-empty-but-name.in.yaml>valid-empty-but-name.out1.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0
-valid-empty-but-name.out1.txt>valid-empty-but-name.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:1 BPJ:0
-valid-empty-j.in.json>valid-empty-j.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-valid-empty-j.out1.txt>valid-empty-j.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-valid-empty.in.toml>valid-empty.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-valid-empty.out1.txt>valid-empty.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-valid-empty.in.yaml>valid-empty.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-valid-empty.out1.txt>valid-empty.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0
-valid-fips.in.yaml>valid-fips.out1.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0
-valid-fips.out1.txt>valid-fips.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:2 BPJ:0
-valid-firewall.in.yaml>valid-firewall.out1.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0
-valid-firewall.out1.txt>valid-firewall.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:2 BPJ:0
-valid-fsnodes.in.yaml>valid-fsnodes.out1.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0
-valid-fsnodes.out1.txt>valid-fsnodes.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:2 BPJ:0
-valid-hostname.in.yaml>valid-hostname.out1.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0
-valid-hostname.out1.txt>valid-hostname.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:2 BPJ:0
-valid-ignition.in.yaml>valid-ignition.out1.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0
-valid-ignition.out1.txt>valid-ignition.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:1 BPJ:0
-valid-installer-nodisabled.in.yaml>valid-installer-nodisabled.out1.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0
-valid-installer-nodisabled.out1.txt>valid-installer-nodisabled.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:3 BPJ:0
-valid-installer.in.yaml>valid-installer.out1.txt: INPUT:UBP-YAML UBPY:7 UBPJ:0 BPT:0 BPJ:0
-valid-installer.out1.txt>valid-installer.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:7 BPJ:0
-valid-kernel.in.yaml>valid-kernel.out1.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0
-valid-kernel.out1.txt>valid-kernel.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:3 BPJ:0
-valid-locale.in.yaml>valid-locale.out1.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0
-valid-locale.out1.txt>valid-locale.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:3 BPJ:0
-valid-openscap-selected.in.yaml>valid-openscap-selected.out1.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0
-valid-openscap-selected.out1.txt>valid-openscap-selected.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:3 BPJ:0
-valid-openscap-selection-both.in.yaml>valid-openscap-selection-both.out1.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0
-valid-openscap-selection-both.out1.txt>valid-openscap-selection-both.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:3 BPJ:0
-valid-openscap-unselected.in.yaml>valid-openscap-unselected.out1.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0
-valid-openscap-unselected.out1.txt>valid-openscap-unselected.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:3 BPJ:0
-valid-registration-fdo-certs.in.yaml>valid-registration-fdo-certs.out1.txt: INPUT:UBP-YAML UBPY:5 UBPJ:0 BPT:0 BPJ:0
-valid-registration-fdo-certs.out1.txt>valid-registration-fdo-certs.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:1 BPJ:0
-valid-registration-fdo-hash.in.yaml>valid-registration-fdo-hash.out1.txt: INPUT:UBP-YAML UBPY:5 UBPJ:0 BPT:0 BPJ:0
-valid-registration-fdo-hash.out1.txt>valid-registration-fdo-hash.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:1 BPJ:0
-valid-registration.in.yaml>valid-registration.out1.txt: INPUT:UBP-YAML UBPY:12 UBPJ:0 BPT:0 BPJ:0
-valid-registration.out1.txt>valid-registration.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:8 BPJ:0
-valid-storage.in.yaml>valid-storage.out1.txt: INPUT:UBP-YAML UBPY:4 UBPJ:0 BPT:0 BPJ:0
-valid-storage.out1.txt>valid-storage.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:4 BPJ:0
-valid-systemd.in.yaml>valid-systemd.out1.txt: INPUT:UBP-YAML UBPY:4 UBPJ:0 BPT:0 BPJ:0
-valid-systemd.out1.txt>valid-systemd.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:3 BPJ:0
-valid-timedate.in.yaml>valid-timedate.out1.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0
-valid-timedate.out1.txt>valid-timedate.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:3 BPJ:0
+all-fields.in.yaml>all-fields.out1.txt: INPUT:UBP-YAML UBPY:43 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+all-fields.out1.txt>all-fields.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:43 BPJ:0 TEMP:1
+all-fields2.in.toml>all-fields2.out1.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:43 BPJ:0 TEMP:1
+all-fields2.out1.txt>all-fields2.out2.txt: INPUT:UBP-YAML UBPY:43 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-all-customizations.in.json>bp-all-customizations.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:17 TEMP:0
+bp-all-customizations.out1.txt>bp-all-customizations.out2.txt: INPUT:UBP-YAML UBPY:17 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-all-with-fips.in.json>bp-all-with-fips.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:15 TEMP:0
+bp-all-with-fips.out1.txt>bp-all-with-fips.out2.txt: INPUT:UBP-YAML UBPY:15 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-bigiso.in.json>bp-bigiso.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:4 TEMP:0
+bp-bigiso.out1.txt>bp-bigiso.out2.txt: INPUT:UBP-YAML UBPY:4 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-disable-lm_sensors.in.json>bp-disable-lm_sensors.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:1 TEMP:0
+bp-disable-lm_sensors.out1.txt>bp-disable-lm_sensors.out2.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-ec2-sap-empty.in.json>bp-ec2-sap-empty.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:0
+bp-ec2-sap-empty.out1.txt>bp-ec2-sap-empty.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-edge-ostree-pull-device-fips.in.json>bp-edge-ostree-pull-device-fips.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:1 TEMP:0
+bp-edge-ostree-pull-device-fips.out1.txt>bp-edge-ostree-pull-device-fips.out2.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-edge-ostree-pull-device.in.json>bp-edge-ostree-pull-device.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:0
+bp-edge-ostree-pull-device.out1.txt>bp-edge-ostree-pull-device.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-edge-ostree-pull-empty.in.json>bp-edge-ostree-pull-empty.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:0
+bp-edge-ostree-pull-empty.out1.txt>bp-edge-ostree-pull-empty.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-edge-ostree-pull-fips.in.json>bp-edge-ostree-pull-fips.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:1 TEMP:0
+bp-edge-ostree-pull-fips.out1.txt>bp-edge-ostree-pull-fips.out2.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-edge-ostree-pull-user-fips.in.json>bp-edge-ostree-pull-user-fips.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:2 TEMP:0
+bp-edge-ostree-pull-user-fips.out1.txt>bp-edge-ostree-pull-user-fips.out2.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-edge-ostree-pull-user-minimalenv.in.json>bp-edge-ostree-pull-user-minimalenv.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:1 TEMP:0
+bp-edge-ostree-pull-user-minimalenv.out1.txt>bp-edge-ostree-pull-user-minimalenv.out2.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-edge-ostree-pull-user.in.json>bp-edge-ostree-pull-user.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:2 TEMP:0
+bp-edge-ostree-pull-user.out1.txt>bp-edge-ostree-pull-user.out2.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-embed-containers-2.in.json>bp-embed-containers-2.out1.txt: INPUT:UBP-YAML UBPY:1 UBPJ:1 BPT:0 BPJ:1 TEMP:0
+bp-embed-containers-2.out1.txt>bp-embed-containers-2.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:1 BPJ:0 TEMP:1
+bp-embed-containers.in.json>bp-embed-containers.out1.txt: INPUT:UBP-YAML UBPY:1 UBPJ:1 BPT:0 BPJ:1 TEMP:0
+bp-embed-containers.out1.txt>bp-embed-containers.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:1 BPJ:0 TEMP:1
+bp-empty-fedora.in.json>bp-empty-fedora.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:0
+bp-empty-fedora.out1.txt>bp-empty-fedora.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-empty-rhel.in.json>bp-empty-rhel.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:0
+bp-empty-rhel.out1.txt>bp-empty-rhel.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-empty.in.json>bp-empty.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:0
+bp-empty.out1.txt>bp-empty.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-file-customizations.in.json>bp-file-customizations.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:2 TEMP:0
+bp-file-customizations.out1.txt>bp-file-customizations.out2.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-firewall.in.json>bp-firewall.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:1 TEMP:0
+bp-firewall.out1.txt>bp-firewall.out2.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-import-rpm-gpg-keys-from-tree-fedora.in.json>bp-import-rpm-gpg-keys-from-tree-fedora.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:1 TEMP:0
+bp-import-rpm-gpg-keys-from-tree-fedora.out1.txt>bp-import-rpm-gpg-keys-from-tree-fedora.out2.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-import-rpm-gpg-keys-from-tree-rhel.in.json>bp-import-rpm-gpg-keys-from-tree-rhel.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:1 TEMP:0
+bp-import-rpm-gpg-keys-from-tree-rhel.out1.txt>bp-import-rpm-gpg-keys-from-tree-rhel.out2.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-interactive-iso-userkickstart.in.json>bp-interactive-iso-userkickstart.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:4 TEMP:0
+bp-interactive-iso-userkickstart.out1.txt>bp-interactive-iso-userkickstart.out2.txt: INPUT:UBP-YAML UBPY:4 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-iot-customizations-full.in.json>bp-iot-customizations-full.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:4 TEMP:0
+bp-iot-customizations-full.out1.txt>bp-iot-customizations-full.out2.txt: INPUT:UBP-YAML UBPY:4 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-iot-ostree-pull-device.in.json>bp-iot-ostree-pull-device.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:0
+bp-iot-ostree-pull-device.out1.txt>bp-iot-ostree-pull-device.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-iot-ostree-pull-empty.in.json>bp-iot-ostree-pull-empty.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:0
+bp-iot-ostree-pull-empty.out1.txt>bp-iot-ostree-pull-empty.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-iot-ostree-pull-user.in.json>bp-iot-ostree-pull-user.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:2 TEMP:0
+bp-iot-ostree-pull-user.out1.txt>bp-iot-ostree-pull-user.out2.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-kernel-debug.in.json>bp-kernel-debug.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:1 TEMP:0
+bp-kernel-debug.out1.txt>bp-kernel-debug.out2.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-kernel-rt.in.json>bp-kernel-rt.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:1 TEMP:0
+bp-kernel-rt.out1.txt>bp-kernel-rt.out2.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-minimal-environment.in.json>bp-minimal-environment.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:0
+bp-minimal-environment.out1.txt>bp-minimal-environment.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-minimal-pkgs.in.json>bp-minimal-pkgs.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:0
+bp-minimal-pkgs.out1.txt>bp-minimal-pkgs.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-minimal.in.json>bp-minimal.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:0
+bp-minimal.out1.txt>bp-minimal.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-modularity-enabled-modules.in.json>bp-modularity-enabled-modules.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:0
+bp-modularity-enabled-modules.out1.txt>bp-modularity-enabled-modules.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-modularity-in-packages.in.json>bp-modularity-in-packages.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:0
+bp-modularity-in-packages.out1.txt>bp-modularity-in-packages.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-oscap-generic.in.json>bp-oscap-generic.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:15 TEMP:0
+bp-oscap-generic.out1.txt>bp-oscap-generic.out2.txt: INPUT:UBP-YAML UBPY:15 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-oscap-rhel10.in.json>bp-oscap-rhel10.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:3 TEMP:0
+bp-oscap-rhel10.out1.txt>bp-oscap-rhel10.out2.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-oscap-rhel8.in.json>bp-oscap-rhel8.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:3 TEMP:0
+bp-oscap-rhel8.out1.txt>bp-oscap-rhel8.out2.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-oscap-rhel9-with-json-tailoring.in.json>bp-oscap-rhel9-with-json-tailoring.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:4 TEMP:0
+bp-oscap-rhel9-with-json-tailoring.out1.txt>bp-oscap-rhel9-with-json-tailoring.out2.txt: INPUT:UBP-YAML UBPY:4 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-oscap-rhel9.in.json>bp-oscap-rhel9.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:3 TEMP:0
+bp-oscap-rhel9.out1.txt>bp-oscap-rhel9.out2.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-ostree-device.in.json>bp-ostree-device.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:0
+bp-ostree-device.out1.txt>bp-ostree-device.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-ostree-example.in.json>bp-ostree-example.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:0
+bp-ostree-example.out1.txt>bp-ostree-example.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-ostree-filesystem-customizations-installer.in.json>bp-ostree-filesystem-customizations-installer.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:1 TEMP:0
+bp-ostree-filesystem-customizations-installer.out1.txt>bp-ostree-filesystem-customizations-installer.out2.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-ostree-filesystem-customizations.in.json>bp-ostree-filesystem-customizations.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:1 TEMP:0
+bp-ostree-filesystem-customizations.out1.txt>bp-ostree-filesystem-customizations.out2.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-ostree-users.in.json>bp-ostree-users.out1.txt: INPUT:BP-JSON UBPY:1 UBPJ:1 BPT:0 BPJ:3 TEMP:0
+bp-ostree-users.out1.txt>bp-ostree-users.out2.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-ostree.in.json>bp-ostree.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:0
+bp-ostree.out1.txt>bp-ostree.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-partitioning-btrfs.in.json>bp-partitioning-btrfs.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:1 TEMP:0
+bp-partitioning-btrfs.out1.txt>bp-partitioning-btrfs.out2.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-partitioning-dos-lvm.in.json>bp-partitioning-dos-lvm.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:2 TEMP:0
+bp-partitioning-dos-lvm.out1.txt>bp-partitioning-dos-lvm.out2.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-partitioning-lvm-noswap.in.json>bp-partitioning-lvm-noswap.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:2 TEMP:0
+bp-partitioning-lvm-noswap.out1.txt>bp-partitioning-lvm-noswap.out2.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-partitioning-lvm-r8.in.json>bp-partitioning-lvm-r8.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:2 TEMP:0
+bp-partitioning-lvm-r8.out1.txt>bp-partitioning-lvm-r8.out2.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-partitioning-lvm.in.json>bp-partitioning-lvm.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:2 TEMP:0
+bp-partitioning-lvm.out1.txt>bp-partitioning-lvm.out2.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-partitioning-plain-r8.in.json>bp-partitioning-plain-r8.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:1 TEMP:0
+bp-partitioning-plain-r8.out1.txt>bp-partitioning-plain-r8.out2.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-partitioning-plain.in.json>bp-partitioning-plain.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:1 TEMP:0
+bp-partitioning-plain.out1.txt>bp-partitioning-plain.out2.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-rhel10-azure-rhui-cdn.in.json>bp-rhel10-azure-rhui-cdn.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:2 TEMP:0
+bp-rhel10-azure-rhui-cdn.out1.txt>bp-rhel10-azure-rhui-cdn.out2.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-rhel10-azure-rhui.in.json>bp-rhel10-azure-rhui.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:2 TEMP:0
+bp-rhel10-azure-rhui.out1.txt>bp-rhel10-azure-rhui.out2.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-rhel9-azure-rhui-cdn.in.json>bp-rhel9-azure-rhui-cdn.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:3 TEMP:0
+bp-rhel9-azure-rhui-cdn.out1.txt>bp-rhel9-azure-rhui-cdn.out2.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-rhel9-azure-rhui.in.json>bp-rhel9-azure-rhui.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:3 TEMP:0
+bp-rhel9-azure-rhui.out1.txt>bp-rhel9-azure-rhui.out2.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-rhsm.in.json>bp-rhsm.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:4 TEMP:0
+bp-rhsm.out1.txt>bp-rhsm.out2.txt: INPUT:UBP-YAML UBPY:4 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-simplified-installer.in.json>bp-simplified-installer.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:0
+bp-simplified-installer.out1.txt>bp-simplified-installer.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-unattended-iso-edge.in.json>bp-unattended-iso-edge.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:3 TEMP:0
+bp-unattended-iso-edge.out1.txt>bp-unattended-iso-edge.out2.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-unattended-iso-iot.in.json>bp-unattended-iso-iot.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:3 TEMP:0
+bp-unattended-iso-iot.out1.txt>bp-unattended-iso-iot.out2.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-unattended-iso.in.json>bp-unattended-iso.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:7 TEMP:0
+bp-unattended-iso.out1.txt>bp-unattended-iso.out2.txt: INPUT:UBP-YAML UBPY:7 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-user-customizations.in.json>bp-user-customizations.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:1 TEMP:0
+bp-user-customizations.out1.txt>bp-user-customizations.out2.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+invalid-accounts-groups.in.yaml>invalid-accounts-groups.out1.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+invalid-accounts-groups.out1.txt>invalid-accounts-groups.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:2 BPJ:0 TEMP:1
+invalid-accounts-users.in.yaml>invalid-accounts-users.out1.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+invalid-accounts-users.out1.txt>invalid-accounts-users.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:2 BPJ:0 TEMP:1
+invalid-all-empty.in.yaml>invalid-all-empty.out1.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+invalid-all-empty.out1.txt>invalid-all-empty.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:3 BPJ:0 TEMP:1
+invalid-dnf-sources.in.yaml>invalid-dnf-sources.out1.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+invalid-dnf-sources.out1.txt>invalid-dnf-sources.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:2 BPJ:0 TEMP:1
+invalid-firewall-missing-from.in.yaml>invalid-firewall-missing-from.out1.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+invalid-firewall-missing-from.out1.txt>invalid-firewall-missing-from.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:1 BPJ:0 TEMP:1
+invalid-firewall-missing-to.in.yaml>invalid-firewall-missing-to.out1.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+invalid-firewall-missing-to.out1.txt>invalid-firewall-missing-to.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:1 BPJ:0 TEMP:1
+invalid-firewall-port-and-range.in.yaml>invalid-firewall-port-and-range.out1.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+invalid-firewall-port-and-range.out1.txt>invalid-firewall-port-and-range.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:2 BPJ:0 TEMP:1
+invalid-fsnodes-content.in.yaml>invalid-fsnodes-content.out1.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+invalid-fsnodes-content.out1.txt>invalid-fsnodes-content.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:2 BPJ:0 TEMP:1
+invalid-ignition.in.yaml>invalid-ignition.out1.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+invalid-ignition.out1.txt>invalid-ignition.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:1 BPJ:0 TEMP:1
+invalid-installer.in.yaml>invalid-installer.out1.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+invalid-installer.out1.txt>invalid-installer.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:2 BPJ:0 TEMP:1
+invalid-openscap-both.in.yaml>invalid-openscap-both.out1.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+invalid-openscap-both.out1.txt>invalid-openscap-both.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:3 BPJ:0 TEMP:1
+invalid-openscap-json-tailoring.in.yaml>invalid-openscap-json-tailoring.out1.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+invalid-openscap-json-tailoring.out1.txt>invalid-openscap-json-tailoring.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:3 BPJ:0 TEMP:1
+invalid-openscap-json.in.yaml>invalid-openscap-json.out1.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+invalid-openscap-json.out1.txt>invalid-openscap-json.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:3 BPJ:0 TEMP:1
+invalid-storage-plain.in.yaml>invalid-storage-plain.out1.txt: INPUT:UBP-YAML UBPY:4 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+invalid-storage-plain.out1.txt>invalid-storage-plain.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:4 BPJ:0 TEMP:1
+valid-accounts.in.yaml>valid-accounts.out1.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+valid-accounts.out1.txt>valid-accounts.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:3 BPJ:0 TEMP:1
+valid-cacerts.in.yaml>valid-cacerts.out1.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+valid-cacerts.out1.txt>valid-cacerts.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:2 BPJ:0 TEMP:1
+valid-containers.in.yaml>valid-containers.out1.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+valid-containers.out1.txt>valid-containers.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:2 BPJ:0 TEMP:1
+valid-dnf.in.yaml>valid-dnf.out1.txt: INPUT:UBP-YAML UBPY:6 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+valid-dnf.out1.txt>valid-dnf.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:6 BPJ:0 TEMP:1
+valid-empty-but-name.in.yaml>valid-empty-but-name.out1.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+valid-empty-but-name.out1.txt>valid-empty-but-name.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:1 BPJ:0 TEMP:1
+valid-empty-j.in.json>valid-empty-j.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:0
+valid-empty-j.out1.txt>valid-empty-j.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+valid-empty.in.toml>valid-empty.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+valid-empty.out1.txt>valid-empty.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+valid-empty.in.yaml>valid-empty.out1.txt: INPUT:UBP-YAML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+valid-empty.out1.txt>valid-empty.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+valid-fips.in.yaml>valid-fips.out1.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+valid-fips.out1.txt>valid-fips.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:2 BPJ:0 TEMP:1
+valid-firewall.in.yaml>valid-firewall.out1.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+valid-firewall.out1.txt>valid-firewall.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:2 BPJ:0 TEMP:1
+valid-fsnodes.in.yaml>valid-fsnodes.out1.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+valid-fsnodes.out1.txt>valid-fsnodes.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:2 BPJ:0 TEMP:1
+valid-hostname.in.yaml>valid-hostname.out1.txt: INPUT:UBP-YAML UBPY:2 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+valid-hostname.out1.txt>valid-hostname.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:2 BPJ:0 TEMP:1
+valid-ignition.in.yaml>valid-ignition.out1.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+valid-ignition.out1.txt>valid-ignition.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:1 BPJ:0 TEMP:1
+valid-installer-nodisabled.in.yaml>valid-installer-nodisabled.out1.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+valid-installer-nodisabled.out1.txt>valid-installer-nodisabled.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:3 BPJ:0 TEMP:1
+valid-installer.in.yaml>valid-installer.out1.txt: INPUT:UBP-YAML UBPY:7 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+valid-installer.out1.txt>valid-installer.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:7 BPJ:0 TEMP:1
+valid-kernel.in.yaml>valid-kernel.out1.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+valid-kernel.out1.txt>valid-kernel.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:3 BPJ:0 TEMP:1
+valid-locale.in.yaml>valid-locale.out1.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+valid-locale.out1.txt>valid-locale.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:3 BPJ:0 TEMP:1
+valid-openscap-selected.in.yaml>valid-openscap-selected.out1.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+valid-openscap-selected.out1.txt>valid-openscap-selected.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:3 BPJ:0 TEMP:1
+valid-openscap-selection-both.in.yaml>valid-openscap-selection-both.out1.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+valid-openscap-selection-both.out1.txt>valid-openscap-selection-both.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:3 BPJ:0 TEMP:1
+valid-openscap-unselected.in.yaml>valid-openscap-unselected.out1.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+valid-openscap-unselected.out1.txt>valid-openscap-unselected.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:3 BPJ:0 TEMP:1
+valid-registration-fdo-certs.in.yaml>valid-registration-fdo-certs.out1.txt: INPUT:UBP-YAML UBPY:5 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+valid-registration-fdo-certs.out1.txt>valid-registration-fdo-certs.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:1 BPJ:0 TEMP:1
+valid-registration-fdo-hash.in.yaml>valid-registration-fdo-hash.out1.txt: INPUT:UBP-YAML UBPY:5 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+valid-registration-fdo-hash.out1.txt>valid-registration-fdo-hash.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:1 BPJ:0 TEMP:1
+valid-registration.in.yaml>valid-registration.out1.txt: INPUT:UBP-YAML UBPY:12 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+valid-registration.out1.txt>valid-registration.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:8 BPJ:0 TEMP:1
+valid-storage.in.yaml>valid-storage.out1.txt: INPUT:UBP-YAML UBPY:4 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+valid-storage.out1.txt>valid-storage.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:4 BPJ:0 TEMP:1
+valid-systemd.in.yaml>valid-systemd.out1.txt: INPUT:UBP-YAML UBPY:4 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+valid-systemd.out1.txt>valid-systemd.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:3 BPJ:0 TEMP:1
+valid-timedate.in.yaml>valid-timedate.out1.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+valid-timedate.out1.txt>valid-timedate.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:3 BPJ:0 TEMP:1

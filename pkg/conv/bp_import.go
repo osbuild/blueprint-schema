@@ -68,7 +68,7 @@ func (e *InternalImporter) importArchitecture() ubp.Arch {
 }
 
 func (e *InternalImporter) importDNF() *ubp.DNF {
-	if e.from.Customizations == nil || e.from.Customizations.RPM == nil {
+	if e.from.Customizations == nil {
 		return nil
 	}
 
@@ -78,7 +78,7 @@ func (e *InternalImporter) importDNF() *ubp.DNF {
 	to.Groups = e.importGroups()
 	to.Repositories = e.importRepositories()
 
-	if e.from.Customizations.RPM.ImportKeys != nil {
+	if e.from.Customizations.RPM != nil && e.from.Customizations.RPM.ImportKeys != nil {
 		for _, keyFile := range e.from.Customizations.RPM.ImportKeys.Files {
 			to.ImportKeys = append(to.ImportKeys, strings.TrimPrefix(keyFile, "file://"))
 		}
@@ -97,12 +97,12 @@ func (e *InternalImporter) importPackages() []string {
 	}
 
 	// Combine packages and modules into a single slice.
-	s := make([]string, len(e.from.Packages)+len(e.from.Modules))
-	for i, pkg := range e.from.Packages {
-		s[i] = joinNonEmpty("-", pkg.Name, pkg.Version)
+	s := make([]string, 0, len(e.from.Packages)+len(e.from.Modules))
+	for _, pkg := range e.from.Packages {
+		s = append(s, joinNonEmpty("-", pkg.Name, pkg.Version))
 	}
-	for i, pkg := range e.from.Modules {
-		s[i] = joinNonEmpty("-", pkg.Name, pkg.Version)
+	for _, pkg := range e.from.Modules {
+		s = append(s, joinNonEmpty("-", pkg.Name, pkg.Version))
 	}
 
 	return s

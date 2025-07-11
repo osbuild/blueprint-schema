@@ -29,12 +29,14 @@ const (
 type AnyDetails struct {
 	Format       AnyFormat
 	Warnings     error
+	Converted bool
 	Intermediate *bp.Blueprint
 
 	ubpCountYAML int
 	ubpCountJSON int
 	bpCountTOML  int
 	bpCountJSON  int
+	bpCountTemp int
 }
 
 func (f AnyFormat) String() string {
@@ -69,6 +71,7 @@ func UnmarshalAny(buf []byte, anyDetails ...*AnyDetails) (*ubp.Blueprint, error)
 	// Try BP TOML
 	bpTempTOML := new(bp.Blueprint)
 	bpErrTOML := toml.Unmarshal(buf, bpTempTOML)
+	details.bpCountTemp = countSetFieldsRecursive(bpTempTOML)
 	imTOML := conv.NewInternalImporter(bpTempTOML)
 	bpTOML, bpWarnTOML := imTOML.Import()
 	details.bpCountTOML = countSetFieldsRecursive(bpTOML)
@@ -76,6 +79,7 @@ func UnmarshalAny(buf []byte, anyDetails ...*AnyDetails) (*ubp.Blueprint, error)
 	// Try BP JSON
 	bpTempJSON := new(bp.Blueprint)
 	bpErrJSON := json.Unmarshal(buf, bpTempJSON)
+	details.bpCountTemp = countSetFieldsRecursive(bpErrJSON)
 	imJSON := conv.NewInternalImporter(bpTempJSON)
 	bpJSON, bpWarnJSON := imJSON.Import()
 	details.bpCountJSON = countSetFieldsRecursive(bpJSON)
@@ -97,10 +101,12 @@ func UnmarshalAny(buf []byte, anyDetails ...*AnyDetails) (*ubp.Blueprint, error)
 		return ubpJSON, nil
 	} else if bpErrTOML == nil && details.bpCountTOML == maxCount {
 		details.Format = AnyFormatBPTOML
+		details.Converted = true
 		details.Intermediate = bpTempTOML
 		return bpTOML, nil
 	} else if bpErrJSON == nil && details.bpCountJSON == maxCount {
 		details.Format = AnyFormatBPJSON
+		details.Converted = true
 		details.Intermediate = bpTempJSON
 		return bpJSON, nil
 	} else {

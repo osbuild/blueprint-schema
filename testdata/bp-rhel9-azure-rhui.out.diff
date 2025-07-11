@@ -1,0 +1,43 @@
+  &blueprint.Blueprint{
+  	Name:        "",
+  	Description: "",
+  	Version:     "",
+  	Packages: []blueprint.Package{
+- 		{Name: "rhui-azure-rhel9"},
++ 		{Name: "rhui", Version: "azure-rhel9"},
+- 		{Name: "redhat-cloud-client-configuration"},
++ 		{Name: "redhat", Version: "cloud-client-configuration"},
+  	},
+  	Modules:        nil,
+  	EnabledModules: nil,
+  	Groups:         nil,
+  	Containers:     nil,
+  	Customizations: &blueprint.Customizations{
+  		... // 19 identical fields
+  		FIPS:      nil,
+  		Installer: nil,
+- 		RPM: &blueprint.RPMCustomization{
+- 			ImportKeys: &blueprint.RPMImportKeys{Files: []string{"/etc/pki/rpm-gpg/RPM-GPG-KEY-mic"...}},
+- 		},
++ 		RPM: nil,
+  		RHSM: &blueprint.RHSMCustomization{
+  			Config: &blueprint.RHSMConfig{
+- 				DNFPlugins: nil,
++ 				DNFPlugins: &blueprint.SubManDNFPluginsConfig{
++ 					ProductID:           &blueprint.DNFPluginConfig{},
++ 					SubscriptionManager: &blueprint.DNFPluginConfig{},
++ 				},
+  				SubscriptionManager: &blueprint.SubManConfig{
+  					RHSMConfig:      &{AutoEnableYumPlugins: &false},
+- 					RHSMCertdConfig: nil,
++ 					RHSMCertdConfig: &blueprint.SubManRHSMCertdConfig{},
+  				},
+  			},
+  		},
+  		CACerts:           nil,
+  		ContainersStorage: nil,
+  	},
+  	Distro:  "",
+  	Arch:    "",
+  	Minimal: false,
+  }

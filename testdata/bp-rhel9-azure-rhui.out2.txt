@@ -1,7 +1,5 @@
 # registration not converted
 
-version = "1.0.0"
-
 [[packages]]
   name = "rhui"
   version = "azure-rhel9"
