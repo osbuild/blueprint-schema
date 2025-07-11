@@ -93,6 +93,11 @@ func UnmarshalAny(buf []byte, details *AnyDetails) (*ubp.Blueprint, error) {
 	bpJSON, bpWarnJSON := imJSON.Import()
 	details.bpCountJSON = countSetFieldsRecursive(bpJSON)
 
+	// XXX: can we archive this with strict unmarshal?
+	// i.e. make json use Decoder.DisallowUnknownFields
+	// check in toml for unconverted fields and use
+	// yaml.UnmarshalStrict() ? i.e. why do we need the counting
+	// here otherwise?
 	maxCount := max(details.ubpCountYAML, details.ubpCountJSON, details.bpCountTOML, details.bpCountJSON)
 	err := errors.Join(
 		fmt.Errorf("YAML: %w", ubpErrYAML),
