@@ -149,13 +149,14 @@ func main() {
 				die("%s: %s", arg, err)
 			}
 
-			b, _, err, warn := parse.UnmarshalAny(inBuf)
+			details := parse.AnyDetails{}
+			b, err := parse.UnmarshalAny(inBuf, &details)
 			if err != nil {
 				die("%s: %s", arg, err)
 			}
 
-			if warn != nil {
-				fmt.Fprintln(os.Stderr, warn)
+			if details.Warnings != nil {
+				fmt.Fprintln(os.Stderr, details.Warnings)
 			}
 
 			var buf []byte

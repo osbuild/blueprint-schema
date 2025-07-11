@@ -35,12 +35,13 @@ func wasmExportTOML(this js.Value, p []js.Value) any {
 		return js.ValueOf([]any{"", "Export TOML expects exactly one argument (UBP string)"})
 	}
 
-	b, _, err, warn := parse.UnmarshalAny([]byte(p[0].String()))
+	details := parse.AnyDetails{}
+	b, err := parse.UnmarshalAny([]byte(p[0].String()), &details)
 	if err != nil {
 		return js.ValueOf([]any{"", fmt.Sprintf("Failed to unmarshal: %v", err)})
 	}
-	if warn != nil {
-		return js.ValueOf([]any{"", fmt.Sprintf("Unexpected warning(s): %v", err)})
+	if details.Warnings != nil {
+		return js.ValueOf([]any{"", fmt.Sprintf("Unexpected warning(s): %v", details.Warnings)})
 	}
 
 	exporter := conv.NewInternalExporter(b)
@@ -62,12 +63,13 @@ func wasmExportJSON(this js.Value, p []js.Value) any {
 		return js.ValueOf([]any{"", "Export TOML expects exactly one argument (UBP string)"})
 	}
 
-	b, _, err, warn := parse.UnmarshalAny([]byte(p[0].String()))
+	details := parse.AnyDetails{}
+	b, err := parse.UnmarshalAny([]byte(p[0].String()), &details)
 	if err != nil {
 		return js.ValueOf([]any{"", fmt.Sprintf("Failed to unmarshal: %v", err)})
 	}
-	if warn != nil {
-		return js.ValueOf([]any{"", fmt.Sprintf("Unexpected warning(s): %v", err)})
+	if details.Warnings != nil {
+		return js.ValueOf([]any{"", fmt.Sprintf("Unexpected warning(s): %v", details.Warnings)})
 	}
 
 	exporter := conv.NewInternalExporter(b)
@@ -89,15 +91,16 @@ func wasmImportYAML(this js.Value, p []js.Value) any {
 		return js.ValueOf([]any{"", "Import TOML expects exactly one argument (BP string)"})
 	}
 
-	_, b, err, warn := parse.UnmarshalAny([]byte(p[0].String()))
+	details := parse.AnyDetails{}
+	_, err := parse.UnmarshalAny([]byte(p[0].String()), &details)
 	if err != nil {
 		return js.ValueOf([]any{"", fmt.Sprintf("Failed to unmarshal: %v", err)})
 	}
-	if warn != nil {
-		js.Global().Get("console").Call("warn", warn.Error())
+	if details.Warnings != nil {
+		js.Global().Get("console").Call("warn", details.Warnings.Error())
 	}
 
-	importer := conv.NewInternalImporter(b)
+	importer := conv.NewInternalImporter(details.Intermediate)
 	result, logs := importer.Import()
 	if logs != nil {
 		js.Global().Get("console").Call("warn", logs.Error())
@@ -116,15 +119,16 @@ func wasmImportJSON(this js.Value, p []js.Value) any {
 		return js.ValueOf([]any{"", "Import TOML expects exactly one argument (BP string)"})
 	}
 
-	_, b, err, warn := parse.UnmarshalAny([]byte(p[0].String()))
+	details := parse.AnyDetails{}
+	_, err := parse.UnmarshalAny([]byte(p[0].String()), &details)
 	if err != nil {
 		return js.ValueOf([]any{"", fmt.Sprintf("Failed to unmarshal: %v", err)})
 	}
-	if warn != nil {
-		js.Global().Get("console").Call("warn", warn.Error())
+	if details.Warnings != nil {
+		js.Global().Get("console").Call("warn", details.Warnings.Error())
 	}
 
-	importer := conv.NewInternalImporter(b)
+	importer := conv.NewInternalImporter(details.Intermediate)
 	result, logs := importer.Import()
 	if logs != nil {
 		js.Global().Get("console").Call("warn", logs.Error())

@@ -16,49 +16,101 @@ import (
 
 var ErrParsingExplanation = errors.New("parsing errors, some are false positives")
 
-func UnmarshalAny(buf []byte) (*ubp.Blueprint, *bp.Blueprint, error, error) {
+type AnyFormat int
+
+const (
+	AnyFormatUnknown AnyFormat = iota
+	AnyFormatUBPYAML
+	AnyFormatUBPJSON
+	AnyFormatBPTOML
+	AnyFormatBPJSON
+)
+
+type AnyDetails struct {
+	Format       AnyFormat
+	Warnings     error
+	Intermediate *bp.Blueprint
+
+	ubpCountYAML int
+	ubpCountJSON int
+	bpCountTOML  int
+	bpCountJSON  int
+}
+
+func (f AnyFormat) String() string {
+	switch f {
+	case AnyFormatUBPYAML:
+		return "UBP-YAML"
+	case AnyFormatUBPJSON:
+		return "UBP-JSON"
+	case AnyFormatBPTOML:
+		return "BP-TOML"
+	case AnyFormatBPJSON:
+		return "BP-JSON"
+	default:
+		return "Unknown"
+	}
+}
+
+func UnmarshalAny(buf []byte, anyDetails ...*AnyDetails) (*ubp.Blueprint, error) {
+	details := &AnyDetails{}
+	if len(anyDetails) > 0 {
+		details = anyDetails[0]
+	}
+
 	// Try UBP YAML
 	ubpYAML, ubpErrYAML := UnmarshalYAML(buf)
-	ubpCountYAML := countSetFieldsRecursive(ubpYAML)
+	details.ubpCountYAML = countSetFieldsRecursive(ubpYAML)
 
 	// Try UBP JSON
 	ubpJSON, ubpErrJSON := UnmarshalJSON(buf)
-	ubpCountJSON := countSetFieldsRecursive(ubpJSON)
+	details.ubpCountJSON = countSetFieldsRecursive(ubpJSON)
 
 	// Try BP TOML
 	bpTempTOML := new(bp.Blueprint)
 	bpErrTOML := toml.Unmarshal(buf, bpTempTOML)
 	imTOML := conv.NewInternalImporter(bpTempTOML)
 	bpTOML, bpWarnTOML := imTOML.Import()
-	bpCountTOML := countSetFieldsRecursive(bpTOML)
+	details.bpCountTOML = countSetFieldsRecursive(bpTOML)
 
 	// Try BP JSON
 	bpTempJSON := new(bp.Blueprint)
 	bpErrJSON := json.Unmarshal(buf, bpTempJSON)
 	imJSON := conv.NewInternalImporter(bpTempJSON)
 	bpJSON, bpWarnJSON := imJSON.Import()
-	bpCountJSON := countSetFieldsRecursive(bpJSON)
+	details.bpCountJSON = countSetFieldsRecursive(bpJSON)
 
-	maxCount := max(ubpCountYAML, ubpCountJSON, bpCountTOML, bpCountJSON)
+	maxCount := max(details.ubpCountYAML, details.ubpCountJSON, details.bpCountTOML, details.bpCountJSON)
 	err := errors.Join(
 		fmt.Errorf("YAML: %w", ubpErrYAML),
 		fmt.Errorf("JSON: %w", ubpErrJSON),
 		fmt.Errorf("TOML: %w", bpErrTOML),
 		fmt.Errorf("JSON: %w", bpErrJSON),
 	)
-	warn := errors.Join(bpWarnTOML, bpWarnJSON)
+	details.Warnings = errors.Join(bpWarnTOML, bpWarnJSON)
 
-	if ubpErrYAML == nil && ubpCountYAML == maxCount {
-		return ubpYAML, nil, nil, warn
-	} else if ubpErrJSON == nil && ubpCountJSON == maxCount {
-		return ubpJSON, nil, nil, warn
-	} else if bpErrTOML == nil && bpCountTOML == maxCount {
-		return bpTOML, bpTempTOML, nil, warn
-	} else if bpErrJSON == nil && bpCountJSON == maxCount {
-		return bpJSON, bpTempJSON, nil, warn
+	if ubpErrYAML == nil && details.ubpCountYAML == maxCount {
+		details.Format = AnyFormatUBPYAML
+		return ubpYAML, nil
+	} else if ubpErrJSON == nil && details.ubpCountJSON == maxCount {
+		details.Format = AnyFormatUBPJSON
+		return ubpJSON, nil
+	} else if bpErrTOML == nil && details.bpCountTOML == maxCount {
+		details.Format = AnyFormatBPTOML
+		details.Intermediate = bpTempTOML
+		return bpTOML, nil
+	} else if bpErrJSON == nil && details.bpCountJSON == maxCount {
+		details.Format = AnyFormatBPJSON
+		details.Intermediate = bpTempJSON
+		return bpJSON, nil
 	} else {
-		countErr := fmt.Errorf("fields set: UBPY:%d UBPJ:%d BPT:%d BPJ:%d", ubpCountYAML, ubpCountJSON, bpCountTOML, bpCountJSON)
-		return nil, nil, errors.Join(ErrParsingExplanation, err, countErr), warn
+		countErr := fmt.Errorf("fields set: UBPY:%d UBPJ:%d BPT:%d BPJ:%d",
+			details.ubpCountYAML,
+			details.ubpCountJSON,
+			details.bpCountTOML,
+			details.bpCountJSON,
+		)
+		return nil, errors.Join(ErrParsingExplanation, err, countErr)
 	}
 }
 

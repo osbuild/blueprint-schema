@@ -94,13 +94,14 @@ func TestDetectionCounts(t *testing.T) {
 				t.Fatalf("failed to read file %s: %v", tt.filename, err)
 			}
 
-			ubp, bp, err, warn := UnmarshalAny(buf)
+			details := AnyDetails{}
+			ubp, err := UnmarshalAny(buf, &details)
 			if err != nil {
 				t.Fatalf("failed to unmarshal file %s: %v", tt.filename, err)
 			}
 
 			ubpCount := countSetFieldsRecursive(ubp)
-			bpCount := countSetFieldsRecursive(bp)
+			bpCount := countSetFieldsRecursive(details.Intermediate)
 
 			if ubpCount != tt.ubpCount {
 				t.Errorf("expected UBP count %d, got %d", tt.ubpCount, ubpCount)
@@ -108,8 +109,8 @@ func TestDetectionCounts(t *testing.T) {
 			if bpCount != tt.bpCount {
 				t.Errorf("expected BP count %d, got %d", tt.bpCount, bpCount)
 			}
-			if warn != nil {
-				t.Logf("Unmarshal warnings: %v", warn)
+			if details.Warnings != nil {
+				t.Logf("Unmarshal warnings: %v", details.Warnings)
 			}
 		})
 	}
@@ -146,8 +147,11 @@ func cleanDiff(diff string) string {
 }
 
 func TestFix(t *testing.T) {
-	convert := func(t *testing.T, input, output string) *ubp.Blueprint {
-		var result *ubp.Blueprint
+	log := strings.Builder{}
+
+	convert := func(t *testing.T, input, output string) (*ubp.Blueprint, *bp.Blueprint) {
+		var resultUBP *ubp.Blueprint
+		var resultBP *bp.Blueprint
 
 		t.Run(fmt.Sprintf("Convert/%s/%s", filepath.Base(input), filepath.Base(output)), func(t *testing.T) {
 			t.Logf("Converting %s", input)
@@ -167,14 +171,26 @@ func TestFix(t *testing.T) {
 
 			var convErrs error
 			var got []byte
-			ubpBP, bpBP, err, warn := UnmarshalAny(inputBuf.Bytes())
+			details := AnyDetails{}
+			ubpBP, err := UnmarshalAny(inputBuf.Bytes(), &details)
 			if err != nil {
 				t.Fatal(err)
 			}
-			if warn != nil {
-				convErrs = warn
+			if details.Warnings != nil {
+				convErrs = details.Warnings
 			}
-			if bpBP == nil {
+			resultUBP = ubpBP
+			log.WriteString(fmt.Sprintf("%s>%s: INPUT:%s UBPY:%d UBPJ:%d BPT:%d BPJ:%d\n",
+				filepath.Base(input),
+				filepath.Base(output),
+				details.Format.String(),
+				details.ubpCountYAML,
+				details.ubpCountJSON,
+				details.bpCountTOML,
+				details.bpCountJSON,
+			))
+
+			if details.Intermediate == nil {
 				// no conversion was done during loading
 				var result *bp.Blueprint
 				exporter := conv.NewInternalExporter(ubpBP)
@@ -185,6 +201,7 @@ func TestFix(t *testing.T) {
 				if err != nil {
 					t.Fatal(err)
 				}
+				resultBP = result
 			} else {
 				// conversion was done during loading
 				got, err = MarshalYAML(ubpBP)
@@ -216,19 +233,21 @@ func TestFix(t *testing.T) {
 					t.Errorf("validity mismatch (-want +got):\n%s", diff)
 				}
 			}
-
-			result = ubpBP
 		})
 
-		return result
+		return resultUBP, resultBP
 	}
 
-	diffUBP := func(t *testing.T, ubp1, ubp2 *ubp.Blueprint, diffFile string) {
+	diffUBP := func(t *testing.T, str string, ubp1, ubp2 any, diffFile string) {
 		t.Run("DiffUBP", func(t *testing.T) {
-			t.Logf("Diffing UBP objects")
 			if ubp1 == nil || ubp2 == nil {
 				t.Fatal("UBP objects are nil, cannot diff")
 			}
+
+			count1 := countSetFieldsRecursive(ubp1)
+			count2 := countSetFieldsRecursive(ubp2)
+			t.Logf("Diffing %s objects: %d fields vs %d fields", str, count1, count2)
+			//log.WriteString(fmt.Sprintf("Diffing UBP objects: %d fields vs %d fields\n", count1, count2))
 
 			diffBuf := bytes.Buffer{}
 			diff := cmp.Diff(ubp1, ubp2, cmpTransformerForRawMessage, cmp.AllowUnexported(
@@ -356,9 +375,16 @@ func TestFix(t *testing.T) {
 		out2 := extRegesp.ReplaceAllString(file, ".out2.txt")
 		inout2diff := extRegesp.ReplaceAllString(file, ".out.diff")
 
-		ubp1 := convert(t, file, out1)
-		ubp2 := convert(t, out1, out2)
-		diffUBP(t, ubp1, ubp2, inout2diff)
+		ubp1, bp1 := convert(t, file, out1)
+		ubp2, bp2 := convert(t, out1, out2)
+		if bp1 != nil && bp2 != nil {
+			diffUBP(t, "BP", bp1, bp2, inout2diff)
+		} else if ubp1 != nil && ubp2 != nil {
+			diffUBP(t, "UBP", ubp1, ubp2, inout2diff)
+		} else {
+			t.Errorf("Both UBP and BP are nil for file %q", file)
+			return false
+		}
 
 		return true
 	}
@@ -366,6 +392,19 @@ func TestFix(t *testing.T) {
 	for _, file := range files {
 		if !processFile(file) {
 			t.Errorf("Failed to process file: %s", file)
+		}
+	}
+
+	if writeFixtures {
+		if log.Len() > 0 {
+			logf := "../../testdata/0_log.txt"
+			if _, err := os.Stat(logf); err == nil {
+				_ = os.Remove(logf)
+			}
+			err := os.WriteFile(logf, []byte(log.String()), 0644)
+			if err != nil {
+				t.Fatal(err)
+			}
 		}
 	}
 }
