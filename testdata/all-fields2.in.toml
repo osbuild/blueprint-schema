@@ -2,7 +2,7 @@
 
 name = "Blueprint example"
 description = "A complete example of a blueprint with all possible fields"
-version = "1.0.0"
+version = ""
 
 [[packages]]
   name = "vim"

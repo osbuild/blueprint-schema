@@ -26,17 +26,20 @@ const (
 	AnyFormatBPJSON
 )
 
+// AnyDetails contains details about the parsing process of a blueprint in any format.
+// It includes the format detected, warnings encountered, whether the blueprint was converted,
+// and the intermediate blueprint if conversion was necessary.
 type AnyDetails struct {
 	Format       AnyFormat
 	Warnings     error
-	Converted bool
+	Converted    bool
 	Intermediate *bp.Blueprint
 
 	ubpCountYAML int
 	ubpCountJSON int
 	bpCountTOML  int
 	bpCountJSON  int
-	bpCountTemp int
+	bpCountTemp  int
 }
 
 func (f AnyFormat) String() string {
@@ -54,6 +57,13 @@ func (f AnyFormat) String() string {
 	}
 }
 
+// UnmarshalAny attempts to unmarshal a blueprint from a byte slice in any format.
+// It performs heuristic detection of UBP YAML, UBP JSON, BP TOML, and BP JSON formats
+// depending on how many fields are set.
+// If none of the formats can be parsed, it returns an error with details about the parsing attempts.
+//
+// To get some insights about the parsing process, you can pass an `AnyDetails` pointer as an
+// argument.
 func UnmarshalAny(buf []byte, anyDetails ...*AnyDetails) (*ubp.Blueprint, error) {
 	details := &AnyDetails{}
 	if len(anyDetails) > 0 {

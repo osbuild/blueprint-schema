@@ -224,3 +224,5 @@ Additionally, every `filename.in.yaml` input file can have `filename.validator.o
 * `example.out2.txt`: `BP>UBP` converted YAML file
 * `example.validator.out.diff`: validator errors or does not exist if none (only for UBP input files)
 * `example.out.diff`: semantic difference between `in.yaml` and `out2.txt` or does not exist if none
+
+A file named `0_log.txt` is created during fixture writing, it contains some statistics pulled out of the autodetection code in `UnmarshalAny`.
