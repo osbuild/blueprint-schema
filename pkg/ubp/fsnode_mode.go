@@ -17,6 +17,11 @@ type FSNodeMode uint32
 
 var ErrInvalidModeFormat = errors.New("invalid mode format")
 
+const (
+	DefaultFileFSNodeMode FSNodeMode = 0644 // Default file mode
+	DefaultDirFSNodeMode  FSNodeMode = 0755 // Default directory mode
+)
+
 func ParseFSNodeMode(mode string) (FSNodeMode, error) {
 	mode = strings.TrimPrefix(mode, "0o")
 	mode = strings.TrimPrefix(mode, "0")

@@ -550,7 +550,7 @@ func (e *InternalExporter) exportFSNodes() ([]bp.FileCustomization, []bp.Directo
 				Data:  contents,
 			}
 			mode := strconv.FormatInt(int64(node.Mode), 8)
-			if mode != "0" {
+			if mode != "0" || node.Mode != ubp.DefaultFileFSNodeMode {
 				fc.Mode = mode
 			}
 
@@ -564,7 +564,7 @@ func (e *InternalExporter) exportFSNodes() ([]bp.FileCustomization, []bp.Directo
 				EnsureParents: node.EnsureParents,
 			}
 			mode := strconv.FormatInt(int64(node.Mode), 8)
-			if mode != "0" {
+			if mode != "0" || node.Mode != ubp.DefaultDirFSNodeMode {
 				fc.Mode = mode
 			}
 
