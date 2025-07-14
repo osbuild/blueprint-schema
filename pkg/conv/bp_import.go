@@ -295,6 +295,10 @@ func (e *InternalImporter) importFSNodes() []ubp.FSNode {
 		return nil
 	}
 
+	if e.from.Customizations.Filesystem != nil {
+		e.log.Printf("filesystem customizations are not converted, ignoring")
+	}
+
 	var res []ubp.FSNode
 	for _, file := range e.from.Customizations.Files {
 		mode, err := ubp.ParseFSNodeMode(file.Mode)

@@ -1,3 +1,5 @@
+# filesystem customizations are not converted, ignoring
+
 accounts:
   groups:
   - gid: 1030
