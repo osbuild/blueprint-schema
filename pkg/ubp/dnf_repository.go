@@ -26,11 +26,11 @@ func (dr *DNFRepository) UnmarshalJSON(data []byte) error {
 // MarshalJSON handles default values.
 func (dr DNFRepository) MarshalJSON() ([]byte, error) {
 	type tmpType DNFRepository
+	tmp := tmpType(dr)
 
-	if dr.SSLVerify != nil && *dr.SSLVerify {
-		dr.SSLVerify = nil
+	if tmp.SSLVerify != nil && *tmp.SSLVerify {
+		tmp.SSLVerify = nil
 	}
 
-	tmp := tmpType(dr)
 	return json.Marshal(tmp)
 }
