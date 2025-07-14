@@ -18,6 +18,7 @@ type FSNodeMode uint32
 var ErrInvalidModeFormat = errors.New("invalid mode format")
 
 const (
+	UnsetFSNodeMode       FSNodeMode = 0    // Unset mode, used for default values
 	DefaultFileFSNodeMode FSNodeMode = 0644 // Default file mode
 	DefaultDirFSNodeMode  FSNodeMode = 0755 // Default directory mode
 )

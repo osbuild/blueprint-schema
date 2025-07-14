@@ -1,6 +1,5 @@
 fsnodes:
-- mode: "0644"
-  path: /var/tmp/file1
+- path: /var/tmp/file1
   type: file
 - contents:
     text: '---'
@@ -9,7 +8,6 @@ fsnodes:
   type: file
 - contents:
     text: test
-  mode: "0644"
   path: /var/tmp/dir/file2
   type: file
 - ensure_parents: true

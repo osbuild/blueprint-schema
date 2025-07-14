@@ -298,11 +298,12 @@ func (e *InternalImporter) importFSNodes() []ubp.FSNode {
 	var res []ubp.FSNode
 	for _, file := range e.from.Customizations.Files {
 		mode, err := ubp.ParseFSNodeMode(file.Mode)
-		if mode == 0 {
-			mode = ubp.DefaultFileFSNodeMode
-		}
 		if err != nil && file.Mode != "" {
 			e.log.Printf("error parsing file mode %q for file %q: %v, using default", file.Mode, file.Path, err)
+		}
+
+		if mode == ubp.DefaultFileFSNodeMode {
+			mode = ubp.UnsetFSNodeMode
 		}
 
 		n := ubp.FSNode{
@@ -324,11 +325,12 @@ func (e *InternalImporter) importFSNodes() []ubp.FSNode {
 
 	for _, dir := range e.from.Customizations.Directories {
 		mode, err := ubp.ParseFSNodeMode(dir.Mode)
-		if mode == 0 {
-			mode = ubp.DefaultDirFSNodeMode
-		}
 		if err != nil && dir.Mode != "" {
 			e.log.Printf("error parsing file mode %q for dir %q: %v, using default", dir.Mode, dir.Path, err)
+		}
+
+		if mode == ubp.DefaultDirFSNodeMode {
+			mode = ubp.UnsetFSNodeMode
 		}
 
 		n := ubp.FSNode{

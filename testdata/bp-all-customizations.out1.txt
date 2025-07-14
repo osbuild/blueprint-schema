@@ -107,7 +107,6 @@ fsnodes:
 
       [Install]
       WantedBy=multi-user.target
-  mode: "0644"
   path: /etc/systemd/system/custom.service
   type: file
 - contents:
@@ -115,23 +114,19 @@ fsnodes:
       [Service]
       ExecStart=
       ExecStart=/usr/bin/cat /etc/custom_file.txt
-  mode: "0644"
   path: /etc/systemd/system/custom.service.d/override.conf
   type: file
 - contents:
     text: image builder is the best
   group: root
-  mode: "0644"
   path: /etc/custom_file.txt
   type: file
   user: root
 - group: "0"
-  mode: "0644"
   path: /etc/empty_file.txt
   type: file
   user: "0"
-- mode: "0755"
-  path: /etc/systemd/system/custom.service.d
+- path: /etc/systemd/system/custom.service.d
   type: dir
 - group: "1050"
   mode: "0770"

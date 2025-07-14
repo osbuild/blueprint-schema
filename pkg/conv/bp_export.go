@@ -526,7 +526,6 @@ func (e *InternalExporter) exportFSNodes() ([]bp.FileCustomization, []bp.Directo
 	var files []bp.FileCustomization
 	var dirs []bp.DirectoryCustomization
 	for i, node := range e.from.FSNodes {
-
 		switch node.Type {
 		case ubp.FSNodeFile, "":
 			var contents string
@@ -549,9 +548,9 @@ func (e *InternalExporter) exportFSNodes() ([]bp.FileCustomization, []bp.Directo
 				Group: parseUGIDstr(node.Group),
 				Data:  contents,
 			}
-			mode := strconv.FormatInt(int64(node.Mode), 8)
-			if mode != "0" || node.Mode != ubp.DefaultFileFSNodeMode {
-				fc.Mode = mode
+
+			if node.Mode != ubp.UnsetFSNodeMode {
+				fc.Mode = strconv.FormatInt(int64(node.Mode), 8)
 			}
 
 			files = append(files, fc)
@@ -560,12 +559,11 @@ func (e *InternalExporter) exportFSNodes() ([]bp.FileCustomization, []bp.Directo
 				Path:          node.Path,
 				User:          parseUGIDstr(node.User),
 				Group:         parseUGIDstr(node.Group),
-				Mode:          strconv.FormatInt(int64(node.Mode), 8),
 				EnsureParents: node.EnsureParents,
 			}
-			mode := strconv.FormatInt(int64(node.Mode), 8)
-			if mode != "0" || node.Mode != ubp.DefaultDirFSNodeMode {
-				fc.Mode = mode
+
+			if node.Mode != ubp.UnsetFSNodeMode {
+				fc.Mode = strconv.FormatInt(int64(node.Mode), 8)
 			}
 
 			dirs = append(dirs, fc)
