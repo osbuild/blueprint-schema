@@ -1,9 +1,10 @@
+# package(s) with dash were converted as names
+
 [[packages]]
   name = "xmlstarlet"
 
 [[packages]]
-  name = "openscap"
-  version = "utils"
+  name = "openscap-utils"
 
 [[packages]]
   name = "jq"

@@ -3,9 +3,16 @@
   	Description: "",
   	Version:     "",
   	Packages: []blueprint.Package{
-  		{Name: "httpd", Version: "*"},
-- 		{Name: "gnome-session", Version: "*"},
-+ 		{Name: "gnome", Version: "session-*"},
+  		{
+  			Name:    "httpd",
+- 			Version: "*",
++ 			Version: "",
+  		},
+  		{
+  			Name:    "gnome-session",
+- 			Version: "*",
++ 			Version: "",
+  		},
   	},
   	Modules:        nil,
   	EnabledModules: nil,

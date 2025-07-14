@@ -17,6 +17,6 @@ dnf:
   groups:
   - Workstation
   packages:
-  - httpd-*
-  - gnome-session-*
+  - httpd
+  - gnome-session
 hostname: custombase

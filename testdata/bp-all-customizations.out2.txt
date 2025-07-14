@@ -1,10 +1,8 @@
 [[packages]]
   name = "bash"
-  version = "*"
 
 [[packages]]
   name = "bluez"
-  version = "*"
 
 [[groups]]
   name = "core"

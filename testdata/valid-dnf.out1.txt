@@ -1,11 +1,12 @@
+# package(s) with dash were converted as names
+
 name = "Blueprint example: DNF"
 
 [[packages]]
   name = "mosh"
 
 [[packages]]
-  name = "vim"
-  version = "enhanced-9.1.866-1.fc41.x86_64"
+  name = "vim-enhanced-9.1.866-1.fc41.x86_64"
 
 [[packages]]
   name = "@virtualization"

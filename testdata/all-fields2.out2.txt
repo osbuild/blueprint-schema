@@ -1,19 +1,17 @@
+# package(s) with dash were converted as names
 # registration not converted
 
 name = "Blueprint example"
 description = "A complete example of a blueprint with all possible fields"
 
 [[packages]]
-  name = "vim"
-  version = "enhanced"
+  name = "vim-enhanced"
 
 [[packages]]
-  name = "vim"
-  version = "enhanced-9.1.866-1"
+  name = "vim-enhanced-9.1.866-1"
 
 [[packages]]
-  name = "vim"
-  version = "enhanced-9.1.866-1.fc41.x86_64"
+  name = "vim-enhanced-9.1.866-1.fc41.x86_64"
 
 [[packages]]
   name = "@virtualization"

@@ -99,9 +99,15 @@ func (e *InternalImporter) importPackages() []string {
 	// Combine packages and modules into a single slice.
 	s := make([]string, 0, len(e.from.Packages)+len(e.from.Modules))
 	for _, pkg := range e.from.Packages {
+		if pkg.Version == "*" {
+			pkg.Version = ""
+		}
 		s = append(s, joinNonEmpty("-", pkg.Name, pkg.Version))
 	}
 	for _, pkg := range e.from.Modules {
+		if pkg.Version == "*" {
+			pkg.Version = ""
+		}
 		s = append(s, joinNonEmpty("-", pkg.Name, pkg.Version))
 	}
 

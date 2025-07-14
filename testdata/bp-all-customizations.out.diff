@@ -1,7 +1,19 @@
   &blueprint.Blueprint{
-  	... // 2 identical fields
-  	Version:        "",
-  	Packages:       {{Name: "bash", Version: "*"}, {Name: "bluez", Version: "*"}},
+  	Name:        "",
+  	Description: "",
+  	Version:     "",
+  	Packages: []blueprint.Package{
+  		{
+  			Name:    "bash",
+- 			Version: "*",
++ 			Version: "",
+  		},
+  		{
+  			Name:    "bluez",
+- 			Version: "*",
++ 			Version: "",
+  		},
+  	},
 - 	Modules:        []blueprint.Package{},
 + 	Modules:        nil,
   	EnabledModules: nil,
