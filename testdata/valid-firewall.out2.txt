@@ -4,6 +4,8 @@ network:
     services:
     - service: dns
     - service: ssh
+    - enabled: false
+      service: dhcp
     - from: 60000
       protocol: udp
       to: 60010

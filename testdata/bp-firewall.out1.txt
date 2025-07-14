@@ -2,5 +2,7 @@ network:
   firewall:
     services:
     - service: ssh
+    - enabled: false
+      service: http
     - port: 1080
       protocol: tcp

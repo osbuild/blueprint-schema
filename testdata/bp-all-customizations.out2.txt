@@ -55,6 +55,7 @@
     ports = ["1337:udp", "42-48:tcp"]
     [customizations.firewall.services]
       enabled = ["ftp"]
+      disabled = ["telnet"]
   [customizations.services]
     enabled = ["sshd.service", "custom.service"]
     disabled = ["bluetooth.service"]

@@ -445,6 +445,16 @@ func (e *InternalImporter) importNetwork() *ubp.Network {
 				to.Firewall.Services = append(to.Firewall.Services, *service)
 			}
 		}
+
+		for _, srv := range e.from.Customizations.Firewall.Services.Disabled {
+			ns := ubp.FirewallService{
+				Service: srv,
+				Enabled: ptr.To(ubp.FirewallEnabled(false)),
+			}
+			if service := ubp.NetworkServiceFromService(ns); service != nil {
+				to.Firewall.Services = append(to.Firewall.Services, *service)
+			}
+		}
 	}
 
 	for _, port := range e.from.Customizations.Firewall.Ports {

@@ -8,18 +8,8 @@
   	Groups:         {{Name: "core"}},
   	Containers:     nil,
   	Customizations: &blueprint.Customizations{
-  		... // 5 identical fields
-  		Timezone: &{Timezone: &"Europe/London", NTPServers: {"time.example.com"}},
-  		Locale:   &{Languages: {"el_CY.UTF-8"}, Keyboard: &"dvorak"},
-  		Firewall: &blueprint.FirewallCustomization{
-  			Ports: {"1337:udp", "42-48:tcp"},
-  			Services: &blueprint.FirewallServicesCustomization{
-  				Enabled:  {"ftp"},
-- 				Disabled: []string{"telnet"},
-+ 				Disabled: nil,
-  			},
-  			Zones: nil,
-  		},
+  		... // 7 identical fields
+  		Firewall: &{Ports: {"1337:udp", "42-48:tcp"}, Services: &{Enabled: {"ftp"}, Disabled: {"telnet"}}},
   		Services: &{Enabled: {"sshd.service", "custom.service"}, Disabled: {"bluetooth.service"}, Masked: {"nfs-server", "rpcbind", "nftables"}},
 - 		Filesystem: []blueprint.FilesystemCustomization{
 - 			{Mountpoint: "/home", MinSize: 2147483648},

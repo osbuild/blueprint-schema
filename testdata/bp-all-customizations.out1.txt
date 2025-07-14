@@ -151,6 +151,8 @@ network:
   firewall:
     services:
     - service: ftp
+    - enabled: false
+      service: telnet
     - port: 1337
       protocol: udp
     - from: 42
