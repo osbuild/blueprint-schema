@@ -40,7 +40,7 @@ storage:
       minsize: 1 GiB
       mountpoint: /srv
       name: srvlv
-    - fs_type: ext4
+    - fs_type: swap
       minsize: 1 GiB
       name: swap-lv
     minsize: 10 GiB

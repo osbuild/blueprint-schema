@@ -623,9 +623,9 @@ func (e *InternalImporter) importStorage() *ubp.Storage {
 				Minsize: ubp.ToByteSize(part.MinSize),
 			}
 			for _, lv := range part.LogicalVolumes {
-				fst, err := ubp.ParseFSType(part.FSType)
+				fst, err := ubp.ParseFSType(lv.FSType)
 				if err != nil {
-					e.log.Printf("error parsing filesystem type %q for lv %q: %v, using default", part.FSType, lv.Name, err)
+					e.log.Printf("error parsing filesystem type %q for lv %q: %v, using default", lv.FSType, lv.Name, err)
 				}
 				nlv := ubp.PartitionLV{
 					Name:       lv.Name,

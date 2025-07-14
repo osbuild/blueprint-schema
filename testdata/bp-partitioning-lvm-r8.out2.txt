@@ -66,4 +66,4 @@
       [[customizations.disk.partitions.logical_volumes]]
         name = "swap-lv"
         minsize = 1073741824
-        fs_type = "ext4"
+        fs_type = "swap"

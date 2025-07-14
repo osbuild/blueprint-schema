@@ -13,7 +13,7 @@ storage:
     mountpoint: /
     type: plain
   - logical_volumes:
-    - fs_type: ext4
+    - fs_type: xfs
       label: vg_data_var
       minsize: 50 GiB
       mountpoint: /var
