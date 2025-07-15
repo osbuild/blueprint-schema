@@ -25,7 +25,6 @@ containers:
 - local_storage: true
   name: fedora
   source: quay.io/fedora/fedora:latest
-  tls_verify: true
 description: A complete example of a blueprint with all possible fields
 dnf:
   groups:

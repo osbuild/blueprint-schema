@@ -3,10 +3,18 @@ package ubp
 import (
 	"encoding/json"
 	"testing"
+
+	"github.com/google/go-cmp/cmp"
 )
 
 func TestPopulateDefaults(t *testing.T) {
 	ubpDefaults := &Blueprint{
+		Containers: []Container{
+			{
+				Name:   "container",
+				Source: "source",
+			},
+		},
 		DNF: &DNF{
 			Repositories: []DNFRepository{{ID: "repo"}},
 		},
@@ -36,6 +44,13 @@ func TestPopulateDefaults(t *testing.T) {
 		val  func(*Blueprint) any
 		want any
 	}{
+		{
+			name: "container-tls-verify",
+			val: func(ubp *Blueprint) any {
+				return *ubp.Containers[0].TLSVerify
+			},
+			want: true,
+		},
 		{
 			name: "dnf-repo-ssl-verify",
 			val: func(ubp *Blueprint) any {
@@ -106,6 +121,12 @@ func TestPopulateDefaults(t *testing.T) {
 	}
 
 	want := `{
+	"containers": [
+		{
+			"name": "container",
+			"source": "source"
+		}
+	],
 	"dnf": {
 		"repositories": [
 			{
@@ -134,7 +155,7 @@ func TestPopulateDefaults(t *testing.T) {
 	}
 }`
 
-	if string(data) != want {
-		t.Errorf("MarshalJSON defaults = %s, want %s", data, want)
+	if diff := cmp.Diff(want, string(data)); diff != "" {
+		t.Errorf("MarshalJSON defaults mismatch (-want +got):\n%s", diff)
 	}
 }
