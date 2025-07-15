@@ -51,10 +51,8 @@ Schema:
         "x-go-type-skip-optional-pointer": true
       },
       "priority": {
-        "default": 99,
-        "description": "Repository priority.",
-        "type": "integer",
-        "x-go-type-skip-optional-pointer": true
+        "description": "Repository priority. When unset, default DNF priority is used. This is useful for third-party repositories that are not part of the base image.",
+        "type": "integer"
       },
       "source": {
         "description": "Repository source.",
@@ -71,9 +69,9 @@ Schema:
         ],
         "x-go-type-name": "DNFSource"
       },
-      "ssl_verify": {
+      "tls_verify": {
         "default": true,
-        "description": "Enable SSL verification for the repository. Enabled by default.",
+        "description": "Enable TLS verification for the repository. Enabled by default.",
         "type": "boolean",
         "x-go-name": "TLSVerify"
       },
@@ -98,6 +96,5 @@ Value:
     "id": "fedora-cisco-openh264",
     "metalink": "https://mirrors.fedoraproject.org/metalink?repo=fedora-cisco-openh264-$releasever\u0026arch=$basearch",
     "module_hotfixes": false,
-    "priority": 99,
-    "ssl_verify": true
+    "tls_verify": true
   }

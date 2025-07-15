@@ -33,6 +33,10 @@ Go code is generated from `blueprint-oas3.json` via `oapi-codegen` using `make s
 
 All the code resides in `pkg/ubp` except embedded schemas from above which are in the top-level directory for technical reasons (Go embedding limitations). Direct access to schema files is not required for any scenario, so only import the former package.
 
+### Default values
+
+All schema default values specified via `default` field must also have a proper handling via `UnmarshalJSON` and `MarshalJSON` and a test in `default_values_test.go`. Only those default values that are independent of operating system, version or architecture can be defined this way. For the dependent default values, use schema description to explain what they are.
+
 ### CLI tool
 
 A simple CLI tool for schema bundling, schema validation or conversion is part of this library:

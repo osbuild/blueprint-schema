@@ -489,10 +489,10 @@ components:
           type: string
           x-go-type-skip-optional-pointer: true
         priority:
-          default: 99
-          description: Repository priority.
+          description: Repository priority. When unset, default DNF priority is used.
+            This is useful for third-party repositories that are not part of the base
+            image.
           type: integer
-          x-go-type-skip-optional-pointer: true
         source:
           description: Repository source.
           oneOf:
@@ -500,9 +500,9 @@ components:
           - $ref: '#/components/schemas/dnf_source_metalink'
           - $ref: '#/components/schemas/dnf_source_mirrorlist'
           x-go-type-name: DNFSource
-        ssl_verify:
+        tls_verify:
           default: true
-          description: Enable SSL verification for the repository. Enabled by default.
+          description: Enable TLS verification for the repository. Enabled by default.
           type: boolean
           x-go-name: TLSVerify
         usage:

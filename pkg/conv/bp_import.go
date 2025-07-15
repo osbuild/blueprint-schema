@@ -159,7 +159,7 @@ func (e *InternalImporter) importRepositories() []ubp.DNFRepository {
 			GPGCheckRepo:   repo.RepoGPGCheck,
 			GPGKeys:        repo.GPGKeys,
 			ModuleHotfixes: ptr.ValueOr(repo.ModuleHotfixes, false),
-			Priority:       ptr.ValueOr(repo.Priority, 0),
+			Priority:       repo.Priority,
 			TLSVerify:      repo.SSLVerify,
 			Usage: &ubp.DnfRepositoryUsage{
 				Configure: repo.Enabled,

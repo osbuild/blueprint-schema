@@ -68,12 +68,11 @@ properties:
     type: boolean
     x-go-type-skip-optional-pointer: true
   priority:
-    description: Repository priority.
-    default: 99
+    description: Repository priority. When unset, default DNF priority is used.
+      This is useful for third-party repositories that are not part of the base image.
     type: integer
-    x-go-type-skip-optional-pointer: true
-  ssl_verify:
-    description: Enable SSL verification for the repository. Enabled by default.
+  tls_verify:
+    description: Enable TLS verification for the repository. Enabled by default.
     default: true
     type: boolean
     x-go-name: TLSVerify

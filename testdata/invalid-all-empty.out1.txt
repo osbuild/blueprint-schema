@@ -8,11 +8,15 @@
   [[customizations.repositories]]
     id = "one"
     enabled = true
+    gpgcheck = true
+    repo_gpgcheck = true
     sslverify = true
     install_from = true
 
   [[customizations.repositories]]
     id = "two"
     enabled = true
+    gpgcheck = true
+    repo_gpgcheck = true
     sslverify = true
     install_from = true

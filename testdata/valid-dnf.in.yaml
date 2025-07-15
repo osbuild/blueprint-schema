@@ -17,7 +17,7 @@ dnf:
         metalink: "https://mirrors.fedoraproject.org/metalink?repo=fedora-cisco-openh264-$releasever&arch=$basearch"
       gpg_keys: ["file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch"]
       gpg_check_repo: false
-      ssl_verify: true
+      tls_verify: true
       usage:
         install: true
         configure: true

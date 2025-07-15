@@ -19,6 +19,14 @@ func (dr *DNFRepository) UnmarshalJSON(data []byte) error {
 		tmp.TLSVerify = ptr.To(true)
 	}
 
+	if tmp.GPGCheck == nil {
+		tmp.GPGCheck = ptr.To(true)
+	}
+
+	if tmp.GPGCheckRepo == nil {
+		tmp.GPGCheckRepo = ptr.To(true)
+	}
+
 	if tmp.Usage == nil {
 		dnfRepoUsage := DNFRepoUsage{}
 		if err := json.Unmarshal(data, &dnfRepoUsage); err != nil {
@@ -38,6 +46,14 @@ func (dr DNFRepository) MarshalJSON() ([]byte, error) {
 
 	if tmp.TLSVerify != nil && *tmp.TLSVerify {
 		tmp.TLSVerify = nil
+	}
+
+	if tmp.GPGCheck != nil && *tmp.GPGCheck {
+		tmp.GPGCheck = nil
+	}
+
+	if tmp.GPGCheckRepo != nil && *tmp.GPGCheckRepo {
+		tmp.GPGCheckRepo = nil
 	}
 
 	if tmp.Usage != nil && tmp.Usage.IsZero() {

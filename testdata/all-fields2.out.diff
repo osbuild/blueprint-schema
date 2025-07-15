@@ -12,5 +12,41 @@
   	},
   	Modules:        nil,
   	EnabledModules: {{Name: "postgres", Stream: "16/server"}},
-  	... // 6 identical fields
+  	Groups:         {{Name: "virtualization"}},
+  	Containers:     {{Source: "quay.io/fedora/fedora:latest", Name: "fedora", TLSVerify: &true, LocalStorage: true}},
+  	Customizations: &blueprint.Customizations{
+  		... // 16 identical fields
+  		Directories: {{Path: "/var/tmp/dir", User: string("lzap"), Group: string("lzap"), Mode: "755", ...}, {Path: "/var/tmp/dir", Mode: "755"}},
+  		Files:       {{Path: "/var/tmp/dir/file1", User: string("lzap"), Group: string("lzap"), Mode: "644", ...}, {Path: "/var/tmp/dir/file2", Mode: "644", Data: "test"}},
+  		Repositories: []blueprint.RepositoryCustomization{
+  			{
+  				... // 6 identical fields
+  				Priority:     nil,
+  				Enabled:      &false,
+- 				GPGCheck:     nil,
++ 				GPGCheck:     &true,
+  				RepoGPGCheck: &false,
+  				SSLVerify:    &true,
+  				... // 3 identical fields
+  			},
+  			{
+  				... // 6 identical fields
+  				Priority:       nil,
+  				Enabled:        &false,
+- 				GPGCheck:       nil,
++ 				GPGCheck:       &true,
+- 				RepoGPGCheck:   nil,
++ 				RepoGPGCheck:   &true,
+  				SSLVerify:      &true,
+  				ModuleHotfixes: nil,
+  				... // 2 identical fields
+  			},
+  		},
+  		FIPS:      &true,
+  		Installer: &{Unattended: true, SudoNopasswd: {"lzap"}, Kickstart: &{Contents: "# some kickstart data"}, Modules: &{Enable: {"org.fedoraproject.Anaconda.Modules.Subscription"}, Disable: {"org.fedoraproject.Anaconda.Modules.Timezone"}}},
+  		... // 4 identical fields
+  	},
+  	Distro:  "",
+  	Arch:    "",
+  	Minimal: false,
   }

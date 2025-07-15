@@ -611,7 +611,7 @@ func (e *InternalExporter) exportRepositories() ([]bp.RepositoryCustomization, *
 			BaseURLs:       burl.URLs,
 			Metalink:       bmeta.Metalink,
 			Mirrorlist:     bmirror.Mirrorlist,
-			Priority:       ptr.ToNilIfEmpty(repo.Priority),
+			Priority:       repo.Priority,
 			Enabled:        configure,
 			SSLVerify:      repo.TLSVerify,
 			GPGKeys:        repo.GPGKeys,

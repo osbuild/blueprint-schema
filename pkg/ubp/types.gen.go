@@ -402,14 +402,14 @@ type DNFRepository struct {
 	// Name Repository name.
 	Name string `json:"name,omitempty"`
 
-	// Priority Repository priority.
-	Priority int `json:"priority,omitempty"`
+	// Priority Repository priority. When unset, default DNF priority is used. This is useful for third-party repositories that are not part of the base image.
+	Priority *int `json:"priority,omitempty"`
 
 	// Source Repository source.
 	Source *DNFSource `json:"source,omitempty"`
 
-	// TLSVerify Enable SSL verification for the repository. Enabled by default.
-	TLSVerify *bool               `json:"ssl_verify,omitempty"`
+	// TLSVerify Enable TLS verification for the repository. Enabled by default.
+	TLSVerify *bool               `json:"tls_verify,omitempty"`
 	Usage     *DnfRepositoryUsage `json:"usage,omitempty"`
 }
 
