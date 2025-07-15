@@ -103,6 +103,16 @@ func UnmarshalAny(buf []byte, anyDetails ...*AnyDetails) (*ubp.Blueprint, error)
 	)
 	details.Warnings = errors.Join(bpWarnTOML, bpWarnJSON)
 
+	errDefaults := ubp.PopulateDefaults(bpTOML)
+	if errDefaults != nil {
+		err = errors.Join(err, fmt.Errorf("populate defaults for BP-TOML: %w", errDefaults))
+	}
+
+	errDefaults = ubp.PopulateDefaults(bpJSON)
+	if errDefaults != nil {
+		err = errors.Join(err, fmt.Errorf("populate defaults for BP-JSON: %w", errDefaults))
+	}
+
 	if ubpErrYAML == nil && details.ubpCountYAML == maxCount {
 		details.Format = AnyFormatUBPYAML
 		return ubpYAML, nil

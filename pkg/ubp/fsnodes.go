@@ -15,16 +15,30 @@ func (node *FSNode) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
-	if tmp.Mode == 0 {
+	if tmp.Mode == UnsetFSNodeMode {
 		if tmp.Type.IsDir() {
-			tmp.Mode = 0755
+			tmp.Mode = DefaultDirFSNodeMode
 		} else {
-			tmp.Mode = 0644
+			tmp.Mode = DefaultFileFSNodeMode
 		}
 	}
 
 	*node = FSNode(tmp)
 	return nil
+}
+
+// MarshalJSON handles default values
+func (node FSNode) MarshalJSON() ([]byte, error) {
+	type tmpType FSNode
+	tmp := tmpType(node)
+
+	if tmp.Type.IsDir() && tmp.Mode == DefaultDirFSNodeMode {
+		tmp.Mode = UnsetFSNodeMode
+	} else if tmp.Type.IsFile() && tmp.Mode == DefaultFileFSNodeMode {
+		tmp.Mode = UnsetFSNodeMode
+	}
+
+	return json.Marshal(tmp)
 }
 
 func (node FSNodeContents) SelectUnion() (FSNodeContentsText, FSNodeContentsBase64, error) {

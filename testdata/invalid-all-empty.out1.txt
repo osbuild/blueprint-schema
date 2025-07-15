@@ -7,10 +7,12 @@
 
   [[customizations.repositories]]
     id = "one"
+    enabled = true
     sslverify = true
     install_from = true
 
   [[customizations.repositories]]
     id = "two"
+    enabled = true
     sslverify = true
     install_from = true

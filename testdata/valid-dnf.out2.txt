@@ -17,5 +17,4 @@ dnf:
     name: Fedora $releasever openh264 (From Cisco) - $basearch
     source:
       metalink: https://mirrors.fedoraproject.org/metalink?repo=fedora-cisco-openh264-$releasever&arch=$basearch
-    usage: {}
 name: 'Blueprint example: DNF'

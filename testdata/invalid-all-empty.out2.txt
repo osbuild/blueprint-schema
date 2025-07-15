@@ -9,9 +9,7 @@ accounts:
 dnf:
   repositories:
   - id: one
-    usage: {}
   - id: two
-    usage: {}
 storage:
   minsize: "0"
   partitions: null

@@ -3,5 +3,4 @@
 dnf:
   repositories:
   - id: fedora-cisco-openh264
-    usage: {}
 name: 'Blueprint example: DNF'

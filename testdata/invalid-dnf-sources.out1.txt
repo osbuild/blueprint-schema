@@ -4,5 +4,6 @@ name = "Blueprint example: DNF"
 
   [[customizations.repositories]]
     id = "fedora-cisco-openh264"
+    enabled = true
     sslverify = true
     install_from = true

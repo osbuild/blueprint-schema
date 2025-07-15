@@ -19,6 +19,14 @@ func (dr *DNFRepository) UnmarshalJSON(data []byte) error {
 		tmp.SSLVerify = ptr.To(true)
 	}
 
+	if tmp.Usage == nil {
+		dnfRepoUsage := DNFRepoUsage{}
+		if err := json.Unmarshal(data, &dnfRepoUsage); err != nil {
+			return err
+		}
+		tmp.Usage = &dnfRepoUsage
+	}
+
 	*dr = DNFRepository(tmp)
 	return nil
 }
@@ -30,6 +38,10 @@ func (dr DNFRepository) MarshalJSON() ([]byte, error) {
 
 	if tmp.SSLVerify != nil && *tmp.SSLVerify {
 		tmp.SSLVerify = nil
+	}
+
+	if tmp.Usage != nil && tmp.Usage.IsZero() {
+		tmp.Usage = nil
 	}
 
 	return json.Marshal(tmp)
