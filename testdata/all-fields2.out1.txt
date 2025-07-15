@@ -57,12 +57,10 @@ fips:
 fsnodes:
 - group: lzap
   path: /var/tmp/dir/file1
-  type: file
   user: lzap
 - contents:
     text: test
   path: /var/tmp/dir/file2
-  type: file
 - ensure_parents: true
   group: lzap
   path: /var/tmp/dir

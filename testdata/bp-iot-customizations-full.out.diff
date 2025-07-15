@@ -9,8 +9,10 @@
   		Directories: []blueprint.DirectoryCustomization{
   			{
   				Path:          "/etc/systemd/system/custom.service.d",
-  				User:          nil,
-  				Group:         nil,
+- 				User:          nil,
++ 				User:          string("root"),
+- 				Group:         nil,
++ 				Group:         string("root"),
 - 				Mode:          "",
 + 				Mode:          "755",
   				EnsureParents: false,
@@ -27,16 +29,20 @@
   		Files: []blueprint.FileCustomization{
   			{
   				Path:  "/etc/systemd/system/custom.service",
-  				User:  nil,
-  				Group: nil,
+- 				User:  nil,
++ 				User:  string("root"),
+- 				Group: nil,
++ 				Group: string("root"),
 - 				Mode:  "",
 + 				Mode:  "644",
   				Data:  "[Unit]\nDescription=Custom service\n\n[Service]\nExecStart=/usr/bin/"...,
   			},
   			{
   				Path:  "/etc/systemd/system/custom.service.d/override.conf",
-  				User:  nil,
-  				Group: nil,
+- 				User:  nil,
++ 				User:  string("root"),
+- 				Group: nil,
++ 				Group: string("root"),
 - 				Mode:  "",
 + 				Mode:  "644",
   				Data:  "[Service]\nExecStart=\nExecStart=/usr/bin/cat /etc/custom_file.txt\n",

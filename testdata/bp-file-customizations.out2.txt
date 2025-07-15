@@ -4,6 +4,8 @@
 
   [[customizations.directories]]
     path = "/etc/systemd/system/custom.service.d"
+    user = "root"
+    group = "root"
     mode = "755"
 
   [[customizations.directories]]
@@ -14,11 +16,15 @@
 
   [[customizations.files]]
     path = "/etc/systemd/system/custom.service"
+    user = "root"
+    group = "root"
     mode = "644"
     data = "[Unit]\nDescription=Custom service\n\n[Service]\nExecStart=/usr/bin/false\n\n[Install]\nWantedBy=multi-user.target\n"
 
   [[customizations.files]]
     path = "/etc/systemd/system/custom.service.d/override.conf"
+    user = "root"
+    group = "root"
     mode = "644"
     data = "[Service]\nExecStart=\nExecStart=/usr/bin/cat /etc/custom_file.txt\n"
 

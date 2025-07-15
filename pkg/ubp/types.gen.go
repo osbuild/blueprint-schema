@@ -543,7 +543,7 @@ type FSNode struct {
 	Path string `json:"path"`
 
 	// State State is the state of the file system node, one of: present, absent. Defaults to present.
-	State *FSNodeState `json:"state,omitempty"`
+	State FSNodeState `json:"state,omitempty"`
 
 	// Type Type is the type of the file system node, one of: file, dir.
 	Type FSNodeType `json:"type,omitempty"`

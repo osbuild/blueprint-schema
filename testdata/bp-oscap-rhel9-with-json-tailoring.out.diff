@@ -19,8 +19,10 @@
   		Files: []blueprint.FileCustomization{
   			{
   				Path:  "/oscap_data/tailoring.json",
-  				User:  nil,
-  				Group: nil,
+- 				User:  nil,
++ 				User:  string("root"),
+- 				Group: nil,
++ 				Group: string("root"),
 - 				Mode:  "",
 + 				Mode:  "644",
   				Data:  `{"profiles":[{"id":"cis","base_profile_id":"cis","rules":{"parti`...,

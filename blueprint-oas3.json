@@ -704,7 +704,8 @@
               "FSStatePresent",
               "FSStateAbsent"
             ],
-            "x-go-type-name": "FSNodeState"
+            "x-go-type-name": "FSNodeState",
+            "x-go-type-skip-optional-pointer": true
           },
           "type": {
             "default": "file",

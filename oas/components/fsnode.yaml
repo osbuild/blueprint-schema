@@ -30,6 +30,7 @@ properties:
       - FSStatePresent
       - FSStateAbsent
     x-go-type-name: FSNodeState
+    x-go-type-skip-optional-pointer: true
   ensure_parents:
     description: |
       EnsureParents is a boolean that determines if the parent directories

@@ -15,9 +15,33 @@
   	Groups:         {{Name: "virtualization"}},
   	Containers:     {{Source: "quay.io/fedora/fedora:latest", Name: "fedora", TLSVerify: &true, LocalStorage: true}},
   	Customizations: &blueprint.Customizations{
-  		... // 16 identical fields
-  		Directories: {{Path: "/var/tmp/dir", User: string("lzap"), Group: string("lzap"), Mode: "755", ...}, {Path: "/var/tmp/dir", Mode: "755"}},
-  		Files:       {{Path: "/var/tmp/dir/file1", User: string("lzap"), Group: string("lzap"), Mode: "644", ...}, {Path: "/var/tmp/dir/file2", Mode: "644", Data: "test"}},
+  		... // 14 identical fields
+  		OpenSCAP: &{DataStream: "/usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml", ProfileID: "xccdf_org.ssgproject.content_profile_cis", Tailoring: &{Selected: {"xccdf_org.ssgproject.content_rule_md5_check"}, Unselected: {"xccdf_org.ssgproject.content_rule_grub2_password"}}},
+  		Ignition: &{FirstBoot: &{ProvisioningURL: "https://ignition.example.com/firstboot"}},
+  		Directories: []blueprint.DirectoryCustomization{
+  			{Path: "/var/tmp/dir", User: string("lzap"), Group: string("lzap"), Mode: "755", ...},
+  			{
+  				Path:          "/var/tmp/dir",
+- 				User:          nil,
++ 				User:          string("root"),
+- 				Group:         nil,
++ 				Group:         string("root"),
+  				Mode:          "755",
+  				EnsureParents: false,
+  			},
+  		},
+  		Files: []blueprint.FileCustomization{
+  			{Path: "/var/tmp/dir/file1", User: string("lzap"), Group: string("lzap"), Mode: "644", ...},
+  			{
+  				Path:  "/var/tmp/dir/file2",
+- 				User:  nil,
++ 				User:  string("root"),
+- 				Group: nil,
++ 				Group: string("root"),
+  				Mode:  "644",
+  				Data:  "test",
+  			},
+  		},
   		Repositories: []blueprint.RepositoryCustomization{
   			{
   				... // 6 identical fields

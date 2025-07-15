@@ -1,15 +1,12 @@
 fsnodes:
 - path: /var/tmp/file1
-  type: file
 - contents:
     text: '---'
   mode: "0640"
   path: /var/tmp/dir/file1
-  type: file
 - contents:
     text: test
   path: /var/tmp/dir/file2
-  type: file
 - ensure_parents: true
   group: lzap
   mode: "0750"

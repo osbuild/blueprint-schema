@@ -546,7 +546,7 @@ func (e *InternalExporter) exportFSNodes() ([]bp.FileCustomization, []bp.Directo
 				}
 			}
 
-			if node.State != nil && node.State.IsAbsent() {
+			if node.State.IsAbsent() {
 				e.log.Printf("fs node %d is marked as absent, unsupported", i)
 				continue
 			}

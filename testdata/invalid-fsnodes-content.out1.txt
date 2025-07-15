@@ -4,8 +4,12 @@ name = "Blueprint example: fsnodes"
 
   [[customizations.directories]]
     path = "/var/tmp/dir"
+    user = "root"
+    group = "root"
     mode = "755"
 
   [[customizations.directories]]
     path = "/var/tmp/dir"
+    user = "root"
+    group = "root"
     mode = "755"

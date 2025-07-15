@@ -21,7 +21,6 @@ func TestPopulateDefaults(t *testing.T) {
 		FSNodes: []FSNode{
 			{
 				Path: "file",
-				Type: "file",
 			},
 			{
 				Path: "dir",
@@ -197,8 +196,7 @@ func TestPopulateDefaults(t *testing.T) {
 	},
 	"fsnodes": [
 		{
-			"path": "file",
-			"type": "file"
+			"path": "file"
 		},
 		{
 			"path": "dir",

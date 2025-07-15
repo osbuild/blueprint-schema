@@ -124,6 +124,8 @@ description = "A complete example of a blueprint with all possible fields"
 
   [[customizations.directories]]
     path = "/var/tmp/dir"
+    user = "root"
+    group = "root"
     mode = "755"
 
   [[customizations.files]]
@@ -134,6 +136,8 @@ description = "A complete example of a blueprint with all possible fields"
 
   [[customizations.files]]
     path = "/var/tmp/dir/file2"
+    user = "root"
+    group = "root"
     mode = "644"
     data = "test"
 

@@ -6,6 +6,8 @@ import (
 	"strings"
 )
 
+const FSStateUnset FSNodeState = ""
+
 // UnmarshalJSON handles default values
 func (node *FSNode) UnmarshalJSON(data []byte) error {
 	type tmpType FSNode
@@ -13,6 +15,22 @@ func (node *FSNode) UnmarshalJSON(data []byte) error {
 
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err
+	}
+
+	if tmp.Type == "" {
+		tmp.Type = FSNodeFile
+	}
+
+	if tmp.State == FSStateUnset {
+		tmp.State = FSStatePresent
+	}
+
+	if tmp.User == "" {
+		tmp.User = "root"
+	}
+
+	if tmp.Group == "" {
+		tmp.Group = "root"
 	}
 
 	if tmp.Mode == UnsetFSNodeMode {
@@ -31,6 +49,22 @@ func (node *FSNode) UnmarshalJSON(data []byte) error {
 func (node FSNode) MarshalJSON() ([]byte, error) {
 	type tmpType FSNode
 	tmp := tmpType(node)
+
+	if tmp.Type == FSNodeFile {
+		tmp.Type = ""
+	}
+
+	if tmp.State == FSStatePresent {
+		tmp.State = FSStateUnset
+	}
+
+	if tmp.User == "root" {
+		tmp.User = ""
+	}
+
+	if tmp.Group == "root" {
+		tmp.Group = ""
+	}
 
 	if tmp.Type.IsDir() && tmp.Mode == DefaultDirFSNodeMode {
 		tmp.Mode = UnsetFSNodeMode
@@ -108,9 +142,17 @@ func (nt FSNodeType) String() string {
 }
 
 func (nt FSNodeType) IsDir() bool {
+	if nt == "" {
+		return false
+	}
+
 	return strings.EqualFold(nt.String(), FSNodeDir.String())
 }
 
 func (nt FSNodeType) IsFile() bool {
+	if nt == "" {
+		return true
+	}
+
 	return strings.EqualFold(nt.String(), FSNodeFile.String())
 }
