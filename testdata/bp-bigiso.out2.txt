@@ -4,7 +4,8 @@
   name = "httpd"
 
 [[packages]]
-  name = "gnome-session"
+  name = "gnome"
+  version = "session"
 
 [[groups]]
   name = "Workstation"

@@ -24,6 +24,22 @@ func splitStringEmptyN(s string, delimiter string, n int) []string {
 	return result
 }
 
+// splitEnVr splits a NVRE string to Epoch+Name and Version+Release. Performs "best effort"
+// heuristic, can generate incorrect split.
+func splitEnVr(s string) (string, string) {
+	lastDash := strings.LastIndex(s, "-")
+	if lastDash == -1 {
+		return s, ""
+	}
+
+	secondLastDash := strings.LastIndex(s[:lastDash], "-")
+	if secondLastDash == -1 {
+		return s[:lastDash], s[lastDash+1:]
+	}
+
+	return s[:secondLastDash], s[secondLastDash+1:]
+}
+
 // int64ToVersion converts a uint64 value to a version string in the format "x.y.z".
 func int64ToVersion(input uint64) string {
 	z := uint16(input & 0xFFFF)

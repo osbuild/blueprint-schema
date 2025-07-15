@@ -4,7 +4,8 @@
   name = "xmlstarlet"
 
 [[packages]]
-  name = "openscap-utils"
+  name = "openscap"
+  version = "utils"
 
 [[packages]]
   name = "jq"

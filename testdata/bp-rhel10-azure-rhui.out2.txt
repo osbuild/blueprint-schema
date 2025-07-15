@@ -2,10 +2,12 @@
 # registration not converted
 
 [[packages]]
-  name = "rhui-azure-rhel10"
+  name = "rhui"
+  version = "azure-rhel10"
 
 [[packages]]
-  name = "redhat-cloud-client-configuration"
+  name = "redhat-cloud"
+  version = "client-configuration"
 
 [customizations]
   [customizations.rhsm]

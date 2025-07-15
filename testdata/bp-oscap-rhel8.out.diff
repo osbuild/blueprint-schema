@@ -3,13 +3,10 @@
   	Description: "",
   	Version:     "",
   	Packages: []blueprint.Package{
-  		{
-  			Name:    "httpd",
-- 			Version: "*",
-+ 			Version: "",
-  		},
-- 		{Name: "gnome-session", Version: "*"},
-+ 		{Name: "gnome", Version: "session"},
+  		{Name: "xmlstarlet"},
+- 		{Name: "openscap-utils"},
++ 		{Name: "openscap", Version: "utils"},
+  		{Name: "jq"},
   	},
   	Modules:        nil,
   	EnabledModules: nil,

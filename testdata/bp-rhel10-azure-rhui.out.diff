@@ -1,7 +1,17 @@
   &blueprint.Blueprint{
-  	... // 6 identical fields
-  	Groups:     nil,
-  	Containers: nil,
+  	Name:        "",
+  	Description: "",
+  	Version:     "",
+  	Packages: []blueprint.Package{
+- 		{Name: "rhui-azure-rhel10"},
++ 		{Name: "rhui", Version: "azure-rhel10"},
+- 		{Name: "redhat-cloud-client-configuration"},
++ 		{Name: "redhat-cloud", Version: "client-configuration"},
+  	},
+  	Modules:        nil,
+  	EnabledModules: nil,
+  	Groups:         nil,
+  	Containers:     nil,
   	Customizations: &blueprint.Customizations{
   		... // 20 identical fields
   		Installer: nil,

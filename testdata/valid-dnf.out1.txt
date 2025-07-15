@@ -6,7 +6,8 @@ name = "Blueprint example: DNF"
   name = "mosh"
 
 [[packages]]
-  name = "vim-enhanced-9.1.866-1.fc41.x86_64"
+  name = "vim-enhanced"
+  version = "9.1.866-1.fc41.x86_64"
 
 [[packages]]
   name = "@virtualization"

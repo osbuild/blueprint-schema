@@ -55,18 +55,20 @@ func (e *InternalExporter) exportPackages() []bp.Package {
 	var dash bool
 	var s []bp.Package
 	for _, pkg := range e.from.DNF.Packages {
-		if strings.Contains(pkg, "-") {
+		// It is not possible to reliably detect version of a package with a dash in its name,
+		// let's do best effort and split it at the second last dash and issue a warning.
+		en, vr := splitEnVr(pkg)
+		if vr != "" {
 			dash = true
 		}
 
 		s = append(s, bp.Package{
-			Name: pkg,
+			Name:    en, // Epoch + Name
+			Version: vr, // Version + Release
 		})
 	}
 
 	if dash {
-		// It is not possible to reliably detect version of a package with a dash in its name,
-		// so we convert it to a name only.
 		e.log.Printf("package(s) with dash were converted as names")
 	}
 	return s
