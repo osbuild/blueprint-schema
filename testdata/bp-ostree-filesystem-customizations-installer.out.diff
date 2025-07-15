@@ -13,11 +13,8 @@
 - 		},
 + 		Filesystem:         nil,
   		Disk:               nil,
-- 		InstallationDevice: "/dev/vda",
-+ 		InstallationDevice: "",
-  		PartitioningMode:   "",
-  		FDO:                nil,
-  		... // 11 identical fields
+  		InstallationDevice: "/dev/vda",
+  		... // 13 identical fields
   	},
   	Distro:  "",
   	Arch:    "",

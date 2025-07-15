@@ -379,31 +379,33 @@ func (e *InternalImporter) importIgnition() *ubp.Ignition {
 }
 
 func (e *InternalImporter) importInstaller() *ubp.Installer {
-	if e.from.Customizations == nil || e.from.Customizations.Installer == nil {
+	if e.from.Customizations == nil {
 		return nil
 	}
 
-	to := ubp.Installer{
-		Anaconda: &ubp.InstallerAnaconda{
+	to := ubp.Installer{}
+
+	if e.from.Customizations.Installer != nil {
+		to.Anaconda = &ubp.InstallerAnaconda{
 			Unattended:   e.from.Customizations.Installer.Unattended,
 			SudoNOPASSWD: e.from.Customizations.Installer.SudoNopasswd,
-		},
-	}
-
-	if e.from.Customizations.Installer.Kickstart != nil {
-		to.Anaconda.Kickstart = e.from.Customizations.Installer.Kickstart.Contents
-	}
-
-	if e.from.Customizations.Installer.Modules != nil {
-		for _, m := range e.from.Customizations.Installer.Modules.Enable {
-			if pm := ubp.ParseAnacondaModule(m); pm != "" {
-				to.Anaconda.EnabledModules = append(to.Anaconda.EnabledModules, pm)
-			}
 		}
 
-		for _, m := range e.from.Customizations.Installer.Modules.Disable {
-			if pm := ubp.ParseAnacondaModule(m); pm != "" {
-				to.Anaconda.DisabledModules = append(to.Anaconda.DisabledModules, pm)
+		if e.from.Customizations.Installer.Kickstart != nil {
+			to.Anaconda.Kickstart = e.from.Customizations.Installer.Kickstart.Contents
+		}
+
+		if e.from.Customizations.Installer.Modules != nil {
+			for _, m := range e.from.Customizations.Installer.Modules.Enable {
+				if pm := ubp.ParseAnacondaModule(m); pm != "" {
+					to.Anaconda.EnabledModules = append(to.Anaconda.EnabledModules, pm)
+				}
+			}
+
+			for _, m := range e.from.Customizations.Installer.Modules.Disable {
+				if pm := ubp.ParseAnacondaModule(m); pm != "" {
+					to.Anaconda.DisabledModules = append(to.Anaconda.DisabledModules, pm)
+				}
 			}
 		}
 	}

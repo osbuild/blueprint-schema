@@ -1,4 +1,5 @@
 [customizations]
+  installation_device = "/dev/vda"
 
   [[customizations.user]]
     name = "osbuild"

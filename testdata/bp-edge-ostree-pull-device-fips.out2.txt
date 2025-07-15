@@ -1,2 +1,3 @@
 [customizations]
+  installation_device = "/dev/vda"
   fips = true

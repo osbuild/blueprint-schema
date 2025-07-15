@@ -1,1 +1,3 @@
-[customizations]
+installer:
+  coreos:
+    installation_device: /dev/sda

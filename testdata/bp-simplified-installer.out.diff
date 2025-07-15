@@ -1,0 +1,18 @@
+  &blueprint.Blueprint{
+  	... // 6 identical fields
+  	Groups:     nil,
+  	Containers: nil,
+  	Customizations: &blueprint.Customizations{
+  		... // 11 identical fields
+  		InstallationDevice: "/dev/vda",
+  		PartitioningMode:   "",
+- 		FDO:                &blueprint.FDOCustomization{ManufacturingServerURL: "https://fdo.example.com", DiunPubKeyInsecure: "true"},
++ 		FDO:                nil,
+  		OpenSCAP:           nil,
+  		Ignition:           nil,
+  		... // 9 identical fields
+  	},
+  	Distro:  "",
+  	Arch:    "",
+  	Minimal: false,
+  }
