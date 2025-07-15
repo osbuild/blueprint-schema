@@ -1,5 +1,4 @@
 storage:
-  minsize: "0"
   partitions:
   - fs_type: xfs
     minsize: 1 GiB

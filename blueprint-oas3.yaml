@@ -890,12 +890,13 @@ components:
       nullable: true
       properties:
         keyboards:
-          default:
-          - us
           description: |
             The keyboards attribute is a list of strings that contains
             the keyboards to be installed on the image. To list available keyboards,
             run: localectl list-keymaps
+
+            The default value depends on the image type and distribution, usually it is
+            set to "en_US.UTF-8" for most types.
           items:
             type: string
           nullable: true
@@ -903,12 +904,13 @@ components:
           x-go-type-skip-optional-pointer: true
           x-omitempty: true
         languages:
-          default:
-          - en_US.UTF-8
           description: |
             The languages attribute is a list of strings that contains
             the languages to be installed on the image. To list available languages,
             run: localectl list-locales
+
+            The default value depends on the image type and distribution, usually it is
+            set to "en_US.UTF-8" for most types.
           items:
             type: string
           nullable: true
@@ -1288,7 +1290,6 @@ components:
           $ref: '#/components/schemas/storage_type'
       required:
       - type
-      - minsize
       - partitions
       type: object
       x-omitempty: true
@@ -1339,7 +1340,10 @@ components:
       x-go-type-skip-optional-pointer: true
     storage_type:
       default: gpt
-      description: 'Device partitioning type: gpt (default) or mbr.'
+      description: |
+        Device partitioning type: gpt (default) or mbr.
+
+        Default value is image specific.
       enum:
       - gpt
       - mbr

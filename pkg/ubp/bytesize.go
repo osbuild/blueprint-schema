@@ -120,6 +120,10 @@ func ToByteSize(size uint64) ByteSize {
 }
 
 func ParseSize(size string) (ByteSize, error) {
+	if size == "" {
+		return 0, nil
+	}
+
 	sizeStr := strings.ToUpper(strings.TrimSpace(size))
 	var numStr string
 	var unitStr string
@@ -186,5 +190,10 @@ func (bs *ByteSize) UnmarshalJSON(data []byte) error {
 }
 
 func (bs ByteSize) MarshalJSON() ([]byte, error) {
-	return json.Marshal(bs.HumanFriendly())
+	hf := bs.HumanFriendly()
+	if hf == "0" {
+		return json.Marshal("")
+	}
+
+	return json.Marshal(hf)
 }

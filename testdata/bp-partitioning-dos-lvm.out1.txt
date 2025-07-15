@@ -1,5 +1,4 @@
 storage:
-  minsize: "0"
   partitions:
   - logical_volumes:
     - fs_type: ext4

@@ -42,6 +42,20 @@ func TestPopulateDefaults(t *testing.T) {
 				},
 			},
 		},
+		Storage: &Storage{
+			Type: StorageTypeGPT,
+			Partitions: []StoragePartition{
+				{
+					union: []byte(`{}`),
+				},
+				{
+					union: []byte(`{"type": "lvm"}`),
+				},
+				{
+					union: []byte(`{"type": "btrfs"}`),
+				},
+			},
+		},
 	}
 
 	tests := []struct {
@@ -218,6 +232,18 @@ func TestPopulateDefaults(t *testing.T) {
 				}
 			]
 		}
+	},
+	"storage": {
+		"partitions": [
+			{},
+			{
+				"type": "lvm"
+			},
+			{
+				"type": "btrfs"
+			}
+		],
+		"type": "gpt"
 	}
 }`
 

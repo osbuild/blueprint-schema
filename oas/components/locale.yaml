@@ -12,8 +12,9 @@ properties:
       The keyboards attribute is a list of strings that contains
       the keyboards to be installed on the image. To list available keyboards,
       run: localectl list-keymaps
-    default:
-      - us
+
+      The default value depends on the image type and distribution, usually it is
+      set to "en_US.UTF-8" for most types.
     type: array
     items:
       type: string
@@ -25,8 +26,9 @@ properties:
       The languages attribute is a list of strings that contains
       the languages to be installed on the image. To list available languages,
       run: localectl list-locales
-    default:
-      - en_US.UTF-8
+
+      The default value depends on the image type and distribution, usually it is
+      set to "en_US.UTF-8" for most types.
     type: array
     items:
       type: string

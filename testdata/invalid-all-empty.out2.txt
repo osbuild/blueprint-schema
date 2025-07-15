@@ -11,6 +11,5 @@ dnf:
   - id: one
   - id: two
 storage:
-  minsize: "0"
   partitions: null
   type: gpt

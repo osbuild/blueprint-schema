@@ -23,7 +23,6 @@ nullable: true
 x-omitempty: true
 required:
   - type
-  - minsize
   - partitions
 properties:
   type:

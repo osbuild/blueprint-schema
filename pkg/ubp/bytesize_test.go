@@ -12,7 +12,7 @@ func TestByteSize(t *testing.T) {
 		expected ByteSize
 		err      string
 	}{
-		{"", 0, `expected number: ""`},
+		{"", 0, ""},
 		{"xxx", 0, `expected number: "xxx"`},
 		{"0", 0, ""},
 		{"0B", 0, ""},
@@ -84,7 +84,7 @@ func TestMarshalJSON(t *testing.T) {
 		input    ByteSize
 		expected string
 	}{
-		{0, `"0"`},
+		{0, `""`},
 		{1, `"1"`},
 		{1000, `"1 KB"`},
 		{1500, `"1500"`},

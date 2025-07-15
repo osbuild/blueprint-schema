@@ -933,10 +933,7 @@
         "nullable": true,
         "properties": {
           "keyboards": {
-            "default": [
-              "us"
-            ],
-            "description": "The keyboards attribute is a list of strings that contains\nthe keyboards to be installed on the image. To list available keyboards,\nrun: localectl list-keymaps\n",
+            "description": "The keyboards attribute is a list of strings that contains\nthe keyboards to be installed on the image. To list available keyboards,\nrun: localectl list-keymaps\n\nThe default value depends on the image type and distribution, usually it is\nset to \"en_US.UTF-8\" for most types.\n",
             "items": {
               "type": "string"
             },
@@ -946,10 +943,7 @@
             "x-omitempty": true
           },
           "languages": {
-            "default": [
-              "en_US.UTF-8"
-            ],
-            "description": "The languages attribute is a list of strings that contains\nthe languages to be installed on the image. To list available languages,\nrun: localectl list-locales\n",
+            "description": "The languages attribute is a list of strings that contains\nthe languages to be installed on the image. To list available languages,\nrun: localectl list-locales\n\nThe default value depends on the image type and distribution, usually it is\nset to \"en_US.UTF-8\" for most types.\n",
             "items": {
               "type": "string"
             },
@@ -1362,7 +1356,6 @@
         },
         "required": [
           "type",
-          "minsize",
           "partitions"
         ],
         "type": "object",
@@ -1417,7 +1410,7 @@
       },
       "storage_type": {
         "default": "gpt",
-        "description": "Device partitioning type: gpt (default) or mbr.",
+        "description": "Device partitioning type: gpt (default) or mbr.\n\nDefault value is image specific.\n",
         "enum": [
           "gpt",
           "mbr"

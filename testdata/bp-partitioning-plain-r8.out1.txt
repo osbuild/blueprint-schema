@@ -1,5 +1,4 @@
 storage:
-  minsize: "0"
   partitions:
   - fs_type: ext4
     minsize: 1 GiB
