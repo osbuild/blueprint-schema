@@ -542,28 +542,30 @@ func (e *InternalImporter) importOpenSCAP() *ubp.OpenSCAP {
 }
 
 func (e *InternalImporter) importRegistration() *ubp.Registration {
-	if e.from.Customizations == nil || e.from.Customizations.RHSM == nil || e.from.Customizations.RHSM.Config == nil {
+	if e.from.Customizations == nil {
 		return nil
 	}
 
-	to := ubp.Registration{
-		RegistrationRedHat: &ubp.RegistrationRedHat{
+	to := ubp.Registration{}
+
+	if e.from.Customizations.RHSM != nil && e.from.Customizations.RHSM.Config != nil {
+		to.RegistrationRedHat = &ubp.RegistrationRedHat{
 			RegistrationRHSM: &ubp.RegistrationRHSM{},
-		},
-	}
+		}
 
-	if e.from.Customizations.RHSM.Config.SubscriptionManager.RHSMConfig != nil {
-		to.RegistrationRedHat.RegistrationRHSM.AutoEnable = e.from.Customizations.RHSM.Config.SubscriptionManager.RHSMConfig.AutoEnableYumPlugins
-		to.RegistrationRedHat.RegistrationRHSM.RepositoryManagement = e.from.Customizations.RHSM.Config.SubscriptionManager.RHSMConfig.ManageRepos
-	}
+		if e.from.Customizations.RHSM.Config.SubscriptionManager.RHSMConfig != nil {
+			to.RegistrationRedHat.RegistrationRHSM.AutoEnable = e.from.Customizations.RHSM.Config.SubscriptionManager.RHSMConfig.AutoEnableYumPlugins
+			to.RegistrationRedHat.RegistrationRHSM.RepositoryManagement = e.from.Customizations.RHSM.Config.SubscriptionManager.RHSMConfig.ManageRepos
+		}
 
-	if e.from.Customizations.RHSM.Config.SubscriptionManager.RHSMCertdConfig != nil {
-		to.RegistrationRedHat.RegistrationRHSM.AutoRegistration = e.from.Customizations.RHSM.Config.SubscriptionManager.RHSMCertdConfig.AutoRegistration
-	}
+		if e.from.Customizations.RHSM.Config.SubscriptionManager.RHSMCertdConfig != nil {
+			to.RegistrationRedHat.RegistrationRHSM.AutoRegistration = e.from.Customizations.RHSM.Config.SubscriptionManager.RHSMCertdConfig.AutoRegistration
+		}
 
-	if e.from.Customizations.RHSM.Config.DNFPlugins != nil {
-		to.RegistrationRedHat.RegistrationRHSM.Enabled = e.from.Customizations.RHSM.Config.DNFPlugins.SubscriptionManager.Enabled
-		to.RegistrationRedHat.RegistrationRHSM.ProductPluginEnabled = e.from.Customizations.RHSM.Config.DNFPlugins.ProductID.Enabled
+		if e.from.Customizations.RHSM.Config.DNFPlugins != nil {
+			to.RegistrationRedHat.RegistrationRHSM.Enabled = e.from.Customizations.RHSM.Config.DNFPlugins.SubscriptionManager.Enabled
+			to.RegistrationRedHat.RegistrationRHSM.ProductPluginEnabled = e.from.Customizations.RHSM.Config.DNFPlugins.ProductID.Enabled
+		}
 	}
 
 	if e.from.Customizations.FDO != nil {

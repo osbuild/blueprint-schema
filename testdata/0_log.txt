@@ -114,8 +114,8 @@ bp-rhel9-azure-rhui.in.json>bp-rhel9-azure-rhui.out1.txt: INPUT:BP-JSON UBPY:0 U
 bp-rhel9-azure-rhui.out1.txt>bp-rhel9-azure-rhui.out2.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0 TEMP:1
 bp-rhsm.in.json>bp-rhsm.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:4 TEMP:0
 bp-rhsm.out1.txt>bp-rhsm.out2.txt: INPUT:UBP-YAML UBPY:4 UBPJ:0 BPT:0 BPJ:0 TEMP:1
-bp-simplified-installer.in.json>bp-simplified-installer.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:1 TEMP:0
-bp-simplified-installer.out1.txt>bp-simplified-installer.out2.txt: INPUT:UBP-YAML UBPY:1 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+bp-simplified-installer.in.json>bp-simplified-installer.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:3 TEMP:0
+bp-simplified-installer.out1.txt>bp-simplified-installer.out2.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0 TEMP:1
 bp-unattended-iso-edge.in.json>bp-unattended-iso-edge.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:3 TEMP:0
 bp-unattended-iso-edge.out1.txt>bp-unattended-iso-edge.out2.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0 TEMP:1
 bp-unattended-iso-iot.in.json>bp-unattended-iso-iot.out1.txt: INPUT:BP-JSON UBPY:0 UBPJ:0 BPT:0 BPJ:3 TEMP:0
@@ -193,9 +193,9 @@ valid-openscap-selection-both.out1.txt>valid-openscap-selection-both.out2.txt: I
 valid-openscap-unselected.in.yaml>valid-openscap-unselected.out1.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0 TEMP:1
 valid-openscap-unselected.out1.txt>valid-openscap-unselected.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:3 BPJ:0 TEMP:1
 valid-registration-fdo-certs.in.yaml>valid-registration-fdo-certs.out1.txt: INPUT:UBP-YAML UBPY:5 UBPJ:0 BPT:0 BPJ:0 TEMP:1
-valid-registration-fdo-certs.out1.txt>valid-registration-fdo-certs.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:1 BPJ:0 TEMP:1
+valid-registration-fdo-certs.out1.txt>valid-registration-fdo-certs.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:3 BPJ:0 TEMP:1
 valid-registration-fdo-hash.in.yaml>valid-registration-fdo-hash.out1.txt: INPUT:UBP-YAML UBPY:5 UBPJ:0 BPT:0 BPJ:0 TEMP:1
-valid-registration-fdo-hash.out1.txt>valid-registration-fdo-hash.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:1 BPJ:0 TEMP:1
+valid-registration-fdo-hash.out1.txt>valid-registration-fdo-hash.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:3 BPJ:0 TEMP:1
 valid-registration.in.yaml>valid-registration.out1.txt: INPUT:UBP-YAML UBPY:12 UBPJ:0 BPT:0 BPJ:0 TEMP:1
 valid-registration.out1.txt>valid-registration.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:8 BPJ:0 TEMP:1
 valid-storage.in.yaml>valid-storage.out1.txt: INPUT:UBP-YAML UBPY:4 UBPJ:0 BPT:0 BPJ:0 TEMP:1
