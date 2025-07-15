@@ -783,7 +783,7 @@ type PartitionBTRFS struct {
 	// Subvolumes BTRFS subvolumes to create.
 	Subvolumes []PartitionSubvolumes `json:"subvolumes,omitempty"`
 
-	// Type Partition type: plain (default), lvm, or btrfs.
+	// Type Partition type: plain, lvm, or btrfs. Must be set.
 	Type PartitionType `json:"type"`
 }
 
@@ -792,9 +792,9 @@ type PartitionLv = PartitionLV
 
 // PartitionLV defines model for .
 type PartitionLV struct {
-	// FSType File system type: ext4 (default), xfs, swap, or vfat.
+	// FSType File system type: ext4, xfs, swap, or vfat.
 	//
-	// Relevant for partition types: plain.
+	// Default value is image-type specific.
 	FSType FSType `json:"fs_type,omitempty"`
 
 	// Label Optional label of the partition.
@@ -836,15 +836,15 @@ type PartitionLVM struct {
 	// Name Optional name of the volume group. Will be generated automatically if not specified.
 	Name string `json:"name,omitempty"`
 
-	// Type Partition type: plain (default), lvm, or btrfs.
+	// Type Partition type: plain, lvm, or btrfs. Must be set.
 	Type PartitionType `json:"type"`
 }
 
 // PartitionPlain defines model for partition_plain.
 type PartitionPlain struct {
-	// FSType File system type: ext4 (default), xfs, swap, or vfat.
+	// FSType File system type: ext4, xfs, swap, or vfat.
 	//
-	// Relevant for partition types: plain.
+	// Default value is image-type specific.
 	FSType FSType `json:"fs_type,omitempty"`
 
 	// Label Optional label of the partition.
@@ -862,7 +862,7 @@ type PartitionPlain struct {
 	// Mountpoint Mount point of the partition. Must start with a slash.
 	Mountpoint StorageMountpoint `json:"mountpoint,omitempty"`
 
-	// Type Partition type: plain (default), lvm, or btrfs.
+	// Type Partition type: plain, lvm, or btrfs. Must be set.
 	Type PartitionType `json:"type"`
 }
 
@@ -875,7 +875,7 @@ type PartitionSubvolumes struct {
 	Name string `json:"name,omitempty"`
 }
 
-// PartitionType Partition type: plain (default), lvm, or btrfs.
+// PartitionType Partition type: plain, lvm, or btrfs. Must be set.
 type PartitionType string
 
 // Registration Registration details for various registration types, namely Red Hat
@@ -1004,9 +1004,9 @@ type Storage struct {
 	Type StorageType `json:"type"`
 }
 
-// FSType File system type: ext4 (default), xfs, swap, or vfat.
+// FSType File system type: ext4, xfs, swap, or vfat.
 //
-// Relevant for partition types: plain.
+// Default value is image-type specific.
 type FSType string
 
 // StorageMinsize Minimum size of the disk or partition.
@@ -1081,7 +1081,7 @@ type TimeDate struct {
 	// Timezone System time zone. Defaults to UTC. To list available time zones run:
 	//
 	// timedatectl list-timezones
-	Timezone string `json:"timezone"`
+	Timezone string `json:"timezone,omitempty"`
 }
 
 // ExportTomlJSONRequestBody defines body for ExportToml for application/json ContentType.

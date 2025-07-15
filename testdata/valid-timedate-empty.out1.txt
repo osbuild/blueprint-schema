@@ -1,0 +1,6 @@
+name = "Blueprint example: timedate"
+
+[customizations]
+  [customizations.timezone]
+    timezone = "UTC"
+    ntpservers = ["0.north-america.pool.ntp.org"]

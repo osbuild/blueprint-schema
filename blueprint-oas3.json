@@ -1157,8 +1157,7 @@
         "type": "object"
       },
       "partition_type": {
-        "default": "plain",
-        "description": "Partition type: plain (default), lvm, or btrfs.",
+        "description": "Partition type: plain, lvm, or btrfs. Must be set.",
         "enum": [
           "plain",
           "lvm",
@@ -1339,8 +1338,7 @@
         "x-omitempty": true
       },
       "storage_fstype": {
-        "default": "ext4",
-        "description": "File system type: ext4 (default), xfs, swap, or vfat.\n\nRelevant for partition types: plain.\n",
+        "description": "File system type: ext4, xfs, swap, or vfat.\n\nDefault value is image-type specific.\n",
         "enum": [
           "ext4",
           "xfs",
@@ -1386,7 +1384,6 @@
         "x-go-type-skip-optional-pointer": true
       },
       "storage_type": {
-        "default": "gpt",
         "description": "Device partitioning type: gpt (default) or mbr.\n\nDefault value is image specific.\n",
         "enum": [
           "gpt",
@@ -1502,9 +1499,6 @@
             "x-go-type-skip-optional-pointer": true
           }
         },
-        "required": [
-          "timezone"
-        ],
         "type": "object",
         "x-omitempty": true
       }

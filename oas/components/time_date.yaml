@@ -5,8 +5,6 @@ description: |
   NTP servers. The timezone is set by default to UTC.
 nullable: true
 x-omitempty: true
-required:
-  - timezone
 properties:
   timezone:
     description: |

@@ -5,7 +5,6 @@ description: |
 
   Default value is image specific.
 x-go-type-skip-optional-pointer: true
-default: gpt
 enum:
   - gpt
   - mbr

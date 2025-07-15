@@ -1,12 +1,11 @@
 ---
 description: |
-  File system type: ext4 (default), xfs, swap, or vfat.
+  File system type: ext4, xfs, swap, or vfat.
 
-  Relevant for partition types: plain.
+  Default value is image-type specific.
 type: string
 x-go-type-skip-optional-pointer: true
 x-go-name: FSType
-default: ext4
 enum:
   - ext4
   - xfs

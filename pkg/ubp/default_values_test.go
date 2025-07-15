@@ -56,6 +56,9 @@ func TestPopulateDefaults(t *testing.T) {
 				},
 			},
 		},
+		Timedate: &TimeDate{
+			Timezone: "UTC",
+		},
 	}
 
 	tests := []struct {
@@ -244,7 +247,8 @@ func TestPopulateDefaults(t *testing.T) {
 			}
 		],
 		"type": "gpt"
-	}
+	},
+	"timedate": {}
 }`
 
 	if diff := cmp.Diff(want, string(data)); diff != "" {

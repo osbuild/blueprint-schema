@@ -44,9 +44,13 @@ func ParseStorageType(s string) (StorageType, error) {
 
 var ErrInvalidFSType = errors.New("invalid filesystem type")
 
+const FSTypeDefault FSType = ""
+
 func ParseFSType(s string) (FSType, error) {
 	switch strings.ToLower(s) {
-	case "ext4", "":
+	case "":
+		return FSTypeDefault, nil
+	case "ext4":
 		return FSTypeExt4, nil
 	case "vfat":
 		return FSTypeVFAT, nil

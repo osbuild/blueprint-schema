@@ -1122,8 +1122,7 @@ components:
           x-go-type-skip-optional-pointer: true
       type: object
     partition_type:
-      default: plain
-      description: 'Partition type: plain (default), lvm, or btrfs.'
+      description: 'Partition type: plain, lvm, or btrfs. Must be set.'
       enum:
       - plain
       - lvm
@@ -1294,11 +1293,10 @@ components:
       type: object
       x-omitempty: true
     storage_fstype:
-      default: ext4
       description: |
-        File system type: ext4 (default), xfs, swap, or vfat.
+        File system type: ext4, xfs, swap, or vfat.
 
-        Relevant for partition types: plain.
+        Default value is image-type specific.
       enum:
       - ext4
       - xfs
@@ -1339,7 +1337,6 @@ components:
       type: object
       x-go-type-skip-optional-pointer: true
     storage_type:
-      default: gpt
       description: |
         Device partitioning type: gpt (default) or mbr.
 
@@ -1451,8 +1448,6 @@ components:
             timedatectl list-timezones
           type: string
           x-go-type-skip-optional-pointer: true
-      required:
-      - timezone
       type: object
       x-omitempty: true
 info:

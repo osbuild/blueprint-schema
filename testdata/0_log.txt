@@ -202,5 +202,7 @@ valid-storage.in.yaml>valid-storage.out1.txt: INPUT:UBP-YAML UBPY:4 UBPJ:0 BPT:0
 valid-storage.out1.txt>valid-storage.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:4 BPJ:0 TEMP:1
 valid-systemd.in.yaml>valid-systemd.out1.txt: INPUT:UBP-YAML UBPY:4 UBPJ:0 BPT:0 BPJ:0 TEMP:1
 valid-systemd.out1.txt>valid-systemd.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:3 BPJ:0 TEMP:1
+valid-timedate-empty.in.yaml>valid-timedate-empty.out1.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0 TEMP:1
+valid-timedate-empty.out1.txt>valid-timedate-empty.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:3 BPJ:0 TEMP:1
 valid-timedate.in.yaml>valid-timedate.out1.txt: INPUT:UBP-YAML UBPY:3 UBPJ:0 BPT:0 BPJ:0 TEMP:1
 valid-timedate.out1.txt>valid-timedate.out2.txt: INPUT:BP-TOML UBPY:0 UBPJ:0 BPT:3 BPJ:0 TEMP:1
