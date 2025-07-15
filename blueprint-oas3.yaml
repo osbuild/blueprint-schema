@@ -504,7 +504,7 @@ components:
           default: true
           description: Enable SSL verification for the repository. Enabled by default.
           type: boolean
-          x-go-name: SSLVerify
+          x-go-name: TLSVerify
         usage:
           $ref: '#/components/schemas/dnf_repository_usage'
       required:

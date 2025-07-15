@@ -613,7 +613,7 @@ func (e *InternalExporter) exportRepositories() ([]bp.RepositoryCustomization, *
 			Mirrorlist:     bmirror.Mirrorlist,
 			Priority:       ptr.ToNilIfEmpty(repo.Priority),
 			Enabled:        configure,
-			SSLVerify:      repo.SSLVerify,
+			SSLVerify:      repo.TLSVerify,
 			GPGKeys:        repo.GPGKeys,
 			GPGCheck:       repo.GPGCheck,
 			RepoGPGCheck:   repo.GPGCheckRepo,

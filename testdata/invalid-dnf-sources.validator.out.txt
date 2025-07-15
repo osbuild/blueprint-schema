@@ -75,7 +75,7 @@ Schema:
         "default": true,
         "description": "Enable SSL verification for the repository. Enabled by default.",
         "type": "boolean",
-        "x-go-name": "SSLVerify"
+        "x-go-name": "TLSVerify"
       },
       "usage": {
         "$ref": "dnf_repository_usage.yaml"

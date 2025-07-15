@@ -52,9 +52,9 @@ func TestPopulateDefaults(t *testing.T) {
 			want: true,
 		},
 		{
-			name: "dnf-repo-ssl-verify",
+			name: "dnf-repo-tls-verify",
 			val: func(ubp *Blueprint) any {
-				return *ubp.DNF.Repositories[0].SSLVerify
+				return *ubp.DNF.Repositories[0].TLSVerify
 			},
 			want: true,
 		},

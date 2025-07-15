@@ -408,8 +408,8 @@ type DNFRepository struct {
 	// Source Repository source.
 	Source *DNFSource `json:"source,omitempty"`
 
-	// SSLVerify Enable SSL verification for the repository. Enabled by default.
-	SSLVerify *bool               `json:"ssl_verify,omitempty"`
+	// TLSVerify Enable SSL verification for the repository. Enabled by default.
+	TLSVerify *bool               `json:"ssl_verify,omitempty"`
 	Usage     *DnfRepositoryUsage `json:"usage,omitempty"`
 }
 

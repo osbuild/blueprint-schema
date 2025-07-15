@@ -76,7 +76,7 @@ properties:
     description: Enable SSL verification for the repository. Enabled by default.
     default: true
     type: boolean
-    x-go-name: SSLVerify
+    x-go-name: TLSVerify
   usage:
     description: |
       Repository usage. By default, the repository is configured

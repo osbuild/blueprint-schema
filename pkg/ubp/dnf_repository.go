@@ -15,8 +15,8 @@ func (dr *DNFRepository) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
-	if tmp.SSLVerify == nil {
-		tmp.SSLVerify = ptr.To(true)
+	if tmp.TLSVerify == nil {
+		tmp.TLSVerify = ptr.To(true)
 	}
 
 	if tmp.Usage == nil {
@@ -36,8 +36,8 @@ func (dr DNFRepository) MarshalJSON() ([]byte, error) {
 	type tmpType DNFRepository
 	tmp := tmpType(dr)
 
-	if tmp.SSLVerify != nil && *tmp.SSLVerify {
-		tmp.SSLVerify = nil
+	if tmp.TLSVerify != nil && *tmp.TLSVerify {
+		tmp.TLSVerify = nil
 	}
 
 	if tmp.Usage != nil && tmp.Usage.IsZero() {
