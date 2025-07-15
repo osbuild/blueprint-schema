@@ -34,6 +34,12 @@ func TestPopulateDefaults(t *testing.T) {
 					{
 						union: []byte(`{"name": "ssh"}`),
 					},
+					{
+						union: []byte(`{"port": 22}`),
+					},
+					{
+						union: []byte(`{"from": 200, "to": 300}`),
+					},
 				},
 			},
 		},
@@ -87,15 +93,70 @@ func TestPopulateDefaults(t *testing.T) {
 			want: DefaultDirFSNodeMode,
 		},
 		{
-			name: "network-firewall-service-name",
+			name: "network-firewall-port-protocol",
 			val: func(ubp *Blueprint) any {
-				s, err := ubp.Network.Firewall.Services[0].AsFirewallPort()
+				s, err := ubp.Network.Firewall.Services[1].AsFirewallPort()
 				if err != nil {
-					t.Fatalf("AsFirewallPort failed: %v", err)
+					t.Fatalf("firewall as call failed: %v", err)
 				}
 				return s.Protocol
 			},
 			want: ProtocolAny,
+		},
+		{
+			name: "network-firewall-service-protocol",
+			val: func(ubp *Blueprint) any {
+				s, err := ubp.Network.Firewall.Services[0].AsFirewallService()
+				if err != nil {
+					t.Fatalf("firewall as call failed: %v", err)
+				}
+				return s.Protocol
+			},
+			want: ProtocolAny,
+		},
+		{
+			name: "network-firewall-from-to-protocol",
+			val: func(ubp *Blueprint) any {
+				s, err := ubp.Network.Firewall.Services[2].AsFirewallFromTo()
+				if err != nil {
+					t.Fatalf("firewall as call failed: %v", err)
+				}
+				return s.Protocol
+			},
+			want: ProtocolAny,
+		},
+		{
+			name: "network-firewall-port-enabled",
+			val: func(ubp *Blueprint) any {
+				s, err := ubp.Network.Firewall.Services[1].AsFirewallPort()
+				if err != nil {
+					t.Fatalf("firewall as call failed: %v", err)
+				}
+				return *s.Enabled
+			},
+			want: true,
+		},
+		{
+			name: "network-firewall-service-enabled",
+			val: func(ubp *Blueprint) any {
+				s, err := ubp.Network.Firewall.Services[0].AsFirewallService()
+				if err != nil {
+					t.Fatalf("firewall as call failed: %v", err)
+				}
+				return *s.Enabled
+			},
+			want: true,
+		},
+		{
+			name: "network-firewall-from-to-enabled",
+			val: func(ubp *Blueprint) any {
+				s, err := ubp.Network.Firewall.Services[2].AsFirewallFromTo()
+				if err != nil {
+					t.Fatalf("firewall as call failed: %v", err)
+				}
+				return *s.Enabled
+			},
+			want: true,
 		},
 	}
 
@@ -149,6 +210,13 @@ func TestPopulateDefaults(t *testing.T) {
 			"services": [
 				{
 					"name": "ssh"
+				},
+				{
+					"port": 22
+				},
+				{
+					"from": 200,
+					"to": 300
 				}
 			]
 		}
