@@ -1,12 +1,14 @@
 package conv
 
 import (
+	"reflect"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/osbuild/blueprint-schema/pkg/ptr"
 	ubp "github.com/osbuild/blueprint-schema/pkg/ubp"
+	"github.com/osbuild/blueprint/pkg/blueprint"
 	bp "github.com/osbuild/blueprint/pkg/blueprint"
 )
 
@@ -71,6 +73,7 @@ func (e *InternalExporter) exportPackages() []bp.Package {
 	if dash {
 		e.log.Printf("package(s) with dash were converted as names")
 	}
+
 	return s
 }
 
@@ -108,8 +111,11 @@ func (e *InternalExporter) exportModules() []bp.EnabledModule {
 }
 
 func (e *InternalExporter) exportContainers() []bp.Container {
-	var s []bp.Container
+	if e.from.Containers == nil {
+		return nil
+	}
 
+	var s []bp.Container
 	for _, container := range e.from.Containers {
 		s = append(s, bp.Container{
 			Name:         container.Name,
@@ -123,7 +129,7 @@ func (e *InternalExporter) exportContainers() []bp.Container {
 }
 
 func (e *InternalExporter) exportCustomizations() *bp.Customizations {
-	to := &bp.Customizations{}
+	to := bp.Customizations{}
 
 	to.Hostname = ptr.ToNilIfEmpty(e.from.Hostname)
 	to.Kernel = e.exportKernel()
@@ -145,7 +151,11 @@ func (e *InternalExporter) exportCustomizations() *bp.Customizations {
 	}
 	to.CACerts = e.exportCACerts()
 
-	return to
+	if reflect.DeepEqual(to, bp.Customizations{}) {
+		return nil // omitzero
+	}
+
+	return &to
 }
 
 func (e *InternalExporter) exportKernel() *bp.KernelCustomization {
@@ -466,6 +476,27 @@ func (e *InternalExporter) exportRegistration() (*bp.RHSMCustomization, *bp.FDOC
 		e.log.Println("registration not converted")
 	}
 
+	if rhsm != nil {
+		emptyRHSM := &blueprint.RHSMCustomization{
+			Config: &blueprint.RHSMConfig{
+				DNFPlugins: &blueprint.SubManDNFPluginsConfig{
+					ProductID:           &blueprint.DNFPluginConfig{},
+					SubscriptionManager: &blueprint.DNFPluginConfig{},
+				},
+				SubscriptionManager: &blueprint.SubManConfig{
+					RHSMConfig:      &blueprint.SubManRHSMConfig{},
+					RHSMCertdConfig: &blueprint.SubManRHSMCertdConfig{},
+				},
+			},
+		}
+		if reflect.DeepEqual(rhsm.Config.DNFPlugins, emptyRHSM.Config.DNFPlugins) {
+			rhsm.Config.DNFPlugins = nil // omitzero
+		}
+		if reflect.DeepEqual(rhsm.Config.SubscriptionManager, emptyRHSM.Config.SubscriptionManager) {
+			rhsm.Config.SubscriptionManager = nil // omitzero
+		}
+	}
+
 	return ptr.EmptyToNil(rhsm), ptr.EmptyToNil(fdo)
 }
 
@@ -586,12 +617,11 @@ func (e *InternalExporter) exportFSNodes() ([]bp.FileCustomization, []bp.Directo
 }
 
 func (e *InternalExporter) exportRepositories() ([]bp.RepositoryCustomization, *bp.RPMCustomization) {
-	if e.from.DNF == nil || e.from.DNF.Repositories == nil {
+	if e.from.DNF == nil {
 		return nil, nil
 	}
 
 	var repos []bp.RepositoryCustomization
-	var rpm *bp.RPMCustomization
 	for _, repo := range e.from.DNF.Repositories {
 		burl, bmeta, bmirror, err := repo.Source.SelectUnion()
 		if err != nil {
@@ -621,19 +651,18 @@ func (e *InternalExporter) exportRepositories() ([]bp.RepositoryCustomization, *
 			Filename:       repo.Filename,
 			InstallFrom:    ptr.ValueOr(install, true),
 		})
+	}
 
-		if len(e.from.DNF.ImportKeys) > 0 {
-			if rpm == nil {
-				rpm = &bp.RPMCustomization{
-					ImportKeys: &bp.RPMImportKeys{
-						Files: e.from.DNF.ImportKeys,
-					},
-				}
-			}
+	var rpm *bp.RPMCustomization
+	if len(e.from.DNF.ImportKeys) > 0 {
+		rpm = &bp.RPMCustomization{
+			ImportKeys: &bp.RPMImportKeys{
+				Files: e.from.DNF.ImportKeys,
+			},
 		}
 	}
 
-	return repos, ptr.EmptyToNil(rpm)
+	return repos, rpm
 }
 
 func (e *InternalExporter) exportCACerts() *bp.CACustomization {

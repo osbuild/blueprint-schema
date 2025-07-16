@@ -1,1 +1,6 @@
-[customizations]
+[[packages]]
+  name = "nodejs"
+
+[[enabled_modules]]
+  name = "nodejs"
+  stream = "18"

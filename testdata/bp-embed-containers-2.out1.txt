@@ -6,5 +6,3 @@
   source = "registry.gitlab.com/redhat/services/products/image-builder/ci/osbuild-composer/manifest-list-test"
   name = "registry.gitlab.com/redhat/services/products/image-builder/ci/osbuild-composer/manifest-list-test:v1"
   tls-verify = true
-
-[customizations]

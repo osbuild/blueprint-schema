@@ -1,1 +1,2 @@
-[customizations]
+[[groups]]
+  name = "minimal-environment"

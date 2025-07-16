@@ -13,20 +13,12 @@
   	Groups:         nil,
   	Containers:     nil,
   	Customizations: &blueprint.Customizations{
-  		... // 19 identical fields
-  		FIPS:      nil,
+  		... // 20 identical fields
   		Installer: nil,
-- 		RPM: &blueprint.RPMCustomization{
-- 			ImportKeys: &blueprint.RPMImportKeys{Files: []string{"/etc/pki/rpm-gpg/RPM-GPG-KEY-mic"...}},
-- 		},
-+ 		RPM: nil,
+  		RPM:       &{ImportKeys: &{Files: {"/etc/pki/rpm-gpg/RPM-GPG-KEY-microsoft-azure-release"}}},
   		RHSM: &blueprint.RHSMCustomization{
   			Config: &blueprint.RHSMConfig{
-- 				DNFPlugins: nil,
-+ 				DNFPlugins: &blueprint.SubManDNFPluginsConfig{
-+ 					ProductID:           &blueprint.DNFPluginConfig{},
-+ 					SubscriptionManager: &blueprint.DNFPluginConfig{},
-+ 				},
+  				DNFPlugins: nil,
   				SubscriptionManager: &blueprint.SubManConfig{
   					RHSMConfig:      &{AutoEnableYumPlugins: &false},
 - 					RHSMCertdConfig: nil,

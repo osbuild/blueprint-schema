@@ -1,1 +1,5 @@
-{}
+dnf:
+  modules:
+  - nodejs:18
+  packages:
+  - nodejs

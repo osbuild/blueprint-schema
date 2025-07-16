@@ -51,6 +51,10 @@ func (e *InternalImporter) Import() (*ubp.Blueprint, error) {
 	to.Systemd = e.importSystemd()
 	to.Timedate = e.importTimedate()
 
+	if e.from.Minimal {
+		e.log.Printf("ignoring minimal flag")
+	}
+
 	return to, e.log.Errors()
 }
 
@@ -68,17 +72,13 @@ func (e *InternalImporter) importArchitecture() ubp.Arch {
 }
 
 func (e *InternalImporter) importDNF() *ubp.DNF {
-	if e.from.Customizations == nil {
-		return nil
-	}
-
 	to := ubp.DNF{}
 	to.Packages = e.importPackages()
 	to.Modules = e.importModules()
 	to.Groups = e.importGroups()
 	to.Repositories = e.importRepositories()
 
-	if e.from.Customizations.RPM != nil && e.from.Customizations.RPM.ImportKeys != nil {
+	if e.from.Customizations != nil && e.from.Customizations.RPM != nil && e.from.Customizations.RPM.ImportKeys != nil {
 		for _, keyFile := range e.from.Customizations.RPM.ImportKeys.Files {
 			to.ImportKeys = append(to.ImportKeys, strings.TrimPrefix(keyFile, "file://"))
 		}
@@ -92,10 +92,6 @@ func (e *InternalImporter) importDNF() *ubp.DNF {
 }
 
 func (e *InternalImporter) importPackages() []string {
-	if e.from.Packages == nil {
-		return nil
-	}
-
 	// Combine packages and modules into a single slice.
 	s := make([]string, 0, len(e.from.Packages)+len(e.from.Modules))
 	for _, pkg := range e.from.Packages {
@@ -109,6 +105,10 @@ func (e *InternalImporter) importPackages() []string {
 			pkg.Version = ""
 		}
 		s = append(s, joinNonEmpty("-", pkg.Name, pkg.Version))
+	}
+
+	if len(s) == 0 {
+		return nil // omitzero
 	}
 
 	return s
@@ -354,6 +354,11 @@ func (e *InternalImporter) importFSNodes() []ubp.FSNode {
 
 		res = append(res, n)
 	}
+
+	if len(res) == 0 {
+		return nil // omitzero
+	}
+
 	return res
 }
 
@@ -384,7 +389,6 @@ func (e *InternalImporter) importInstaller() *ubp.Installer {
 	}
 
 	to := ubp.Installer{}
-
 	if e.from.Customizations.Installer != nil {
 		to.Anaconda = &ubp.InstallerAnaconda{
 			Unattended:   e.from.Customizations.Installer.Unattended,
@@ -498,7 +502,7 @@ func (e *InternalImporter) importNetwork() *ubp.Network {
 		e.log.Printf("firewall zones are not supported, ignoring")
 	}
 
-	if reflect.DeepEqual(to.Firewall, ubp.NetworkFirewall{}) {
+	if reflect.DeepEqual(to.Firewall, &ubp.NetworkFirewall{}) {
 		return nil // omitzero
 	}
 
@@ -547,7 +551,6 @@ func (e *InternalImporter) importRegistration() *ubp.Registration {
 	}
 
 	to := ubp.Registration{}
-
 	if e.from.Customizations.RHSM != nil && e.from.Customizations.RHSM.Config != nil {
 		to.RegistrationRedHat = &ubp.RegistrationRedHat{
 			RegistrationRHSM: &ubp.RegistrationRHSM{},
@@ -655,7 +658,8 @@ func (e *InternalImporter) importStorage() *ubp.Storage {
 			to.Partitions = append(to.Partitions, ubp.StoragePartitionFromLVM(np))
 		}
 	}
-	if reflect.DeepEqual(to, ubp.Storage{}) {
+
+	if reflect.DeepEqual(to, ubp.Storage{Type: ""}) {
 		return nil // omitzero
 	}
 

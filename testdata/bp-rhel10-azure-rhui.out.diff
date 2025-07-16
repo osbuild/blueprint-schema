@@ -18,11 +18,7 @@
   		RPM:       nil,
   		RHSM: &blueprint.RHSMCustomization{
   			Config: &blueprint.RHSMConfig{
-- 				DNFPlugins: nil,
-+ 				DNFPlugins: &blueprint.SubManDNFPluginsConfig{
-+ 					ProductID:           &blueprint.DNFPluginConfig{},
-+ 					SubscriptionManager: &blueprint.DNFPluginConfig{},
-+ 				},
+  				DNFPlugins: nil,
   				SubscriptionManager: &blueprint.SubManConfig{
   					RHSMConfig:      &{AutoEnableYumPlugins: &false},
 - 					RHSMCertdConfig: nil,
