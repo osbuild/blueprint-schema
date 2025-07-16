@@ -1,13 +1,10 @@
-# package(s) with dash were converted as names
 # registration not converted
 
 [[packages]]
-  name = "rhui"
-  version = "azure-rhel9"
+  name = "rhui-azure-rhel9"
 
 [[packages]]
-  name = "redhat-cloud-client"
-  version = "configuration-cdn"
+  name = "redhat-cloud-client-configuration-cdn"
 
 [customizations]
   [customizations.rpm]

@@ -10,7 +10,7 @@ enum:
   - org.fedoraproject.Anaconda.Modules.Storage
   - org.fedoraproject.Anaconda.Modules.Subscription
   - org.fedoraproject.Anaconda.Modules.Timezone
-  - org.fedoraproject.Anaconda.Modules.User
+  - org.fedoraproject.Anaconda.Modules.Users
 x-enum-varnames:
   - AnacondaLocalization
   - AnacondaNetwork
@@ -21,6 +21,6 @@ x-enum-varnames:
   - AnacondaStorage
   - AnacondaSubscription
   - AnacondaTimezone
-  - AnacondaUser
+  - AnacondaUsers
 x-go-type-skip-optional-pointer: true
 x-go-type-name: AnacondaModule

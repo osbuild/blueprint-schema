@@ -20,8 +20,8 @@ func ParseAnacondaModule(m string) AnacondaModules {
 		return AnacondaSubscription
 	case "org.fedoraproject.Anaconda.Modules.Timezone":
 		return AnacondaTimezone
-	case "org.fedoraproject.Anaconda.Modules.User":
-		return AnacondaUser
+	case "org.fedoraproject.Anaconda.Modules.Users":
+		return AnacondaUsers
 	default:
 		return ""
 	}

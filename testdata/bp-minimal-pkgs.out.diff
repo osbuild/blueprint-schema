@@ -1,15 +1,5 @@
   &blueprint.Blueprint{
-  	Name:        "",
-  	Description: "",
-  	Version:     "",
-  	Packages: []blueprint.Package{
-  		{Name: "tmux"},
-- 		{Name: "vim-enhanced"},
-+ 		{Name: "vim", Version: "enhanced"},
-  	},
-  	Modules:        nil,
-  	EnabledModules: nil,
-  	... // 3 identical fields
+  	... // 9 identical fields
   	Distro:  "",
   	Arch:    "",
 - 	Minimal: true,

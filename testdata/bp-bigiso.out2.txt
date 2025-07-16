@@ -1,11 +1,8 @@
-# package(s) with dash were converted as names
-
 [[packages]]
   name = "httpd"
 
 [[packages]]
-  name = "gnome"
-  version = "session"
+  name = "gnome-session"
 
 [[groups]]
   name = "Workstation"

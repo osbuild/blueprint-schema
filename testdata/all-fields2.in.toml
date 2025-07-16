@@ -1,20 +1,19 @@
+# package(s) with dash were converted as names
 # registration not converted
 
 name = "Blueprint example"
 description = "A complete example of a blueprint with all possible fields"
-version = ""
 
 [[packages]]
-  name = "vim"
-  version = "enhanced"
+  name = "vim-enhanced"
 
 [[packages]]
-  name = "vim"
-  version = "enhanced-9.1.866-1"
+  name = "vim-enhanced"
+  version = "9.1.866-1"
 
 [[packages]]
-  name = "vim"
-  version = "enhanced-9.1.866-1.fc41.x86_64"
+  name = "vim-enhanced"
+  version = "9.1.866-1.fc41.x86_64"
 
 [[packages]]
   name = "@virtualization"
@@ -124,6 +123,8 @@ version = ""
 
   [[customizations.directories]]
     path = "/var/tmp/dir"
+    user = "root"
+    group = "root"
     mode = "755"
 
   [[customizations.files]]
@@ -134,6 +135,8 @@ version = ""
 
   [[customizations.files]]
     path = "/var/tmp/dir/file2"
+    user = "root"
+    group = "root"
     mode = "644"
     data = "test"
 
@@ -143,6 +146,7 @@ version = ""
     metalink = "https://mirrors.fedoraproject.org/metalink?repo=fedora-cisco-openh264-$releasever&arch=$basearch"
     name = "Fedora $releasever openh264 (From Cisco) - $basearch"
     enabled = false
+    gpgcheck = true
     repo_gpgcheck = false
     sslverify = true
     install_from = true
@@ -150,6 +154,8 @@ version = ""
   [[customizations.repositories]]
     id = "empty-repo"
     enabled = false
+    gpgcheck = true
+    repo_gpgcheck = true
     sslverify = true
     install_from = false
   [customizations.installer]

@@ -34,10 +34,18 @@ func splitEnVr(s string) (string, string) {
 
 	secondLastDash := strings.LastIndex(s[:lastDash], "-")
 	if secondLastDash == -1 {
-		return s[:lastDash], s[lastDash+1:]
+		if strings.Contains(s[secondLastDash+1:], ".") {
+			return s[:lastDash], s[lastDash+1:]
+		} else {
+			return s, ""
+		}
 	}
 
-	return s[:secondLastDash], s[secondLastDash+1:]
+	if strings.Contains(s[secondLastDash+1:], ".") {
+		return s[:secondLastDash], s[secondLastDash+1:]
+	} else {
+		return s, ""
+	}
 }
 
 // int64ToVersion converts a uint64 value to a version string in the format "x.y.z".

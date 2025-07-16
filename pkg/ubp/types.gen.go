@@ -27,7 +27,7 @@ const (
 	AnacondaStorage      AnacondaModules = "org.fedoraproject.Anaconda.Modules.Storage"
 	AnacondaSubscription AnacondaModules = "org.fedoraproject.Anaconda.Modules.Subscription"
 	AnacondaTimezone     AnacondaModules = "org.fedoraproject.Anaconda.Modules.Timezone"
-	AnacondaUser         AnacondaModules = "org.fedoraproject.Anaconda.Modules.User"
+	AnacondaUsers        AnacondaModules = "org.fedoraproject.Anaconda.Modules.Users"
 )
 
 // Defines values for Arch.

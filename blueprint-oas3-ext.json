@@ -138,7 +138,7 @@
           "org.fedoraproject.Anaconda.Modules.Storage",
           "org.fedoraproject.Anaconda.Modules.Subscription",
           "org.fedoraproject.Anaconda.Modules.Timezone",
-          "org.fedoraproject.Anaconda.Modules.User"
+          "org.fedoraproject.Anaconda.Modules.Users"
         ],
         "type": "string",
         "x-enum-varnames": [
@@ -151,7 +151,7 @@
           "AnacondaStorage",
           "AnacondaSubscription",
           "AnacondaTimezone",
-          "AnacondaUser"
+          "AnacondaUsers"
         ],
         "x-go-type-name": "AnacondaModule",
         "x-go-type-skip-optional-pointer": true

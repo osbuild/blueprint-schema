@@ -1,8 +1,5 @@
-# package(s) with dash were converted as names
-
 [[packages]]
   name = "tmux"
 
 [[packages]]
-  name = "vim"
-  version = "enhanced"
+  name = "vim-enhanced"

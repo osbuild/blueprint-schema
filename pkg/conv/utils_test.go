@@ -38,22 +38,40 @@ func TestSplitEnVr(t *testing.T) {
 		wantPart2 string
 	}{
 		{
-			name:      "multiple hyphens",
-			input:     "my-cool-package-1.0-1",
-			wantPart1: "my-cool-package",
+			name:      "simple package",
+			input:     "vim-1.0-1",
+			wantPart1: "vim",
 			wantPart2: "1.0-1",
 		},
 		{
-			name:      "exactly two hyphens",
-			input:     "name-version-release",
-			wantPart1: "name",
-			wantPart2: "version-release",
+			name:      "package with dash",
+			input:     "vim-enhanced-1.0-1",
+			wantPart1: "vim-enhanced",
+			wantPart2: "1.0-1",
+		},
+		{
+			name:      "package with everything",
+			input:     "vim-enhanced-9.1.866-1.fc41.x86_64",
+			wantPart1: "vim-enhanced",
+			wantPart2: "9.1.866-1.fc41.x86_64",
+		},
+		{
+			name:      "number and two hyphens",
+			input:     "grub2-utils",
+			wantPart1: "grub2-utils",
+			wantPart2: "",
 		},
 		{
 			name:      "exactly one hyphen",
 			input:     "name-version",
-			wantPart1: "name",
-			wantPart2: "version",
+			wantPart1: "name-version",
+			wantPart2: "",
+		},
+		{
+			name:      "exactly two hyphens",
+			input:     "name-version-release",
+			wantPart1: "name-version-release",
+			wantPart2: "",
 		},
 		{
 			name:      "no hyphens",
@@ -68,28 +86,28 @@ func TestSplitEnVr(t *testing.T) {
 			wantPart2: "",
 		},
 		{
+			name:      "trailing hyphen with version",
+			input:     "a-b-1.0-",
+			wantPart1: "a-b",
+			wantPart2: "1.0-",
+		},
+		{
 			name:      "trailing hyphen",
 			input:     "a-b-",
-			wantPart1: "a",
-			wantPart2: "b-",
-		},
-		{
-			name:      "leading hyphen",
-			input:     "-a-b",
-			wantPart1: "",
-			wantPart2: "a-b",
-		},
-		{
-			name:      "consecutive hyphens",
-			input:     "a--b",
-			wantPart1: "a",
-			wantPart2: "-b",
-		},
-		{
-			name:      "more consecutive hyphens",
-			input:     "a-b--c-d",
 			wantPart1: "a-b-",
-			wantPart2: "c-d",
+			wantPart2: "",
+		},
+		{
+			name:      "leading hyphen", // suboptimal case
+			input:     "-a-b-1.0",
+			wantPart1: "-a",
+			wantPart2: "b-1.0",
+		},
+		{
+			name:      "consecutive hyphens", // suboptimal case
+			input:     "a--b-1.0",
+			wantPart1: "a-",
+			wantPart2: "b-1.0",
 		},
 	}
 

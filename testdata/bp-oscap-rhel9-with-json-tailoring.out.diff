@@ -1,17 +1,7 @@
   &blueprint.Blueprint{
-  	Name:        "",
-  	Description: "",
-  	Version:     "",
-  	Packages: []blueprint.Package{
-  		{Name: "xmlstarlet"},
-- 		{Name: "openscap-utils"},
-+ 		{Name: "openscap", Version: "utils"},
-  		{Name: "jq"},
-  	},
-  	Modules:        nil,
-  	EnabledModules: nil,
-  	Groups:         nil,
-  	Containers:     nil,
+  	... // 6 identical fields
+  	Groups:     nil,
+  	Containers: nil,
   	Customizations: &blueprint.Customizations{
   		... // 15 identical fields
   		Ignition:    nil,
