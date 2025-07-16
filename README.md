@@ -13,7 +13,7 @@ This repository contains the common blueprint JSON Schema and Go types for Image
 * **UBP** aka Unified Blueprint: The new structure in this repo available in `pkg/ubp`.
 * **BP** aka Blueprint: The (legacy) blueprint as it exists in [osbuild/blueprint](https://github.com/osbuild/blueprint), is user-facing in osbuild-composer, and is documented on osbuild.org
 * **CRC Blueprint**: The blueprint as it exists in [image-builder-crc](https://github.com/osbuild/image-builder-crc), is user-facing in the service API, and is documented on osbuild.org.  This is very close but sometimes slightly different from the Blueprint.
-* **Images Blueprint**: The format and code that currently exists in [osbuild/images](https://github.com/osbuild/images) in `pkg/ubp`, which was never meant to be user-facing, but through sloppiness (on my part as well) initially (but not anymore) ended up being the user-facing blueprint in bootc-image-builder and, for a short period, ib-cli.  This slightly differs from the Old Schema in that it was more aggressive in dropping deprecated options (like SSHKey), because the user-facing blueprints (Old and CRC) were responsible for backwards compatibility.
+* **Images Blueprint**: The format and code that currently exists in [osbuild/images](https://github.com/osbuild/images) in `pkg/ubp`, which slightly differs from BP in that it was more aggressive in dropping deprecated options (like SSHKey).
 
 ### Schema source
 
