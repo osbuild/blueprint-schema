@@ -67,13 +67,11 @@ func UnmarshalAny(buf []byte, details *AnyDetails) (*ubp.Blueprint, error) {
 		details = &AnyDetails{}
 	}
 
-	var err error
 	errs := make([]error, 0, 5)
 	errs = append(errs, ErrParsingDetection)
 
 	// Try UBP YAML
-	ubpData := new(ubp.Blueprint)
-	ubpData, err = UnmarshalStrictYAML(buf)
+	ubpData, err := UnmarshalStrictYAML(buf)
 	if err == nil {
 		details.Format = AnyFormatUBPYAML
 
@@ -83,7 +81,6 @@ func UnmarshalAny(buf []byte, details *AnyDetails) (*ubp.Blueprint, error) {
 	}
 
 	// Try UBP JSON
-	ubpData = new(ubp.Blueprint)
 	ubpData, err = UnmarshalStrictJSON(buf)
 	if err == nil {
 		details.Format = AnyFormatUBPJSON
