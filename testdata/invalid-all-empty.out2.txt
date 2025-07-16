@@ -1,5 +1,5 @@
 # repository "one" has no source defined
-repository "two" has no source defined
+# repository "two" has no source defined
 
 accounts:
   groups: null

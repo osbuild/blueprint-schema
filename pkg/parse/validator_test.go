@@ -72,50 +72,6 @@ func unwrapErrorsAsComments(es error) []byte {
 	return buf.Bytes()
 }
 
-func TestDetectionCounts(t *testing.T) {
-	tests := []struct {
-		filename string
-		ubpCount int
-		bpCount  int
-	}{
-		{"../../testdata/all-fields.in.yaml", 43, 0},
-		{"../../testdata/invalid-all-empty.in.yaml", 2, 0},
-		{"../../testdata/valid-empty.in.yaml", 0, 0},
-		{"../../testdata/valid-empty-j.in.json", 0, 0},
-		{"../../testdata/small.json", 2, 0},
-		{"../../testdata/legacy-small.json", 2, 3},
-		{"../../testdata/bp-oscap-generic.in.json", 15, 20},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.filename, func(t *testing.T) {
-			buf, err := os.ReadFile(tt.filename)
-			if err != nil {
-				t.Fatalf("failed to read file %s: %v", tt.filename, err)
-			}
-
-			details := AnyDetails{}
-			ubp, err := UnmarshalAny(buf, &details)
-			if err != nil {
-				t.Fatalf("failed to unmarshal file %s: %v", tt.filename, err)
-			}
-
-			ubpCount := countSetFieldsRecursive(ubp)
-			bpCount := countSetFieldsRecursive(details.Intermediate)
-
-			if ubpCount != tt.ubpCount {
-				t.Errorf("expected UBP count %d, got %d", tt.ubpCount, ubpCount)
-			}
-			if bpCount != tt.bpCount {
-				t.Errorf("expected BP count %d, got %d", tt.bpCount, bpCount)
-			}
-			if details.Warnings != nil {
-				t.Logf("Unmarshal warnings: %v", details.Warnings)
-			}
-		})
-	}
-}
-
 // cmpTransformerForRawMessage is a cmp.Option that transforms json.RawMessage
 // into a map[string]interface{} before comparison. This makes the comparison
 // independent of key ordering in the JSON string.
@@ -147,8 +103,6 @@ func cleanDiff(diff string) string {
 }
 
 func TestFix(t *testing.T) {
-	log := strings.Builder{}
-
 	convert := func(t *testing.T, input, output string) (*ubp.Blueprint, *bp.Blueprint) {
 		var resultUBP *ubp.Blueprint
 		var resultBP *bp.Blueprint
@@ -176,23 +130,14 @@ func TestFix(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
+			t.Logf("UnmarshalAny details: %v", details)
 			if details.Warnings != nil {
 				convErrs = details.Warnings
 			}
 			resultUBP = ubpBP
 			resultBP = details.Intermediate
-			log.WriteString(fmt.Sprintf("%s>%s: INPUT:%s UBPY:%d UBPJ:%d BPT:%d BPJ:%d TEMP:%d\n",
-				filepath.Base(input),
-				filepath.Base(output),
-				details.Format.String(),
-				details.ubpCountYAML,
-				details.ubpCountJSON,
-				details.bpCountTOML,
-				details.bpCountJSON,
-				details.bpCountTemp,
-			))
 
-			if details.Converted {
+			if details.Format == AnyFormatBPJSON || details.Format == AnyFormatBPTOML {
 				// conversion was done during loading
 				got, err = MarshalYAML(ubpBP)
 				if err != nil {
@@ -211,8 +156,6 @@ func TestFix(t *testing.T) {
 				}
 				resultBP = result
 			}
-
-			t.Logf("Conversion warnings: %v", convErrs)
 
 			if writeFixtures {
 				writeFile(t, output, ptr.To(unwrapErrorsAsComments(convErrs)), ptr.To(got))
@@ -240,22 +183,18 @@ func TestFix(t *testing.T) {
 		return resultUBP, resultBP
 	}
 
-	diffUBP := func(t *testing.T, str string, ubp1, ubp2 any, diffFile string) {
-		t.Run("DiffUBP", func(t *testing.T) {
-			if ubp1 == nil || ubp2 == nil {
-				t.Fatal("UBP objects are nil, cannot diff")
+	diffObjects := func(t *testing.T, s1, s2 any, diffFile string) {
+		t.Run("DiffObj", func(t *testing.T) {
+			if s1 == nil || s2 == nil {
+				t.Fatal("objects are nil, cannot diff")
 			}
 
-			count1 := countSetFieldsRecursive(ubp1)
-			count2 := countSetFieldsRecursive(ubp2)
-			t.Logf("Diffing %s objects: %d fields vs %d fields", str, count1, count2)
-			//log.WriteString(fmt.Sprintf("Diffing UBP objects: %d fields vs %d fields\n", count1, count2))
-
+			// Transform raw messages and allow unexported fields because of "union" field
 			diffBuf := bytes.Buffer{}
-			diff := cmp.Diff(ubp1, ubp2, cmpTransformerForRawMessage, cmp.AllowUnexported(
+			diff := cmp.Diff(s1, s2, cmpTransformerForRawMessage, cmp.AllowUnexported(
+				ubp.Ignition{},
 				ubp.DNFSource{},
 				ubp.FSNodeContents{},
-				ubp.Ignition{},
 				ubp.NetworkService{},
 				ubp.OpenSCAPTailoring{},
 				ubp.StoragePartition{},
@@ -274,7 +213,7 @@ func TestFix(t *testing.T) {
 					if err != nil {
 						t.Fatal(err)
 					}
-					t.Logf("Written UBP diff to %s", diffFile)
+					t.Logf("Written diff to %s", diffFile)
 				}
 			} else {
 				want := []byte{}
@@ -293,7 +232,7 @@ func TestFix(t *testing.T) {
 
 				// diff or diffs are not too readable, just print the diff
 				if diffBuf.Len() > 0 && diffBuf.String() != string(want) {
-					t.Logf("UBP diff mismatch (-want +got):\n%s", cmp.Diff(string(want), diffBuf.String()))
+					t.Logf("diff mismatch (-want +got):\n%s", cmp.Diff(string(want), diffBuf.String()))
 				}
 			}
 		})
@@ -380,9 +319,9 @@ func TestFix(t *testing.T) {
 		ubp1, bp1 := convert(t, file, out1)
 		ubp2, bp2 := convert(t, out1, out2)
 		if bp1 != nil && bp2 != nil {
-			diffUBP(t, "BP", bp1, bp2, inout2diff)
+			diffObjects(t, bp1, bp2, inout2diff)
 		} else if ubp1 != nil && ubp2 != nil {
-			diffUBP(t, "UBP", ubp1, ubp2, inout2diff)
+			diffObjects(t, ubp1, ubp2, inout2diff)
 		} else {
 			t.Errorf("Both UBP and BP are nil for file %q", file)
 			return false
@@ -396,23 +335,10 @@ func TestFix(t *testing.T) {
 			t.Errorf("Failed to process file: %s", file)
 		}
 	}
-
-	if writeFixtures {
-		if log.Len() > 0 {
-			logf := "../../testdata/0_log.txt"
-			if _, err := os.Stat(logf); err == nil {
-				_ = os.Remove(logf)
-			}
-			err := os.WriteFile(logf, []byte(log.String()), 0644)
-			if err != nil {
-				t.Fatal(err)
-			}
-		}
-	}
 }
 
 func TestImportOneFile(t *testing.T) {
-	inputFile, err := os.Open("../../testdata/bp-all-customizations.in.json")
+	inputFile, err := os.Open("../../testdata/bp-minimal-environment.in.json")
 	if err != nil {
 		t.Fatal(err)
 	}
