@@ -323,7 +323,11 @@ func (e *InternalExporter) exportStorage() *bp.DiskCustomization {
 	}
 
 	to := &bp.DiskCustomization{}
-	to.Type = e.from.Storage.Type.String()
+	if e.from.Storage.Type == ubp.StorageTypeMBR {
+		to.Type = "dos"
+	} else {
+		to.Type = e.from.Storage.Type.String()
+	}
 	to.MinSize = e.from.Storage.Minsize.Bytes()
 
 	for i, p := range e.from.Storage.Partitions {

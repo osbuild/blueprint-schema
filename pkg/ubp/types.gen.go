@@ -998,10 +998,11 @@ type Storage struct {
 	// Partitions Partitions of the following types: plain (default), lvm, or btrfs.
 	Partitions []StoragePartition `json:"partitions"`
 
-	// Type Device partitioning type: gpt (default) or mbr.
+	// Type Device partitioning type: gpt or mbr.
 	//
-	// Default value is image specific.
-	Type StorageType `json:"type"`
+	// Default value depends on the image type or architecture. Most of images are GPT
+	// but s390x or ppc images are MBR.
+	Type StorageType `json:"type,omitempty"`
 }
 
 // FSType File system type: ext4, xfs, swap, or vfat.
@@ -1026,9 +1027,10 @@ type StoragePartition struct {
 	union json.RawMessage
 }
 
-// StorageType Device partitioning type: gpt (default) or mbr.
+// StorageType Device partitioning type: gpt or mbr.
 //
-// Default value is image specific.
+// Default value depends on the image type or architecture. Most of images are GPT
+// but s390x or ppc images are MBR.
 type StorageType string
 
 // Systemd Systemd unit configuration.

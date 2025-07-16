@@ -40,4 +40,4 @@ storage:
     minsize: 10 GiB
     name: testvg
     type: lvm
-  type: dos
+  type: mbr
