@@ -13,13 +13,13 @@ import (
 // InternalImporter is used to convert a blueprint to the internal representation.
 type InternalImporter struct {
 	from *bp.Blueprint
-	log  *errs
+	log  *warnings
 }
 
 func NewInternalImporter(inputBlueprint *bp.Blueprint) *InternalImporter {
 	return &InternalImporter{
 		from: inputBlueprint,
-		log:  newErrorCollector(),
+		log:  &warnings{},
 	}
 }
 
@@ -55,7 +55,7 @@ func (e *InternalImporter) Import() (*ubp.Blueprint, error) {
 		e.log.Printf("ignoring minimal flag")
 	}
 
-	return to, e.log.Errors()
+	return to, e.log.Error()
 }
 
 func (e *InternalImporter) importArchitecture() ubp.Arch {

@@ -8,20 +8,19 @@ import (
 
 	"github.com/osbuild/blueprint-schema/pkg/ptr"
 	ubp "github.com/osbuild/blueprint-schema/pkg/ubp"
-	"github.com/osbuild/blueprint/pkg/blueprint"
 	bp "github.com/osbuild/blueprint/pkg/blueprint"
 )
 
 // InternalExporter is used to convert a blueprint to the internal representation.
 type InternalExporter struct {
 	from *ubp.Blueprint
-	log  *errs
+	log  *warnings
 }
 
 func NewInternalExporter(inputBlueprint *ubp.Blueprint) *InternalExporter {
 	return &InternalExporter{
 		from: inputBlueprint,
-		log:  newErrorCollector(),
+		log:  &warnings{},
 	}
 }
 
@@ -46,7 +45,7 @@ func (e *InternalExporter) Export() (*bp.Blueprint, error) {
 	to.Distro = e.from.Distribution
 	to.Arch = e.from.Architecture.String()
 
-	return to, e.log.Errors()
+	return to, e.log.Error()
 }
 
 func (e *InternalExporter) exportPackages() []bp.Package {
@@ -477,15 +476,15 @@ func (e *InternalExporter) exportRegistration() (*bp.RHSMCustomization, *bp.FDOC
 	}
 
 	if rhsm != nil {
-		emptyRHSM := &blueprint.RHSMCustomization{
-			Config: &blueprint.RHSMConfig{
-				DNFPlugins: &blueprint.SubManDNFPluginsConfig{
-					ProductID:           &blueprint.DNFPluginConfig{},
-					SubscriptionManager: &blueprint.DNFPluginConfig{},
+		emptyRHSM := &bp.RHSMCustomization{
+			Config: &bp.RHSMConfig{
+				DNFPlugins: &bp.SubManDNFPluginsConfig{
+					ProductID:           &bp.DNFPluginConfig{},
+					SubscriptionManager: &bp.DNFPluginConfig{},
 				},
-				SubscriptionManager: &blueprint.SubManConfig{
-					RHSMConfig:      &blueprint.SubManRHSMConfig{},
-					RHSMCertdConfig: &blueprint.SubManRHSMCertdConfig{},
+				SubscriptionManager: &bp.SubManConfig{
+					RHSMConfig:      &bp.SubManRHSMConfig{},
+					RHSMCertdConfig: &bp.SubManRHSMCertdConfig{},
 				},
 			},
 		}
