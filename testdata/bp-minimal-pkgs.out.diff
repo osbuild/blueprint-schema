@@ -1,0 +1,17 @@
+  &blueprint.Blueprint{
+  	Name:           "",
+  	Description:    "",
+  	Version:        "",
+- 	Packages:       []blueprint.Package{{Name: "tmux"}, {Name: "vim-enhanced"}},
++ 	Packages:       nil,
+  	Modules:        nil,
+  	EnabledModules: nil,
+  	Groups:         nil,
+  	Containers:     nil,
+- 	Customizations: nil,
++ 	Customizations: &blueprint.Customizations{},
+  	Distro:         "",
+  	Arch:           "",
+- 	Minimal:        true,
++ 	Minimal:        false,
+  }

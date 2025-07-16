@@ -1,7 +1,0 @@
-name = "Blueprint example: invalid installer"
-
-[customizations]
-  [customizations.installer]
-    sudo-nopasswd = ["invalid username"]
-    [customizations.installer.modules]
-      enable = ["org.fedoraproject.xxx"]

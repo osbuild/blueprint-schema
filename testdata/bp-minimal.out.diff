@@ -1,0 +1,11 @@
+  &blueprint.Blueprint{
+  	... // 6 identical fields
+  	Groups:         nil,
+  	Containers:     nil,
+- 	Customizations: nil,
++ 	Customizations: &blueprint.Customizations{},
+  	Distro:         "",
+  	Arch:           "",
+- 	Minimal:        true,
++ 	Minimal:        false,
+  }

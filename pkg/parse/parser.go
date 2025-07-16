@@ -14,32 +14,24 @@ import (
 	"sigs.k8s.io/yaml"
 )
 
-var ErrParsingExplanation = errors.New("parsing errors, some are false positives")
-
+// AnyFormat represents the format of a blueprint that can be parsed.
 type AnyFormat int
 
 const (
-	AnyFormatUnknown AnyFormat = iota
-	AnyFormatUBPYAML
-	AnyFormatUBPJSON
-	AnyFormatBPTOML
-	AnyFormatBPJSON
+	AnyFormatUnknown AnyFormat = iota // Unknown format
+	AnyFormatUBPYAML                  // UBP YAML format
+	AnyFormatUBPJSON                  // UBP JSON format
+	AnyFormatBPTOML                   // BP TOML format
+	AnyFormatBPJSON                   // BP JSON format
 )
 
 // AnyDetails contains details about the parsing process of a blueprint in any format.
 // It includes the format detected, warnings encountered, whether the blueprint was converted,
 // and the intermediate blueprint if conversion was necessary.
 type AnyDetails struct {
-	Format       AnyFormat
-	Warnings     error
-	Converted    bool
-	Intermediate *bp.Blueprint
-
-	ubpCountYAML int
-	ubpCountJSON int
-	bpCountTOML  int
-	bpCountJSON  int
-	bpCountTemp  int
+	Format       AnyFormat     // Detected format of the blueprint
+	Warnings     error         // Warnings encountered during conversion
+	Intermediate *bp.Blueprint // Intermediate blueprint if conversion was necessary
 }
 
 func (f AnyFormat) String() string {
@@ -57,86 +49,87 @@ func (f AnyFormat) String() string {
 	}
 }
 
+var ErrParsingDetection = errors.New("parsing and detecting blueprint failed")
+
 // UnmarshalAny attempts to unmarshal a blueprint from a byte slice in any format.
 // It performs heuristic detection of UBP YAML, UBP JSON, BP TOML, and BP JSON formats
-// depending on how many fields are set.
-// If none of the formats can be parsed, it returns an error with details about the parsing attempts.
+// via strict unmarshalling. If parsing fails, it returns a list of wrapped errors
+// indicating the failure of each format attempt.
+//
+// When BP format is detected, it is converted to UBP automatically and default values
+// are populated.
 //
 // To get some insights about the parsing process, you can pass an `AnyDetails` pointer as an
-// argument.
+// argument. This allows finding out which format was detected, whether there were any warnings
+// during the conversion, and what the intermediate blueprint was if conversion was necessary.
 func UnmarshalAny(buf []byte, details *AnyDetails) (*ubp.Blueprint, error) {
 	if details == nil {
 		details = &AnyDetails{}
 	}
 
+	var err error
+	errs := make([]error, 0, 5)
+	errs = append(errs, ErrParsingDetection)
+
 	// Try UBP YAML
-	ubpYAML, ubpErrYAML := UnmarshalYAML(buf)
-	details.ubpCountYAML = countSetFieldsRecursive(ubpYAML)
+	ubpData := new(ubp.Blueprint)
+	ubpData, err = UnmarshalStrictYAML(buf)
+	if err == nil {
+		details.Format = AnyFormatUBPYAML
+
+		return ubpData, nil
+	} else {
+		errs = append(errs, fmt.Errorf("%w (UBP-YAML)", err))
+	}
 
 	// Try UBP JSON
-	ubpJSON, ubpErrJSON := UnmarshalJSON(buf)
-	details.ubpCountJSON = countSetFieldsRecursive(ubpJSON)
+	ubpData = new(ubp.Blueprint)
+	ubpData, err = UnmarshalStrictJSON(buf)
+	if err == nil {
+		details.Format = AnyFormatUBPJSON
 
-	// Try BP TOML
-	bpTempTOML := new(bp.Blueprint)
-	bpErrTOML := toml.Unmarshal(buf, bpTempTOML)
-	details.bpCountTemp = countSetFieldsRecursive(bpTempTOML)
-	imTOML := conv.NewInternalImporter(bpTempTOML)
-	bpTOML, bpWarnTOML := imTOML.Import()
-	details.bpCountTOML = countSetFieldsRecursive(bpTOML)
+		return ubpData, nil
+	} else {
+		errs = append(errs, fmt.Errorf("%w (UBP-JSON)", err))
+	}
 
 	// Try BP JSON
-	bpTempJSON := new(bp.Blueprint)
-	bpErrJSON := json.Unmarshal(buf, bpTempJSON)
-	details.bpCountTemp = countSetFieldsRecursive(bpErrJSON)
-	imJSON := conv.NewInternalImporter(bpTempJSON)
-	bpJSON, bpWarnJSON := imJSON.Import()
-	details.bpCountJSON = countSetFieldsRecursive(bpJSON)
-
-	maxCount := max(details.ubpCountYAML, details.ubpCountJSON, details.bpCountTOML, details.bpCountJSON)
-	err := errors.Join(
-		fmt.Errorf("YAML: %w", ubpErrYAML),
-		fmt.Errorf("JSON: %w", ubpErrJSON),
-		fmt.Errorf("TOML: %w", bpErrTOML),
-		fmt.Errorf("JSON: %w", bpErrJSON),
-	)
-	details.Warnings = errors.Join(bpWarnTOML, bpWarnJSON)
-
-	errDefaults := ubp.PopulateDefaults(bpTOML)
-	if errDefaults != nil {
-		err = errors.Join(err, fmt.Errorf("populate defaults for BP-TOML: %w", errDefaults))
-	}
-
-	errDefaults = ubp.PopulateDefaults(bpJSON)
-	if errDefaults != nil {
-		err = errors.Join(err, fmt.Errorf("populate defaults for BP-JSON: %w", errDefaults))
-	}
-
-	if ubpErrYAML == nil && details.ubpCountYAML == maxCount {
-		details.Format = AnyFormatUBPYAML
-		return ubpYAML, nil
-	} else if ubpErrJSON == nil && details.ubpCountJSON == maxCount {
-		details.Format = AnyFormatUBPJSON
-		return ubpJSON, nil
-	} else if bpErrTOML == nil && details.bpCountTOML == maxCount {
-		details.Format = AnyFormatBPTOML
-		details.Converted = true
-		details.Intermediate = bpTempTOML
-		return bpTOML, nil
-	} else if bpErrJSON == nil && details.bpCountJSON == maxCount {
+	bpData := new(bp.Blueprint)
+	dec := json.NewDecoder(bytes.NewReader(buf))
+	dec.DisallowUnknownFields()
+	err = dec.Decode(bpData)
+	if err == nil {
 		details.Format = AnyFormatBPJSON
-		details.Converted = true
-		details.Intermediate = bpTempJSON
-		return bpJSON, nil
+
+		importer := conv.NewInternalImporter(bpData)
+		imData, warn := importer.Import()
+		details.Intermediate = bpData
+		details.Warnings = warn
+
+		errDefaults := ubp.PopulateDefaults(imData)
+		return imData, errDefaults
 	} else {
-		countErr := fmt.Errorf("fields set: UBPY:%d UBPJ:%d BPT:%d BPJ:%d",
-			details.ubpCountYAML,
-			details.ubpCountJSON,
-			details.bpCountTOML,
-			details.bpCountJSON,
-		)
-		return nil, errors.Join(ErrParsingExplanation, err, countErr)
+		errs = append(errs, fmt.Errorf("%w (BP-JSON)", err))
 	}
+
+	// Try BP TOML (this parser does not have a strict mode, so it comes last)
+	bpData = new(bp.Blueprint)
+	err = toml.Unmarshal(buf, bpData)
+	if err == nil {
+		details.Format = AnyFormatBPTOML
+
+		importer := conv.NewInternalImporter(bpData)
+		imData, warn := importer.Import()
+		details.Intermediate = bpData
+		details.Warnings = warn
+
+		errDefaults := ubp.PopulateDefaults(imData)
+		return imData, errDefaults
+	} else {
+		errs = append(errs, fmt.Errorf("%w (BP-TOML)", err))
+	}
+
+	return nil, errors.Join(errs...)
 }
 
 // UnmarshalYAML loads a blueprint from YAML data. It converts YAML into JSON first,
@@ -149,6 +142,18 @@ func UnmarshalYAML(buf []byte) (*ubp.Blueprint, error) {
 	b := new(ubp.Blueprint)
 
 	if err := yaml.Unmarshal(buf, b); err != nil {
+		return nil, fmt.Errorf("failed to unmarshal YAML blueprint: %w", err)
+	}
+
+	return b, nil
+}
+
+// UnmarshalStrictYAML loads a blueprint from YAML data, but it does not allow unknown fields.
+// Read UnmarshalYAML for more details.
+func UnmarshalStrictYAML(buf []byte) (*ubp.Blueprint, error) {
+	b := new(ubp.Blueprint)
+
+	if err := yaml.UnmarshalStrict(buf, b); err != nil {
 		return nil, fmt.Errorf("failed to unmarshal YAML blueprint: %w", err)
 	}
 
@@ -191,6 +196,20 @@ func WriteYAML(b *ubp.Blueprint, writer io.Writer) error {
 func UnmarshalJSON(data []byte) (*ubp.Blueprint, error) {
 	b := new(ubp.Blueprint)
 	return b, json.Unmarshal(data, b)
+}
+
+// UnmarshalStrictJSON uses JSON decoder to unmarshal into an object, but it does
+// not allow unknown fields. See UnmarshalJSON for more details.
+func UnmarshalStrictJSON(data []byte) (*ubp.Blueprint, error) {
+	b := new(ubp.Blueprint)
+	dec := json.NewDecoder(bytes.NewReader(data))
+	dec.DisallowUnknownFields()
+
+	if err := dec.Decode(b); err != nil {
+		return nil, fmt.Errorf("failed to unmarshal JSON blueprint: %w", err)
+	}
+
+	return b, nil
 }
 
 // ReadJSON calls UnmarshalJSON after reading into a buffer.

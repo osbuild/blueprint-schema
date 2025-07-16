@@ -1,5 +1,0 @@
-installer:
-  anaconda:
-    sudo_nopasswd:
-    - invalid username
-name: 'Blueprint example: invalid installer'
