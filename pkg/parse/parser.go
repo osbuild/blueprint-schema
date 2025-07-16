@@ -64,10 +64,9 @@ func (f AnyFormat) String() string {
 //
 // To get some insights about the parsing process, you can pass an `AnyDetails` pointer as an
 // argument.
-func UnmarshalAny(buf []byte, anyDetails ...*AnyDetails) (*ubp.Blueprint, error) {
-	details := &AnyDetails{}
-	if len(anyDetails) > 0 {
-		details = anyDetails[0]
+func UnmarshalAny(buf []byte, details *AnyDetails) (*ubp.Blueprint, error) {
+	if details == nil {
+		details = &AnyDetails{}
 	}
 
 	// Try UBP YAML
