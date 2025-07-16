@@ -7,7 +7,6 @@ storage:
     minsize: 800 MiB
     mountpoint: /boot
     type: plain
-  - fs_type: ext4
-    minsize: 50 GiB
+  - minsize: 50 GiB
     type: plain
   type: gpt

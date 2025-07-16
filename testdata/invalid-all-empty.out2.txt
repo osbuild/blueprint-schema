@@ -10,6 +10,3 @@ dnf:
   repositories:
   - id: one
   - id: two
-storage:
-  partitions: null
-  type: gpt

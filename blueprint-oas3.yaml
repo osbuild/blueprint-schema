@@ -1288,7 +1288,6 @@ components:
         type:
           $ref: '#/components/schemas/storage_type'
       required:
-      - type
       - partitions
       type: object
       x-omitempty: true
@@ -1338,9 +1337,7 @@ components:
       x-go-type-skip-optional-pointer: true
     storage_type:
       description: |
-        Device partitioning type: gpt (default) or mbr.
-
-        Default value is image specific.
+        Device partitioning type: gpt or mbr. Default value depends on the image type or architecture.
       enum:
       - gpt
       - mbr

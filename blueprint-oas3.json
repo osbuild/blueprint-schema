@@ -1331,7 +1331,6 @@
           }
         },
         "required": [
-          "type",
           "partitions"
         ],
         "type": "object",
@@ -1384,7 +1383,7 @@
         "x-go-type-skip-optional-pointer": true
       },
       "storage_type": {
-        "description": "Device partitioning type: gpt (default) or mbr.\n\nDefault value is image specific.\n",
+        "description": "Device partitioning type: gpt or mbr. Default value depends on the image type or architecture.\n",
         "enum": [
           "gpt",
           "mbr"

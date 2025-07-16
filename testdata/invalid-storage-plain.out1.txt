@@ -15,4 +15,3 @@ name = "Blueprint example: disallowed properties for storage"
     [[customizations.disk.partitions]]
       type = "plain"
       minsize = 53687091200
-      fs_type = "ext4"

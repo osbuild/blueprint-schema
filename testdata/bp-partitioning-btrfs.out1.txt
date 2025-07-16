@@ -27,4 +27,3 @@ storage:
     label: swap-part
     minsize: 1 GiB
     type: plain
-  type: ""

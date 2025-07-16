@@ -1,9 +1,7 @@
 ---
 type: string
 description: |
-  Device partitioning type: gpt (default) or mbr.
-
-  Default value is image specific.
+  Device partitioning type: gpt or mbr. Default value depends on the image type or architecture.
 x-go-type-skip-optional-pointer: true
 enum:
   - gpt

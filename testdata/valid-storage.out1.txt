@@ -43,10 +43,8 @@ name = "Blueprint example: valid storage"
       type = "plain"
       minsize = 1000000000
       label = "plain-bytes"
-      fs_type = "ext4"
 
     [[customizations.disk.partitions]]
       type = "plain"
       minsize = 104857600
       label = "plain-mib"
-      fs_type = "ext4"

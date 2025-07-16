@@ -22,7 +22,6 @@ description: |
 nullable: true
 x-omitempty: true
 required:
-  - type
   - partitions
 properties:
   type:

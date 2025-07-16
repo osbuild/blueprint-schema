@@ -26,12 +26,10 @@ storage:
     - mountpoint: /var/backups
       name: root
     type: btrfs
-  - fs_type: ext4
-    label: plain-bytes
+  - label: plain-bytes
     minsize: 1 GB
     type: plain
-  - fs_type: ext4
-    label: plain-mib
+  - label: plain-mib
     minsize: 100 MiB
     type: plain
   type: gpt
