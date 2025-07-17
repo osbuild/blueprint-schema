@@ -10,10 +10,6 @@ import (
 type StorageSize string
 
 func (s StorageType) String() string {
-	if s == "" {
-		return StorageTypeGPT.String()
-	}
-
 	return string(s)
 }
 
@@ -31,11 +27,17 @@ func (s StorageType) Size() (ByteSize, error) {
 
 var ErrInvalidStorageType = errors.New("invalid storage type")
 
+// StorageTypeDefault is used when no storage type was specified. This can only happen
+// for a converted blueprint, UBP schema requires a storage type to be specified.
+const StorageTypeDefault StorageType = ""
+
 func ParseStorageType(s string) (StorageType, error) {
 	switch strings.ToLower(s) {
-	case "gpt", "":
+	case "":
+		return StorageTypeDefault, nil
+	case "gpt":
 		return StorageTypeGPT, nil
-	case "mbr":
+	case "dos", "mbr": // "dos" used for BP, "mbr" for UBP
 		return StorageTypeMBR, nil
 	default:
 		return "", fmt.Errorf("%w: %q", ErrInvalidStorageType, s)

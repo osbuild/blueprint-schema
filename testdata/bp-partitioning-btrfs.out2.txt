@@ -1,6 +1,5 @@
 [customizations]
   [customizations.disk]
-    type = "gpt"
 
     [[customizations.disk.partitions]]
       type = "plain"

@@ -2,8 +2,6 @@
 
   [[customizations.user]]
     name = "user"
-  [customizations.disk]
-    type = "gpt"
 
   [[customizations.repositories]]
     id = "one"

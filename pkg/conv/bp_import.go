@@ -599,8 +599,14 @@ func (e *InternalImporter) importStorage() *ubp.Storage {
 		return nil
 	}
 
+	st, err := ubp.ParseStorageType(e.from.Customizations.Disk.Type)
+	if err != nil {
+		e.log.Printf("error parsing storage type %q: %v, using default", e.from.Customizations.Disk.Type, err)
+		st = ubp.StorageTypeDefault
+	}
+
 	to := ubp.Storage{
-		Type: ubp.StorageType(e.from.Customizations.Disk.Type),
+		Type: st,
 	}
 
 	if e.from.Customizations.Disk.MinSize > 0 {

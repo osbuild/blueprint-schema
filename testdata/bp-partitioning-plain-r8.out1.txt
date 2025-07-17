@@ -40,4 +40,3 @@ storage:
   - fs_type: swap
     minsize: 1 GiB
     type: plain
-  type: ""

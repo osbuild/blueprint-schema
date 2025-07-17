@@ -1,9 +1,10 @@
 ---
 type: string
 description: |
-  Device partitioning type: gpt (default) or mbr.
+  Device partitioning type: gpt or mbr.
 
-  Default value is image specific.
+  Default value depends on the image type or architecture. Most of images are GPT
+  but s390x or ppc images are MBR.
 x-go-type-skip-optional-pointer: true
 enum:
   - gpt
