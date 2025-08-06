@@ -9,7 +9,6 @@ properties:
     type: integer
     maximum: 65535
     minimum: 1
-    x-go-type-skip-optional-pointer: true
     x-omitempty: true
   enabled:
     "$ref": "firewall_enabled.yaml"

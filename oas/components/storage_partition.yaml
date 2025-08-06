@@ -7,4 +7,5 @@ anyOf:
   - "$ref": "partition_lvm.yaml"
   - "$ref": "partition_btrfs.yaml"
 nullable: true
+# Must be kept because anyOf is used: https://github.com/oapi-codegen/oapi-codegen/issues/2052
 x-go-type-skip-optional-pointer: true

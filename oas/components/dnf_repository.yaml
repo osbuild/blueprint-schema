@@ -9,12 +9,10 @@ properties:
     type: string
     pattern: "^[a-zA-Z0-9_-]+$"
     maxLength: 256
-    x-go-type-skip-optional-pointer: true
     x-go-name: ID
   name:
     description: Repository name.
     type: string
-    x-go-type-skip-optional-pointer: true
   source:
     description: Repository source.
     oneOf:
@@ -30,12 +28,13 @@ properties:
     type: string
     pattern: "^[a-zA-Z0-9_-]+$"
     maxLength: 256
-    x-go-type-skip-optional-pointer: true
+    x-go-type-skip-optionalpointer: true
   gpg_check:
     description: Enable GPG check for the repository. GPG key(s) must be provided. Disabled by default.
     default: true
     type: boolean
     x-go-name: GPGCheck
+    x-go-type-skip-optional-pointer: false
   gpg_check_repo:
     description: Enable GPG check for the repository metadata. Disabled by default.
       This is different from gpg_check, which is for the packages.
@@ -45,6 +44,7 @@ properties:
     default: true
     type: boolean
     x-go-name: GPGCheckRepo
+    x-go-type-skip-optional-pointer: false
   gpg_keys:
     description: |
       GPG keys for the repository.
@@ -56,7 +56,6 @@ properties:
     type: array
     items:
       type: string
-    x-go-type-skip-optional-pointer: true
     x-go-name: GPGKeys
   module_hotfixes:
     description: |
@@ -66,20 +65,20 @@ properties:
       to disable modularity filtering on specific repositories.
     default: false
     type: boolean
-    x-go-type-skip-optional-pointer: true
   priority:
     description: Repository priority. When unset, default DNF priority is used.
       This is useful for third-party repositories that are not part of the base image.
     type: integer
+    x-go-type-skip-optional-pointer: false
   tls_verify:
     description: Enable TLS verification for the repository. Enabled by default.
     default: true
     type: boolean
     x-go-name: TLSVerify
+    x-go-type-skip-optional-pointer: false
   usage:
     description: |
       Repository usage. By default, the repository is configured
       on the image but not used for image build.
-    nullable: true
     "$ref": "dnf_repository_usage.yaml"
 additionalProperties: false

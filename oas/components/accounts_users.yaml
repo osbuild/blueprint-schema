@@ -17,7 +17,6 @@ properties:
     description: A longer description of the account.
     type: string
     maxLength: 4096
-    x-go-type-skip-optional-pointer: true
   expires:
     description: |
       The expiration date in the format YYYY-MM-DD. Leave empty to never expire.
@@ -25,7 +24,6 @@ properties:
       String-based type which accepts date (YYYY-MM-DD) or date-time (RFC3339)
       format and only marshals into date format. This is needed for JSON/YAML compatibility
       since YAML automatically converts strings which look like dates into time.Time.
-    x-go-type-skip-optional-pointer: false
     x-go-type: EpochDays
   gid:
     description: |
@@ -33,19 +31,16 @@ properties:
       value) means that the next available UID will be assigned.
     type: integer
     minimum: 1
-    x-go-type-skip-optional-pointer: true
     x-go-name: GID
   groups:
     description: Additional groups that the user should be a member of.
     type: array
-    x-go-type-skip-optional-pointer: true
     items:
       type: string
   home:
     description: The home directory of the user.
     type: string
     pattern: "^/"
-    x-go-type-skip-optional-pointer: true
   password:
     description: |
       Password either in plain text or encrypted form. If the password
@@ -54,22 +49,22 @@ properties:
       function. The format of the encrypted password is $id$salt$hashed, where
       $id is the algorithm used (1, 5, 6, or 2a).
     type: string
+    x-go-type-skip-optional-pointer: false
   force_password_change:
     description: |
       If set to true, the user will be forced to change their password
       on first login.
     type: boolean
+    x-go-type-skip-optional-pointer: false
   shell:
     description: The shell of the user.
     type: string
     pattern: "^/"
-    x-go-type-skip-optional-pointer: true
   ssh_keys:
     description: SSH keys to be added to the account's authorized_keys file.
     type: array
     items:
       type: string
-    x-go-type-skip-optional-pointer: true
     x-go-name: SSHKeys
   uid:
     description: |
@@ -77,6 +72,5 @@ properties:
       means that the next available UID will be assigned.
     type: integer
     minimum: 1
-    x-go-type-skip-optional-pointer: true
     x-go-name: UID
 additionalProperties: false
