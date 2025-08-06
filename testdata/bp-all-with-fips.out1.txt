@@ -9,13 +9,11 @@ accounts:
   - gid: 1060
     name: user3
   users:
-  - expires: "1970-01-01"
-    name: user1
+  - name: user1
     ssh_keys:
     - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC61wMCjOSHwbVb4VfVyl5sn497qW4PsdQ7Ty7aD6wDNZ/QjjULkDV/yW5WjDlDQ7UqFH0Sr7vywjqDizUAqK7zM5FsUKsUXWHWwg/ehKg8j9xKcMv11AkFoUoujtfAujnKODkk58XSA9whPr7qcw3vPrmog680pnMSzf9LC7J6kXfs6lkoKfBh9VnlxusCrw2yg0qI1fHAZBLPx7mW6+me71QZsS6sVz8v8KXyrXsKTdnF50FjzHcK9HXDBtSJS5wA3fkcRYymJe0o6WMWNdgSRVpoSiWaHHmFgdMUJaYoCfhXzyl7LtNb3Q+Sveg+tJK7JaRXBLMUllOlJ6ll5Hod
       root@localhost
   - description: description 2
-    expires: "1970-01-01"
     gid: 1050
     groups:
     - group1
@@ -27,8 +25,7 @@ accounts:
     - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC61wMCjOSHwbVb4VfVyl5sn497qW4PsdQ7Ty7aD6wDNZ/QjjULkDV/yW5WjDlDQ7UqFH0Sr7vywjqDizUAqK7zM5FsUKsUXWHWwg/ehKg8j9xKcMv11AkFoUoujtfAujnKODkk58XSA9whPr7qcw3vPrmog680pnMSzf9LC7J6kXfs6lkoKfBh9VnlxusCrw2yg0qI1fHAZBLPx7mW6+me71QZsS6sVz8v8KXyrXsKTdnF50FjzHcK9HXDBtSJS5wA3fkcRYymJe0o6WMWNdgSRVpoSiWaHHmFgdMUJaYoCfhXzyl7LtNb3Q+Sveg+tJK7JaRXBLMUllOlJ6ll5Hod
       root@localhost
     uid: 1020
-  - expires: "1970-01-01"
-    gid: 1060
+  - gid: 1060
     name: user3
     uid: 1060
 dnf:
@@ -107,6 +104,10 @@ fsnodes:
   type: dir
   user: "1020"
 hostname: my-host
+ignition: null
+installer:
+  anaconda: {}
+  coreos: {}
 kernel:
   cmdline_append:
   - debug
@@ -115,6 +116,22 @@ locale:
   - dvorak
   languages:
   - el_CY.UTF-8
+network:
+  firewall: {}
+openscap:
+  profile_id: ""
+registration:
+  fdo:
+    manufacturing_server_url: ""
+  redhat:
+    connector:
+      enabled: false
+    insights:
+      enabled: false
+    subscription_manager: {}
+storage:
+  partitions: null
+  type: ""
 systemd:
   disabled:
   - bluetooth.service

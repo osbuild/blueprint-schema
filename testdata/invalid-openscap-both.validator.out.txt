@@ -7,14 +7,12 @@ Schema:
         "description": "JSON filepath, must be used with json_profile_id and cannot be used with selected and unselected fields.",
         "pattern": "^/",
         "type": "string",
-        "x-go-name": "JSONFilePath",
-        "x-go-type-skip-optional-pointer": true
+        "x-go-name": "JSONFilePath"
       },
       "json_profile_id": {
         "description": "JSON profile ID, must be used with json_filepath and cannot be used with selected and unselected fields.",
         "type": "string",
-        "x-go-name": "JSONProfileID",
-        "x-go-type-skip-optional-pointer": true
+        "x-go-name": "JSONProfileID"
       }
     },
     "required": [
@@ -43,16 +41,14 @@ Schema:
         "items": {
           "type": "string"
         },
-        "type": "array",
-        "x-go-type-skip-optional-pointer": true
+        "type": "array"
       },
       "unselected": {
         "description": "Unselected rules, cannot be used with json_profile_id and json_filepath.",
         "items": {
           "type": "string"
         },
-        "type": "array",
-        "x-go-type-skip-optional-pointer": true
+        "type": "array"
       }
     },
     "type": "object"

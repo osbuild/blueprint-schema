@@ -1,3 +1,8 @@
+accounts:
+  groups: null
+  users: null
+dnf: {}
+fips: {}
 fsnodes:
 - path: /var/tmp/file1
 - contents:
@@ -13,4 +18,28 @@ fsnodes:
   path: /var/tmp/dir
   type: dir
   user: lzap
+ignition: null
+installer:
+  anaconda: {}
+  coreos: {}
+kernel: {}
+locale: {}
 name: 'Blueprint example: fsnodes'
+network:
+  firewall: {}
+openscap:
+  profile_id: ""
+registration:
+  fdo:
+    manufacturing_server_url: ""
+  redhat:
+    connector:
+      enabled: false
+    insights:
+      enabled: false
+    subscription_manager: {}
+storage:
+  partitions: null
+  type: gpt
+systemd: {}
+timedate: {}

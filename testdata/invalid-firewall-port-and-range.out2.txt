@@ -1,5 +1,32 @@
+accounts:
+  groups: null
+  users: null
+dnf: {}
+fips: {}
+ignition: null
+installer:
+  anaconda: {}
+  coreos: {}
+kernel: {}
+locale: {}
 name: Firewall example - port and range specified
 network:
   firewall:
     services:
     - port: 1301
+openscap:
+  profile_id: ""
+registration:
+  fdo:
+    manufacturing_server_url: ""
+  redhat:
+    connector:
+      enabled: false
+    insights:
+      enabled: false
+    subscription_manager: {}
+storage:
+  partitions: null
+  type: gpt
+systemd: {}
+timedate: {}

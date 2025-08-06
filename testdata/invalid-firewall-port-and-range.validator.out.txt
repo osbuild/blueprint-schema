@@ -13,7 +13,6 @@ Schema:
         "description": "The name of the IANA service name. This is the name of the service as defined in\nthe /etc/services file.\n",
         "minLength": 2,
         "type": "string",
-        "x-go-type-skip-optional-pointer": true,
         "x-omitempty": true
       }
     },
@@ -40,7 +39,6 @@ Schema:
         "maximum": 65535,
         "minimum": 1,
         "type": "integer",
-        "x-go-type-skip-optional-pointer": true,
         "x-omitempty": true
       },
       "protocol": {
@@ -70,7 +68,6 @@ Schema:
         "maximum": 65535,
         "minimum": 1,
         "type": "integer",
-        "x-go-type-skip-optional-pointer": true,
         "x-omitempty": true
       },
       "protocol": {
@@ -81,7 +78,6 @@ Schema:
         "maximum": 65535,
         "minimum": 1,
         "type": "integer",
-        "x-go-type-skip-optional-pointer": true,
         "x-omitempty": true
       }
     },

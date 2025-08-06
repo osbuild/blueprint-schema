@@ -1,7 +1,31 @@
+accounts:
+  groups: null
+  users: null
+dnf: {}
+fips: {}
+ignition: null
 installer:
+  anaconda: {}
   coreos:
     installation_device: /dev/vda
+kernel: {}
+locale: {}
+network:
+  firewall: {}
+openscap:
+  profile_id: ""
 registration:
   fdo:
     diun_pub_key_insecure: true
     manufacturing_server_url: https://fdo.example.com
+  redhat:
+    connector:
+      enabled: false
+    insights:
+      enabled: false
+    subscription_manager: {}
+storage:
+  partitions: null
+  type: ""
+systemd: {}
+timedate: {}

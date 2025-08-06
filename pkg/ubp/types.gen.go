@@ -108,7 +108,7 @@ type AccountsUsers struct {
 	// String-based type which accepts date (YYYY-MM-DD) or date-time (RFC3339)
 	// format and only marshals into date format. This is needed for JSON/YAML compatibility
 	// since YAML automatically converts strings which look like dates into time.Time.
-	Expires *EpochDays `json:"expires,omitempty"`
+	Expires EpochDays `json:"expires,omitempty"`
 
 	// ForcePasswordChange If set to true, the user will be forced to change their password
 	// on first login.
@@ -156,7 +156,7 @@ type AnacondaModules string
 // THIS IS WORK IN PROGRESS
 type Blueprint struct {
 	// Accounts Operating system user and group accounts to be created on the image.
-	Accounts *Accounts `json:"accounts,omitempty"`
+	Accounts Accounts `json:"accounts,omitempty"`
 
 	// Architecture Architecture of the image. This is the architecture of the target system, not the build system.
 	Architecture Arch `json:"architecture,omitempty"`
@@ -185,10 +185,10 @@ type Blueprint struct {
 	// package name the version glob should be *. And be aware that you will be unable
 	// to freeze the blueprint. This is because the provides will expand into multiple
 	// packages with their own names and versions.
-	DNF *DNF `json:"dnf,omitempty"`
+	DNF DNF `json:"dnf,omitempty"`
 
 	// FIPS FIPS details, optional.
-	FIPS *FIPS `json:"fips,omitempty"`
+	FIPS FIPS `json:"fips,omitempty"`
 
 	// FSNodes File system nodes details.
 	//
@@ -229,19 +229,19 @@ type Blueprint struct {
 	//
 	// The blueprint configuration can be done either by embedding an Ignition configuration
 	// file into the image, or providing a provisioning URL that will be fetched at first boot.
-	Ignition *Ignition `json:"ignition,omitempty"`
+	Ignition Ignition `json:"ignition,omitempty"`
 
 	// Installer Extra customization for Anaconda installer (ISO) and Edge/IOT simplified
 	// installer image types.
-	Installer *Installer `json:"installer,omitempty"`
+	Installer Installer `json:"installer,omitempty"`
 
 	// Kernel Custom Linux kernel details, optional.
-	Kernel *Kernel `json:"kernel,omitempty"`
+	Kernel Kernel `json:"kernel,omitempty"`
 
 	// Locale An optional object that contains the following attributes to customize
 	// the locale settings for the system. If the locale is not specified, the default
 	// locale and keyboard settings are used: en_US.UTF-8 and us.
-	Locale *Locale `json:"locale,omitempty"`
+	Locale Locale `json:"locale,omitempty"`
 
 	// Name The name attribute is a string that contains the name of the blueprint.
 	// It can contain spaces, but they may be converted to dash characters during build.
@@ -249,16 +249,16 @@ type Blueprint struct {
 	Name string `json:"name,omitempty"`
 
 	// Network Networking details including firewall configuration.
-	Network *Network `json:"network,omitempty"`
+	Network Network `json:"network,omitempty"`
 
 	// OpenSCAP OpenSCAP policy to be applied on the operating system. Added in
 	// RHEL 8.7 & RHEL 9.1. It is possible to either list policy rules (enable or
 	// disable) or to provide a full policy file.
-	OpenSCAP *OpenSCAP `json:"openscap,omitempty"`
+	OpenSCAP OpenSCAP `json:"openscap,omitempty"`
 
 	// Registration Registration details for various registration types, namely Red Hat
 	// Subscription Manager.
-	Registration *Registration `json:"registration,omitempty"`
+	Registration Registration `json:"registration,omitempty"`
 
 	// Storage Disk partitioning details. Not available for installer-based images.
 	//
@@ -278,7 +278,7 @@ type Blueprint struct {
 	// containing the root filesystem is grown to fill any left over space on the
 	// partition table. Logical Volumes are not grown to fill the space in the Volume
 	// Group since they are trivial to grow on a live system.
-	Storage *Storage `json:"storage,omitempty"`
+	Storage Storage `json:"storage,omitempty"`
 
 	// Systemd Systemd unit configuration.
 	//
@@ -288,11 +288,11 @@ type Blueprint struct {
 	// sshd, chronyd, and cloud-init services. Blueprint services do not replace these
 	// services, but add them to the list of services already present in the templates,
 	// if any.
-	Systemd *Systemd `json:"systemd,omitempty"`
+	Systemd Systemd `json:"systemd,omitempty"`
 
 	// Timedate Time and date details allowing configuration of the timezone and
 	// NTP servers. The timezone is set by default to UTC.
-	Timedate *TimeDate `json:"timedate,omitempty"`
+	Timedate TimeDate `json:"timedate,omitempty"`
 }
 
 // Arch Architecture of the image. This is the architecture of the target system, not the build system.
@@ -409,8 +409,8 @@ type DNFRepository struct {
 	Source *DNFSource `json:"source,omitempty"`
 
 	// TLSVerify Enable TLS verification for the repository. Enabled by default.
-	TLSVerify *bool               `json:"tls_verify,omitempty"`
-	Usage     *DnfRepositoryUsage `json:"usage,omitempty"`
+	TLSVerify *bool              `json:"tls_verify,omitempty"`
+	Usage     DnfRepositoryUsage `json:"usage,omitempty"`
 }
 
 // DNFSource Repository source.
@@ -602,11 +602,11 @@ type Installer struct {
 	//
 	// Blueprint customizations that match the kickstart options (languages, keyboard,
 	// timezone) will change the value in the kickstart file as well.
-	Anaconda *InstallerAnaconda `json:"anaconda,omitempty"`
+	Anaconda InstallerAnaconda `json:"anaconda,omitempty"`
 
 	// CoreOS CoreOS installer configuration is required by the edge-simplified-installer
 	// image. It allows to define the destination device for the installation.
-	CoreOS *CoreOS `json:"coreos,omitempty"`
+	CoreOS CoreOS `json:"coreos,omitempty"`
 }
 
 // InstallerAnaconda Extra customizations for Anaconda installer (ISO) image types.
@@ -685,7 +685,7 @@ type Locale struct {
 // Network Networking details including firewall configuration.
 type Network struct {
 	// Firewall Firewall details - package firewalld must be installed in the image.
-	Firewall *NetworkFirewall `json:"firewall,omitempty"`
+	Firewall NetworkFirewall `json:"firewall,omitempty"`
 }
 
 // NetworkFirewall Firewall details - package firewalld must be installed in the image.
@@ -884,10 +884,10 @@ type Registration struct {
 	// RegistrationFDO FDO allows users to configure FIDO Device Onboard device initialization
 	// parameters. It is only available with the edge-simplified-installer or
 	// iot-simplified-installer image types.
-	RegistrationFDO *RegistrationFDO `json:"fdo,omitempty"`
+	RegistrationFDO RegistrationFDO `json:"fdo,omitempty"`
 
 	// RegistrationRedHat Registration details for Red Hat operating system images.
-	RegistrationRedHat *RegistrationRedHat `json:"redhat,omitempty"`
+	RegistrationRedHat RegistrationRedHat `json:"redhat,omitempty"`
 }
 
 // RegistrationConnector Red Hat console.redhat.com connector (rhc) details.
@@ -929,10 +929,10 @@ type RegistrationRedHat struct {
 	ActivationKey string `json:"activation_key,omitempty"`
 
 	// Connector Red Hat console.redhat.com connector (rhc) details.
-	Connector *RegistrationConnector `json:"connector,omitempty"`
+	Connector RegistrationConnector `json:"connector,omitempty"`
 
 	// Insights Red Hat Insights client details.
-	Insights *RegistrationInsights `json:"insights,omitempty"`
+	Insights RegistrationInsights `json:"insights,omitempty"`
 
 	// Organization Subscription manager organization name to use during registration.
 	Organization string `json:"organization,omitempty"`
@@ -942,7 +942,7 @@ type RegistrationRedHat struct {
 	// is by default part of the RHEL distribution bootable images. To explicitly
 	// install the package, add it to the packages section in the blueprint.
 	// The customization is not supported on Fedora distribution images.
-	RegistrationRHSM *RegistrationRHSM `json:"subscription_manager,omitempty"`
+	RegistrationRHSM RegistrationRHSM `json:"subscription_manager,omitempty"`
 }
 
 // RegistrationRHSM Subscription manager details (internal use only). The customization

@@ -3,8 +3,7 @@ accounts:
   - gid: 1002
     name: osbuild
   users:
-  - expires: "1970-01-01"
-    gid: 1002
+  - gid: 1002
     groups:
     - wheel
     name: osbuild
@@ -12,3 +11,29 @@ accounts:
     - ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNebAh6SjpAn8wB53K4695cGnHGuCtl4RdaX3futZgJUultHyzeYHnzMO7d4++qnRL+Rworew62LKP560uvtncc=
       github.com/osbuild/images
     uid: 1001
+dnf: {}
+fips: {}
+ignition: null
+installer:
+  anaconda: {}
+  coreos: {}
+kernel: {}
+locale: {}
+network:
+  firewall: {}
+openscap:
+  profile_id: ""
+registration:
+  fdo:
+    manufacturing_server_url: ""
+  redhat:
+    connector:
+      enabled: false
+    insights:
+      enabled: false
+    subscription_manager: {}
+storage:
+  partitions: null
+  type: ""
+systemd: {}
+timedate: {}

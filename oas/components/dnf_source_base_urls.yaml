@@ -8,7 +8,6 @@ properties:
     type: array
     items:
       type: string
-    x-go-type-skip-optional-pointer: true
     x-go-name: URLs
 additionalProperties: false
 x-go-type-name: DNFSourceBaseURLs

@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
 )
 
 func TestPopulateDefaults(t *testing.T) {
@@ -15,7 +16,7 @@ func TestPopulateDefaults(t *testing.T) {
 				Source: "source",
 			},
 		},
-		DNF: &DNF{
+		DNF: DNF{
 			Repositories: []DNFRepository{{ID: "repo"}},
 		},
 		FSNodes: []FSNode{
@@ -27,8 +28,8 @@ func TestPopulateDefaults(t *testing.T) {
 				Type: "dir",
 			},
 		},
-		Network: &Network{
-			Firewall: &NetworkFirewall{
+		Network: Network{
+			Firewall: NetworkFirewall{
 				Services: []NetworkService{
 					{
 						union: []byte(`{"name": "ssh"}`),
@@ -42,7 +43,7 @@ func TestPopulateDefaults(t *testing.T) {
 				},
 			},
 		},
-		Storage: &Storage{
+		Storage: Storage{
 			Type: StorageTypeGPT,
 			Partitions: []StoragePartition{
 				{
@@ -56,7 +57,7 @@ func TestPopulateDefaults(t *testing.T) {
 				},
 			},
 		},
-		Timedate: &TimeDate{
+		Timedate: TimeDate{
 			Timezone: "UTC",
 		},
 	}
@@ -197,7 +198,12 @@ func TestPopulateDefaults(t *testing.T) {
 		t.Fatalf("MarshalJSON defaults failed: %v", err)
 	}
 
+	// XXX: empty structs need to be removed after upgrade to Go 1.24+
 	want := `{
+	"accounts": {
+		"groups": null,
+		"users": null
+	},
 	"containers": [
 		{
 			"name": "container",
@@ -207,10 +213,12 @@ func TestPopulateDefaults(t *testing.T) {
 	"dnf": {
 		"repositories": [
 			{
-				"id": "repo"
+				"id": "repo",
+				"usage": {}
 			}
 		]
 	},
+	"fips": {},
 	"fsnodes": [
 		{
 			"path": "file"
@@ -220,6 +228,13 @@ func TestPopulateDefaults(t *testing.T) {
 			"type": "dir"
 		}
 	],
+	"ignition": null,
+	"installer": {
+		"anaconda": {},
+		"coreos": {}
+	},
+	"kernel": {},
+	"locale": {},
 	"network": {
 		"firewall": {
 			"services": [
@@ -236,6 +251,23 @@ func TestPopulateDefaults(t *testing.T) {
 			]
 		}
 	},
+	"openscap": {
+		"profile_id": ""
+	},
+	"registration": {
+		"fdo": {
+			"manufacturing_server_url": ""
+		},
+		"redhat": {
+			"connector": {
+				"enabled": false
+			},
+			"insights": {
+				"enabled": false
+			},
+			"subscription_manager": {}
+		}
+	},
 	"storage": {
 		"partitions": [
 			{},
@@ -248,10 +280,11 @@ func TestPopulateDefaults(t *testing.T) {
 		],
 		"type": "gpt"
 	},
+	"systemd": {},
 	"timedate": {}
 }`
 
-	if diff := cmp.Diff(want, string(data)); diff != "" {
+	if diff := cmp.Diff(want, string(data), cmpopts.EquateEmpty()); diff != "" {
 		t.Errorf("MarshalJSON defaults mismatch (-want +got):\n%s", diff)
 	}
 }

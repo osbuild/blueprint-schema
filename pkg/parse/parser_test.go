@@ -8,9 +8,84 @@ import (
 )
 
 func TestReadYAMLWriteJSON(t *testing.T) {
+	// XXX: this will fail with 1.24 which should clean up the output via omitzero
 	in := "name: test\n"
-	want := "{\n  \"name\": \"test\"\n}"
+	want := `{
+  "accounts": {
+    "groups": null,
+    "users": null
+  },
+  "dnf": {},
+  "fips": {},
+  "ignition": null,
+  "installer": {
+    "anaconda": {},
+    "coreos": {}
+  },
+  "kernel": {},
+  "locale": {},
+  "name": "test",
+  "network": {
+    "firewall": {}
+  },
+  "openscap": {
+    "profile_id": ""
+  },
+  "registration": {
+    "fdo": {
+      "manufacturing_server_url": ""
+    },
+    "redhat": {
+      "connector": {
+        "enabled": false
+      },
+      "insights": {
+        "enabled": false
+      },
+      "subscription_manager": {}
+    }
+  },
+  "storage": {
+    "partitions": null,
+    "type": ""
+  },
+  "systemd": {},
+  "timedate": {}
+}`
 
+	// XXX: however storing back YAML will not respect omitzero and this
+	// needs to be fixed (relevant only for the convertor)
+	want2 := `accounts:
+  groups: null
+  users: null
+dnf: {}
+fips: {}
+ignition: null
+installer:
+  anaconda: {}
+  coreos: {}
+kernel: {}
+locale: {}
+name: test
+network:
+  firewall: {}
+openscap:
+  profile_id: ""
+registration:
+  fdo:
+    manufacturing_server_url: ""
+  redhat:
+    connector:
+      enabled: false
+    insights:
+      enabled: false
+    subscription_manager: {}
+storage:
+  partitions: null
+  type: ""
+systemd: {}
+timedate: {}
+`
 	b, err := ReadYAML(bytes.NewBufferString(in))
 	if err != nil {
 		t.Fatal(err)
@@ -38,14 +113,87 @@ func TestReadYAMLWriteJSON(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if cmp.Diff(string(out), in) != "" {
-		t.Fatalf("Unexpected YAML output: %s", out)
+	if diff := cmp.Diff(string(out), want2); diff != "" {
+		t.Fatalf("Unexpected YAML output: %s", diff)
 	}
 }
 
 func TestReadJSONWriteYAML(t *testing.T) {
+	// XXX: see above
 	in := "{\n  \"name\": \"test\"\n}"
-	want := "name: test\n"
+	want := `accounts:
+  groups: null
+  users: null
+dnf: {}
+fips: {}
+ignition: null
+installer:
+  anaconda: {}
+  coreos: {}
+kernel: {}
+locale: {}
+name: test
+network:
+  firewall: {}
+openscap:
+  profile_id: ""
+registration:
+  fdo:
+    manufacturing_server_url: ""
+  redhat:
+    connector:
+      enabled: false
+    insights:
+      enabled: false
+    subscription_manager: {}
+storage:
+  partitions: null
+  type: ""
+systemd: {}
+timedate: {}
+`
+	want2 := `{
+  "accounts": {
+    "groups": null,
+    "users": null
+  },
+  "dnf": {},
+  "fips": {},
+  "ignition": null,
+  "installer": {
+    "anaconda": {},
+    "coreos": {}
+  },
+  "kernel": {},
+  "locale": {},
+  "name": "test",
+  "network": {
+    "firewall": {}
+  },
+  "openscap": {
+    "profile_id": ""
+  },
+  "registration": {
+    "fdo": {
+      "manufacturing_server_url": ""
+    },
+    "redhat": {
+      "connector": {
+        "enabled": false
+      },
+      "insights": {
+        "enabled": false
+      },
+      "subscription_manager": {}
+    }
+  },
+  "storage": {
+    "partitions": null,
+    "type": ""
+  },
+  "systemd": {},
+  "timedate": {}
+}`
 
 	b, err := ReadJSON(bytes.NewBufferString(in))
 	if err != nil {
@@ -65,8 +213,8 @@ func TestReadJSONWriteYAML(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if cmp.Diff(string(out), want) != "" {
-		t.Fatalf("Unexpected YAML output: %s", out)
+	if diff := cmp.Diff(string(out), want); diff != "" {
+		t.Fatalf("Unexpected YAML output: %s", diff)
 	}
 
 	out, err = MarshalJSON(b, true)
@@ -74,8 +222,8 @@ func TestReadJSONWriteYAML(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if cmp.Diff(string(out), in) != "" {
-		t.Fatalf("Unexpected JSON output: %s", out)
+	if diff := cmp.Diff(string(out), want2); diff != "" {
+		t.Fatalf("Unexpected JSON output: %s", diff)
 	}
 
 	err = WriteJSON(b, bytes.NewBufferString(""), true)
@@ -83,8 +231,8 @@ func TestReadJSONWriteYAML(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if cmp.Diff(string(out), in) != "" {
-		t.Fatalf("Unexpected JSON output: %s", out)
+	if diff := cmp.Diff(string(out), want2); diff != "" {
+		t.Fatalf("Unexpected JSON output: %s", diff)
 	}
 }
 

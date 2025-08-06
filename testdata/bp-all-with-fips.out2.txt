@@ -50,9 +50,16 @@
   [customizations.locale]
     languages = ["el_CY.UTF-8"]
     keyboard = "dvorak"
+  [customizations.firewall]
+    [customizations.firewall.services]
   [customizations.services]
     enabled = ["sshd.service", "custom.service"]
     disabled = ["bluetooth.service"]
+  [customizations.disk]
+    type = "gpt"
+  [customizations.fdo]
+    diun_pub_key_insecure = "false"
+  [customizations.ignition]
 
   [[customizations.directories]]
     path = "/etc/systemd/system/custom.service.d"
@@ -103,3 +110,7 @@
     repo_gpgcheck = false
     sslverify = true
     install_from = false
+  [customizations.installer]
+    [customizations.installer.modules]
+  [customizations.rhsm]
+    [customizations.rhsm.config]

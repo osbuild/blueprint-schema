@@ -9,8 +9,18 @@
   [customizations.locale]
     languages = ["en_GB.UTF-8"]
     keyboard = "uk"
+  [customizations.firewall]
+    [customizations.firewall.services]
+  [customizations.services]
+  [customizations.disk]
+    type = "gpt"
+  [customizations.fdo]
+    diun_pub_key_insecure = "false"
+  [customizations.ignition]
   [customizations.installer]
     unattended = true
     sudo-nopasswd = ["%wheel", "%sudo"]
     [customizations.installer.modules]
       enable = ["org.fedoraproject.Anaconda.Modules.Users", "org.fedoraproject.Anaconda.Modules.Localization", "org.fedoraproject.Anaconda.Modules.Network", "org.fedoraproject.Anaconda.Modules.Services"]
+  [customizations.rhsm]
+    [customizations.rhsm.config]

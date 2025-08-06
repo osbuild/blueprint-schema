@@ -4,8 +4,8 @@
   	Containers: nil,
   	Customizations: &blueprint.Customizations{
   		... // 6 identical fields
-  		Locale:   nil,
-  		Firewall: nil,
+  		Locale:   &{},
+  		Firewall: &{Services: &{}},
   		Services: &blueprint.ServicesCustomization{
   			Enabled:  {"sshd.service", "backup.timer"},
   			Disabled: {"tuned", "cupsd"},
@@ -13,7 +13,7 @@
 + 			Masked:   nil,
   		},
   		Filesystem: nil,
-  		Disk:       nil,
+  		Disk:       &{Type: "gpt"},
   		... // 14 identical fields
   	},
   	Distro:  "",

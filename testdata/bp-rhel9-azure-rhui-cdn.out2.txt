@@ -7,6 +7,19 @@
   name = "redhat-cloud-client-configuration-cdn"
 
 [customizations]
+  [customizations.timezone]
+    timezone = "UTC"
+  [customizations.locale]
+  [customizations.firewall]
+    [customizations.firewall.services]
+  [customizations.services]
+  [customizations.disk]
+    type = "gpt"
+  [customizations.fdo]
+    diun_pub_key_insecure = "false"
+  [customizations.ignition]
+  [customizations.installer]
+    [customizations.installer.modules]
   [customizations.rpm]
     [customizations.rpm.import_keys]
       files = ["/etc/pki/rpm-gpg/RPM-GPG-KEY-microsoft-azure-release"]

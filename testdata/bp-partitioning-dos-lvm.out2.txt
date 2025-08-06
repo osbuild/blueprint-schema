@@ -1,4 +1,10 @@
 [customizations]
+  [customizations.timezone]
+    timezone = "UTC"
+  [customizations.locale]
+  [customizations.firewall]
+    [customizations.firewall.services]
+  [customizations.services]
   [customizations.disk]
     type = "dos"
 
@@ -60,3 +66,10 @@
         name = "swap-lv"
         minsize = 1073741824
         fs_type = "swap"
+  [customizations.fdo]
+    diun_pub_key_insecure = "false"
+  [customizations.ignition]
+  [customizations.installer]
+    [customizations.installer.modules]
+  [customizations.rhsm]
+    [customizations.rhsm.config]

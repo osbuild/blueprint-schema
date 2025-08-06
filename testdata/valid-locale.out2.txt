@@ -1,3 +1,13 @@
+accounts:
+  groups: null
+  users: null
+dnf: {}
+fips: {}
+ignition: null
+installer:
+  anaconda: {}
+  coreos: {}
+kernel: {}
 locale:
   keyboards:
   - cz-qwerty
@@ -5,3 +15,21 @@ locale:
   - en_US.UTF-8
   - cs_CZ.UTF-8
 name: 'Blueprint example: locale'
+network:
+  firewall: {}
+openscap:
+  profile_id: ""
+registration:
+  fdo:
+    manufacturing_server_url: ""
+  redhat:
+    connector:
+      enabled: false
+    insights:
+      enabled: false
+    subscription_manager: {}
+storage:
+  partitions: null
+  type: gpt
+systemd: {}
+timedate: {}

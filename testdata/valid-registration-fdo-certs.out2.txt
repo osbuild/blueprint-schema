@@ -1,5 +1,31 @@
+accounts:
+  groups: null
+  users: null
+dnf: {}
+fips: {}
+ignition: null
+installer:
+  anaconda: {}
+  coreos: {}
+kernel: {}
+locale: {}
 name: 'Blueprint example: registration'
+network:
+  firewall: {}
+openscap:
+  profile_id: ""
 registration:
   fdo:
     diun_pub_key_root_certs: /etc/pki
     manufacturing_server_url: http://192.168.122.122:8080
+  redhat:
+    connector:
+      enabled: false
+    insights:
+      enabled: false
+    subscription_manager: {}
+storage:
+  partitions: null
+  type: gpt
+systemd: {}
+timedate: {}

@@ -27,14 +27,6 @@ func (dr *DNFRepository) UnmarshalJSON(data []byte) error {
 		tmp.GPGCheckRepo = ptr.To(true)
 	}
 
-	if tmp.Usage == nil {
-		dnfRepoUsage := DNFRepoUsage{}
-		if err := json.Unmarshal(data, &dnfRepoUsage); err != nil {
-			return err
-		}
-		tmp.Usage = &dnfRepoUsage
-	}
-
 	*dr = DNFRepository(tmp)
 	return nil
 }
@@ -54,10 +46,6 @@ func (dr DNFRepository) MarshalJSON() ([]byte, error) {
 
 	if tmp.GPGCheckRepo != nil && *tmp.GPGCheckRepo {
 		tmp.GPGCheckRepo = nil
-	}
-
-	if tmp.Usage != nil && tmp.Usage.IsZero() {
-		tmp.Usage = nil
 	}
 
 	return json.Marshal(tmp)

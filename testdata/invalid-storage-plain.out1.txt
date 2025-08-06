@@ -1,6 +1,11 @@
 name = "Blueprint example: disallowed properties for storage"
 
 [customizations]
+  [customizations.timezone]
+  [customizations.locale]
+  [customizations.firewall]
+    [customizations.firewall.services]
+  [customizations.services]
   [customizations.disk]
     type = "gpt"
     minsize = 590558003200
@@ -16,3 +21,10 @@ name = "Blueprint example: disallowed properties for storage"
       type = "plain"
       minsize = 53687091200
       fs_type = "ext4"
+  [customizations.fdo]
+    diun_pub_key_insecure = "false"
+  [customizations.ignition]
+  [customizations.installer]
+    [customizations.installer.modules]
+  [customizations.rhsm]
+    [customizations.rhsm.config]

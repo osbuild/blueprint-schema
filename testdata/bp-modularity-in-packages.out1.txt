@@ -1,3 +1,31 @@
+accounts:
+  groups: null
+  users: null
 dnf:
   packages:
   - '@nodejs:18'
+fips: {}
+ignition: null
+installer:
+  anaconda: {}
+  coreos: {}
+kernel: {}
+locale: {}
+network:
+  firewall: {}
+openscap:
+  profile_id: ""
+registration:
+  fdo:
+    manufacturing_server_url: ""
+  redhat:
+    connector:
+      enabled: false
+    insights:
+      enabled: false
+    subscription_manager: {}
+storage:
+  partitions: null
+  type: ""
+systemd: {}
+timedate: {}

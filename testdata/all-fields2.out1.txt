@@ -120,6 +120,10 @@ registration:
     diun_pub_key_insecure: true
     manufacturing_server_url: https://fdo.example.com/manufacturing
   redhat:
+    connector:
+      enabled: false
+    insights:
+      enabled: false
     subscription_manager:
       auto_registration: true
       enabled: true

@@ -1,3 +1,8 @@
+accounts:
+  groups: null
+  users: null
+dnf: {}
+fips: {}
 fsnodes:
 - contents:
     text: |
@@ -29,6 +34,29 @@ fsnodes:
   path: /etc/custom_dir
   type: dir
   user: "1020"
+ignition: null
+installer:
+  anaconda: {}
+  coreos: {}
+kernel: {}
+locale: {}
+network:
+  firewall: {}
+openscap:
+  profile_id: ""
+registration:
+  fdo:
+    manufacturing_server_url: ""
+  redhat:
+    connector:
+      enabled: false
+    insights:
+      enabled: false
+    subscription_manager: {}
+storage:
+  partitions: null
+  type: ""
 systemd:
   enabled:
   - custom.service
+timedate: {}

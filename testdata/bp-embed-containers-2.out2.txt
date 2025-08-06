@@ -1,5 +1,34 @@
+accounts:
+  groups: null
+  users: null
 containers:
 - name: ""
   source: registry.gitlab.com/redhat/services/products/image-builder/ci/osbuild-composer/fedora-minimal
 - name: registry.gitlab.com/redhat/services/products/image-builder/ci/osbuild-composer/manifest-list-test:v1
   source: registry.gitlab.com/redhat/services/products/image-builder/ci/osbuild-composer/manifest-list-test
+dnf: {}
+fips: {}
+ignition: null
+installer:
+  anaconda: {}
+  coreos: {}
+kernel: {}
+locale: {}
+network:
+  firewall: {}
+openscap:
+  profile_id: ""
+registration:
+  fdo:
+    manufacturing_server_url: ""
+  redhat:
+    connector:
+      enabled: false
+    insights:
+      enabled: false
+    subscription_manager: {}
+storage:
+  partitions: null
+  type: gpt
+systemd: {}
+timedate: {}

@@ -1,6 +1,9 @@
 ---
 package: ubp
 output-options:
+  prefer-skip-optional-pointer: true
+  # XXX: for easier review of generated code, omitzero is disabled and will be enabled in a separate commit
+  prefer-skip-optional-pointer-with-omitzero: false
   # https://github.com/oapi-codegen/oapi-codegen/pull/1987
   disable-type-aliases-for-type:
     - "int"

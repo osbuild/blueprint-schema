@@ -17,11 +17,9 @@ properties:
       is not provided, a sensible default based on the selected distro will be
       chosen.
     type: string
-    x-go-type-skip-optional-pointer: true
   profile_id:
     description: The desired security profile ID.
     type: string
-    x-go-type-skip-optional-pointer: true
     x-go-name: ProfileID
   tailoring:
     description: |

@@ -20,8 +20,11 @@
   	Groups:         {{Name: "core"}},
   	Containers:     nil,
   	Customizations: &blueprint.Customizations{
-  		... // 7 identical fields
-  		Firewall: nil,
+  		... // 5 identical fields
+  		Timezone: &{Timezone: &"Europe/London", NTPServers: {"time.example.com"}},
+  		Locale:   &{Languages: {"el_CY.UTF-8"}, Keyboard: &"dvorak"},
+- 		Firewall: nil,
++ 		Firewall: &blueprint.FirewallCustomization{Services: &blueprint.FirewallServicesCustomization{}},
   		Services: &{Enabled: {"sshd.service", "custom.service"}, Disabled: {"bluetooth.service"}},
 - 		Filesystem: []blueprint.FilesystemCustomization{
 - 			{Mountpoint: "/home", MinSize: 2147483648},
@@ -35,11 +38,15 @@
 - 			{Mountpoint: "/mnt", MinSize: 1073741824},
 - 		},
 + 		Filesystem:         nil,
-  		Disk:               nil,
+- 		Disk:               nil,
++ 		Disk:               &blueprint.DiskCustomization{Type: "gpt"},
   		InstallationDevice: "",
-  		... // 2 identical fields
-  		OpenSCAP: nil,
-  		Ignition: nil,
+  		PartitioningMode:   "",
+- 		FDO:                nil,
++ 		FDO:                &blueprint.FDOCustomization{DiunPubKeyInsecure: "false"},
+  		OpenSCAP:           nil,
+- 		Ignition:           nil,
++ 		Ignition:           &blueprint.IgnitionCustomization{},
   		Directories: []blueprint.DirectoryCustomization{
   			{
   				Path:          "/etc/systemd/system/custom.service.d",
@@ -110,9 +117,14 @@
   				InstallFrom:    false,
   			},
   		},
-  		FIPS:      &true,
-  		Installer: nil,
-  		... // 4 identical fields
+  		FIPS:              &true,
+- 		Installer:         nil,
++ 		Installer:         &blueprint.InstallerCustomization{Modules: &blueprint.AnacondaModules{}},
+  		RPM:               nil,
+- 		RHSM:              nil,
++ 		RHSM:              &blueprint.RHSMCustomization{Config: &blueprint.RHSMConfig{}},
+  		CACerts:           nil,
+  		ContainersStorage: nil,
   	},
   	Distro:  "",
   	Arch:    "",

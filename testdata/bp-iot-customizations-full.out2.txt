@@ -27,8 +27,18 @@
   [[customizations.group]]
     name = "user3"
     gid = 1060
+  [customizations.timezone]
+    timezone = "UTC"
+  [customizations.locale]
+  [customizations.firewall]
+    [customizations.firewall.services]
   [customizations.services]
     enabled = ["custom.service"]
+  [customizations.disk]
+    type = "gpt"
+  [customizations.fdo]
+    diun_pub_key_insecure = "false"
+  [customizations.ignition]
 
   [[customizations.directories]]
     path = "/etc/systemd/system/custom.service.d"
@@ -68,3 +78,7 @@
     user = 0
     group = 0
     mode = "644"
+  [customizations.installer]
+    [customizations.installer.modules]
+  [customizations.rhsm]
+    [customizations.rhsm.config]

@@ -1,3 +1,8 @@
+accounts:
+  groups: null
+  users: null
+dnf: {}
+fips: {}
 ignition:
   text: |
     {
@@ -16,4 +21,27 @@ ignition:
         ]
       }
     }
+installer:
+  anaconda: {}
+  coreos: {}
+kernel: {}
+locale: {}
 name: 'Blueprint example: ingition'
+network:
+  firewall: {}
+openscap:
+  profile_id: ""
+registration:
+  fdo:
+    manufacturing_server_url: ""
+  redhat:
+    connector:
+      enabled: false
+    insights:
+      enabled: false
+    subscription_manager: {}
+storage:
+  partitions: null
+  type: gpt
+systemd: {}
+timedate: {}
