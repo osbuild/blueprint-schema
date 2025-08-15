@@ -1,8 +1,6 @@
 package ubp
 
-import (
-	"encoding/json"
-)
+import "encoding/json"
 
 func (s *DNFSource) SelectUnion() (DNFSourceBaseURLs, DNFSourceMetalink, DNFSourceMirrorlist, error) {
 	if s == nil {

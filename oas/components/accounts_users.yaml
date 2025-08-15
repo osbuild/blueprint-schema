@@ -24,6 +24,7 @@ properties:
       String-based type which accepts date (YYYY-MM-DD) or date-time (RFC3339)
       format and only marshals into date format. This is needed for JSON/YAML compatibility
       since YAML automatically converts strings which look like dates into time.Time.
+    x-go-type-skip-optional-pointer: false
     x-go-type: EpochDays
   gid:
     description: |

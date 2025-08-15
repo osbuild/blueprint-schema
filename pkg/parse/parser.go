@@ -2,12 +2,13 @@ package parse
 
 import (
 	"bytes"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
 
 	"github.com/BurntSushi/toml"
+	"github.com/go-json-experiment/json"
+	"github.com/go-json-experiment/json/jsontext"
 	"github.com/osbuild/blueprint-schema/pkg/conv"
 	"github.com/osbuild/blueprint-schema/pkg/ubp"
 	bp "github.com/osbuild/blueprint/pkg/blueprint"
@@ -92,9 +93,7 @@ func UnmarshalAny(buf []byte, details *AnyDetails) (*ubp.Blueprint, error) {
 
 	// Try BP JSON
 	bpData := new(bp.Blueprint)
-	dec := json.NewDecoder(bytes.NewReader(buf))
-	dec.DisallowUnknownFields()
-	err = dec.Decode(bpData)
+	err = json.Unmarshal(buf, bpData, json.DefaultOptionsV2())
 	if err == nil {
 		details.Format = AnyFormatBPJSON
 
@@ -133,11 +132,16 @@ func UnmarshalAny(buf []byte, details *AnyDetails) (*ubp.Blueprint, error) {
 //
 // Uses sigs.k8s.io/yaml package for YAML parsing, for the API guarantees and
 // compatibility read https://pkg.go.dev/sigs.k8s.io/yaml#Unmarshal.
-func UnmarshalYAML(buf []byte) (*ubp.Blueprint, error) {
-	b := new(ubp.Blueprint)
+func UnmarshalYAML(yamlBuf []byte) (*ubp.Blueprint, error) {
+	jsonBuf, err := ConvertYAMLtoJSON(yamlBuf)
+	if err != nil {
+		return nil, fmt.Errorf("failed to convert YAML to JSON: %w", err)
+	}
 
-	if err := yaml.Unmarshal(buf, b); err != nil {
-		return nil, fmt.Errorf("failed to unmarshal YAML blueprint: %w", err)
+	b := new(ubp.Blueprint)
+	err = json.Unmarshal(jsonBuf, b, json.DefaultOptionsV2())
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal converted JSON blueprint: %w", err)
 	}
 
 	return b, nil
@@ -169,10 +173,15 @@ func ReadYAML(reader io.Reader) (*ubp.Blueprint, error) {
 // MarshalYAML uses JSON encoder to marshal the object into JSON and then converts JSON to YAML.
 // No YAML Go struct tags are necessary as JSON tags are used.
 //
-// Uses sigs.k8s.io/yaml package for YAML encoding, for the API guarantees and
+// Uses sigs.k8s.io/yaml package for YAML parsing, for the API guarantees and
 // compatibility read https://pkg.go.dev/sigs.k8s.io/yaml#Unmarshal.
 func MarshalYAML(b *ubp.Blueprint) ([]byte, error) {
-	return yaml.Marshal(b)
+	jsonBuf, err := MarshalJSON(b, false)
+	if err != nil {
+		return nil, err
+	}
+
+	return ConvertJSONtoYAML(jsonBuf)
 }
 
 // WriteYAML calls MarshalYAML and writes the result to the writer.
@@ -197,10 +206,8 @@ func UnmarshalJSON(data []byte) (*ubp.Blueprint, error) {
 // not allow unknown fields. See UnmarshalJSON for more details.
 func UnmarshalStrictJSON(data []byte) (*ubp.Blueprint, error) {
 	b := new(ubp.Blueprint)
-	dec := json.NewDecoder(bytes.NewReader(data))
-	dec.DisallowUnknownFields()
-
-	if err := dec.Decode(b); err != nil {
+	err := json.Unmarshal(data, b, json.DefaultOptionsV2())
+	if err != nil {
 		return nil, fmt.Errorf("failed to unmarshal JSON blueprint: %w", err)
 	}
 
@@ -225,11 +232,20 @@ func ReadJSON(reader io.Reader) (*ubp.Blueprint, error) {
 //
 // Do not use this function for user-facing data.
 func MarshalJSON(b *ubp.Blueprint, indent bool) ([]byte, error) {
-	if indent {
-		return json.MarshalIndent(b, "", "  ")
+	// XXX: experimental JSON parser for omitzero
+	buf, err := json.Marshal(b, json.DefaultOptionsV2())
+	if err != nil {
+		return nil, err
 	}
 
-	return json.Marshal(b)
+	if indent {
+		err = (*jsontext.Value)(&buf).Indent()
+		if err != nil {
+			return nil, fmt.Errorf("failed to indent JSON blueprint: %w", err)
+		}
+	}
+
+	return buf, nil
 }
 
 // WriteJSON calls MarshalJSON and writes the result to the writer.
@@ -247,11 +263,17 @@ func WriteJSON(b *ubp.Blueprint, writer io.Writer, indent bool) error {
 }
 
 // ConvertJSONtoYAML converts JSON to YAML.
+//
+// Uses sigs.k8s.io/yaml package for YAML encoding, for the API guarantees and
+// compatibility read https://pkg.go.dev/sigs.k8s.io/yaml#Unmarshal.
 func ConvertJSONtoYAML(data []byte) ([]byte, error) {
 	return yaml.JSONToYAML(data)
 }
 
 // ConvertYAMLtoJSON converts YAML to JSON. Output is not indented.
+//
+// Uses sigs.k8s.io/yaml package for YAML encoding, for the API guarantees and
+// compatibility read https://pkg.go.dev/sigs.k8s.io/yaml#Unmarshal.
 func ConvertYAMLtoJSON(data []byte) ([]byte, error) {
 	return yaml.YAMLToJSON(data)
 }

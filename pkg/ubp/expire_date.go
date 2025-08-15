@@ -35,8 +35,8 @@ func NewStringEpochDays(date string) (*EpochDays, error) {
 }
 
 // NewIntEpochDays creates a new EpochDays from an integer representing the number of days since the epoch.
-func NewIntEpochDays(epochDays int) EpochDays {
-	return EpochDays(epochDays)
+func NewIntEpochDays(epochDays int) *EpochDays {
+	return ptr.To(EpochDays(epochDays))
 }
 
 // UnmarshalJSON handles problem between YAML/JSON with time and date.
