@@ -57,7 +57,8 @@
           },
           "expires": {
             "description": "The expiration date in the format YYYY-MM-DD. Leave empty to never expire.\n\nString-based type which accepts date (YYYY-MM-DD) or date-time (RFC3339)\nformat and only marshals into date format. This is needed for JSON/YAML compatibility\nsince YAML automatically converts strings which look like dates into time.Time.\n",
-            "x-go-type": "EpochDays"
+            "x-go-type": "EpochDays",
+            "x-go-type-skip-optional-pointer": false
           },
           "force_password_change": {
             "description": "If set to true, the user will be forced to change their password\non first login.\n",
@@ -389,7 +390,7 @@
             "maxLength": 256,
             "pattern": "^[a-zA-Z0-9_-]+$",
             "type": "string",
-            "x-go-type-skip-optionalpointer": true
+            "x-go-type-skip-optional-pointer": true
           },
           "gpg_check": {
             "default": true,

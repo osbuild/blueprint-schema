@@ -1,35 +1,9 @@
 # repository "fedora-cisco-openh264" has no source defined
 
-accounts:
-  groups: null
-  users: null
 dnf:
   repositories:
   - id: fedora-cisco-openh264
-    usage: {}
-fips: {}
-ignition: null
-installer:
-  anaconda: {}
-  coreos: {}
-kernel: {}
-locale: {}
 name: 'Blueprint example: DNF'
-network:
-  firewall: {}
-openscap:
-  profile_id: ""
-registration:
-  fdo:
-    manufacturing_server_url: ""
-  redhat:
-    connector:
-      enabled: false
-    insights:
-      enabled: false
-    subscription_manager: {}
 storage:
-  partitions: null
+  partitions: []
   type: gpt
-systemd: {}
-timedate: {}

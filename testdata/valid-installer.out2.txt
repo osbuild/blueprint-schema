@@ -1,9 +1,3 @@
-accounts:
-  groups: null
-  users: null
-dnf: {}
-fips: {}
-ignition: null
 installer:
   anaconda:
     disabled_modules:
@@ -17,24 +11,7 @@ installer:
     unattended: true
   coreos:
     installation_device: /dev/vda
-kernel: {}
-locale: {}
 name: 'Blueprint example: installer'
-network:
-  firewall: {}
-openscap:
-  profile_id: ""
-registration:
-  fdo:
-    manufacturing_server_url: ""
-  redhat:
-    connector:
-      enabled: false
-    insights:
-      enabled: false
-    subscription_manager: {}
 storage:
-  partitions: null
+  partitions: []
   type: gpt
-systemd: {}
-timedate: {}

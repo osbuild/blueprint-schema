@@ -28,7 +28,7 @@ properties:
     type: string
     pattern: "^[a-zA-Z0-9_-]+$"
     maxLength: 256
-    x-go-type-skip-optionalpointer: true
+    x-go-type-skip-optional-pointer: true
   gpg_check:
     description: Enable GPG check for the repository. GPG key(s) must be provided. Disabled by default.
     default: true

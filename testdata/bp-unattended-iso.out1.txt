@@ -1,49 +1,15 @@
-accounts:
-  groups: null
-  users:
-  - groups:
-    - wheel
-    name: osbuild
-    ssh_keys:
-    - ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNebAh6SjpAn8wB53K4695cGnHGuCtl4RdaX3futZgJUultHyzeYHnzMO7d4++qnRL+Rworew62LKP560uvtncc=
-      github.com/osbuild/images
-dnf: {}
-fips: {}
-ignition: null
-installer:
-  anaconda:
-    enabled_modules:
-    - org.fedoraproject.Anaconda.Modules.Users
-    - org.fedoraproject.Anaconda.Modules.Localization
-    - org.fedoraproject.Anaconda.Modules.Network
-    - org.fedoraproject.Anaconda.Modules.Services
-    sudo_nopasswd:
-    - '%wheel'
-    - '%sudo'
-    unattended: true
-  coreos: {}
-kernel: {}
-locale:
-  keyboards:
-  - uk
-  languages:
-  - en_GB.UTF-8
-network:
-  firewall: {}
-openscap:
-  profile_id: ""
-registration:
-  fdo:
-    manufacturing_server_url: ""
-  redhat:
-    connector:
-      enabled: false
-    insights:
-      enabled: false
-    subscription_manager: {}
-storage:
-  partitions: null
-  type: ""
-systemd: {}
-timedate:
-  timezone: Europe/Berlin
+[customizations]
+  [customizations.timezone]
+  [customizations.locale]
+  [customizations.firewall]
+    [customizations.firewall.services]
+  [customizations.services]
+  [customizations.disk]
+    type = "gpt"
+  [customizations.fdo]
+    diun_pub_key_insecure = "false"
+  [customizations.ignition]
+  [customizations.installer]
+    [customizations.installer.modules]
+  [customizations.rhsm]
+    [customizations.rhsm.config]

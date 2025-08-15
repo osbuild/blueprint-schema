@@ -1,69 +1,15 @@
-accounts:
-  groups: null
-  users: null
-dnf: {}
-fips: {}
-ignition: null
-installer:
-  anaconda: {}
-  coreos: {}
-kernel: {}
-locale: {}
-network:
-  firewall: {}
-openscap:
-  profile_id: ""
-registration:
-  fdo:
-    manufacturing_server_url: ""
-  redhat:
-    connector:
-      enabled: false
-    insights:
-      enabled: false
-    subscription_manager: {}
-storage:
-  partitions:
-  - logical_volumes:
-    - fs_type: ext4
-      label: home
-      minsize: 2 GiB
-      mountpoint: /home
-      name: homelv
-    - fs_type: ext4
-      minsize: 5 GiB
-      mountpoint: /home/shadowman
-      name: shadowmanlv
-    - fs_type: ext4
-      minsize: 1 GiB
-      mountpoint: /foo
-      name: foolv
-    - fs_type: ext4
-      minsize: 4 GiB
-      mountpoint: /usr
-      name: usrlv
-    - fs_type: ext4
-      minsize: 1 GiB
-      mountpoint: /opt
-      name: optlv
-    - fs_type: ext4
-      minsize: 1 GiB
-      mountpoint: /media
-      name: medialv
-    - fs_type: ext4
-      minsize: 1 GiB
-      mountpoint: /root
-      name: roothomelv
-    - fs_type: ext4
-      minsize: 1 GiB
-      mountpoint: /srv
-      name: srvlv
-    - fs_type: swap
-      minsize: 1 GiB
-      name: swap-lv
-    minsize: 10 GiB
-    name: testvg
-    type: lvm
-  type: dos
-systemd: {}
-timedate: {}
+[customizations]
+  [customizations.timezone]
+  [customizations.locale]
+  [customizations.firewall]
+    [customizations.firewall.services]
+  [customizations.services]
+  [customizations.disk]
+    type = "gpt"
+  [customizations.fdo]
+    diun_pub_key_insecure = "false"
+  [customizations.ignition]
+  [customizations.installer]
+    [customizations.installer.modules]
+  [customizations.rhsm]
+    [customizations.rhsm.config]

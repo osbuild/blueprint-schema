@@ -1,14 +1,3 @@
-accounts:
-  groups: null
-  users: null
-dnf: {}
-fips: {}
-ignition: null
-installer:
-  anaconda: {}
-  coreos: {}
-kernel: {}
-locale: {}
 name: Firewall valid example
 network:
   firewall:
@@ -20,19 +9,6 @@ network:
     - from: 60000
       protocol: udp
       to: 60010
-openscap:
-  profile_id: ""
-registration:
-  fdo:
-    manufacturing_server_url: ""
-  redhat:
-    connector:
-      enabled: false
-    insights:
-      enabled: false
-    subscription_manager: {}
 storage:
-  partitions: null
+  partitions: []
   type: gpt
-systemd: {}
-timedate: {}

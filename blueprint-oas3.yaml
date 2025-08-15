@@ -54,6 +54,7 @@ components:
             format and only marshals into date format. This is needed for JSON/YAML compatibility
             since YAML automatically converts strings which look like dates into time.Time.
           x-go-type: EpochDays
+          x-go-type-skip-optional-pointer: false
         force_password_change:
           description: |
             If set to true, the user will be forced to change their password
@@ -414,7 +415,7 @@ components:
           maxLength: 256
           pattern: ^[a-zA-Z0-9_-]+$
           type: string
-          x-go-type-skip-optionalpointer: true
+          x-go-type-skip-optional-pointer: true
         gpg_check:
           default: true
           description: Enable GPG check for the repository. GPG key(s) must be provided.

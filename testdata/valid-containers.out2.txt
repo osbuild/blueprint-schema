@@ -1,34 +1,8 @@
-accounts:
-  groups: null
-  users: null
 containers:
 - name: fedora
   source: quay.io/fedora/fedora:latest
   tls_verify: false
-dnf: {}
-fips: {}
-ignition: null
-installer:
-  anaconda: {}
-  coreos: {}
-kernel: {}
-locale: {}
 name: 'Blueprint example: containers'
-network:
-  firewall: {}
-openscap:
-  profile_id: ""
-registration:
-  fdo:
-    manufacturing_server_url: ""
-  redhat:
-    connector:
-      enabled: false
-    insights:
-      enabled: false
-    subscription_manager: {}
 storage:
-  partitions: null
+  partitions: []
   type: gpt
-systemd: {}
-timedate: {}

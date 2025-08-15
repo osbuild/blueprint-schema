@@ -1,6 +1,3 @@
-accounts:
-  groups: null
-  users: null
 dnf:
   groups:
   - text-internet
@@ -20,30 +17,7 @@ dnf:
     name: Fedora $releasever openh264 (From Cisco) - $basearch
     source:
       metalink: https://mirrors.fedoraproject.org/metalink?repo=fedora-cisco-openh264-$releasever&arch=$basearch
-    usage: {}
-fips: {}
-ignition: null
-installer:
-  anaconda: {}
-  coreos: {}
-kernel: {}
-locale: {}
 name: 'Blueprint example: DNF'
-network:
-  firewall: {}
-openscap:
-  profile_id: ""
-registration:
-  fdo:
-    manufacturing_server_url: ""
-  redhat:
-    connector:
-      enabled: false
-    insights:
-      enabled: false
-    subscription_manager: {}
 storage:
-  partitions: null
+  partitions: []
   type: gpt
-systemd: {}
-timedate: {}

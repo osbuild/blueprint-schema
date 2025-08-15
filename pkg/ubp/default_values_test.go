@@ -193,17 +193,12 @@ func TestPopulateDefaults(t *testing.T) {
 		})
 	}
 
-	data, err := json.MarshalIndent(ubpDefaults, "", "\t")
+	buf, err := json.MarshalIndent(ubpDefaults, "", "  ")
 	if err != nil {
 		t.Fatalf("MarshalJSON defaults failed: %v", err)
 	}
 
-	// XXX: empty structs need to be removed after upgrade to Go 1.24+
 	want := `{
-	"accounts": {
-		"groups": null,
-		"users": null
-	},
 	"containers": [
 		{
 			"name": "container",
@@ -218,7 +213,6 @@ func TestPopulateDefaults(t *testing.T) {
 			}
 		]
 	},
-	"fips": {},
 	"fsnodes": [
 		{
 			"path": "file"
@@ -228,13 +222,6 @@ func TestPopulateDefaults(t *testing.T) {
 			"type": "dir"
 		}
 	],
-	"ignition": null,
-	"installer": {
-		"anaconda": {},
-		"coreos": {}
-	},
-	"kernel": {},
-	"locale": {},
 	"network": {
 		"firewall": {
 			"services": [
@@ -251,23 +238,6 @@ func TestPopulateDefaults(t *testing.T) {
 			]
 		}
 	},
-	"openscap": {
-		"profile_id": ""
-	},
-	"registration": {
-		"fdo": {
-			"manufacturing_server_url": ""
-		},
-		"redhat": {
-			"connector": {
-				"enabled": false
-			},
-			"insights": {
-				"enabled": false
-			},
-			"subscription_manager": {}
-		}
-	},
 	"storage": {
 		"partitions": [
 			{},
@@ -279,12 +249,10 @@ func TestPopulateDefaults(t *testing.T) {
 			}
 		],
 		"type": "gpt"
-	},
-	"systemd": {},
-	"timedate": {}
+	}
 }`
 
-	if diff := cmp.Diff(want, string(data), cmpopts.EquateEmpty()); diff != "" {
+	if diff := cmp.Diff(want, string(buf), cmpopts.EquateEmpty()); diff != "" {
 		t.Errorf("MarshalJSON defaults mismatch (-want +got):\n%s", diff)
 	}
 }

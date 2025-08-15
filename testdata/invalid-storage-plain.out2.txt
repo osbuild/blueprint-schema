@@ -1,28 +1,4 @@
-accounts:
-  groups: null
-  users: null
-dnf: {}
-fips: {}
-ignition: null
-installer:
-  anaconda: {}
-  coreos: {}
-kernel: {}
-locale: {}
 name: 'Blueprint example: disallowed properties for storage'
-network:
-  firewall: {}
-openscap:
-  profile_id: ""
-registration:
-  fdo:
-    manufacturing_server_url: ""
-  redhat:
-    connector:
-      enabled: false
-    insights:
-      enabled: false
-    subscription_manager: {}
 storage:
   minsize: 550 GiB
   partitions:
@@ -35,5 +11,3 @@ storage:
     minsize: 50 GiB
     type: plain
   type: gpt
-systemd: {}
-timedate: {}

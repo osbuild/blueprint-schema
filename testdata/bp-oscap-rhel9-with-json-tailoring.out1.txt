@@ -1,41 +1,15 @@
-accounts:
-  groups: null
-  users: null
-dnf:
-  packages:
-  - xmlstarlet
-  - openscap-utils
-  - jq
-fips: {}
-fsnodes:
-- contents:
-    text: '{"profiles":[{"id":"cis","base_profile_id":"cis","rules":{"partition_var_log":{"evaluate":true},"rpm_verify_hashes":{"evaluate":false},"rpm_verify_permisions":{"evaluate":false},"grub2_password":{"evaluate":false},"grub2_uefi_password":{"evaluate":false},"partition_for_dev_shm":{"evaluate":false},"mount_option_dev_shm_nosuid":{"evaluate":false},"mount_option_dev_shm_noexec":{"evaluate":false},"mount_option_dev_shm_nodev":{"evaluate":false}}}]}'
-  path: /oscap_data/tailoring.json
-ignition: null
-installer:
-  anaconda: {}
-  coreos: {}
-kernel: {}
-locale: {}
-network:
-  firewall: {}
-openscap:
-  datastream: /usr/share/xml/scap/ssg/content/ssg-rhel9-ds.xml
-  profile_id: xccdf_org.ssgproject.content_profile_cis
-  tailoring:
-    json_filepath: /oscap_data/tailoring.json
-    json_profile_id: xccdf_org.ssgproject.content_profile_cis_osbuild_tailoring
-registration:
-  fdo:
-    manufacturing_server_url: ""
-  redhat:
-    connector:
-      enabled: false
-    insights:
-      enabled: false
-    subscription_manager: {}
-storage:
-  partitions: null
-  type: ""
-systemd: {}
-timedate: {}
+[customizations]
+  [customizations.timezone]
+  [customizations.locale]
+  [customizations.firewall]
+    [customizations.firewall.services]
+  [customizations.services]
+  [customizations.disk]
+    type = "gpt"
+  [customizations.fdo]
+    diun_pub_key_insecure = "false"
+  [customizations.ignition]
+  [customizations.installer]
+    [customizations.installer.modules]
+  [customizations.rhsm]
+    [customizations.rhsm.config]
