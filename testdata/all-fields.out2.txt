@@ -25,6 +25,7 @@ containers:
 - local_storage: true
   name: fedora
   source: quay.io/fedora/fedora:latest
+  tls_verify: true
 description: A complete example of a blueprint with all possible fields
 dnf:
   groups:
@@ -48,6 +49,7 @@ dnf:
       metalink: https://mirrors.fedoraproject.org/metalink?repo=fedora-cisco-openh264-$releasever&arch=$basearch
     usage:
       configure: false
+      install: true
   - id: empty-repo
     usage:
       configure: false
@@ -57,10 +59,12 @@ fips:
 fsnodes:
 - group: lzap
   path: /var/tmp/dir/file1
+  type: file
   user: lzap
 - contents:
     text: test
   path: /var/tmp/dir/file2
+  type: file
 - ensure_parents: true
   group: lzap
   path: /var/tmp/dir

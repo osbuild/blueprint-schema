@@ -1,6 +1,0 @@
-# repository "fedora-cisco-openh264" has no source defined
-
-dnf:
-  repositories:
-  - id: fedora-cisco-openh264
-name: 'Blueprint example: DNF'

@@ -27,7 +27,6 @@ name = "Blueprint example: DNF"
     metalink = "https://mirrors.fedoraproject.org/metalink?repo=fedora-cisco-openh264-$releasever&arch=$basearch"
     name = "Fedora $releasever openh264 (From Cisco) - $basearch"
     enabled = true
-    gpgcheck = true
     repo_gpgcheck = false
     sslverify = true
     install_from = true

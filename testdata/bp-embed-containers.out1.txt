@@ -1,8 +1,6 @@
 [[containers]]
   source = "registry.gitlab.com/redhat/services/products/image-builder/ci/osbuild-composer/fedora-minimal"
-  tls-verify = true
 
 [[containers]]
   source = "registry.gitlab.com/redhat/services/products/image-builder/ci/osbuild-composer/manifest-list-test"
   name = "manifest-list-test:v1"
-  tls-verify = true

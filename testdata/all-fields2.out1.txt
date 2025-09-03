@@ -25,6 +25,7 @@ containers:
 - local_storage: true
   name: fedora
   source: quay.io/fedora/fedora:latest
+  tls_verify: true
 description: A complete example of a blueprint with all possible fields
 dnf:
   groups:
@@ -39,16 +40,22 @@ dnf:
   - vim-enhanced-9.1.866-1.fc41.x86_64
   - '@virtualization'
   repositories:
-  - gpg_check_repo: false
+  - gpg_check: true
+    gpg_check_repo: false
     gpg_keys:
     - file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
     id: fedora-cisco-openh264
     name: Fedora $releasever openh264 (From Cisco) - $basearch
     source:
       metalink: https://mirrors.fedoraproject.org/metalink?repo=fedora-cisco-openh264-$releasever&arch=$basearch
+    tls_verify: true
     usage:
       configure: false
-  - id: empty-repo
+      install: true
+  - gpg_check: true
+    gpg_check_repo: true
+    id: empty-repo
+    tls_verify: true
     usage:
       configure: false
       install: false
@@ -56,18 +63,28 @@ fips:
   enabled: true
 fsnodes:
 - group: lzap
+  mode: "0700"
   path: /var/tmp/dir/file1
+  type: file
   user: lzap
 - contents:
     text: test
+  group: root
+  mode: "0500"
   path: /var/tmp/dir/file2
+  type: file
+  user: root
 - ensure_parents: true
   group: lzap
+  mode: "0441"
   path: /var/tmp/dir
   type: dir
   user: lzap
-- path: /var/tmp/dir
+- group: root
+  mode: "0552"
+  path: /var/tmp/dir
   type: dir
+  user: root
 hostname: worker.example.com
 ignition:
   url: https://ignition.example.com/firstboot

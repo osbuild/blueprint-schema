@@ -123,8 +123,6 @@ description = "A complete example of a blueprint with all possible fields"
 
   [[customizations.directories]]
     path = "/var/tmp/dir"
-    user = "root"
-    group = "root"
     mode = "755"
 
   [[customizations.files]]
@@ -135,8 +133,6 @@ description = "A complete example of a blueprint with all possible fields"
 
   [[customizations.files]]
     path = "/var/tmp/dir/file2"
-    user = "root"
-    group = "root"
     mode = "644"
     data = "test"
 
@@ -146,17 +142,12 @@ description = "A complete example of a blueprint with all possible fields"
     metalink = "https://mirrors.fedoraproject.org/metalink?repo=fedora-cisco-openh264-$releasever&arch=$basearch"
     name = "Fedora $releasever openh264 (From Cisco) - $basearch"
     enabled = false
-    gpgcheck = true
     repo_gpgcheck = false
-    sslverify = true
     install_from = true
 
   [[customizations.repositories]]
     id = "empty-repo"
     enabled = false
-    gpgcheck = true
-    repo_gpgcheck = true
-    sslverify = true
     install_from = false
   [customizations.installer]
     unattended = true

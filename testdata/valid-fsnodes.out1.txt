@@ -11,20 +11,12 @@ name = "Blueprint example: fsnodes"
 
   [[customizations.files]]
     path = "/var/tmp/file1"
-    user = "root"
-    group = "root"
-    mode = "644"
 
   [[customizations.files]]
     path = "/var/tmp/dir/file1"
-    user = "root"
-    group = "root"
     mode = "640"
     data = "---"
 
   [[customizations.files]]
     path = "/var/tmp/dir/file2"
-    user = "root"
-    group = "root"
-    mode = "644"
     data = "test"

@@ -9,7 +9,11 @@ accounts:
 dnf:
   repositories:
   - id: one
+    usage:
+      install: true
   - id: two
+    usage:
+      install: true
 storage:
   partitions: null
   type: gpt
