@@ -38,7 +38,8 @@ dnf:
   - bash
   - bluez
   repositories:
-  - gpg_check_repo: false
+  - gpg_check: true
+    gpg_check_repo: false
     gpg_keys:
     - |
       -----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -72,6 +73,7 @@ dnf:
       urls:
       - https://example.com/download/yum
     usage:
+      configure: true
       install: false
 fips:
   enabled: true
@@ -87,17 +89,23 @@ fsnodes:
       [Install]
       WantedBy=multi-user.target
   path: /etc/systemd/system/custom.service
+  type: file
 - contents:
     text: |
       [Service]
       ExecStart=
       ExecStart=/usr/bin/cat /etc/custom_file.txt
   path: /etc/systemd/system/custom.service.d/override.conf
+  type: file
 - contents:
     text: image builder is the best
+  group: root
   path: /etc/custom_file.txt
+  type: file
+  user: root
 - group: "0"
   path: /etc/empty_file.txt
+  type: file
   user: "0"
 - path: /etc/systemd/system/custom.service.d
   type: dir

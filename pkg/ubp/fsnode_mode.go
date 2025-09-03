@@ -46,6 +46,8 @@ func (m FSNodeMode) String() string {
 
 var ErrInvalidFSNodeMode = errors.New("mode must be string with octal number")
 
+// UnmarshalJSON handles problem between YAML/JSON with octal numbers and performs
+// reading/writing of octal numbers stored as strings.
 func (m *FSNodeMode) UnmarshalJSON(data []byte) error {
 	var mode string
 	if err := json.Unmarshal(data, &mode); err != nil {
@@ -61,6 +63,8 @@ func (m *FSNodeMode) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// MarshalJSON handles problem between YAML/JSON with octal numbers and performs
+// reading/writing of octal numbers stored as strings.
 func (m FSNodeMode) MarshalJSON() ([]byte, error) {
 	modeStr := fmt.Sprintf("0%03o", uint32(m))
 	return json.Marshal(modeStr)

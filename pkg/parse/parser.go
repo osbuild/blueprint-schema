@@ -103,8 +103,7 @@ func UnmarshalAny(buf []byte, details *AnyDetails) (*ubp.Blueprint, error) {
 		details.Intermediate = bpData
 		details.Warnings = warn
 
-		errDefaults := ubp.PopulateDefaults(imData)
-		return imData, errDefaults
+		return imData, nil
 	} else {
 		errs = append(errs, fmt.Errorf("%w (BP-JSON)", err))
 	}
@@ -120,8 +119,7 @@ func UnmarshalAny(buf []byte, details *AnyDetails) (*ubp.Blueprint, error) {
 		details.Intermediate = bpData
 		details.Warnings = warn
 
-		errDefaults := ubp.PopulateDefaults(imData)
-		return imData, errDefaults
+		return imData, nil
 	} else {
 		errs = append(errs, fmt.Errorf("%w (BP-TOML)", err))
 	}

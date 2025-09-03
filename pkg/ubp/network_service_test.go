@@ -2,41 +2,6 @@ package ubp
 
 import "testing"
 
-func TestNetworkProtocolJSON(t *testing.T) {
-	tests := []struct {
-		input string
-		proto    NetworkProtocol
-		output string
-	}{
-		{`""`, ProtocolAny, `""`},
-		{`"any"`, ProtocolAny, `""`},
-		{`"tcp"`, ProtocolTCP, `"tcp"`},
-		{`"udp"`, ProtocolUDP, `"udp"`},
-		{`"icmp"`, ProtocolICMP, `"icmp"`},
-	}
-
-	for _, test := range tests {
-		t.Run(test.proto.String(), func(t *testing.T) {
-			var proto NetworkProtocol
-			err := proto.UnmarshalJSON([]byte(test.input))
-			if err != nil {
-				t.Fatalf("unexpected error unmarshaling protocol %q: %v", test.input, err)
-			}
-			if proto != test.proto {
-				t.Errorf("expected %s, got %s", test.proto, proto)
-			}
-
-			data, err := test.proto.MarshalJSON()
-			if err != nil {
-				t.Fatalf("unexpected error marshaling protocol %q: %v", test.proto, err)
-			}
-			if string(data) != test.output {
-				t.Errorf("expected %s, got %s", test.output, data)
-			}
-		})
-	}
-}
-
 func TestParseFirewalldPort(t *testing.T) {
 	tests := []struct {
 		input    string

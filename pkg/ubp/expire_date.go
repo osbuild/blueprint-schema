@@ -39,6 +39,7 @@ func NewIntEpochDays(epochDays int) *EpochDays {
 	return ptr.To(EpochDays(epochDays))
 }
 
+// UnmarshalJSON handles problem between YAML/JSON with time and date.
 func (e *EpochDays) UnmarshalJSON(data []byte) error {
 	if len(data) == 0 || string(data) == `""` {
 		return nil
@@ -58,6 +59,7 @@ func (e *EpochDays) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// MarshalJSON handles problem between YAML/JSON with time and date.
 func (e EpochDays) MarshalJSON() ([]byte, error) {
 	t := time.Unix(int64(e.Days())*(24*60*60), 0).UTC()
 	return json.Marshal(t.Format("2006-01-02"))

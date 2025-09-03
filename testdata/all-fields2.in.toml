@@ -118,26 +118,26 @@ description = "A complete example of a blueprint with all possible fields"
     path = "/var/tmp/dir"
     user = "lzap"
     group = "lzap"
-    mode = "755"
+    mode = "441"
     ensure_parents = true
 
   [[customizations.directories]]
     path = "/var/tmp/dir"
     user = "root"
     group = "root"
-    mode = "755"
+    mode = "552"
 
   [[customizations.files]]
     path = "/var/tmp/dir/file1"
     user = "lzap"
     group = "lzap"
-    mode = "644"
+    mode = "700"
 
   [[customizations.files]]
     path = "/var/tmp/dir/file2"
     user = "root"
     group = "root"
-    mode = "644"
+    mode = "500"
     data = "test"
 
   [[customizations.repositories]]

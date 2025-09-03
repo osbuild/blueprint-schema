@@ -60,9 +60,6 @@
 
   [[customizations.directories]]
     path = "/etc/systemd/system/custom.service.d"
-    user = "root"
-    group = "root"
-    mode = "755"
 
   [[customizations.directories]]
     path = "/etc/custom_dir"
@@ -72,30 +69,22 @@
 
   [[customizations.files]]
     path = "/etc/systemd/system/custom.service"
-    user = "root"
-    group = "root"
-    mode = "644"
     data = "[Unit]\nDescription=Custom service\n\n[Service]\nExecStart=/usr/bin/false\n\n[Install]\nWantedBy=multi-user.target\n"
 
   [[customizations.files]]
     path = "/etc/systemd/system/custom.service.d/override.conf"
-    user = "root"
-    group = "root"
-    mode = "644"
     data = "[Service]\nExecStart=\nExecStart=/usr/bin/cat /etc/custom_file.txt\n"
 
   [[customizations.files]]
     path = "/etc/custom_file.txt"
     user = "root"
     group = "root"
-    mode = "644"
     data = "image builder is the best"
 
   [[customizations.files]]
     path = "/etc/empty_file.txt"
     user = 0
     group = 0
-    mode = "644"
 
   [[customizations.repositories]]
     id = "example"
@@ -105,5 +94,4 @@
     enabled = true
     gpgcheck = true
     repo_gpgcheck = false
-    sslverify = true
     install_from = false
