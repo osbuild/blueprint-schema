@@ -8,6 +8,34 @@ import (
 	"github.com/osbuild/blueprint-schema/pkg/ptr"
 )
 
+func TestDefaultValues(t *testing.T) {
+	ubp := &Blueprint{
+		DNF: DNF{
+			Repositories: []DNFRepository{
+				{
+					Usage: DNFRepoUsage{},
+				},
+			},
+		},
+	}
+
+	if err := PopulateDefaults(ubp); err != nil {
+		t.Fatalf("Failed to populate defaults: %v", err)
+	}
+
+	if ubp.DNF.Repositories[0].Usage.Configure == nil {
+		t.Error("Expected Configure to be set")
+	} else if *ubp.DNF.Repositories[0].Usage.Configure != true {
+		t.Errorf("Expected Configure to be true, got %v", *ubp.DNF.Repositories[0].Usage.Configure)
+	}
+
+	if ubp.DNF.Repositories[0].Usage.Install == nil {
+		t.Error("Expected Install to be set")
+	} else if *ubp.DNF.Repositories[0].Usage.Install != true {
+		t.Errorf("Expected Install to be true, got %v", *ubp.DNF.Repositories[0].Usage.Install)
+	}
+}
+
 func TestJSONUnmarshalDNFRepoUsage(t *testing.T) {
 	tests := []struct {
 		input    string
@@ -43,25 +71,31 @@ func TestJSONUnmarshalDNFRepoUsage(t *testing.T) {
 }
 
 func TestJSONMarshalDNFRepoUsage(t *testing.T) {
+	type DRU = DNFRepoUsage
+
+	type tru struct {
+		Usage DRU `json:"usage,omitzero"`
+	}
+
 	tests := []struct {
-		input  DNFRepoUsage
+		input  tru
 		output string
 	}{
 		{
-			input:  DNFRepoUsage{},
+			input:  tru{Usage: DNFRepoUsage{}},
 			output: `{}`,
 		},
 		{
-			input:  DNFRepoUsage{Configure: ptr.To(true), Install: ptr.To(true)},
+			input:  tru{Usage: DNFRepoUsage{Configure: ptr.To(true), Install: ptr.To(true)}},
 			output: `{}`,
 		},
 		{
-			input:  DNFRepoUsage{Configure: ptr.To(false), Install: ptr.To(false)},
-			output: `{"configure":false,"install":false}`,
+			input:  tru{Usage: DNFRepoUsage{Configure: ptr.To(false), Install: ptr.To(false)}},
+			output: `{"usage":{"configure":false,"install":false}}`,
 		},
 		{
-			input:  DNFRepoUsage{Configure: ptr.To(true), Install: ptr.To(false)},
-			output: `{"install":false}`,
+			input:  tru{Usage: DNFRepoUsage{Configure: ptr.To(true), Install: ptr.To(false)}},
+			output: `{"usage":{"install":false}}`,
 		},
 	}
 
@@ -74,6 +108,33 @@ func TestJSONMarshalDNFRepoUsage(t *testing.T) {
 
 			if diff := cmp.Diff(test.output, string(output)); diff != "" {
 				t.Errorf("Marshal mismatch (-input +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func TestDNFRepoUsageIsZero(t *testing.T) {
+	tests := []struct {
+		n    string
+		in   DNFRepoUsage
+		zero bool
+	}{
+		// zero
+		{n: "empty", in: DNFRepoUsage{}, zero: true},
+		{n: "true-true", in: DNFRepoUsage{Configure: ptr.To(true), Install: ptr.To(true)}, zero: true},
+		{n: "true-nil", in: DNFRepoUsage{Configure: ptr.To(true)}, zero: true},
+
+		// non-zero
+		{n: "false-nil", in: DNFRepoUsage{Configure: ptr.To(false)}, zero: false},
+		{n: "false-false", in: DNFRepoUsage{Configure: ptr.To(false), Install: ptr.To(false)}, zero: false},
+		{n: "true-false", in: DNFRepoUsage{Configure: ptr.To(true), Install: ptr.To(false)}, zero: false},
+		{n: "false-true", in: DNFRepoUsage{Configure: ptr.To(false), Install: ptr.To(true)}, zero: false},
+	}
+
+	for _, test := range tests {
+		t.Run(test.n, func(t *testing.T) {
+			if got := test.in.IsZero(); got != test.zero {
+				t.Errorf("IsZero() = %v, want %v", got, test.zero)
 			}
 		})
 	}

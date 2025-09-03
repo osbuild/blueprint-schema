@@ -1,15 +1,14 @@
 module github.com/osbuild/blueprint-schema
 
-go 1.23.0
+go 1.24
 
-toolchain go1.23.7
-
-//replace github.com/osbuild/blueprint => ../blueprint
+toolchain go1.24.6
 
 require (
 	github.com/BurntSushi/toml v1.5.1-0.20250403130103-3d3abc24416a
 	github.com/gabriel-vasile/mimetype v1.4.2
 	github.com/getkin/kin-openapi v0.131.0
+	github.com/go-json-experiment/json v0.0.0-20250211171154-1ae217ad3535
 	github.com/google/go-cmp v0.7.0
 	github.com/oapi-codegen/runtime v1.1.1
 	github.com/osbuild/blueprint v1.9.0

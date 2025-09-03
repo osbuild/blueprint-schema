@@ -1,1 +1,4 @@
 name: Firewall example - missing from
+storage:
+  partitions: []
+  type: gpt

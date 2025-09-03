@@ -12,12 +12,10 @@ properties:
     items:
       type: string
     nullable: true
-    x-go-type-skip-optional-pointer: true
     x-omitempty: true
   package:
     description: Kernel package name to be installed.
     type: string
     nullable: true
-    x-go-type-skip-optional-pointer: true
     x-omitempty: true
 additionalProperties: false

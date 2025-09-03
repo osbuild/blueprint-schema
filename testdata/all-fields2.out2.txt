@@ -42,7 +42,6 @@ description = "A complete example of a blueprint with all possible fields"
   [[customizations.user]]
     name = "lzap"
     description = "Lukas Zapletal"
-    password = ""
     key = "ssh-key 1234"
     home = "/home/lzap"
     shell = "/usr/bin/bash"

@@ -1,10 +1,15 @@
-dnf:
-  import_keys:
-  - /etc/pki/rpm-gpg/RPM-GPG-KEY-microsoft-azure-release
-  packages:
-  - rhui-azure-rhel9
-  - redhat-cloud-client-configuration-cdn
-registration:
-  redhat:
-    subscription_manager:
-      auto_enable: false
+[customizations]
+  [customizations.timezone]
+  [customizations.locale]
+  [customizations.firewall]
+    [customizations.firewall.services]
+  [customizations.services]
+  [customizations.disk]
+    type = "gpt"
+  [customizations.fdo]
+    diun_pub_key_insecure = "false"
+  [customizations.ignition]
+  [customizations.installer]
+    [customizations.installer.modules]
+  [customizations.rhsm]
+    [customizations.rhsm.config]

@@ -12,3 +12,6 @@ installer:
   coreos:
     installation_device: /dev/vda
 name: 'Blueprint example: installer'
+storage:
+  partitions: []
+  type: gpt

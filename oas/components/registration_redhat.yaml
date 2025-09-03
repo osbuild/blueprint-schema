@@ -8,7 +8,6 @@ properties:
       Subscription manager activation key to use during registration.
       A list of keys to use to redeem or apply specific subscriptions to the system.
     type: string
-    x-go-type-skip-optional-pointer: true
   connector:
     "$ref": "registration_connector.yaml"
     nullable: true
@@ -18,7 +17,6 @@ properties:
   organization:
     description: Subscription manager organization name to use during registration.
     type: string
-    x-go-type-skip-optional-pointer: true
   subscription_manager:
     "$ref": "registration_rhsm.yaml"
     nullable: true

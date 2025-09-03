@@ -7,5 +7,7 @@ accounts:
   - name: names-with-diakritics-žluťoučký-kůň
   - name: names with spaces
   - name: gid-0
-  users: null
 name: 'Blueprint example: accounts'
+storage:
+  partitions: []
+  type: gpt

@@ -1,1 +1,4 @@
 name: 'Blueprint example: ingition invalid'
+storage:
+  partitions: []
+  type: gpt

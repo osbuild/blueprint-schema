@@ -4,3 +4,6 @@ dnf:
   repositories:
   - id: fedora-cisco-openh264
 name: 'Blueprint example: DNF'
+storage:
+  partitions: []
+  type: gpt

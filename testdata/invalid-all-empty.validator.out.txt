@@ -6,8 +6,7 @@ Schema:
       "type": "string"
     },
     "type": "array",
-    "x-go-name": "SSHKeys",
-    "x-go-type-skip-optional-pointer": true
+    "x-go-name": "SSHKeys"
   }
 
 Value:

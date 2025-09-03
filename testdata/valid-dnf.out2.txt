@@ -18,3 +18,6 @@ dnf:
     source:
       metalink: https://mirrors.fedoraproject.org/metalink?repo=fedora-cisco-openh264-$releasever&arch=$basearch
 name: 'Blueprint example: DNF'
+storage:
+  partitions: []
+  type: gpt

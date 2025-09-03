@@ -1,2 +1,3 @@
-[customizations]
-  fips = true
+storage:
+  partitions: []
+  type: gpt

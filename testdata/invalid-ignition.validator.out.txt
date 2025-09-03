@@ -6,8 +6,7 @@ Schema:
       "url": {
         "description": "The URL to the Ignition configuration to be used by Ignition. This configuration\nis a URL to a remote Ignition configuration.\n",
         "type": "string",
-        "x-go-name": "URL",
-        "x-go-type-skip-optional-pointer": true
+        "x-go-name": "URL"
       }
     },
     "required": [
@@ -31,8 +30,7 @@ Schema:
     "properties": {
       "text": {
         "description": "Ignition data formatted in plain text.",
-        "type": "string",
-        "x-go-type-skip-optional-pointer": true
+        "type": "string"
       }
     },
     "required": [

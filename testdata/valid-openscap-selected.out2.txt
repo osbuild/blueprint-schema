@@ -5,3 +5,6 @@ openscap:
   tailoring:
     selected:
     - xccdf_org.ssgproject.content_bind_crypto_policy
+storage:
+  partitions: []
+  type: gpt

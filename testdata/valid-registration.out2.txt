@@ -10,3 +10,6 @@ registration:
       enabled: true
       product_plugin_enabled: true
       repository_management: true
+storage:
+  partitions: []
+  type: gpt

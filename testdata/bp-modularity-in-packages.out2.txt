@@ -1,2 +1,3 @@
-[[packages]]
-  name = "@nodejs:18"
+storage:
+  partitions: []
+  type: gpt

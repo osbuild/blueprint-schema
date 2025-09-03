@@ -1,2 +1,3 @@
-[[groups]]
-  name = "minimal-environment"
+storage:
+  partitions: []
+  type: gpt

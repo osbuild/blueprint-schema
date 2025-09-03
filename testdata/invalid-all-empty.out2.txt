@@ -2,7 +2,6 @@
 # repository "two" has no source defined
 
 accounts:
-  groups: null
   users:
   - expires: "1970-01-01"
     name: user
@@ -11,5 +10,5 @@ dnf:
   - id: one
   - id: two
 storage:
-  partitions: null
+  partitions: []
   type: gpt

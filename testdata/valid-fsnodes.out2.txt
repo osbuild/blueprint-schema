@@ -14,3 +14,6 @@ fsnodes:
   type: dir
   user: lzap
 name: 'Blueprint example: fsnodes'
+storage:
+  partitions: []
+  type: gpt

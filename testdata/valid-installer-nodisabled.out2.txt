@@ -4,3 +4,6 @@ installer:
     - org.fedoraproject.Anaconda.Modules.Network
     unattended: true
 name: 'Blueprint example: installer'
+storage:
+  partitions: []
+  type: gpt

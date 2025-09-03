@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
 )
 
 func TestPopulateDefaults(t *testing.T) {
@@ -15,7 +16,7 @@ func TestPopulateDefaults(t *testing.T) {
 				Source: "source",
 			},
 		},
-		DNF: &DNF{
+		DNF: DNF{
 			Repositories: []DNFRepository{{ID: "repo"}},
 		},
 		FSNodes: []FSNode{
@@ -27,8 +28,8 @@ func TestPopulateDefaults(t *testing.T) {
 				Type: "dir",
 			},
 		},
-		Network: &Network{
-			Firewall: &NetworkFirewall{
+		Network: Network{
+			Firewall: NetworkFirewall{
 				Services: []NetworkService{
 					{
 						union: []byte(`{"name": "ssh"}`),
@@ -42,7 +43,7 @@ func TestPopulateDefaults(t *testing.T) {
 				},
 			},
 		},
-		Storage: &Storage{
+		Storage: Storage{
 			Type: StorageTypeGPT,
 			Partitions: []StoragePartition{
 				{
@@ -56,7 +57,7 @@ func TestPopulateDefaults(t *testing.T) {
 				},
 			},
 		},
-		Timedate: &TimeDate{
+		Timedate: TimeDate{
 			Timezone: "UTC",
 		},
 	}
@@ -192,7 +193,7 @@ func TestPopulateDefaults(t *testing.T) {
 		})
 	}
 
-	data, err := json.MarshalIndent(ubpDefaults, "", "\t")
+	buf, err := json.MarshalIndent(ubpDefaults, "", "  ")
 	if err != nil {
 		t.Fatalf("MarshalJSON defaults failed: %v", err)
 	}
@@ -207,7 +208,8 @@ func TestPopulateDefaults(t *testing.T) {
 	"dnf": {
 		"repositories": [
 			{
-				"id": "repo"
+				"id": "repo",
+				"usage": {}
 			}
 		]
 	},
@@ -247,11 +249,10 @@ func TestPopulateDefaults(t *testing.T) {
 			}
 		],
 		"type": "gpt"
-	},
-	"timedate": {}
+	}
 }`
 
-	if diff := cmp.Diff(want, string(data)); diff != "" {
+	if diff := cmp.Diff(want, string(buf), cmpopts.EquateEmpty()); diff != "" {
 		t.Errorf("MarshalJSON defaults mismatch (-want +got):\n%s", diff)
 	}
 }

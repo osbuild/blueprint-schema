@@ -14,13 +14,15 @@ Schema:
         "default": true,
         "description": "Enable GPG check for the repository. GPG key(s) must be provided. Disabled by default.",
         "type": "boolean",
-        "x-go-name": "GPGCheck"
+        "x-go-name": "GPGCheck",
+        "x-go-type-skip-optional-pointer": false
       },
       "gpg_check_repo": {
         "default": true,
         "description": "Enable GPG check for the repository metadata. Disabled by default. This is different from gpg_check, which is for the packages.\nThis is useful for third-party repositories that do not provide GPG keys for the repository metadata.",
         "type": "boolean",
-        "x-go-name": "GPGCheckRepo"
+        "x-go-name": "GPGCheckRepo",
+        "x-go-type-skip-optional-pointer": false
       },
       "gpg_keys": {
         "description": "GPG keys for the repository.\n\nThe blueprint accepts both inline GPG keys and GPG key urls. If an inline GPG key is provided it\nwill be saved to the /etc/pki/rpm-gpg directory and will be referenced accordingly in the repository\nconfiguration. GPG keys are not imported to the RPM database and will only be imported when first\ninstalling a package from the third-party repository.\n",
@@ -28,31 +30,28 @@ Schema:
           "type": "string"
         },
         "type": "array",
-        "x-go-name": "GPGKeys",
-        "x-go-type-skip-optional-pointer": true
+        "x-go-name": "GPGKeys"
       },
       "id": {
         "description": "Repository ID. Required.",
         "maxLength": 256,
         "pattern": "^[a-zA-Z0-9_-]+$",
         "type": "string",
-        "x-go-name": "ID",
-        "x-go-type-skip-optional-pointer": true
+        "x-go-name": "ID"
       },
       "module_hotfixes": {
         "default": false,
         "description": "Enable module hotfixes for the repository. Disabled by default.\n\nAdds module_hotfixes flag to all repo types so it can be used during osbuild. This enables users\nto disable modularity filtering on specific repositories.\n",
-        "type": "boolean",
-        "x-go-type-skip-optional-pointer": true
+        "type": "boolean"
       },
       "name": {
         "description": "Repository name.",
-        "type": "string",
-        "x-go-type-skip-optional-pointer": true
+        "type": "string"
       },
       "priority": {
         "description": "Repository priority. When unset, default DNF priority is used. This is useful for third-party repositories that are not part of the base image.",
-        "type": "integer"
+        "type": "integer",
+        "x-go-type-skip-optional-pointer": false
       },
       "source": {
         "description": "Repository source.",
@@ -73,7 +72,8 @@ Schema:
         "default": true,
         "description": "Enable TLS verification for the repository. Enabled by default.",
         "type": "boolean",
-        "x-go-name": "TLSVerify"
+        "x-go-name": "TLSVerify",
+        "x-go-type-skip-optional-pointer": false
       },
       "usage": {
         "$ref": "dnf_repository_usage.yaml"

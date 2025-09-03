@@ -4,3 +4,6 @@ kernel:
   - crashkernel=1G-4G:192M,4G-64G:256M,64G-:512M
   package: kernel-debug-6.11.5-300
 name: 'Blueprint example: kernel'
+storage:
+  partitions: []
+  type: gpt

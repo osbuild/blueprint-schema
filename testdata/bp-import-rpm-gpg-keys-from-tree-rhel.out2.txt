@@ -1,4 +1,3 @@
-[customizations]
-  [customizations.rpm]
-    [customizations.rpm.import_keys]
-      files = ["/etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-beta"]
+storage:
+  partitions: []
+  type: gpt

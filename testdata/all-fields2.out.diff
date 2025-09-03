@@ -1,0 +1,27 @@
+  &blueprint.Blueprint{
+  	... // 6 identical fields
+  	Groups:     {{Name: "virtualization"}},
+  	Containers: {{Source: "quay.io/fedora/fedora:latest", Name: "fedora", TLSVerify: &true, LocalStorage: true}},
+  	Customizations: &blueprint.Customizations{
+  		Hostname: &"worker.example.com",
+  		Kernel:   &{Name: "kernel-debug-6.11.5-300", Append: "nosmt=force"},
+  		SSHKey:   nil,
+  		User: []blueprint.UserCustomization{
+  			{
+  				Name:        "lzap",
+  				Description: &"Lukas Zapletal",
+- 				Password:    &"",
++ 				Password:    nil,
+  				Key:         &"ssh-key 1234",
+  				Home:        &"/home/lzap",
+  				... // 6 identical fields
+  			},
+  		},
+  		Group:    {{Name: "operators", GID: &1042}},
+  		Timezone: &{Timezone: &"Europe/Prague", NTPServers: {"0.north-america.pool.ntp.org", "1.north-america.pool.ntp.org"}},
+  		... // 19 identical fields
+  	},
+  	Distro:  "",
+  	Arch:    "",
+  	Minimal: false,
+  }

@@ -4,3 +4,6 @@ fsnodes:
 - path: /var/tmp/dir
   type: dir
 name: 'Blueprint example: fsnodes'
+storage:
+  partitions: []
+  type: gpt

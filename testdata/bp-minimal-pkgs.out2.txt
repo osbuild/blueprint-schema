@@ -1,5 +1,3 @@
-[[packages]]
-  name = "tmux"
-
-[[packages]]
-  name = "vim-enhanced"
+storage:
+  partitions: []
+  type: gpt

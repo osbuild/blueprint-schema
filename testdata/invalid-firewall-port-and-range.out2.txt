@@ -3,3 +3,6 @@ network:
   firewall:
     services:
     - port: 1301
+storage:
+  partitions: []
+  type: gpt

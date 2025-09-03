@@ -9,7 +9,8 @@ import (
 
 func TestReadYAMLWriteJSON(t *testing.T) {
 	in := "name: test\n"
-	want := "{\n  \"name\": \"test\"\n}"
+	wantIndent := "{\n\t\"name\": \"test\"\n}"
+	want := `{"name":"test"}`
 
 	b, err := ReadYAML(bytes.NewBufferString(in))
 	if err != nil {
@@ -29,8 +30,17 @@ func TestReadYAMLWriteJSON(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if cmp.Diff(string(out), want) != "" {
-		t.Fatalf("Unexpected JSON output: %s", out)
+	if diff := cmp.Diff(string(out), wantIndent); diff != "" {
+		t.Fatalf("Unexpected output: %s", diff)
+	}
+
+	out, err = MarshalJSON(b, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if diff := cmp.Diff(string(out), want); diff != "" {
+		t.Fatalf("Unexpected output: %s", diff)
 	}
 
 	out, err = MarshalYAML(b)
@@ -38,13 +48,13 @@ func TestReadYAMLWriteJSON(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if cmp.Diff(string(out), in) != "" {
-		t.Fatalf("Unexpected YAML output: %s", out)
+	if diff := cmp.Diff(string(out), in); diff != "" {
+		t.Fatalf("Unexpected output: %s", diff)
 	}
 }
 
 func TestReadJSONWriteYAML(t *testing.T) {
-	in := "{\n  \"name\": \"test\"\n}"
+	in := "{\n\t\"name\": \"test\"\n}"
 	want := "name: test\n"
 
 	b, err := ReadJSON(bytes.NewBufferString(in))
@@ -65,8 +75,8 @@ func TestReadJSONWriteYAML(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if cmp.Diff(string(out), want) != "" {
-		t.Fatalf("Unexpected YAML output: %s", out)
+	if diff := cmp.Diff(string(out), want); diff != "" {
+		t.Fatalf("Unexpected YAML output: %s", diff)
 	}
 
 	out, err = MarshalJSON(b, true)
@@ -74,17 +84,8 @@ func TestReadJSONWriteYAML(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if cmp.Diff(string(out), in) != "" {
-		t.Fatalf("Unexpected JSON output: %s", out)
-	}
-
-	err = WriteJSON(b, bytes.NewBufferString(""), true)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	if cmp.Diff(string(out), in) != "" {
-		t.Fatalf("Unexpected JSON output: %s", out)
+	if diff := cmp.Diff(string(out), in); diff != "" {
+		t.Fatalf("Unexpected JSON output: %s", diff)
 	}
 }
 

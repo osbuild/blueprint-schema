@@ -9,3 +9,6 @@ network:
     - from: 60000
       protocol: udp
       to: 60010
+storage:
+  partitions: []
+  type: gpt
