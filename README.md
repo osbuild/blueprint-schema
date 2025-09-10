@@ -15,6 +15,10 @@ This repository contains the common blueprint JSON Schema and Go types for Image
 * **CRC Blueprint**: The blueprint as it exists in [image-builder-crc](https://github.com/osbuild/image-builder-crc), is user-facing in the service API, and is documented on osbuild.org.  This is very close but sometimes slightly different from the Blueprint.
 * **Images Blueprint**: The format and code that currently exists in [osbuild/images](https://github.com/osbuild/images) in `pkg/ubp`, which slightly differs from BP in that it was more aggressive in dropping deprecated options (like SSHKey).
 
+### Requirements
+
+The Go library requires Go 1.24+.
+
 ### Schema source
 
 All schema source files are in `oas/` directory, each component resides in its own YAML file in `oas/components`. Make sure to create component for each object that is supposed to be a Go type (`struct`). There is a README in the `oas/` directory with some tips on how to write OAS3 schemas.
