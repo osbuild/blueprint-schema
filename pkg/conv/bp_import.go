@@ -2,7 +2,6 @@ package conv
 
 import (
 	"fmt"
-	"reflect"
 	"strings"
 
 	"github.com/osbuild/blueprint-schema/pkg/ptr"
@@ -71,7 +70,7 @@ func (e *InternalImporter) importArchitecture() ubp.Arch {
 	return result
 }
 
-func (e *InternalImporter) importDNF() *ubp.DNF {
+func (e *InternalImporter) importDNF() ubp.DNF {
 	to := ubp.DNF{}
 	to.Packages = e.importPackages()
 	to.Modules = e.importModules()
@@ -84,11 +83,7 @@ func (e *InternalImporter) importDNF() *ubp.DNF {
 		}
 	}
 
-	if reflect.DeepEqual(to, ubp.DNF{}) {
-		return nil // omitzero
-	}
-
-	return &to
+	return to
 }
 
 func (e *InternalImporter) importPackages() []string {
@@ -161,7 +156,7 @@ func (e *InternalImporter) importRepositories() []ubp.DNFRepository {
 			ModuleHotfixes: ptr.ValueOr(repo.ModuleHotfixes, false),
 			Priority:       repo.Priority,
 			TLSVerify:      repo.SSLVerify,
-			Usage: &ubp.DnfRepositoryUsage{
+			Usage: ubp.DnfRepositoryUsage{
 				Configure: repo.Enabled,
 				Install:   &repo.InstallFrom,
 			},
@@ -206,12 +201,12 @@ func (e *InternalImporter) importContainers() []ubp.Container {
 	return containers
 }
 
-func (e *InternalImporter) importKernel() *ubp.Kernel {
+func (e *InternalImporter) importKernel() ubp.Kernel {
 	if e.from.Customizations == nil || e.from.Customizations.Kernel == nil {
-		return nil
+		return ubp.Kernel{}
 	}
 
-	r := &ubp.Kernel{
+	r := ubp.Kernel{
 		Package: e.from.Customizations.Kernel.Name,
 	}
 
@@ -222,9 +217,9 @@ func (e *InternalImporter) importKernel() *ubp.Kernel {
 	return r
 }
 
-func (e *InternalImporter) importAccounts() *ubp.Accounts {
+func (e *InternalImporter) importAccounts() ubp.Accounts {
 	if e.from.Customizations == nil {
-		return nil
+		return ubp.Accounts{}
 	}
 
 	to := ubp.Accounts{}
@@ -258,11 +253,7 @@ func (e *InternalImporter) importAccounts() *ubp.Accounts {
 		to.Groups = append(to.Groups, g)
 	}
 
-	if reflect.DeepEqual(to, ubp.Accounts{}) {
-		return nil // omitzero
-	}
-
-	return &to
+	return to
 }
 
 func (e *InternalImporter) importCACerts() []ubp.CACert {
@@ -280,20 +271,16 @@ func (e *InternalImporter) importCACerts() []ubp.CACert {
 	return caCerts
 }
 
-func (e *InternalImporter) importFIPS() *ubp.FIPS {
+func (e *InternalImporter) importFIPS() ubp.FIPS {
 	if e.from.Customizations == nil || e.from.Customizations.FIPS == nil {
-		return nil
+		return ubp.FIPS{}
 	}
 
 	fips := ubp.FIPS{
 		Enabled: ptr.ValueOr(e.from.Customizations.FIPS, false),
 	}
 
-	if reflect.DeepEqual(fips, ubp.FIPS{}) {
-		return nil // omitzero
-	}
-
-	return &fips
+	return fips
 }
 
 func (e *InternalImporter) importFSNodes() []ubp.FSNode {
@@ -362,12 +349,12 @@ func (e *InternalImporter) importFSNodes() []ubp.FSNode {
 	return res
 }
 
-func (e *InternalImporter) importIgnition() *ubp.Ignition {
+func (e *InternalImporter) importIgnition() ubp.Ignition {
 	if e.from.Customizations == nil || e.from.Customizations.Ignition == nil {
-		return nil
+		return ubp.Ignition{}
 	}
 
-	var res *ubp.Ignition
+	var res ubp.Ignition
 	if e.from.Customizations.Ignition.FirstBoot != nil {
 		res = ubp.IgnitionFromURL(ubp.IgnitionURL{
 			URL: e.from.Customizations.Ignition.FirstBoot.ProvisioningURL,
@@ -383,14 +370,14 @@ func (e *InternalImporter) importIgnition() *ubp.Ignition {
 	return res
 }
 
-func (e *InternalImporter) importInstaller() *ubp.Installer {
+func (e *InternalImporter) importInstaller() ubp.Installer {
 	if e.from.Customizations == nil {
-		return nil
+		return ubp.Installer{}
 	}
 
 	to := ubp.Installer{}
 	if e.from.Customizations.Installer != nil {
-		to.Anaconda = &ubp.InstallerAnaconda{
+		to.Anaconda = ubp.InstallerAnaconda{
 			Unattended:   e.from.Customizations.Installer.Unattended,
 			SudoNOPASSWD: e.from.Customizations.Installer.SudoNopasswd,
 		}
@@ -415,21 +402,17 @@ func (e *InternalImporter) importInstaller() *ubp.Installer {
 	}
 
 	if e.from.Customizations.InstallationDevice != "" {
-		to.CoreOS = &ubp.InstallerCoreOS{
+		to.CoreOS = ubp.InstallerCoreOS{
 			InstallationDevice: e.from.Customizations.InstallationDevice,
 		}
 	}
 
-	if reflect.DeepEqual(to, ubp.Installer{}) {
-		return nil // omitzero
-	}
-
-	return &to
+	return to
 }
 
-func (e *InternalImporter) importLocale() *ubp.Locale {
+func (e *InternalImporter) importLocale() ubp.Locale {
 	if e.from.Customizations == nil || e.from.Customizations.Locale == nil {
-		return nil
+		return ubp.Locale{}
 	}
 
 	to := ubp.Locale{}
@@ -438,20 +421,16 @@ func (e *InternalImporter) importLocale() *ubp.Locale {
 		to.Keyboards = []string{*e.from.Customizations.Locale.Keyboard}
 	}
 
-	if reflect.DeepEqual(to, ubp.Locale{}) {
-		return nil // omitzero
-	}
-
-	return &to
+	return to
 }
 
-func (e *InternalImporter) importNetwork() *ubp.Network {
-	if e.from.Customizations == nil || e.from.Customizations.Firewall == nil {
-		return nil
+func (e *InternalImporter) importNetwork() ubp.Network {
+	to := ubp.Network{
+		Firewall: ubp.NetworkFirewall{},
 	}
 
-	to := ubp.Network{
-		Firewall: &ubp.NetworkFirewall{},
+	if e.from.Customizations == nil || e.from.Customizations.Firewall == nil {
+		return to
 	}
 
 	if e.from.Customizations.Firewall.Services != nil {
@@ -502,16 +481,12 @@ func (e *InternalImporter) importNetwork() *ubp.Network {
 		e.log.Printf("firewall zones are not supported, ignoring")
 	}
 
-	if reflect.DeepEqual(to.Firewall, &ubp.NetworkFirewall{}) {
-		return nil // omitzero
-	}
-
-	return &to
+	return to
 }
 
-func (e *InternalImporter) importOpenSCAP() *ubp.OpenSCAP {
+func (e *InternalImporter) importOpenSCAP() ubp.OpenSCAP {
 	if e.from.Customizations == nil || e.from.Customizations.OpenSCAP == nil {
-		return nil
+		return ubp.OpenSCAP{}
 	}
 
 	to := ubp.OpenSCAP{
@@ -538,31 +513,29 @@ func (e *InternalImporter) importOpenSCAP() *ubp.OpenSCAP {
 		})
 	}
 
-	if reflect.DeepEqual(to, ubp.OpenSCAP{}) {
-		return nil // omitzero
-	}
-
-	return &to
+	return to
 }
 
-func (e *InternalImporter) importRegistration() *ubp.Registration {
+func (e *InternalImporter) importRegistration() ubp.Registration {
 	if e.from.Customizations == nil {
-		return nil
+		return ubp.Registration{}
 	}
 
 	to := ubp.Registration{}
 	if e.from.Customizations.RHSM != nil && e.from.Customizations.RHSM.Config != nil {
-		to.RegistrationRedHat = &ubp.RegistrationRedHat{
-			RegistrationRHSM: &ubp.RegistrationRHSM{},
+		to.RegistrationRedHat = ubp.RegistrationRedHat{
+			RegistrationRHSM: ubp.RegistrationRHSM{},
 		}
 
-		if e.from.Customizations.RHSM.Config.SubscriptionManager.RHSMConfig != nil {
-			to.RegistrationRedHat.RegistrationRHSM.AutoEnable = e.from.Customizations.RHSM.Config.SubscriptionManager.RHSMConfig.AutoEnableYumPlugins
-			to.RegistrationRedHat.RegistrationRHSM.RepositoryManagement = e.from.Customizations.RHSM.Config.SubscriptionManager.RHSMConfig.ManageRepos
-		}
+		if e.from.Customizations.RHSM.Config.SubscriptionManager != nil {
+			if e.from.Customizations.RHSM.Config.SubscriptionManager.RHSMConfig != nil {
+				to.RegistrationRedHat.RegistrationRHSM.AutoEnable = e.from.Customizations.RHSM.Config.SubscriptionManager.RHSMConfig.AutoEnableYumPlugins
+				to.RegistrationRedHat.RegistrationRHSM.RepositoryManagement = e.from.Customizations.RHSM.Config.SubscriptionManager.RHSMConfig.ManageRepos
+			}
 
-		if e.from.Customizations.RHSM.Config.SubscriptionManager.RHSMCertdConfig != nil {
-			to.RegistrationRedHat.RegistrationRHSM.AutoRegistration = e.from.Customizations.RHSM.Config.SubscriptionManager.RHSMCertdConfig.AutoRegistration
+			if e.from.Customizations.RHSM.Config.SubscriptionManager.RHSMCertdConfig != nil {
+				to.RegistrationRedHat.RegistrationRHSM.AutoRegistration = e.from.Customizations.RHSM.Config.SubscriptionManager.RHSMCertdConfig.AutoRegistration
+			}
 		}
 
 		if e.from.Customizations.RHSM.Config.DNFPlugins != nil {
@@ -578,7 +551,7 @@ func (e *InternalImporter) importRegistration() *ubp.Registration {
 			e.log.Printf("cannot parse DiunPubKeyInsecure %q: %v, using default false", e.from.Customizations.FDO.DiunPubKeyInsecure, err)
 		}
 
-		to.RegistrationFDO = &ubp.RegistrationFDO{
+		to.RegistrationFDO = ubp.RegistrationFDO{
 			ManufacturingServerURL:  e.from.Customizations.FDO.ManufacturingServerURL,
 			DiMfgStringTypeMacIface: e.from.Customizations.FDO.DiMfgStringTypeMacIface,
 			DiunPubKeyHash:          e.from.Customizations.FDO.DiunPubKeyHash,
@@ -587,16 +560,12 @@ func (e *InternalImporter) importRegistration() *ubp.Registration {
 		}
 	}
 
-	if reflect.DeepEqual(to, ubp.Registration{}) {
-		return nil // omitzero
-	}
-
-	return &to
+	return to
 }
 
-func (e *InternalImporter) importStorage() *ubp.Storage {
+func (e *InternalImporter) importStorage() ubp.Storage {
 	if e.from.Customizations == nil || e.from.Customizations.Disk == nil {
-		return nil
+		return ubp.Storage{}
 	}
 
 	to := ubp.Storage{
@@ -659,16 +628,12 @@ func (e *InternalImporter) importStorage() *ubp.Storage {
 		}
 	}
 
-	if reflect.DeepEqual(to, ubp.Storage{Type: ""}) {
-		return nil // omitzero
-	}
-
-	return &to
+	return to
 }
 
-func (e *InternalImporter) importSystemd() *ubp.Systemd {
+func (e *InternalImporter) importSystemd() ubp.Systemd {
 	if e.from.Customizations == nil || e.from.Customizations.Services == nil {
-		return nil
+		return ubp.Systemd{}
 	}
 
 	to := ubp.Systemd{
@@ -677,16 +642,12 @@ func (e *InternalImporter) importSystemd() *ubp.Systemd {
 		Masked:   e.from.Customizations.Services.Masked,
 	}
 
-	if reflect.DeepEqual(to, ubp.Systemd{}) {
-		return nil // omitzero
-	}
-
-	return &to
+	return to
 }
 
-func (e *InternalImporter) importTimedate() *ubp.TimeDate {
+func (e *InternalImporter) importTimedate() ubp.TimeDate {
 	if e.from.Customizations == nil || e.from.Customizations.Timezone == nil {
-		return nil
+		return ubp.TimeDate{}
 	}
 
 	to := ubp.TimeDate{
@@ -694,9 +655,5 @@ func (e *InternalImporter) importTimedate() *ubp.TimeDate {
 		NTPServers: e.from.Customizations.Timezone.NTPServers,
 	}
 
-	if reflect.DeepEqual(to, ubp.TimeDate{}) {
-		return nil // omitzero
-	}
-
-	return &to
+	return to
 }
