@@ -6,5 +6,4 @@ properties:
   text:
     description: Ignition data formatted in plain text.
     type: string
-    x-go-type-skip-optional-pointer: true
 additionalProperties: false

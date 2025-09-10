@@ -11,16 +11,14 @@
               "$ref": "#/components/schemas/accounts_groups"
             },
             "nullable": true,
-            "type": "array",
-            "x-go-type-skip-optional-pointer": true
+            "type": "array"
           },
           "users": {
             "items": {
               "$ref": "#/components/schemas/accounts_users"
             },
             "nullable": true,
-            "type": "array",
-            "x-go-type-skip-optional-pointer": true
+            "type": "array"
           }
         },
         "type": "object",
@@ -34,8 +32,7 @@
             "description": "The group ID (GID) of the group. Must be non-zero.",
             "minimum": 1,
             "type": "integer",
-            "x-go-name": "GID",
-            "x-go-type-skip-optional-pointer": true
+            "x-go-name": "GID"
           },
           "name": {
             "description": "Group name. Accepted characters: lowercase letters, digits,\nunderscores, dollars, and hyphens. Name must not start with a hyphen. Maximum\nlength is 256 characters. The validation pattern is a relaxed version of\nhttps://github.com/shadow-maint/shadow/blob/master/lib/chkname.c\n",
@@ -56,8 +53,7 @@
           "description": {
             "description": "A longer description of the account.",
             "maxLength": 4096,
-            "type": "string",
-            "x-go-type-skip-optional-pointer": true
+            "type": "string"
           },
           "expires": {
             "description": "The expiration date in the format YYYY-MM-DD. Leave empty to never expire.\n\nString-based type which accepts date (YYYY-MM-DD) or date-time (RFC3339)\nformat and only marshals into date format. This is needed for JSON/YAML compatibility\nsince YAML automatically converts strings which look like dates into time.Time.\n",
@@ -66,28 +62,26 @@
           },
           "force_password_change": {
             "description": "If set to true, the user will be forced to change their password\non first login.\n",
-            "type": "boolean"
+            "type": "boolean",
+            "x-go-type-skip-optional-pointer": false
           },
           "gid": {
             "description": "The primary group ID (GID) of the user. Value of zero (or ommited\nvalue) means that the next available UID will be assigned.\n",
             "minimum": 1,
             "type": "integer",
-            "x-go-name": "GID",
-            "x-go-type-skip-optional-pointer": true
+            "x-go-name": "GID"
           },
           "groups": {
             "description": "Additional groups that the user should be a member of.",
             "items": {
               "type": "string"
             },
-            "type": "array",
-            "x-go-type-skip-optional-pointer": true
+            "type": "array"
           },
           "home": {
             "description": "The home directory of the user.",
             "pattern": "^/",
-            "type": "string",
-            "x-go-type-skip-optional-pointer": true
+            "type": "string"
           },
           "name": {
             "description": "Account name. Accepted characters: lowercase letters, digits,\nunderscores, dollars, and hyphens. Name must not start with a hyphen. Maximum\nlength is 256 characters. The validation pattern is a relaxed version of\nhttps://github.com/shadow-maint/shadow/blob/master/lib/chkname.c\n",
@@ -97,13 +91,13 @@
           },
           "password": {
             "description": "Password either in plain text or encrypted form. If the password\nis not provided, the account will be locked and the user will not be able\nto log in with a password. The password can be encrypted using the crypt(3)\nfunction. The format of the encrypted password is $id$salt$hashed, where\n$id is the algorithm used (1, 5, 6, or 2a).\n",
-            "type": "string"
+            "type": "string",
+            "x-go-type-skip-optional-pointer": false
           },
           "shell": {
             "description": "The shell of the user.",
             "pattern": "^/",
-            "type": "string",
-            "x-go-type-skip-optional-pointer": true
+            "type": "string"
           },
           "ssh_keys": {
             "description": "SSH keys to be added to the account's authorized_keys file.",
@@ -111,15 +105,13 @@
               "type": "string"
             },
             "type": "array",
-            "x-go-name": "SSHKeys",
-            "x-go-type-skip-optional-pointer": true
+            "x-go-name": "SSHKeys"
           },
           "uid": {
             "description": "The user ID (UID) of the user. Value of zero (or ommited value)\nmeans that the next available UID will be assigned.\n",
             "minimum": 1,
             "type": "integer",
-            "x-go-name": "UID",
-            "x-go-type-skip-optional-pointer": true
+            "x-go-name": "UID"
           }
         },
         "required": [
@@ -153,8 +145,7 @@
           "AnacondaTimezone",
           "AnacondaUsers"
         ],
-        "x-go-type-name": "AnacondaModule",
-        "x-go-type-skip-optional-pointer": true
+        "x-go-type-name": "AnacondaModule"
       },
       "blueprint": {
         "additionalProperties": false,
@@ -182,8 +173,7 @@
               "ArchS390x",
               "ArchRISCV64"
             ],
-            "x-go-type-name": "Arch",
-            "x-go-type-skip-optional-pointer": true
+            "x-go-type-name": "Arch"
           },
           "cacerts": {
             "description": "The CA certificates to be added to the image. The certificates\nare added to the system-wide CA trust store. The certificates are added to\nthe /etc/pki/ca-trust/source/anchors/ directory and the update-ca-trust command\nis run to update the system-wide CA trust store.\n",
@@ -193,7 +183,6 @@
             "nullable": true,
             "type": "array",
             "x-go-name": "CACerts",
-            "x-go-type-skip-optional-pointer": true,
             "x-omitempty": true
           },
           "containers": {
@@ -203,22 +192,19 @@
             },
             "nullable": true,
             "type": "array",
-            "x-go-type-skip-optional-pointer": true,
             "x-omitempty": true
           },
           "description": {
             "description": "The description attribute is a string that can be a longer description\nof the blueprint and is only used for display purposes.\n",
             "nullable": true,
             "type": "string",
-            "x-go-type-skip-optional-pointer": true,
             "x-omitempty": true
           },
           "distribution": {
             "description": "Linux OS distribution name followed by dash and version.\n",
             "example": "fedora-13",
             "pattern": "^[a-zA-Z0-9]+-[\\.0-9]+$",
-            "type": "string",
-            "x-go-type-skip-optional-pointer": true
+            "type": "string"
           },
           "dnf": {
             "$ref": "#/components/schemas/dnf"
@@ -234,19 +220,16 @@
             "nullable": true,
             "type": "array",
             "x-go-name": "FSNodes",
-            "x-go-type-skip-optional-pointer": true,
             "x-omitempty": true
           },
           "hostname": {
             "description": "Hostname is an optional string that can be used to configure the\nhostname of the final image.\n",
             "nullable": true,
             "type": "string",
-            "x-go-type-skip-optional-pointer": true,
             "x-omitempty": true
           },
           "ignition": {
             "description": "Provides Ignition configuration files to be used in edge-raw-image and\nedge-simplified-installer images. Check the RHEL for Edge butane specification for\na description of the supported configuration options.\n\nThe blueprint configuration can be done either by embedding an Ignition configuration\nfile into the image, or providing a provisioning URL that will be fetched at first boot.\n",
-            "nullable": true,
             "oneOf": [
               {
                 "$ref": "#/components/schemas/ignition_url"
@@ -257,7 +240,7 @@
             ],
             "x-go-name": "Ignition",
             "x-go-type-name": "Ignition",
-            "x-omitempty": true
+            "x-go-type-skip-optional-pointer": true
           },
           "installer": {
             "$ref": "#/components/schemas/installer"
@@ -272,7 +255,6 @@
             "description": "The name attribute is a string that contains the name of the blueprint.\nIt can contain spaces, but they may be converted to dash characters during build.\nIt should be short and descriptive.\n",
             "nullable": true,
             "type": "string",
-            "x-go-type-skip-optional-pointer": true,
             "x-omitempty": true
           },
           "network": {
@@ -304,7 +286,6 @@
             "description": "The PEM-encoded certificate.",
             "type": "string",
             "x-go-name": "PEM",
-            "x-go-type-skip-optional-pointer": true,
             "x-omitempty": true
           }
         },
@@ -321,24 +302,22 @@
           "local_storage": {
             "default": false,
             "description": "Whether to pull the container image from the host's local-storage.",
-            "type": "boolean",
-            "x-go-type-skip-optional-pointer": true
+            "type": "boolean"
           },
           "name": {
             "description": "Container name is an optional string to set the name under which the container image will be saved in the image. If not specified name falls back to the same value as source.",
-            "type": "string",
-            "x-go-type-skip-optional-pointer": true
+            "type": "string"
           },
           "source": {
             "description": "Container image URL is a reference to a container image at a registry.",
-            "type": "string",
-            "x-go-type-skip-optional-pointer": true
+            "type": "string"
           },
           "tls_verify": {
             "default": true,
             "description": "Verify TLS connection, default is true.",
             "type": "boolean",
-            "x-go-name": "TLSVerify"
+            "x-go-name": "TLSVerify",
+            "x-go-type-skip-optional-pointer": false
           }
         },
         "required": [
@@ -360,7 +339,6 @@
             },
             "nullable": true,
             "type": "array",
-            "x-go-type-skip-optional-pointer": true,
             "x-omitempty": true
           },
           "import_keys": {
@@ -370,7 +348,6 @@
             },
             "nullable": true,
             "type": "array",
-            "x-go-type-skip-optional-pointer": true,
             "x-omitempty": true
           },
           "modules": {
@@ -380,7 +357,6 @@
             },
             "nullable": true,
             "type": "array",
-            "x-go-type-skip-optional-pointer": true,
             "x-omitempty": true
           },
           "packages": {
@@ -390,7 +366,6 @@
             },
             "nullable": true,
             "type": "array",
-            "x-go-type-skip-optional-pointer": true,
             "x-omitempty": true
           },
           "repositories": {
@@ -400,7 +375,6 @@
             },
             "nullable": true,
             "type": "array",
-            "x-go-type-skip-optional-pointer": true,
             "x-omitempty": true
           }
         },
@@ -422,13 +396,15 @@
             "default": true,
             "description": "Enable GPG check for the repository. GPG key(s) must be provided. Disabled by default.",
             "type": "boolean",
-            "x-go-name": "GPGCheck"
+            "x-go-name": "GPGCheck",
+            "x-go-type-skip-optional-pointer": false
           },
           "gpg_check_repo": {
             "default": true,
             "description": "Enable GPG check for the repository metadata. Disabled by default. This is different from gpg_check, which is for the packages.\nThis is useful for third-party repositories that do not provide GPG keys for the repository metadata.",
             "type": "boolean",
-            "x-go-name": "GPGCheckRepo"
+            "x-go-name": "GPGCheckRepo",
+            "x-go-type-skip-optional-pointer": false
           },
           "gpg_keys": {
             "description": "GPG keys for the repository.\n\nThe blueprint accepts both inline GPG keys and GPG key urls. If an inline GPG key is provided it\nwill be saved to the /etc/pki/rpm-gpg directory and will be referenced accordingly in the repository\nconfiguration. GPG keys are not imported to the RPM database and will only be imported when first\ninstalling a package from the third-party repository.\n",
@@ -436,31 +412,28 @@
               "type": "string"
             },
             "type": "array",
-            "x-go-name": "GPGKeys",
-            "x-go-type-skip-optional-pointer": true
+            "x-go-name": "GPGKeys"
           },
           "id": {
             "description": "Repository ID. Required.",
             "maxLength": 256,
             "pattern": "^[a-zA-Z0-9_-]+$",
             "type": "string",
-            "x-go-name": "ID",
-            "x-go-type-skip-optional-pointer": true
+            "x-go-name": "ID"
           },
           "module_hotfixes": {
             "default": false,
             "description": "Enable module hotfixes for the repository. Disabled by default.\n\nAdds module_hotfixes flag to all repo types so it can be used during osbuild. This enables users\nto disable modularity filtering on specific repositories.\n",
-            "type": "boolean",
-            "x-go-type-skip-optional-pointer": true
+            "type": "boolean"
           },
           "name": {
             "description": "Repository name.",
-            "type": "string",
-            "x-go-type-skip-optional-pointer": true
+            "type": "string"
           },
           "priority": {
             "description": "Repository priority. When unset, default DNF priority is used. This is useful for third-party repositories that are not part of the base image.",
-            "type": "integer"
+            "type": "integer",
+            "x-go-type-skip-optional-pointer": false
           },
           "source": {
             "description": "Repository source.",
@@ -481,7 +454,8 @@
             "default": true,
             "description": "Enable TLS verification for the repository. Enabled by default.",
             "type": "boolean",
-            "x-go-name": "TLSVerify"
+            "x-go-name": "TLSVerify",
+            "x-go-type-skip-optional-pointer": false
           },
           "usage": {
             "$ref": "#/components/schemas/dnf_repository_usage"
@@ -499,12 +473,14 @@
           "configure": {
             "default": true,
             "description": "Configure the repository for dnf on the created image. Enabled by default.\n\nA repository will be saved as /etc/yum.repos.d/repository-id and enabled so when the image is\nbooted, the repository will be available for dnf. This is useful for third-party repositories\nthat are not part of the base image.\n\nWhen this flag is disabled, the repository will be saved but not enabled.\n",
-            "type": "boolean"
+            "type": "boolean",
+            "x-go-type-skip-optional-pointer": false
           },
           "install": {
             "default": true,
             "description": "Use the repository for image build. Enabled by default.\n\nWhen this flag is set, it is possible to install third-party packages during the image build.\n",
-            "type": "boolean"
+            "type": "boolean",
+            "x-go-type-skip-optional-pointer": false
           }
         },
         "type": "object",
@@ -519,8 +495,7 @@
               "type": "string"
             },
             "type": "array",
-            "x-go-name": "URLs",
-            "x-go-type-skip-optional-pointer": true
+            "x-go-name": "URLs"
           }
         },
         "required": [
@@ -534,8 +509,7 @@
         "properties": {
           "metalink": {
             "description": "Metalink for the repository.",
-            "type": "string",
-            "x-go-type-skip-optional-pointer": true
+            "type": "string"
           }
         },
         "required": [
@@ -549,8 +523,7 @@
         "properties": {
           "mirrorlist": {
             "description": "Mirror list for the repository.",
-            "type": "string",
-            "x-go-type-skip-optional-pointer": true
+            "type": "string"
           }
         },
         "required": [
@@ -569,8 +542,7 @@
         "properties": {
           "enabled": {
             "description": "Enables the system FIPS mode (disabled by default). Currently\nonly edge-raw-image, edge-installer, edge-simplified-installer, edge-ami\nand edge-vsphere images support this customization.\n",
-            "type": "boolean",
-            "x-go-type-skip-optional-pointer": true
+            "type": "boolean"
           }
         },
         "type": "object",
@@ -581,7 +553,9 @@
         "additionalProperties": false,
         "default": true,
         "description": "Whether the firewall rule is enabled or not. Defaults to true.",
+        "nullable": true,
         "type": "boolean",
+        "x-go-type-skip-optional-pointer": false,
         "x-omitempty": true,
         "x-order": 2
       },
@@ -596,7 +570,6 @@
             "maximum": 65535,
             "minimum": 1,
             "type": "integer",
-            "x-go-type-skip-optional-pointer": true,
             "x-omitempty": true
           },
           "protocol": {
@@ -607,7 +580,6 @@
             "maximum": 65535,
             "minimum": 1,
             "type": "integer",
-            "x-go-type-skip-optional-pointer": true,
             "x-omitempty": true
           }
         },
@@ -624,7 +596,6 @@
             "maximum": 65535,
             "minimum": 1,
             "type": "integer",
-            "x-go-type-skip-optional-pointer": true,
             "x-omitempty": true
           },
           "protocol": {
@@ -646,7 +617,6 @@
             "description": "The name of the IANA service name. This is the name of the service as defined in\nthe /etc/services file.\n",
             "minLength": 2,
             "type": "string",
-            "x-go-type-skip-optional-pointer": true,
             "x-omitempty": true
           }
         },
@@ -695,25 +665,21 @@
           "ensure_parents": {
             "default": false,
             "description": "EnsureParents is a boolean that determines if the parent directories\nshould be created if they do not exist.\n",
-            "type": "boolean",
-            "x-go-type-skip-optional-pointer": true
+            "type": "boolean"
           },
           "group": {
             "default": "root",
             "description": "Group is the file system node group. Can be also a decimal GID. Defaults to root.",
-            "type": "string",
-            "x-go-type-skip-optional-pointer": true
+            "type": "string"
           },
           "mode": {
             "description": "Mode is the file system node permissions. Defaults to 0644 for\nfiles and 0755 for directories. Must be a valid octal number as a string.\n",
-            "x-go-type": "FSNodeMode",
-            "x-go-type-skip-optional-pointer": true
+            "x-go-type": "FSNodeMode"
           },
           "path": {
             "description": "Path is the absolute path to the file or directory.",
             "pattern": "^/",
-            "type": "string",
-            "x-go-type-skip-optional-pointer": true
+            "type": "string"
           },
           "state": {
             "default": "present",
@@ -727,8 +693,7 @@
               "FSStatePresent",
               "FSStateAbsent"
             ],
-            "x-go-type-name": "FSNodeState",
-            "x-go-type-skip-optional-pointer": true
+            "x-go-type-name": "FSNodeState"
           },
           "type": {
             "default": "file",
@@ -742,14 +707,12 @@
               "FSNodeFile",
               "FSNodeDir"
             ],
-            "x-go-type-name": "FSNodeType",
-            "x-go-type-skip-optional-pointer": true
+            "x-go-type-name": "FSNodeType"
           },
           "user": {
             "default": "root",
             "description": "User is the file system node owner. Can be also a decimal UID. Defaults to root.",
-            "type": "string",
-            "x-go-type-skip-optional-pointer": true
+            "type": "string"
           }
         },
         "required": [
@@ -792,8 +755,7 @@
         "properties": {
           "text": {
             "description": "Ignition data formatted in plain text.",
-            "type": "string",
-            "x-go-type-skip-optional-pointer": true
+            "type": "string"
           }
         },
         "required": [
@@ -807,8 +769,7 @@
           "url": {
             "description": "The URL to the Ignition configuration to be used by Ignition. This configuration\nis a URL to a remote Ignition configuration.\n",
             "type": "string",
-            "x-go-name": "URL",
-            "x-go-type-skip-optional-pointer": true
+            "x-go-name": "URL"
           }
         },
         "required": [
@@ -843,7 +804,6 @@
             },
             "nullable": true,
             "type": "array",
-            "x-go-type-skip-optional-pointer": true,
             "x-omitempty": true
           },
           "enabled_modules": {
@@ -853,14 +813,12 @@
             },
             "nullable": true,
             "type": "array",
-            "x-go-type-skip-optional-pointer": true,
             "x-omitempty": true
           },
           "kickstart": {
             "description": "Kickstart installer configuration.",
             "nullable": true,
             "type": "string",
-            "x-go-type-skip-optional-pointer": true,
             "x-omitempty": true
           },
           "sudo_nopasswd": {
@@ -873,7 +831,6 @@
             "nullable": true,
             "type": "array",
             "x-go-name": "SudoNOPASSWD",
-            "x-go-type-skip-optional-pointer": true,
             "x-omitempty": true
           },
           "unattended": {
@@ -881,7 +838,6 @@
             "description": "Unattended installation Anaconda flag. When not set, Anaconda\ninstaller will ask for user input.\n",
             "nullable": true,
             "type": "boolean",
-            "x-go-type-skip-optional-pointer": true,
             "x-omitempty": true
           }
         },
@@ -893,8 +849,7 @@
         "properties": {
           "installation_device": {
             "description": "Installation device for iot/edge simplified installer image types.",
-            "type": "string",
-            "x-go-type-skip-optional-pointer": true
+            "type": "string"
           }
         },
         "type": "object",
@@ -913,14 +868,12 @@
             },
             "nullable": true,
             "type": "array",
-            "x-go-type-skip-optional-pointer": true,
             "x-omitempty": true
           },
           "package": {
             "description": "Kernel package name to be installed.",
             "nullable": true,
             "type": "string",
-            "x-go-type-skip-optional-pointer": true,
             "x-omitempty": true
           }
         },
@@ -939,7 +892,6 @@
             },
             "nullable": true,
             "type": "array",
-            "x-go-type-skip-optional-pointer": true,
             "x-omitempty": true
           },
           "languages": {
@@ -949,7 +901,6 @@
             },
             "nullable": true,
             "type": "array",
-            "x-go-type-skip-optional-pointer": true,
             "x-omitempty": true
           }
         },
@@ -1013,7 +964,6 @@
           "ProtocolICMP"
         ],
         "x-go-type-name": "NetworkProtocol",
-        "x-go-type-skip-optional-pointer": true,
         "x-omitempty": true,
         "x-order": 1
       },
@@ -1024,14 +974,12 @@
         "properties": {
           "datastream": {
             "description": "Datastream to use for the scan. The datastream is the path to\nthe SCAP datastream file to use for the scan. If the datastream parameter\nis not provided, a sensible default based on the selected distro will be\nchosen.\n",
-            "type": "string",
-            "x-go-type-skip-optional-pointer": true
+            "type": "string"
           },
           "profile_id": {
             "description": "The desired security profile ID.",
             "type": "string",
-            "x-go-name": "ProfileID",
-            "x-go-type-skip-optional-pointer": true
+            "x-go-name": "ProfileID"
           },
           "tailoring": {
             "description": "An optional OpenSCAP tailoring information. Can be done via profile\nselection or tailoring JSON file.\n\nIn case of profile selection, a tailoring file with a new tailoring profile\nID is created and saved to the image. The new tailoring profile ID is\ncreated by appending the _osbuild_tailoring suffix to the base profile.\nFor example, given tailoring options for the cis profile, tailoring profile\nxccdf_org.ssgproject.content_profile_cis_osbuild_tailoring will be created.\nThe default namespace of the rules is org.ssgproject.content, so the prefix\nmay be omitted for rules under this namespace, i.e.\norg.ssgproject.content_grub2_password and grub2_password are functionally\nequivalent. The generated tailoring file is saved to the image as\n/usr/share/xml/osbuild-oscap-tailoring/tailoring.xml or, for newer releases,\nin the /oscap_data directory, this is the location used for other OpenSCAP\nrelated artifacts.\n\nIt is also possible to use JSON tailoring. In that case, custom JSON file\nmust be provided using the blueprint and used in json_filepath field\nalongside with json_profile_id field. The generated XML tailoring file\nis saved to the image as /oscap_data/tailoring.xml.\n",
@@ -1067,7 +1015,6 @@
               "$ref": "#/components/schemas/partition_subvolumes"
             },
             "type": "array",
-            "x-go-type-skip-optional-pointer": true,
             "x-omitempty": true
           },
           "type": {
@@ -1089,8 +1036,7 @@
           },
           "label": {
             "description": "Optional label of the partition.",
-            "type": "string",
-            "x-go-type-skip-optional-pointer": true
+            "type": "string"
           },
           "minsize": {
             "$ref": "#/components/schemas/storage_minsize"
@@ -1100,8 +1046,7 @@
           },
           "name": {
             "description": "Logical volume name. When not set, will be generated automatically.",
-            "type": "string",
-            "x-go-type-skip-optional-pointer": true
+            "type": "string"
           }
         },
         "type": "object",
@@ -1116,7 +1061,6 @@
               "$ref": "#/components/schemas/partition_lv"
             },
             "type": "array",
-            "x-go-type-skip-optional-pointer": true,
             "x-omitempty": true
           },
           "minsize": {
@@ -1125,7 +1069,6 @@
           "name": {
             "description": "Optional name of the volume group. Will be generated automatically if not specified.",
             "type": "string",
-            "x-go-type-skip-optional-pointer": true,
             "x-omitempty": true
           },
           "type": {
@@ -1147,8 +1090,7 @@
           },
           "label": {
             "description": "Optional label of the partition.",
-            "type": "string",
-            "x-go-type-skip-optional-pointer": true
+            "type": "string"
           },
           "minsize": {
             "$ref": "#/components/schemas/storage_minsize"
@@ -1173,8 +1115,7 @@
           },
           "name": {
             "description": "Subvolume name, must also define its parent volume.",
-            "type": "string",
-            "x-go-type-skip-optional-pointer": true
+            "type": "string"
           }
         },
         "type": "object"
@@ -1191,8 +1132,7 @@
           "PartTypePlain",
           "PartTypeLVM",
           "PartTypeBTRFS"
-        ],
-        "x-go-type-skip-optional-pointer": true
+        ]
       },
       "registration": {
         "additionalProperties": false,
@@ -1215,8 +1155,7 @@
         "properties": {
           "enabled": {
             "description": "Enables rhc (Red Hat Connector) during boot.",
-            "type": "boolean",
-            "x-go-type-skip-optional-pointer": true
+            "type": "boolean"
           }
         },
         "required": [
@@ -1230,24 +1169,20 @@
         "properties": {
           "di_mfg_string_type_mac_iface": {
             "description": "Optional interface name for the MAC address.",
-            "type": "string",
-            "x-go-type-skip-optional-pointer": true
+            "type": "string"
           },
           "diun_pub_key_hash": {
             "description": "FDO server public key hex-encoded hash. Cannot be used together with insecure option or root certs.",
-            "type": "string",
-            "x-go-type-skip-optional-pointer": true
+            "type": "string"
           },
           "diun_pub_key_insecure": {
             "default": false,
             "description": "FDO insecure option. When set, both hash or root certs must not be set.",
-            "type": "boolean",
-            "x-go-type-skip-optional-pointer": true
+            "type": "boolean"
           },
           "diun_pub_key_root_certs": {
             "description": "FDO server public key root certificate path. Cannot be used together with insecure option or hash.",
-            "type": "string",
-            "x-go-type-skip-optional-pointer": true
+            "type": "string"
           },
           "manufacturing_server_url": {
             "description": "FDO manufacturing server URL.",
@@ -1267,8 +1202,7 @@
         "properties": {
           "enabled": {
             "description": "Enables insights client during boot.",
-            "type": "boolean",
-            "x-go-type-skip-optional-pointer": true
+            "type": "boolean"
           }
         },
         "required": [
@@ -1282,8 +1216,7 @@
         "properties": {
           "activation_key": {
             "description": "Subscription manager activation key to use during registration.\nA list of keys to use to redeem or apply specific subscriptions to the system.\n",
-            "type": "string",
-            "x-go-type-skip-optional-pointer": true
+            "type": "string"
           },
           "connector": {
             "$ref": "#/components/schemas/registration_connector"
@@ -1293,8 +1226,7 @@
           },
           "organization": {
             "description": "Subscription manager organization name to use during registration.",
-            "type": "string",
-            "x-go-type-skip-optional-pointer": true
+            "type": "string"
           },
           "subscription_manager": {
             "$ref": "#/components/schemas/registration_rhsm"
@@ -1309,23 +1241,28 @@
         "properties": {
           "auto_enable": {
             "description": "Enabled auto_enable_yum_plugins rhsm configuration in rhsm.conf.",
-            "type": "boolean"
+            "type": "boolean",
+            "x-go-type-skip-optional-pointer": false
           },
           "auto_registration": {
             "description": "Enabled auto_registration rhsmcertd configuration in rhsm.conf.",
-            "type": "boolean"
+            "type": "boolean",
+            "x-go-type-skip-optional-pointer": false
           },
           "enabled": {
             "description": "Enables the subscription-manager dnf plugin.",
-            "type": "boolean"
+            "type": "boolean",
+            "x-go-type-skip-optional-pointer": false
           },
           "product_plugin_enabled": {
             "description": "Enables the product-id dnf plugin.",
-            "type": "boolean"
+            "type": "boolean",
+            "x-go-type-skip-optional-pointer": false
           },
           "repository_management": {
             "description": "Enabled repository_management rhsm configuration in rhsm.conf.",
-            "type": "boolean"
+            "type": "boolean",
+            "x-go-type-skip-optional-pointer": false
           }
         },
         "type": "object",
@@ -1346,8 +1283,7 @@
             },
             "nullable": true,
             "type": "array",
-            "x-go-type-name": "StoragePartitions",
-            "x-go-type-skip-optional-pointer": true
+            "x-go-type-name": "StoragePartitions"
           },
           "type": {
             "$ref": "#/components/schemas/storage_type"
@@ -1375,19 +1311,16 @@
           "FSTypeSwap",
           "FSTypeVFAT"
         ],
-        "x-go-name": "FSType",
-        "x-go-type-skip-optional-pointer": true
+        "x-go-name": "FSType"
       },
       "storage_minsize": {
         "description": "Minimum size of the disk or partition.\n\nSize must be formatted as an integer followed by whitespace and then either a\ndecimal unit (B, KB/kB, MB, GB, TB, PB, EB) or binary unit (KiB, MiB, GiB,\nTiB, PiB, EiB).\n\nIf unit is ommited, it is assumed to be in bytes.\n",
-        "x-go-type": "ByteSize",
-        "x-go-type-skip-optional-pointer": true
+        "x-go-type": "ByteSize"
       },
       "storage_mountpoint": {
         "description": "Mount point of the partition. Must start with a slash.",
         "pattern": "^/",
-        "type": "string",
-        "x-go-type-skip-optional-pointer": true
+        "type": "string"
       },
       "storage_partition": {
         "anyOf": [
@@ -1416,8 +1349,7 @@
         "x-enum-varnames": [
           "StorageTypeGPT",
           "StorageTypeMBR"
-        ],
-        "x-go-type-skip-optional-pointer": true
+        ]
       },
       "systemd": {
         "additionalProperties": false,
@@ -1429,24 +1361,21 @@
             "items": {
               "type": "string"
             },
-            "type": "array",
-            "x-go-type-skip-optional-pointer": true
+            "type": "array"
           },
           "enabled": {
             "description": "The enabled attribute is a list of strings that contains the systemd units to be enabled.",
             "items": {
               "type": "string"
             },
-            "type": "array",
-            "x-go-type-skip-optional-pointer": true
+            "type": "array"
           },
           "masked": {
             "description": "The masked attribute is a list of strings that contains the systemd units to be masked.",
             "items": {
               "type": "string"
             },
-            "type": "array",
-            "x-go-type-skip-optional-pointer": true
+            "type": "array"
           }
         },
         "type": "object",
@@ -1459,14 +1388,12 @@
             "description": "JSON filepath, must be used with json_profile_id and cannot be used with selected and unselected fields.",
             "pattern": "^/",
             "type": "string",
-            "x-go-name": "JSONFilePath",
-            "x-go-type-skip-optional-pointer": true
+            "x-go-name": "JSONFilePath"
           },
           "json_profile_id": {
             "description": "JSON profile ID, must be used with json_filepath and cannot be used with selected and unselected fields.",
             "type": "string",
-            "x-go-name": "JSONProfileID",
-            "x-go-type-skip-optional-pointer": true
+            "x-go-name": "JSONProfileID"
           }
         },
         "required": [
@@ -1484,16 +1411,14 @@
             "items": {
               "type": "string"
             },
-            "type": "array",
-            "x-go-type-skip-optional-pointer": true
+            "type": "array"
           },
           "unselected": {
             "description": "Unselected rules, cannot be used with json_profile_id and json_filepath.",
             "items": {
               "type": "string"
             },
-            "type": "array",
-            "x-go-type-skip-optional-pointer": true
+            "type": "array"
           }
         },
         "type": "object"
@@ -1512,14 +1437,12 @@
               "type": "string"
             },
             "type": "array",
-            "x-go-name": "NTPServers",
-            "x-go-type-skip-optional-pointer": true
+            "x-go-name": "NTPServers"
           },
           "timezone": {
             "default": "UTC",
             "description": "System time zone. Defaults to UTC. To list available time zones run:\n\ntimedatectl list-timezones\n",
-            "type": "string",
-            "x-go-type-skip-optional-pointer": true
+            "type": "string"
           }
         },
         "type": "object",

@@ -6,6 +6,5 @@ properties:
   mirrorlist:
     description: Mirror list for the repository.
     type: string
-    x-go-type-skip-optional-pointer: true
 additionalProperties: false
 x-go-type-name: DNFSourceMirrorlist

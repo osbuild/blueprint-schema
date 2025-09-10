@@ -15,6 +15,5 @@ properties:
     type: array
     items:
       "$ref": "partition_subvolumes.yaml"
-    x-go-type-skip-optional-pointer: true
     x-omitempty: true
 additionalProperties: false
