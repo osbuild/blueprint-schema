@@ -1,10 +1,8 @@
 module github.com/osbuild/blueprint-schema
 
-go 1.23.0
+go 1.24
 
-toolchain go1.23.7
-
-//replace github.com/osbuild/blueprint => ../blueprint
+toolchain go1.24.6
 
 require (
 	github.com/BurntSushi/toml v1.5.1-0.20250403130103-3d3abc24416a
