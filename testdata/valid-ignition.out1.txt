@@ -1,0 +1,19 @@
+name = "Blueprint example: ingition"
+
+[customizations]
+  [customizations.timezone]
+  [customizations.locale]
+  [customizations.firewall]
+    [customizations.firewall.services]
+  [customizations.services]
+  [customizations.disk]
+    type = "gpt"
+  [customizations.fdo]
+    diun_pub_key_insecure = "false"
+  [customizations.ignition]
+    [customizations.ignition.embedded]
+      config = "{\n  \"ignition\": {\n    \"version\": \"3.1.0\"\n  },\n  \"storage\": {\n    \"files\": [\n      {\n        \"path\": \"/etc/hostname\",\n        \"mode\": 420,\n        \"contents\": {\n          \"source\": \"data:,myhostname\"\n        }\n      }\n    ]\n  }\n}\n"
+  [customizations.installer]
+    [customizations.installer.modules]
+  [customizations.rhsm]
+    [customizations.rhsm.config]

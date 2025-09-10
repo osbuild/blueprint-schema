@@ -1,0 +1,36 @@
+name = "Blueprint example: fsnodes"
+
+[customizations]
+  [customizations.timezone]
+  [customizations.locale]
+  [customizations.firewall]
+    [customizations.firewall.services]
+  [customizations.services]
+  [customizations.disk]
+    type = "gpt"
+  [customizations.fdo]
+    diun_pub_key_insecure = "false"
+  [customizations.ignition]
+
+  [[customizations.directories]]
+    path = "/var/tmp/dir"
+    user = "lzap"
+    group = "lzap"
+    mode = "750"
+    ensure_parents = true
+
+  [[customizations.files]]
+    path = "/var/tmp/file1"
+
+  [[customizations.files]]
+    path = "/var/tmp/dir/file1"
+    mode = "640"
+    data = "---"
+
+  [[customizations.files]]
+    path = "/var/tmp/dir/file2"
+    data = "test"
+  [customizations.installer]
+    [customizations.installer.modules]
+  [customizations.rhsm]
+    [customizations.rhsm.config]

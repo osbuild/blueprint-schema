@@ -1,0 +1,5 @@
+description: Simple blueprint that installs the minimal-environment package group
+dnf:
+  groups:
+  - minimal-environment
+name: minimal-environment

@@ -1,0 +1,4 @@
+name: Empty blueprint
+storage:
+  partitions: null
+  type: gpt

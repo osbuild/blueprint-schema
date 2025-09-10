@@ -1,0 +1,55 @@
+name = "Blueprint example: accounts"
+
+[customizations]
+
+  [[customizations.user]]
+    name = "lzap"
+    description = "Lukáš Zapletal"
+    password = "$1$yLbp23ib$BNYcV9CQV17e1460PNrVe."
+    key = "ssh-key 1234"
+    home = "/home/lzap"
+    shell = "/usr/bin/bash"
+    groups = ["wheel", "operators"]
+    uid = 1001
+    gid = 1001
+    expiredate = 29352
+
+  [[customizations.user]]
+    name = "dash-allowed"
+
+  [[customizations.user]]
+    name = "underscore_allowed"
+
+  [[customizations.user]]
+    name = "dot.allowed"
+
+  [[customizations.user]]
+    name = ".head-dot-allowed-too"
+
+  [[customizations.user]]
+    name = "123456789"
+
+  [[customizations.user]]
+    name = "trailing-dollar-for-samba$"
+
+  [[customizations.group]]
+    name = "operators"
+    gid = 1042
+
+  [[customizations.group]]
+    name = "kiosk"
+    gid = 1313
+  [customizations.timezone]
+  [customizations.locale]
+  [customizations.firewall]
+    [customizations.firewall.services]
+  [customizations.services]
+  [customizations.disk]
+    type = "gpt"
+  [customizations.fdo]
+    diun_pub_key_insecure = "false"
+  [customizations.ignition]
+  [customizations.installer]
+    [customizations.installer.modules]
+  [customizations.rhsm]
+    [customizations.rhsm.config]

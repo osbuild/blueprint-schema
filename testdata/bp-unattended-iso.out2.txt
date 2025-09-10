@@ -1,0 +1,29 @@
+name = "unattended-iso"
+description = "Configures any Anaconda-based ISO to install the system with no user interaction."
+
+[customizations]
+
+  [[customizations.user]]
+    name = "osbuild"
+    key = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNebAh6SjpAn8wB53K4695cGnHGuCtl4RdaX3futZgJUultHyzeYHnzMO7d4++qnRL+Rworew62LKP560uvtncc= github.com/osbuild/images"
+    groups = ["wheel"]
+  [customizations.timezone]
+    timezone = "Europe/Berlin"
+  [customizations.locale]
+    languages = ["en_GB.UTF-8"]
+    keyboard = "uk"
+  [customizations.firewall]
+    [customizations.firewall.services]
+  [customizations.services]
+  [customizations.disk]
+    type = "gpt"
+  [customizations.fdo]
+    diun_pub_key_insecure = "false"
+  [customizations.ignition]
+  [customizations.installer]
+    unattended = true
+    sudo-nopasswd = ["%wheel", "%sudo"]
+    [customizations.installer.modules]
+      enable = ["org.fedoraproject.Anaconda.Modules.Users", "org.fedoraproject.Anaconda.Modules.Localization", "org.fedoraproject.Anaconda.Modules.Network", "org.fedoraproject.Anaconda.Modules.Services"]
+  [customizations.rhsm]
+    [customizations.rhsm.config]
