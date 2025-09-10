@@ -1,0 +1,56 @@
+request body has an error: doesn't match schema #/components/schemas/blueprint: Error at "/openscap/tailoring": doesn't match schema due to: Error at "/json_profile_id": property "json_profile_id" is missing
+Schema:
+  {
+    "additionalProperties": false,
+    "properties": {
+      "json_filepath": {
+        "description": "JSON filepath, must be used with json_profile_id and cannot be used with selected and unselected fields.",
+        "pattern": "^/",
+        "type": "string",
+        "x-go-name": "JSONFilePath"
+      },
+      "json_profile_id": {
+        "description": "JSON profile ID, must be used with json_filepath and cannot be used with selected and unselected fields.",
+        "type": "string",
+        "x-go-name": "JSONProfileID"
+      }
+    },
+    "required": [
+      "json_profile_id",
+      "json_filepath"
+    ],
+    "type": "object",
+    "x-go-name": "TailoringJSON"
+  }
+
+Value:
+  {
+    "json_filepath": "/some/path/tailoring-file.json"
+  }
+ Or property "json_filepath" is unsupported
+Schema:
+  {
+    "additionalProperties": false,
+    "properties": {
+      "selected": {
+        "description": "Selected rules, cannot be used with json_profile_id and json_filepath.",
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "unselected": {
+        "description": "Unselected rules, cannot be used with json_profile_id and json_filepath.",
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      }
+    },
+    "type": "object"
+  }
+
+Value:
+  {
+    "json_filepath": "/some/path/tailoring-file.json"
+  }

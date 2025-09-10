@@ -1,0 +1,11 @@
+name: 'Blueprint example: systemd'
+storage:
+  partitions: null
+  type: gpt
+systemd:
+  disabled:
+  - tuned
+  - cupsd
+  enabled:
+  - sshd.service
+  - backup.timer
