@@ -1,6 +1,0 @@
-# XXX: this is currently not enforced
-name: "Firewall example - missing from"
-network:
-  firewall:
-    services:
-      - to: 1303

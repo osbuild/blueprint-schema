@@ -1,5 +1,0 @@
-name = "Blueprint example: timedate"
-
-[customizations]
-  [customizations.timezone]
-    ntpservers = ["0.north-america.pool.ntp.org"]

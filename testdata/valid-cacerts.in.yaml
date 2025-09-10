@@ -1,3 +1,0 @@
-name: "Blueprint example: cacerts"
-cacerts:
-  - pem: "pem encoded cert"

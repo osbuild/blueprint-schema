@@ -1,5 +1,0 @@
-containers:
-- name: fedora
-  source: quay.io/fedora/fedora:latest
-  tls_verify: false
-name: 'Blueprint example: containers'
