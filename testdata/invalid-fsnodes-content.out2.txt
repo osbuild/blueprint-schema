@@ -1,6 +1,0 @@
-fsnodes:
-- path: /var/tmp/dir
-  type: dir
-- path: /var/tmp/dir
-  type: dir
-name: 'Blueprint example: fsnodes'

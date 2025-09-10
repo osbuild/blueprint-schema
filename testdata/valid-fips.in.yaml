@@ -1,3 +1,0 @@
-name: "Blueprint example: FIPS"
-fips:
-  enabled: true

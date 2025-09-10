@@ -1,6 +1,0 @@
-name = "Firewall example - port and range specified"
-
-[customizations]
-  [customizations.firewall]
-    ports = ["1301"]
-    [customizations.firewall.services]

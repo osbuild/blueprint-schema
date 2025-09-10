@@ -1,2 +1,0 @@
-kernel:
-  package: kernel-debug
