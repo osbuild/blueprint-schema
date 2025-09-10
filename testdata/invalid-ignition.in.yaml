@@ -1,5 +1,0 @@
-name: "Blueprint example: ingition invalid"
-ignition:
-  firstboot_url: ""
-  embedded:
-    text: ""

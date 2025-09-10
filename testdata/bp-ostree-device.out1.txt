@@ -1,3 +1,0 @@
-installer:
-  coreos:
-    installation_device: /dev/null

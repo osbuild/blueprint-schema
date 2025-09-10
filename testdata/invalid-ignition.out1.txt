@@ -1,3 +1,0 @@
-# could not parse ignition: <nil>
-
-name = "Blueprint example: ingition invalid"

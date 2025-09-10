@@ -1,7 +1,0 @@
-{
-  "customizations": {
-    "kernel": {
-      "name": "kernel-rt"
-    }
-  }
-}

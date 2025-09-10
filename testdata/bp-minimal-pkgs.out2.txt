@@ -1,5 +1,0 @@
-[[packages]]
-  name = "tmux"
-
-[[packages]]
-  name = "vim-enhanced"

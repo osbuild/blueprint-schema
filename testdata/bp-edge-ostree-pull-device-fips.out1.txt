@@ -1,5 +1,0 @@
-fips:
-  enabled: true
-installer:
-  coreos:
-    installation_device: /dev/vda
