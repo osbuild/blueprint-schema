@@ -1,0 +1,24 @@
+name = "Blueprint example: installer"
+
+[customizations]
+  installation_device = "/dev/vda"
+  [customizations.timezone]
+  [customizations.locale]
+  [customizations.firewall]
+    [customizations.firewall.services]
+  [customizations.services]
+  [customizations.disk]
+    type = "gpt"
+  [customizations.fdo]
+    diun_pub_key_insecure = "false"
+  [customizations.ignition]
+  [customizations.installer]
+    unattended = true
+    sudo-nopasswd = ["lzap", "%devops"]
+    [customizations.installer.kickstart]
+      contents = "# some kickstart data"
+    [customizations.installer.modules]
+      enable = ["org.fedoraproject.Anaconda.Modules.Network"]
+      disable = ["org.fedoraproject.Anaconda.Modules.Subscription"]
+  [customizations.rhsm]
+    [customizations.rhsm.config]

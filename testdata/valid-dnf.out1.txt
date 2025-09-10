@@ -1,0 +1,49 @@
+# package(s) with dash were converted as names
+
+name = "Blueprint example: DNF"
+
+[[packages]]
+  name = "mosh"
+
+[[packages]]
+  name = "vim-enhanced"
+  version = "9.1.866-1.fc41.x86_64"
+
+[[packages]]
+  name = "@virtualization"
+
+[[enabled_modules]]
+  name = "postgres"
+  stream = "16/server"
+
+[[groups]]
+  name = "text-internet"
+
+[customizations]
+  [customizations.timezone]
+  [customizations.locale]
+  [customizations.firewall]
+    [customizations.firewall.services]
+  [customizations.services]
+  [customizations.disk]
+    type = "gpt"
+  [customizations.fdo]
+    diun_pub_key_insecure = "false"
+  [customizations.ignition]
+
+  [[customizations.repositories]]
+    id = "fedora-cisco-openh264"
+    gpgkeys = ["file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch"]
+    metalink = "https://mirrors.fedoraproject.org/metalink?repo=fedora-cisco-openh264-$releasever&arch=$basearch"
+    name = "Fedora $releasever openh264 (From Cisco) - $basearch"
+    enabled = true
+    repo_gpgcheck = false
+    sslverify = true
+    install_from = true
+  [customizations.installer]
+    [customizations.installer.modules]
+  [customizations.rpm]
+    [customizations.rpm.import_keys]
+      files = ["/etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-41-primary"]
+  [customizations.rhsm]
+    [customizations.rhsm.config]
