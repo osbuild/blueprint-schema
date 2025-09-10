@@ -9,5 +9,4 @@ properties:
   installation_device:
     description: Installation device for iot/edge simplified installer image types.
     type: string
-    x-go-type-skip-optional-pointer: true
 additionalProperties: false

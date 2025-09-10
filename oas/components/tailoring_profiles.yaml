@@ -6,11 +6,9 @@ properties:
     type: array
     items:
       type: string
-    x-go-type-skip-optional-pointer: true
   unselected:
     description: Unselected rules, cannot be used with json_profile_id and json_filepath.
     type: array
     items:
       type: string
-    x-go-type-skip-optional-pointer: true
 additionalProperties: false
