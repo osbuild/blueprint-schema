@@ -11,7 +11,6 @@ properties:
     description: Optional name of the volume group. Will be generated
       automatically if not specified.
     type: string
-    x-go-type-skip-optional-pointer: true
     x-omitempty: true
   minsize:
     "$ref": "storage_minsize.yaml"
@@ -21,6 +20,5 @@ properties:
     type: array
     items:
       "$ref": "partition_lv.yaml"
-    x-go-type-skip-optional-pointer: true
     x-omitempty: true
 additionalProperties: false

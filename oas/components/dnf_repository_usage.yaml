@@ -9,6 +9,7 @@ properties:
       When this flag is set, it is possible to install third-party packages during the image build.
     default: true
     type: boolean
+    x-go-type-skip-optional-pointer: false
   configure:
     description: |
       Configure the repository for dnf on the created image. Enabled by default.
@@ -20,4 +21,5 @@ properties:
       When this flag is disabled, the repository will be saved but not enabled.
     default: true
     type: boolean
+    x-go-type-skip-optional-pointer: false
 additionalProperties: false

@@ -18,19 +18,16 @@ properties:
     type: array
     items:
       type: string
-    x-go-type-skip-optional-pointer: true
   enabled:
     description: The enabled attribute is a list of strings that contains the
       systemd units to be enabled.
     type: array
     items:
       type: string
-    x-go-type-skip-optional-pointer: true
   masked:
     description: The masked attribute is a list of strings that contains the
       systemd units to be masked.
     type: array
     items:
       type: string
-    x-go-type-skip-optional-pointer: true
 additionalProperties: false

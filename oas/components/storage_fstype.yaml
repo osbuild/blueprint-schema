@@ -4,7 +4,6 @@ description: |
 
   Default value is image-type specific.
 type: string
-x-go-type-skip-optional-pointer: true
 x-go-name: FSType
 enum:
   - ext4

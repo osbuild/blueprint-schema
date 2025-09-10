@@ -10,13 +10,11 @@ components:
             $ref: '#/components/schemas/accounts_groups'
           nullable: true
           type: array
-          x-go-type-skip-optional-pointer: true
         users:
           items:
             $ref: '#/components/schemas/accounts_users'
           nullable: true
           type: array
-          x-go-type-skip-optional-pointer: true
       type: object
       x-omitempty: true
     accounts_groups:
@@ -28,7 +26,6 @@ components:
           minimum: 1
           type: integer
           x-go-name: GID
-          x-go-type-skip-optional-pointer: true
         name:
           description: |
             Group name. Accepted characters: lowercase letters, digits,
@@ -49,7 +46,6 @@ components:
           description: A longer description of the account.
           maxLength: 4096
           type: string
-          x-go-type-skip-optional-pointer: true
         expires:
           description: |
             The expiration date in the format YYYY-MM-DD. Leave empty to never expire.
@@ -64,6 +60,7 @@ components:
             If set to true, the user will be forced to change their password
             on first login.
           type: boolean
+          x-go-type-skip-optional-pointer: false
         gid:
           description: |
             The primary group ID (GID) of the user. Value of zero (or ommited
@@ -71,18 +68,15 @@ components:
           minimum: 1
           type: integer
           x-go-name: GID
-          x-go-type-skip-optional-pointer: true
         groups:
           description: Additional groups that the user should be a member of.
           items:
             type: string
           type: array
-          x-go-type-skip-optional-pointer: true
         home:
           description: The home directory of the user.
           pattern: ^/
           type: string
-          x-go-type-skip-optional-pointer: true
         name:
           description: |
             Account name. Accepted characters: lowercase letters, digits,
@@ -100,18 +94,17 @@ components:
             function. The format of the encrypted password is $id$salt$hashed, where
             $id is the algorithm used (1, 5, 6, or 2a).
           type: string
+          x-go-type-skip-optional-pointer: false
         shell:
           description: The shell of the user.
           pattern: ^/
           type: string
-          x-go-type-skip-optional-pointer: true
         ssh_keys:
           description: SSH keys to be added to the account's authorized_keys file.
           items:
             type: string
           type: array
           x-go-name: SSHKeys
-          x-go-type-skip-optional-pointer: true
         uid:
           description: |
             The user ID (UID) of the user. Value of zero (or ommited value)
@@ -119,7 +112,6 @@ components:
           minimum: 1
           type: integer
           x-go-name: UID
-          x-go-type-skip-optional-pointer: true
       required:
       - name
       type: object
@@ -148,7 +140,6 @@ components:
       - AnacondaTimezone
       - AnacondaUsers
       x-go-type-name: AnacondaModule
-      x-go-type-skip-optional-pointer: true
     blueprint:
       additionalProperties: false
       description: |-
@@ -177,7 +168,6 @@ components:
           - ArchS390x
           - ArchRISCV64
           x-go-type-name: Arch
-          x-go-type-skip-optional-pointer: true
         cacerts:
           description: |
             The CA certificates to be added to the image. The certificates
@@ -189,7 +179,6 @@ components:
           nullable: true
           type: array
           x-go-name: CACerts
-          x-go-type-skip-optional-pointer: true
           x-omitempty: true
         containers:
           description: |
@@ -202,7 +191,6 @@ components:
             $ref: '#/components/schemas/container'
           nullable: true
           type: array
-          x-go-type-skip-optional-pointer: true
           x-omitempty: true
         description:
           description: |
@@ -210,7 +198,6 @@ components:
             of the blueprint and is only used for display purposes.
           nullable: true
           type: string
-          x-go-type-skip-optional-pointer: true
           x-omitempty: true
         distribution:
           description: |
@@ -218,7 +205,6 @@ components:
           example: fedora-13
           pattern: ^[a-zA-Z0-9]+-[\.0-9]+$
           type: string
-          x-go-type-skip-optional-pointer: true
         dnf:
           $ref: '#/components/schemas/dnf'
         fips:
@@ -257,7 +243,6 @@ components:
           nullable: true
           type: array
           x-go-name: FSNodes
-          x-go-type-skip-optional-pointer: true
           x-omitempty: true
         hostname:
           description: |
@@ -265,7 +250,6 @@ components:
             hostname of the final image.
           nullable: true
           type: string
-          x-go-type-skip-optional-pointer: true
           x-omitempty: true
         ignition:
           description: |
@@ -275,13 +259,12 @@ components:
 
             The blueprint configuration can be done either by embedding an Ignition configuration
             file into the image, or providing a provisioning URL that will be fetched at first boot.
-          nullable: true
           oneOf:
           - $ref: '#/components/schemas/ignition_url'
           - $ref: '#/components/schemas/ignition_text'
           x-go-name: Ignition
           x-go-type-name: Ignition
-          x-omitempty: true
+          x-go-type-skip-optional-pointer: true
         installer:
           $ref: '#/components/schemas/installer'
         kernel:
@@ -295,7 +278,6 @@ components:
             It should be short and descriptive.
           nullable: true
           type: string
-          x-go-type-skip-optional-pointer: true
           x-omitempty: true
         network:
           $ref: '#/components/schemas/network'
@@ -319,7 +301,6 @@ components:
           description: The PEM-encoded certificate.
           type: string
           x-go-name: PEM
-          x-go-type-skip-optional-pointer: true
           x-omitempty: true
       required:
       - pem
@@ -333,23 +314,21 @@ components:
           default: false
           description: Whether to pull the container image from the host's local-storage.
           type: boolean
-          x-go-type-skip-optional-pointer: true
         name:
           description: Container name is an optional string to set the name under
             which the container image will be saved in the image. If not specified
             name falls back to the same value as source.
           type: string
-          x-go-type-skip-optional-pointer: true
         source:
           description: Container image URL is a reference to a container image at
             a registry.
           type: string
-          x-go-type-skip-optional-pointer: true
         tls_verify:
           default: true
           description: Verify TLS connection, default is true.
           type: boolean
           x-go-name: TLSVerify
+          x-go-type-skip-optional-pointer: false
       required:
       - name
       - source
@@ -379,7 +358,6 @@ components:
             type: string
           nullable: true
           type: array
-          x-go-type-skip-optional-pointer: true
           x-omitempty: true
         import_keys:
           description: |
@@ -389,7 +367,6 @@ components:
             type: string
           nullable: true
           type: array
-          x-go-type-skip-optional-pointer: true
           x-omitempty: true
         modules:
           description: |-
@@ -399,7 +376,6 @@ components:
             type: string
           nullable: true
           type: array
-          x-go-type-skip-optional-pointer: true
           x-omitempty: true
         packages:
           description: |
@@ -414,7 +390,6 @@ components:
             type: string
           nullable: true
           type: array
-          x-go-type-skip-optional-pointer: true
           x-omitempty: true
         repositories:
           description: |
@@ -425,7 +400,6 @@ components:
             $ref: '#/components/schemas/dnf_repository'
           nullable: true
           type: array
-          x-go-type-skip-optional-pointer: true
           x-omitempty: true
       type: object
       x-go-name: DNF
@@ -448,6 +422,7 @@ components:
             Disabled by default.
           type: boolean
           x-go-name: GPGCheck
+          x-go-type-skip-optional-pointer: false
         gpg_check_repo:
           default: true
           description: |-
@@ -455,6 +430,7 @@ components:
             This is useful for third-party repositories that do not provide GPG keys for the repository metadata.
           type: boolean
           x-go-name: GPGCheckRepo
+          x-go-type-skip-optional-pointer: false
         gpg_keys:
           description: |
             GPG keys for the repository.
@@ -467,14 +443,12 @@ components:
             type: string
           type: array
           x-go-name: GPGKeys
-          x-go-type-skip-optional-pointer: true
         id:
           description: Repository ID. Required.
           maxLength: 256
           pattern: ^[a-zA-Z0-9_-]+$
           type: string
           x-go-name: ID
-          x-go-type-skip-optional-pointer: true
         module_hotfixes:
           default: false
           description: |
@@ -483,16 +457,15 @@ components:
             Adds module_hotfixes flag to all repo types so it can be used during osbuild. This enables users
             to disable modularity filtering on specific repositories.
           type: boolean
-          x-go-type-skip-optional-pointer: true
         name:
           description: Repository name.
           type: string
-          x-go-type-skip-optional-pointer: true
         priority:
           description: Repository priority. When unset, default DNF priority is used.
             This is useful for third-party repositories that are not part of the base
             image.
           type: integer
+          x-go-type-skip-optional-pointer: false
         source:
           description: Repository source.
           oneOf:
@@ -505,6 +478,7 @@ components:
           description: Enable TLS verification for the repository. Enabled by default.
           type: boolean
           x-go-name: TLSVerify
+          x-go-type-skip-optional-pointer: false
         usage:
           $ref: '#/components/schemas/dnf_repository_usage'
       required:
@@ -525,6 +499,7 @@ components:
 
             When this flag is disabled, the repository will be saved but not enabled.
           type: boolean
+          x-go-type-skip-optional-pointer: false
         install:
           default: true
           description: |
@@ -532,6 +507,7 @@ components:
 
             When this flag is set, it is possible to install third-party packages during the image build.
           type: boolean
+          x-go-type-skip-optional-pointer: false
       type: object
       x-go-type-name: DNFRepoUsage
     dnf_source_base_urls:
@@ -543,7 +519,6 @@ components:
             type: string
           type: array
           x-go-name: URLs
-          x-go-type-skip-optional-pointer: true
       required:
       - urls
       type: object
@@ -554,7 +529,6 @@ components:
         metalink:
           description: Metalink for the repository.
           type: string
-          x-go-type-skip-optional-pointer: true
       required:
       - metalink
       type: object
@@ -565,7 +539,6 @@ components:
         mirrorlist:
           description: Mirror list for the repository.
           type: string
-          x-go-type-skip-optional-pointer: true
       required:
       - mirrorlist
       type: object
@@ -583,7 +556,6 @@ components:
             only edge-raw-image, edge-installer, edge-simplified-installer, edge-ami
             and edge-vsphere images support this customization.
           type: boolean
-          x-go-type-skip-optional-pointer: true
       type: object
       x-go-name: FIPS
       x-omitempty: true
@@ -591,7 +563,9 @@ components:
       additionalProperties: false
       default: true
       description: Whether the firewall rule is enabled or not. Defaults to true.
+      nullable: true
       type: boolean
+      x-go-type-skip-optional-pointer: false
       x-omitempty: true
       x-order: 2
     firewall_from_to:
@@ -605,7 +579,6 @@ components:
           maximum: 65535
           minimum: 1
           type: integer
-          x-go-type-skip-optional-pointer: true
           x-omitempty: true
         protocol:
           $ref: '#/components/schemas/network_protocol'
@@ -615,7 +588,6 @@ components:
           maximum: 65535
           minimum: 1
           type: integer
-          x-go-type-skip-optional-pointer: true
           x-omitempty: true
       type: object
     firewall_port:
@@ -629,7 +601,6 @@ components:
           maximum: 65535
           minimum: 1
           type: integer
-          x-go-type-skip-optional-pointer: true
           x-omitempty: true
         protocol:
           $ref: '#/components/schemas/network_protocol'
@@ -647,7 +618,6 @@ components:
             the /etc/services file.
           minLength: 2
           type: string
-          x-go-type-skip-optional-pointer: true
           x-omitempty: true
       type: object
     fsnode:
@@ -669,24 +639,20 @@ components:
             EnsureParents is a boolean that determines if the parent directories
             should be created if they do not exist.
           type: boolean
-          x-go-type-skip-optional-pointer: true
         group:
           default: root
           description: Group is the file system node group. Can be also a decimal
             GID. Defaults to root.
           type: string
-          x-go-type-skip-optional-pointer: true
         mode:
           description: |
             Mode is the file system node permissions. Defaults to 0644 for
             files and 0755 for directories. Must be a valid octal number as a string.
           x-go-type: FSNodeMode
-          x-go-type-skip-optional-pointer: true
         path:
           description: Path is the absolute path to the file or directory.
           pattern: ^/
           type: string
-          x-go-type-skip-optional-pointer: true
         state:
           default: present
           description: |
@@ -699,7 +665,6 @@ components:
           - FSStatePresent
           - FSStateAbsent
           x-go-type-name: FSNodeState
-          x-go-type-skip-optional-pointer: true
         type:
           default: file
           description: |
@@ -712,13 +677,11 @@ components:
           - FSNodeFile
           - FSNodeDir
           x-go-type-name: FSNodeType
-          x-go-type-skip-optional-pointer: true
         user:
           default: root
           description: User is the file system node owner. Can be also a decimal UID.
             Defaults to root.
           type: string
-          x-go-type-skip-optional-pointer: true
       required:
       - path
       type: object
@@ -750,7 +713,6 @@ components:
         text:
           description: Ignition data formatted in plain text.
           type: string
-          x-go-type-skip-optional-pointer: true
       required:
       - text
       type: object
@@ -763,7 +725,6 @@ components:
             is a URL to a remote Ignition configuration.
           type: string
           x-go-name: URL
-          x-go-type-skip-optional-pointer: true
       required:
       - url
       type: object
@@ -799,7 +760,6 @@ components:
             $ref: '#/components/schemas/anaconda_modules'
           nullable: true
           type: array
-          x-go-type-skip-optional-pointer: true
           x-omitempty: true
         enabled_modules:
           description: |
@@ -811,13 +771,11 @@ components:
             $ref: '#/components/schemas/anaconda_modules'
           nullable: true
           type: array
-          x-go-type-skip-optional-pointer: true
           x-omitempty: true
         kickstart:
           description: Kickstart installer configuration.
           nullable: true
           type: string
-          x-go-type-skip-optional-pointer: true
           x-omitempty: true
         sudo_nopasswd:
           description: |
@@ -832,7 +790,6 @@ components:
           nullable: true
           type: array
           x-go-name: SudoNOPASSWD
-          x-go-type-skip-optional-pointer: true
           x-omitempty: true
         unattended:
           default: false
@@ -841,7 +798,6 @@ components:
             installer will ask for user input.
           nullable: true
           type: boolean
-          x-go-type-skip-optional-pointer: true
           x-omitempty: true
       type: object
     installer_coreos:
@@ -854,7 +810,6 @@ components:
           description: Installation device for iot/edge simplified installer image
             types.
           type: string
-          x-go-type-skip-optional-pointer: true
       type: object
       x-go-name: CoreOS
       x-go-type-name: InstallerCoreOS
@@ -871,13 +826,11 @@ components:
             type: string
           nullable: true
           type: array
-          x-go-type-skip-optional-pointer: true
           x-omitempty: true
         package:
           description: Kernel package name to be installed.
           nullable: true
           type: string
-          x-go-type-skip-optional-pointer: true
           x-omitempty: true
       type: object
       x-omitempty: true
@@ -901,7 +854,6 @@ components:
             type: string
           nullable: true
           type: array
-          x-go-type-skip-optional-pointer: true
           x-omitempty: true
         languages:
           description: |
@@ -915,7 +867,6 @@ components:
             type: string
           nullable: true
           type: array
-          x-go-type-skip-optional-pointer: true
           x-omitempty: true
       type: object
       x-omitempty: true
@@ -971,7 +922,6 @@ components:
       - ProtocolUDP
       - ProtocolICMP
       x-go-type-name: NetworkProtocol
-      x-go-type-skip-optional-pointer: true
       x-omitempty: true
       x-order: 1
     openscap:
@@ -989,12 +939,10 @@ components:
             is not provided, a sensible default based on the selected distro will be
             chosen.
           type: string
-          x-go-type-skip-optional-pointer: true
         profile_id:
           description: The desired security profile ID.
           type: string
           x-go-name: ProfileID
-          x-go-type-skip-optional-pointer: true
         tailoring:
           description: |
             An optional OpenSCAP tailoring information. Can be done via profile
@@ -1039,7 +987,6 @@ components:
           items:
             $ref: '#/components/schemas/partition_subvolumes'
           type: array
-          x-go-type-skip-optional-pointer: true
           x-omitempty: true
         type:
           $ref: '#/components/schemas/partition_type'
@@ -1056,7 +1003,6 @@ components:
         label:
           description: Optional label of the partition.
           type: string
-          x-go-type-skip-optional-pointer: true
         minsize:
           $ref: '#/components/schemas/storage_minsize'
         mountpoint:
@@ -1064,7 +1010,6 @@ components:
         name:
           description: Logical volume name. When not set, will be generated automatically.
           type: string
-          x-go-type-skip-optional-pointer: true
       type: object
       x-go-type-name: PartitionLV
     partition_lvm:
@@ -1076,7 +1021,6 @@ components:
           items:
             $ref: '#/components/schemas/partition_lv'
           type: array
-          x-go-type-skip-optional-pointer: true
           x-omitempty: true
         minsize:
           $ref: '#/components/schemas/storage_minsize'
@@ -1084,7 +1028,6 @@ components:
           description: Optional name of the volume group. Will be generated automatically
             if not specified.
           type: string
-          x-go-type-skip-optional-pointer: true
           x-omitempty: true
         type:
           $ref: '#/components/schemas/partition_type'
@@ -1101,7 +1044,6 @@ components:
         label:
           description: Optional label of the partition.
           type: string
-          x-go-type-skip-optional-pointer: true
         minsize:
           $ref: '#/components/schemas/storage_minsize'
         mountpoint:
@@ -1119,7 +1061,6 @@ components:
         name:
           description: Subvolume name, must also define its parent volume.
           type: string
-          x-go-type-skip-optional-pointer: true
       type: object
     partition_type:
       description: 'Partition type: plain, lvm, or btrfs. Must be set.'
@@ -1132,7 +1073,6 @@ components:
       - PartTypePlain
       - PartTypeLVM
       - PartTypeBTRFS
-      x-go-type-skip-optional-pointer: true
     registration:
       additionalProperties: false
       description: |
@@ -1153,7 +1093,6 @@ components:
         enabled:
           description: Enables rhc (Red Hat Connector) during boot.
           type: boolean
-          x-go-type-skip-optional-pointer: true
       required:
       - enabled
       type: object
@@ -1167,23 +1106,19 @@ components:
         di_mfg_string_type_mac_iface:
           description: Optional interface name for the MAC address.
           type: string
-          x-go-type-skip-optional-pointer: true
         diun_pub_key_hash:
           description: FDO server public key hex-encoded hash. Cannot be used together
             with insecure option or root certs.
           type: string
-          x-go-type-skip-optional-pointer: true
         diun_pub_key_insecure:
           default: false
           description: FDO insecure option. When set, both hash or root certs must
             not be set.
           type: boolean
-          x-go-type-skip-optional-pointer: true
         diun_pub_key_root_certs:
           description: FDO server public key root certificate path. Cannot be used
             together with insecure option or hash.
           type: string
-          x-go-type-skip-optional-pointer: true
         manufacturing_server_url:
           description: FDO manufacturing server URL.
           type: string
@@ -1199,7 +1134,6 @@ components:
         enabled:
           description: Enables insights client during boot.
           type: boolean
-          x-go-type-skip-optional-pointer: true
       required:
       - enabled
       type: object
@@ -1212,7 +1146,6 @@ components:
             Subscription manager activation key to use during registration.
             A list of keys to use to redeem or apply specific subscriptions to the system.
           type: string
-          x-go-type-skip-optional-pointer: true
         connector:
           $ref: '#/components/schemas/registration_connector'
         insights:
@@ -1220,7 +1153,6 @@ components:
         organization:
           description: Subscription manager organization name to use during registration.
           type: string
-          x-go-type-skip-optional-pointer: true
         subscription_manager:
           $ref: '#/components/schemas/registration_rhsm'
       type: object
@@ -1237,18 +1169,23 @@ components:
         auto_enable:
           description: Enabled auto_enable_yum_plugins rhsm configuration in rhsm.conf.
           type: boolean
+          x-go-type-skip-optional-pointer: false
         auto_registration:
           description: Enabled auto_registration rhsmcertd configuration in rhsm.conf.
           type: boolean
+          x-go-type-skip-optional-pointer: false
         enabled:
           description: Enables the subscription-manager dnf plugin.
           type: boolean
+          x-go-type-skip-optional-pointer: false
         product_plugin_enabled:
           description: Enables the product-id dnf plugin.
           type: boolean
+          x-go-type-skip-optional-pointer: false
         repository_management:
           description: Enabled repository_management rhsm configuration in rhsm.conf.
           type: boolean
+          x-go-type-skip-optional-pointer: false
       type: object
       x-go-name: RegistrationRHSM
     storage:
@@ -1284,7 +1221,6 @@ components:
           nullable: true
           type: array
           x-go-type-name: StoragePartitions
-          x-go-type-skip-optional-pointer: true
         type:
           $ref: '#/components/schemas/storage_type'
       required:
@@ -1309,7 +1245,6 @@ components:
       - FSTypeSwap
       - FSTypeVFAT
       x-go-name: FSType
-      x-go-type-skip-optional-pointer: true
     storage_minsize:
       description: |
         Minimum size of the disk or partition.
@@ -1320,12 +1255,10 @@ components:
 
         If unit is ommited, it is assumed to be in bytes.
       x-go-type: ByteSize
-      x-go-type-skip-optional-pointer: true
     storage_mountpoint:
       description: Mount point of the partition. Must start with a slash.
       pattern: ^/
       type: string
-      x-go-type-skip-optional-pointer: true
     storage_partition:
       anyOf:
       - $ref: '#/components/schemas/partition_plain'
@@ -1348,7 +1281,6 @@ components:
       x-enum-varnames:
       - StorageTypeGPT
       - StorageTypeMBR
-      x-go-type-skip-optional-pointer: true
     systemd:
       additionalProperties: false
       description: |
@@ -1368,21 +1300,18 @@ components:
           items:
             type: string
           type: array
-          x-go-type-skip-optional-pointer: true
         enabled:
           description: The enabled attribute is a list of strings that contains the
             systemd units to be enabled.
           items:
             type: string
           type: array
-          x-go-type-skip-optional-pointer: true
         masked:
           description: The masked attribute is a list of strings that contains the
             systemd units to be masked.
           items:
             type: string
           type: array
-          x-go-type-skip-optional-pointer: true
       type: object
       x-omitempty: true
     tailoring_json:
@@ -1394,13 +1323,11 @@ components:
           pattern: ^/
           type: string
           x-go-name: JSONFilePath
-          x-go-type-skip-optional-pointer: true
         json_profile_id:
           description: JSON profile ID, must be used with json_filepath and cannot
             be used with selected and unselected fields.
           type: string
           x-go-name: JSONProfileID
-          x-go-type-skip-optional-pointer: true
       required:
       - json_profile_id
       - json_filepath
@@ -1414,13 +1341,11 @@ components:
           items:
             type: string
           type: array
-          x-go-type-skip-optional-pointer: true
         unselected:
           description: Unselected rules, cannot be used with json_profile_id and json_filepath.
           items:
             type: string
           type: array
-          x-go-type-skip-optional-pointer: true
       type: object
     text:
       type: string
@@ -1439,7 +1364,6 @@ components:
             type: string
           type: array
           x-go-name: NTPServers
-          x-go-type-skip-optional-pointer: true
         timezone:
           default: UTC
           description: |
@@ -1447,7 +1371,6 @@ components:
 
             timedatectl list-timezones
           type: string
-          x-go-type-skip-optional-pointer: true
       type: object
       x-omitempty: true
 info:

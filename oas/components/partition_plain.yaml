@@ -10,7 +10,6 @@ properties:
   label:
     description: Optional label of the partition.
     type: string
-    x-go-type-skip-optional-pointer: true
   minsize:
     "$ref": "storage_minsize.yaml"
   mountpoint:

@@ -12,7 +12,6 @@ properties:
       It can contain spaces, but they may be converted to dash characters during build.
       It should be short and descriptive.
     type: string
-    x-go-type-skip-optional-pointer: true
     nullable: true
     x-omitempty: true
   description:
@@ -20,14 +19,12 @@ properties:
       The description attribute is a string that can be a longer description
       of the blueprint and is only used for display purposes.
     type: string
-    x-go-type-skip-optional-pointer: true
     x-omitempty: true
     nullable: true
   distribution:
     description: |
       Linux OS distribution name followed by dash and version.
     type: string
-    x-go-type-skip-optional-pointer: true
     example: "fedora-13"
     pattern: "^[a-zA-Z0-9]+-[\\.0-9]+$"
   architecture:
@@ -35,7 +32,6 @@ properties:
       Architecture of the image. This is the architecture of the target system, not the build system.
     type: string
     x-go-type-name: Arch
-    x-go-type-skip-optional-pointer: true
     example: "x86_64"
     enum:
       - x86_64
@@ -60,7 +56,6 @@ properties:
     type: array
     items:
       "$ref": "ca_cert.yaml"
-    x-go-type-skip-optional-pointer: true
     nullable: true
     x-omitempty: true
     x-go-name: CACerts
@@ -74,7 +69,6 @@ properties:
     type: array
     items:
       "$ref": "container.yaml"
-    x-go-type-skip-optional-pointer: true
     nullable: true
     x-omitempty: true
   dnf:
@@ -114,7 +108,6 @@ properties:
     items:
       "$ref": "fsnode.yaml"
     x-go-name: FSNodes
-    x-go-type-skip-optional-pointer: true
     x-omitempty: true
     nullable: true
   hostname:
@@ -122,7 +115,6 @@ properties:
       Hostname is an optional string that can be used to configure the
       hostname of the final image.
     type: string
-    x-go-type-skip-optional-pointer: true
     x-omitempty: true
     nullable: true
   ignition:
@@ -138,8 +130,8 @@ properties:
       - "$ref": "ignition_text.yaml"
     x-go-name: Ignition
     x-go-type-name: Ignition
-    x-omitempty: true
-    nullable: true
+    # Must be kept because oneOf is used: https://github.com/oapi-codegen/oapi-codegen/issues/2052
+    x-go-type-skip-optional-pointer: true
   installer:
     "$ref": "installer.yaml"
   kernel:

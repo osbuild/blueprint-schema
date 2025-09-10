@@ -22,5 +22,4 @@ x-enum-varnames:
   - AnacondaSubscription
   - AnacondaTimezone
   - AnacondaUsers
-x-go-type-skip-optional-pointer: true
 x-go-type-name: AnacondaModule

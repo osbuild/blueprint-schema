@@ -7,5 +7,4 @@ properties:
   enabled:
     description: Enables rhc (Red Hat Connector) during boot.
     type: boolean
-    x-go-type-skip-optional-pointer: true
 additionalProperties: false

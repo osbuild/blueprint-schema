@@ -13,7 +13,6 @@ properties:
       timedatectl list-timezones
     default: UTC
     type: string
-    x-go-type-skip-optional-pointer: true
   ntp_servers:
     description: |
       An optional list of strings containing NTP servers to use. If
@@ -21,6 +20,5 @@ properties:
     type: array
     items:
       type: string
-    x-go-type-skip-optional-pointer: true
     x-go-name: NTPServers
 additionalProperties: false

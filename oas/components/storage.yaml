@@ -36,6 +36,5 @@ properties:
     items:
       "$ref": "storage_partition.yaml"
     nullable: true
-    x-go-type-skip-optional-pointer: true
     x-go-type-name: StoragePartitions
 additionalProperties: false
