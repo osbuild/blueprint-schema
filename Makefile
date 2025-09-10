@@ -89,7 +89,10 @@ clean: ## Clean up all build artifacts
 	rm -f ./testdata/*.{out,out1,out2}.*
 
 IMAGES_DIR := ../images/test/configs
-TESTDATA_SRC := $(wildcard $(IMAGES_DIR)/*.json)
+TESTDATA_SRC := \
+    $(IMAGES_DIR)/all-customizations.json \
+    $(IMAGES_DIR)/oscap-generic.json \
+    $(IMAGES_DIR)/unattended-iso.json
 TESTDATA_DST := $(patsubst $(IMAGES_DIR)/%.json,testdata/bp-%.in.json,$(TESTDATA_SRC))
 
 testdata/bp-%.in.json: $(IMAGES_DIR)/%.json

@@ -1,7 +1,0 @@
-name = "Blueprint example: registration"
-
-[customizations]
-  [customizations.fdo]
-    manufacturing_server_url = "http://192.168.122.122:8080"
-    diun_pub_key_insecure = "false"
-    diun_pub_key_root_certs = "/etc/pki"
