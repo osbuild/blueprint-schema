@@ -11,5 +11,4 @@ properties:
       only edge-raw-image, edge-installer, edge-simplified-installer, edge-ami
       and edge-vsphere images support this customization.
     type: boolean
-    x-go-type-skip-optional-pointer: true
 additionalProperties: false

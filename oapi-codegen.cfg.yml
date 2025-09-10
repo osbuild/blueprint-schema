@@ -1,6 +1,8 @@
 ---
 package: ubp
 output-options:
+  prefer-skip-optional-pointer: true
+  prefer-skip-optional-pointer-with-omitzero: false
   # https://github.com/oapi-codegen/oapi-codegen/pull/1987
   disable-type-aliases-for-type:
     - "int"

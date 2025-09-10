@@ -5,13 +5,11 @@ properties:
   name:
     description: Logical volume name. When not set, will be generated automatically.
     type: string
-    x-go-type-skip-optional-pointer: true
   fs_type:
     "$ref": "storage_fstype.yaml"
   label:
     description: Optional label of the partition.
     type: string
-    x-go-type-skip-optional-pointer: true
   minsize:
     "$ref": "storage_minsize.yaml"
   mountpoint:

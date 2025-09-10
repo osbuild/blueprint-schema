@@ -4,7 +4,6 @@ properties:
   name:
     description: Subvolume name, must also define its parent volume.
     type: string
-    x-go-type-skip-optional-pointer: true
   mountpoint:
     "$ref": "storage_mountpoint.yaml"
 additionalProperties: false
