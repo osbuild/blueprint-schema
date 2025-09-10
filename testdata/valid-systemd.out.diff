@@ -1,0 +1,22 @@
+  &blueprint.Blueprint{
+  	... // 6 identical fields
+  	Groups:     nil,
+  	Containers: nil,
+  	Customizations: &blueprint.Customizations{
+  		... // 6 identical fields
+  		Locale:   &{},
+  		Firewall: &{Services: &{}},
+  		Services: &blueprint.ServicesCustomization{
+  			Enabled:  {"sshd.service", "backup.timer"},
+  			Disabled: {"tuned", "cupsd"},
+- 			Masked:   []string{},
++ 			Masked:   nil,
+  		},
+  		Filesystem: nil,
+  		Disk:       &{Type: "gpt"},
+  		... // 14 identical fields
+  	},
+  	Distro:  "",
+  	Arch:    "",
+  	Minimal: false,
+  }

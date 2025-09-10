@@ -1,0 +1,21 @@
+name = "minimal-environment"
+description = "Simple blueprint that installs the minimal-environment package group"
+
+[[groups]]
+  name = "minimal-environment"
+
+[customizations]
+  [customizations.timezone]
+  [customizations.locale]
+  [customizations.firewall]
+    [customizations.firewall.services]
+  [customizations.services]
+  [customizations.disk]
+    type = "gpt"
+  [customizations.fdo]
+    diun_pub_key_insecure = "false"
+  [customizations.ignition]
+  [customizations.installer]
+    [customizations.installer.modules]
+  [customizations.rhsm]
+    [customizations.rhsm.config]

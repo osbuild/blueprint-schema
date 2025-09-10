@@ -1,0 +1,20 @@
+name = "Blueprint example: kernel"
+
+[customizations]
+  [customizations.kernel]
+    name = "kernel-debug-6.11.5-300"
+    append = "nosmt=force crashkernel=1G-4G:192M,4G-64G:256M,64G-:512M"
+  [customizations.timezone]
+  [customizations.locale]
+  [customizations.firewall]
+    [customizations.firewall.services]
+  [customizations.services]
+  [customizations.disk]
+    type = "gpt"
+  [customizations.fdo]
+    diun_pub_key_insecure = "false"
+  [customizations.ignition]
+  [customizations.installer]
+    [customizations.installer.modules]
+  [customizations.rhsm]
+    [customizations.rhsm.config]

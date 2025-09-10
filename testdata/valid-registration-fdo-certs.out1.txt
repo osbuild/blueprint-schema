@@ -1,0 +1,21 @@
+# registration not converted
+
+name = "Blueprint example: registration"
+
+[customizations]
+  [customizations.timezone]
+  [customizations.locale]
+  [customizations.firewall]
+    [customizations.firewall.services]
+  [customizations.services]
+  [customizations.disk]
+    type = "gpt"
+  [customizations.fdo]
+    manufacturing_server_url = "http://192.168.122.122:8080"
+    diun_pub_key_insecure = "false"
+    diun_pub_key_root_certs = "/etc/pki"
+  [customizations.ignition]
+  [customizations.installer]
+    [customizations.installer.modules]
+  [customizations.rhsm]
+    [customizations.rhsm.config]
