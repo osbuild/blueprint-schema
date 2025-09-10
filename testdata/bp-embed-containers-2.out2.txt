@@ -1,5 +1,0 @@
-containers:
-- name: ""
-  source: registry.gitlab.com/redhat/services/products/image-builder/ci/osbuild-composer/fedora-minimal
-- name: registry.gitlab.com/redhat/services/products/image-builder/ci/osbuild-composer/manifest-list-test:v1
-  source: registry.gitlab.com/redhat/services/products/image-builder/ci/osbuild-composer/manifest-list-test

@@ -1,2 +1,0 @@
-[customizations]
-  installation_device = "/dev/null"

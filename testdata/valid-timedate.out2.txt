@@ -1,6 +1,0 @@
-name: 'Blueprint example: timedate'
-timedate:
-  ntp_servers:
-  - 0.north-america.pool.ntp.org
-  - 1.north-america.pool.ntp.org
-  timezone: Europe/Prague

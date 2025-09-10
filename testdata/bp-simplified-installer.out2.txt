@@ -1,5 +1,0 @@
-[customizations]
-  installation_device = "/dev/vda"
-  [customizations.fdo]
-    manufacturing_server_url = "https://fdo.example.com"
-    diun_pub_key_insecure = "true"

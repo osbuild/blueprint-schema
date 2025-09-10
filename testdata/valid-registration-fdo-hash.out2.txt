@@ -1,5 +1,0 @@
-name: 'Blueprint example: registration'
-registration:
-  fdo:
-    diun_pub_key_hash: 94c752494c2c9dcfca3edd2f4522fa1e5c9f67e81132f32a8997c3245d4113cc
-    manufacturing_server_url: https://192.168.122.122:8080

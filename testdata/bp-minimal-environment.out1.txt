@@ -1,3 +1,0 @@
-dnf:
-  groups:
-  - minimal-environment

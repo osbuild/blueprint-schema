@@ -1,4 +1,0 @@
-name = "Blueprint example: hostname"
-
-[customizations]
-  hostname = "inst1.example.com"

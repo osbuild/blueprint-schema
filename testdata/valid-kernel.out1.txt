@@ -1,6 +1,0 @@
-name = "Blueprint example: kernel"
-
-[customizations]
-  [customizations.kernel]
-    name = "kernel-debug-6.11.5-300"
-    append = "nosmt=force crashkernel=1G-4G:192M,4G-64G:256M,64G-:512M"

@@ -1,6 +1,0 @@
-name = "Blueprint example: systemd"
-
-[customizations]
-  [customizations.services]
-    enabled = ["sshd.service", "backup.timer"]
-    disabled = ["tuned", "cupsd"]

@@ -1,9 +1,0 @@
-name = "Blueprint example: fsnodes"
-
-[customizations]
-
-  [[customizations.directories]]
-    path = "/var/tmp/dir"
-
-  [[customizations.directories]]
-    path = "/var/tmp/dir"

@@ -1,7 +1,0 @@
-name = "Blueprint example: installer"
-
-[customizations]
-  [customizations.installer]
-    unattended = true
-    [customizations.installer.modules]
-      enable = ["org.fedoraproject.Anaconda.Modules.Network"]

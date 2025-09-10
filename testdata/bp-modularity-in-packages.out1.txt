@@ -1,3 +1,0 @@
-dnf:
-  packages:
-  - '@nodejs:18'
