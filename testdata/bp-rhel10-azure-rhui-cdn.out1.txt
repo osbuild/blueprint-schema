@@ -1,8 +1,0 @@
-dnf:
-  packages:
-  - rhui-azure-rhel10
-  - redhat-cloud-client-configuration-cdn
-registration:
-  redhat:
-    subscription_manager:
-      auto_enable: false

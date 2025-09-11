@@ -55,6 +55,8 @@ cacerts:
     djrujsA3Cn5vX2L+0yuiLB5/zoxqx5cEy97TuKUYB8OqMMujAXNzF4L3HJDUNba2
     AhEkFozMXwYX73TGbGZ0mawPS5D3v3tYTEmJFf6SnVCmUW1fs57g
     -----END CERTIFICATE-----
+description: Blueprint that uses (almost) all available customizations for the disk
+  image types
 dnf:
   groups:
   - core
@@ -145,6 +147,7 @@ locale:
   - dvorak
   languages:
   - el_CY.UTF-8
+name: all-customizations
 network:
   firewall:
     services:

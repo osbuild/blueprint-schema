@@ -1,7 +1,0 @@
-  &blueprint.Blueprint{
-  	... // 9 identical fields
-  	Distro:  "",
-  	Arch:    "",
-- 	Minimal: true,
-+ 	Minimal: false,
-  }

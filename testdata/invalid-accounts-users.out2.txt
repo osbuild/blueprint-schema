@@ -1,5 +1,4 @@
 accounts:
-  groups: null
   users:
   - expires: "1970-01-01"
     name: -names-starting-with-dash
@@ -14,3 +13,6 @@ accounts:
   - expires: "1970-01-01"
     name: uid-0
 name: 'Blueprint example: accounts'
+storage:
+  partitions: null
+  type: gpt

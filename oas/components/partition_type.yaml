@@ -1,6 +1,5 @@
 ---
 type: string
-x-go-type-skip-optional-pointer: true
 description: 'Partition type: plain, lvm, or btrfs. Must be set.'
 enum:
   - plain

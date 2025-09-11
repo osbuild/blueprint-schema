@@ -16,7 +16,6 @@ properties:
     items:
       "$ref": "anaconda_modules.yaml"
     nullable: true
-    x-go-type-skip-optional-pointer: true
     x-omitempty: true
   enabled_modules:
     description: |
@@ -28,13 +27,11 @@ properties:
     items:
       "$ref": "anaconda_modules.yaml"
     nullable: true
-    x-go-type-skip-optional-pointer: true
     x-omitempty: true
   kickstart:
     description: Kickstart installer configuration.
     type: string
     nullable: true
-    x-go-type-skip-optional-pointer: true
     x-omitempty: true
   sudo_nopasswd:
     description: |
@@ -49,7 +46,6 @@ properties:
       maxLength: 256
     nullable: true
     x-go-name: SudoNOPASSWD
-    x-go-type-skip-optional-pointer: true
     x-omitempty: true
   unattended:
     description: |
@@ -58,6 +54,5 @@ properties:
     type: boolean
     default: false
     nullable: true
-    x-go-type-skip-optional-pointer: true
     x-omitempty: true
 additionalProperties: false

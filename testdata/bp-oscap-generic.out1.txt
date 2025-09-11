@@ -31,6 +31,7 @@ accounts:
     gid: 1060
     name: user3
     uid: 1060
+description: Almost full (disk) blueprint with additional openscap options.
 dnf:
   groups:
   - core
@@ -121,6 +122,7 @@ locale:
   - dvorak
   languages:
   - el_CY.UTF-8
+name: oscap-generic
 openscap:
   profile_id: xccdf_org.ssgproject.content_profile_pci-dss
   tailoring:

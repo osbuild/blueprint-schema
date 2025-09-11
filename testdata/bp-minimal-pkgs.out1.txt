@@ -1,6 +1,0 @@
-# ignoring minimal flag
-
-dnf:
-  packages:
-  - tmux
-  - vim-enhanced

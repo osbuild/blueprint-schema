@@ -2,4 +2,3 @@
 description: Mount point of the partition. Must start with a slash.
 type: string
 pattern: "^/"
-x-go-type-skip-optional-pointer: true

@@ -1,4 +1,7 @@
 name: 'Blueprint example: timedate'
+storage:
+  partitions: null
+  type: gpt
 timedate:
   ntp_servers:
   - 0.north-america.pool.ntp.org

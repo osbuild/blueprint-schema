@@ -7,3 +7,6 @@ openscap:
     - xccdf_org.ssgproject.content_bind_crypto_policy
     unselected:
     - xccdf_org.ssgproject.content_rule_grub2_password
+storage:
+  partitions: null
+  type: gpt

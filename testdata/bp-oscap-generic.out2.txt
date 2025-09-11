@@ -1,3 +1,6 @@
+name = "oscap-generic"
+description = "Almost full (disk) blueprint with additional openscap options."
+
 [[packages]]
   name = "bash"
 
@@ -49,14 +52,21 @@
   [customizations.locale]
     languages = ["el_CY.UTF-8"]
     keyboard = "dvorak"
+  [customizations.firewall]
+    [customizations.firewall.services]
   [customizations.services]
     enabled = ["sshd.service", "custom.service"]
     disabled = ["bluetooth.service"]
+  [customizations.disk]
+    type = "gpt"
+  [customizations.fdo]
+    diun_pub_key_insecure = "false"
   [customizations.openscap]
     profile_id = "xccdf_org.ssgproject.content_profile_pci-dss"
     [customizations.openscap.tailoring]
       selected = ["bind_crypto_policy"]
       unselected = ["rpm_verify_hashes", "enable_fips_mode"]
+  [customizations.ignition]
 
   [[customizations.directories]]
     path = "/etc/systemd/system/custom.service.d"
@@ -95,3 +105,7 @@
     gpgcheck = true
     repo_gpgcheck = false
     install_from = false
+  [customizations.installer]
+    [customizations.installer.modules]
+  [customizations.rhsm]
+    [customizations.rhsm.config]

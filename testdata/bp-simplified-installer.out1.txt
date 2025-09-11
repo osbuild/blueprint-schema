@@ -1,7 +1,0 @@
-installer:
-  coreos:
-    installation_device: /dev/vda
-registration:
-  fdo:
-    diun_pub_key_insecure: true
-    manufacturing_server_url: https://fdo.example.com

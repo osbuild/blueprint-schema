@@ -1,4 +1,7 @@
 {
+  "name": "all-customizations",
+  "description": "Blueprint that uses (almost) all available customizations for the disk image types",
+  "version": "1.0",
   "packages": [
     {
       "name": "bash",

@@ -1,3 +1,0 @@
-[customizations]
-  [customizations.kernel]
-    name = "kernel-rt"

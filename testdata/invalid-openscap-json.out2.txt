@@ -5,3 +5,6 @@ openscap:
   tailoring:
     json_filepath: /some/path/tailoring-file.json
     json_profile_id: ""
+storage:
+  partitions: null
+  type: gpt

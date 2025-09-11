@@ -11,16 +11,21 @@ properties:
   auto_registration:
     description: Enabled auto_registration rhsmcertd configuration in rhsm.conf.
     type: boolean
+    x-go-type-skip-optional-pointer: false
   auto_enable:
     description: Enabled auto_enable_yum_plugins rhsm configuration in rhsm.conf.
     type: boolean
+    x-go-type-skip-optional-pointer: false
   enabled:
     description: Enables the subscription-manager dnf plugin.
     type: boolean
+    x-go-type-skip-optional-pointer: false
   product_plugin_enabled:
     description: Enables the product-id dnf plugin.
     type: boolean
+    x-go-type-skip-optional-pointer: false
   repository_management:
     description: Enabled repository_management rhsm configuration in rhsm.conf.
     type: boolean
+    x-go-type-skip-optional-pointer: false
 additionalProperties: false

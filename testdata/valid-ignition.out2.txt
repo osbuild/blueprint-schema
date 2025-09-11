@@ -17,3 +17,6 @@ ignition:
       }
     }
 name: 'Blueprint example: ingition'
+storage:
+  partitions: null
+  type: gpt
