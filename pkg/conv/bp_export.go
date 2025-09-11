@@ -4,7 +4,6 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/osbuild/blueprint-schema/pkg/ptr"
 	ubp "github.com/osbuild/blueprint-schema/pkg/ubp"
@@ -31,9 +30,6 @@ func (e *InternalExporter) Export() (*bp.Blueprint, error) {
 	if e.from == nil {
 		return nil, nil
 	}
-
-	// Create monotonic incremental version number based on miliseconds
-	to.Version = int64ToVersion(uint64(time.Now().UTC().UnixMilli()))
 
 	to.Name = e.from.Name
 	to.Description = e.from.Description

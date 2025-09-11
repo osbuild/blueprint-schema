@@ -148,7 +148,6 @@ func TestFix(t *testing.T) {
 				var result *bp.Blueprint
 				exporter := conv.NewInternalExporter(ubpBP)
 				result, convErrs = exporter.Export()
-				result.Version = ""
 
 				got, err = toml.Marshal(result)
 				if err != nil {

@@ -48,15 +48,6 @@ func splitEnVr(s string) (string, string) {
 	}
 }
 
-// int64ToVersion converts a uint64 value to a version string in the format "x.y.z".
-func int64ToVersion(input uint64) string {
-	z := uint16(input & 0xFFFF)
-	y := uint16(input >> 16 & 0xFFFF)
-	x := uint32(input >> 32 & 0xFFFFFFFF)
-
-	return fmt.Sprintf("%d.%d.%d", x+1, y, z)
-}
-
 // parseUGIDstr parses a user/group ID from a string. It returns the
 // user/group ID as an int64 if it is a number, or the string itself
 // if it is not a number. If the string is empty, it returns nil.
