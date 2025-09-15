@@ -2,7 +2,6 @@
 description: Whether the firewall rule is enabled or not. Defaults to true.
 type: boolean
 default: true
-nullable: true
 x-go-type-skip-optional-pointer: false
 x-omitempty: true
 x-order: 2

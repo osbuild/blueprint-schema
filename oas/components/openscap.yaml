@@ -6,7 +6,6 @@ description: |
   disable) or to provide a full policy file.
 x-go-name: OpenSCAP
 x-omitempty: true
-nullable: true
 required:
   - profile_id
 properties:
@@ -47,6 +46,5 @@ properties:
       - "$ref": "tailoring_json.yaml"
       - "$ref": "tailoring_profiles.yaml"
     x-go-type-name: OpenSCAPTailoring
-    nullable: true
     x-omitempty: true
 additionalProperties: false

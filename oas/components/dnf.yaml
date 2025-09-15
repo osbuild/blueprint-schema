@@ -6,7 +6,6 @@ description: |
   package name the version glob should be *. And be aware that you will be unable
   to freeze the blueprint. This is because the provides will expand into multiple
   packages with their own names and versions.
-nullable: true
 x-omitempty: true
 x-go-name: DNF
 properties:
@@ -24,7 +23,6 @@ properties:
     type: array
     items:
       type: string
-    nullable: true
     x-omitempty: true
   import_keys:
     description: |
@@ -33,7 +31,6 @@ properties:
     type: array
     items:
       type: string
-    nullable: true
     x-omitempty: true
   modules:
     description: Modules to enable or disable. This field only supports native DNF
@@ -45,7 +42,6 @@ properties:
     type: array
     items:
       type: string
-    nullable: true
     x-omitempty: true
   packages:
     description: |
@@ -59,7 +55,6 @@ properties:
     type: array
     items:
       type: string
-    nullable: true
     x-omitempty: true
   repositories:
     description: |
@@ -69,6 +64,5 @@ properties:
     type: array
     items:
       "$ref": "dnf_repository.yaml"
-    nullable: true
     x-omitempty: true
 additionalProperties: false

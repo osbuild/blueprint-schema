@@ -4,7 +4,6 @@
       "accounts": {
         "additionalProperties": false,
         "description": "Operating system user and group accounts to be created on the image.",
-        "nullable": true,
         "properties": {
           "groups": {
             "items": {
@@ -27,6 +26,7 @@
       "accounts_groups": {
         "additionalProperties": false,
         "description": "Operating system group accounts to be created on the image.",
+        "nullable": true,
         "properties": {
           "gid": {
             "description": "The group ID (GID) of the group. Must be non-zero.",
@@ -196,7 +196,6 @@
           },
           "description": {
             "description": "The description attribute is a string that can be a longer description\nof the blueprint and is only used for display purposes.\n",
-            "nullable": true,
             "type": "string",
             "x-omitempty": true
           },
@@ -224,7 +223,6 @@
           },
           "hostname": {
             "description": "Hostname is an optional string that can be used to configure the\nhostname of the final image.\n",
-            "nullable": true,
             "type": "string",
             "x-omitempty": true
           },
@@ -253,7 +251,6 @@
           },
           "name": {
             "description": "The name attribute is a string that contains the name of the blueprint.\nIt can contain spaces, but they may be converted to dash characters during build.\nIt should be short and descriptive.\n",
-            "nullable": true,
             "type": "string",
             "x-omitempty": true
           },
@@ -330,14 +327,12 @@
       "dnf": {
         "additionalProperties": false,
         "description": "DNF package managers details. When using virtual provides as the\npackage name the version glob should be *. And be aware that you will be unable\nto freeze the blueprint. This is because the provides will expand into multiple\npackages with their own names and versions.\n",
-        "nullable": true,
         "properties": {
           "groups": {
             "description": "Groups to install, must match exactly. Groups describes groups\nof packages to be installed into the image. Package groups are defined\nin the repository metadata. Each group has a descriptive name used primarily\nfor display in user interfaces and an ID more commonly used in kickstart\nfiles. Here, the ID is the expected way of listing a group. Groups have\nthree different ways of categorizing their packages: mandatory, default,\nand optional. For the purposes of blueprints, only mandatory and default\npackages will be installed. There is no mechanism for selecting optional\npackages.\n",
             "items": {
               "type": "string"
             },
-            "nullable": true,
             "type": "array",
             "x-omitempty": true
           },
@@ -346,7 +341,6 @@
             "items": {
               "type": "string"
             },
-            "nullable": true,
             "type": "array",
             "x-omitempty": true
           },
@@ -355,7 +349,6 @@
             "items": {
               "type": "string"
             },
-            "nullable": true,
             "type": "array",
             "x-omitempty": true
           },
@@ -364,7 +357,6 @@
             "items": {
               "type": "string"
             },
-            "nullable": true,
             "type": "array",
             "x-omitempty": true
           },
@@ -373,7 +365,6 @@
             "items": {
               "$ref": "#/components/schemas/dnf_repository"
             },
-            "nullable": true,
             "type": "array",
             "x-omitempty": true
           }
@@ -538,7 +529,6 @@
       "fips": {
         "additionalProperties": false,
         "description": "FIPS details, optional.",
-        "nullable": true,
         "properties": {
           "enabled": {
             "description": "Enables the system FIPS mode (disabled by default). Currently\nonly edge-raw-image, edge-installer, edge-simplified-installer, edge-ami\nand edge-vsphere images support this customization.\n",
@@ -553,7 +543,6 @@
         "additionalProperties": false,
         "default": true,
         "description": "Whether the firewall rule is enabled or not. Defaults to true.",
-        "nullable": true,
         "type": "boolean",
         "x-go-type-skip-optional-pointer": false,
         "x-omitempty": true,
@@ -650,7 +639,6 @@
         "properties": {
           "contents": {
             "description": "Contents is the file system node contents. When not present,\nan empty file is created.\n",
-            "nullable": true,
             "oneOf": [
               {
                 "$ref": "#/components/schemas/fsnode_contents_text"
@@ -781,7 +769,6 @@
       "installer": {
         "additionalProperties": false,
         "description": "Extra customization for Anaconda installer (ISO) and Edge/IOT simplified\ninstaller image types.\n",
-        "nullable": true,
         "properties": {
           "anaconda": {
             "$ref": "#/components/schemas/installer_anaconda"
@@ -802,7 +789,6 @@
             "items": {
               "$ref": "#/components/schemas/anaconda_modules"
             },
-            "nullable": true,
             "type": "array",
             "x-omitempty": true
           },
@@ -811,13 +797,11 @@
             "items": {
               "$ref": "#/components/schemas/anaconda_modules"
             },
-            "nullable": true,
             "type": "array",
             "x-omitempty": true
           },
           "kickstart": {
             "description": "Kickstart installer configuration.",
-            "nullable": true,
             "type": "string",
             "x-omitempty": true
           },
@@ -828,7 +812,6 @@
               "pattern": "^[%a-zA-Z0-9_.][a-zA-Z0-9_.$-]*$",
               "type": "string"
             },
-            "nullable": true,
             "type": "array",
             "x-go-name": "SudoNOPASSWD",
             "x-omitempty": true
@@ -836,7 +819,6 @@
           "unattended": {
             "default": false,
             "description": "Unattended installation Anaconda flag. When not set, Anaconda\ninstaller will ask for user input.\n",
-            "nullable": true,
             "type": "boolean",
             "x-omitempty": true
           }
@@ -859,20 +841,17 @@
       "kernel": {
         "additionalProperties": false,
         "description": "Custom Linux kernel details, optional.",
-        "nullable": true,
         "properties": {
           "cmdline_append": {
             "description": "An optional string to append arguments to the bootloader kernel\ncommand line. The list will be concatenated with spaces.\n",
             "items": {
               "type": "string"
             },
-            "nullable": true,
             "type": "array",
             "x-omitempty": true
           },
           "package": {
             "description": "Kernel package name to be installed.",
-            "nullable": true,
             "type": "string",
             "x-omitempty": true
           }
@@ -883,14 +862,12 @@
       "locale": {
         "additionalProperties": false,
         "description": "An optional object that contains the following attributes to customize\nthe locale settings for the system. If the locale is not specified, the default\nlocale and keyboard settings are used: en_US.UTF-8 and us.\n",
-        "nullable": true,
         "properties": {
           "keyboards": {
             "description": "The keyboards attribute is a list of strings that contains\nthe keyboards to be installed on the image. To list available keyboards,\nrun: localectl list-keymaps\n\nThe default value depends on the image type and distribution, usually it is\nset to \"en_US.UTF-8\" for most types.\n",
             "items": {
               "type": "string"
             },
-            "nullable": true,
             "type": "array",
             "x-omitempty": true
           },
@@ -899,7 +876,6 @@
             "items": {
               "type": "string"
             },
-            "nullable": true,
             "type": "array",
             "x-omitempty": true
           }
@@ -910,7 +886,6 @@
       "network": {
         "additionalProperties": false,
         "description": "Networking details including firewall configuration.",
-        "nullable": true,
         "properties": {
           "firewall": {
             "$ref": "#/components/schemas/network_firewall"
@@ -941,7 +916,6 @@
               "x-go-name": "NetworkService",
               "x-go-type-name": "NetworkService"
             },
-            "nullable": true,
             "type": "array",
             "x-go-type-skip-optional-pointer": true,
             "x-omitempty": true
@@ -970,7 +944,6 @@
       "openscap": {
         "additionalProperties": false,
         "description": "OpenSCAP policy to be applied on the operating system. Added in\nRHEL 8.7 \u0026 RHEL 9.1. It is possible to either list policy rules (enable or\ndisable) or to provide a full policy file.\n",
-        "nullable": true,
         "properties": {
           "datastream": {
             "description": "Datastream to use for the scan. The datastream is the path to\nthe SCAP datastream file to use for the scan. If the datastream parameter\nis not provided, a sensible default based on the selected distro will be\nchosen.\n",
@@ -983,7 +956,6 @@
           },
           "tailoring": {
             "description": "An optional OpenSCAP tailoring information. Can be done via profile\nselection or tailoring JSON file.\n\nIn case of profile selection, a tailoring file with a new tailoring profile\nID is created and saved to the image. The new tailoring profile ID is\ncreated by appending the _osbuild_tailoring suffix to the base profile.\nFor example, given tailoring options for the cis profile, tailoring profile\nxccdf_org.ssgproject.content_profile_cis_osbuild_tailoring will be created.\nThe default namespace of the rules is org.ssgproject.content, so the prefix\nmay be omitted for rules under this namespace, i.e.\norg.ssgproject.content_grub2_password and grub2_password are functionally\nequivalent. The generated tailoring file is saved to the image as\n/usr/share/xml/osbuild-oscap-tailoring/tailoring.xml or, for newer releases,\nin the /oscap_data directory, this is the location used for other OpenSCAP\nrelated artifacts.\n\nIt is also possible to use JSON tailoring. In that case, custom JSON file\nmust be provided using the blueprint and used in json_filepath field\nalongside with json_profile_id field. The generated XML tailoring file\nis saved to the image as /oscap_data/tailoring.xml.\n",
-            "nullable": true,
             "oneOf": [
               {
                 "$ref": "#/components/schemas/tailoring_json"
@@ -1137,7 +1109,6 @@
       "registration": {
         "additionalProperties": false,
         "description": "Registration details for various registration types, namely Red Hat\nSubscription Manager.\n",
-        "nullable": true,
         "properties": {
           "fdo": {
             "$ref": "#/components/schemas/registration_fdo"
@@ -1271,7 +1242,6 @@
       "storage": {
         "additionalProperties": false,
         "description": "Disk partitioning details. Not available for installer-based images.\n\nGeneral principles:\n\n1. All sizes, whether for specific filesystems, partitions, logical volumes,\nor the image itself, are treated as minimum requirements. This means the full\ndisk image size is always larger than the size of the sum of the partitions,\ndue to requirements for headers and metadata.\n\n2. The partition that contains the root filesystem, whether this is a plain\nformatted partition, an LVM Volume Group, or a Btrfs partition, is always last\nin the partition table layout when it is automatically added. For Disk\ncustomizations the user-defined order is respected.\n\n3. In the case of raw partitioning (no LVM and no Btrfs), the partition\ncontaining the root filesystem is grown to fill any left over space on the\npartition table. Logical Volumes are not grown to fill the space in the Volume\nGroup since they are trivial to grow on a live system.\n",
-        "nullable": true,
         "properties": {
           "minsize": {
             "$ref": "#/components/schemas/storage_minsize"
@@ -1281,7 +1251,6 @@
             "items": {
               "$ref": "#/components/schemas/storage_partition"
             },
-            "nullable": true,
             "type": "array",
             "x-go-type-name": "StoragePartitions"
           },
@@ -1335,7 +1304,6 @@
           }
         ],
         "description": "Partitions of the following types: plain (default), lvm, or btrfs.\n",
-        "nullable": true,
         "type": "object",
         "x-go-type-skip-optional-pointer": true
       },
@@ -1354,7 +1322,6 @@
       "systemd": {
         "additionalProperties": false,
         "description": "Systemd unit configuration.\n\nThis section can be used to control which services are enabled at boot time.\nSome image types already have services enabled or disabled in order for the image\nto work correctly, and cannot be overridden. For example, ami image type requires\nsshd, chronyd, and cloud-init services. Blueprint services do not replace these\nservices, but add them to the list of services already present in the templates,\nif any.\n",
-        "nullable": true,
         "properties": {
           "disabled": {
             "description": "The disabled attribute is a list of strings that contains the systemd units to be disabled.",
@@ -1429,7 +1396,6 @@
       "time_date": {
         "additionalProperties": false,
         "description": "Time and date details allowing configuration of the timezone and\nNTP servers. The timezone is set by default to UTC.\n",
-        "nullable": true,
         "properties": {
           "ntp_servers": {
             "description": "An optional list of strings containing NTP servers to use. If\nnot provided the distribution defaults are used.\n",
