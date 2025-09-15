@@ -9,7 +9,6 @@ description: |
   sshd, chronyd, and cloud-init services. Blueprint services do not replace these
   services, but add them to the list of services already present in the templates,
   if any.
-nullable: true
 x-omitempty: true
 properties:
   disabled:

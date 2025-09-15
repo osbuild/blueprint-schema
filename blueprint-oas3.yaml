@@ -3,7 +3,6 @@ components:
     accounts:
       additionalProperties: false
       description: Operating system user and group accounts to be created on the image.
-      nullable: true
       properties:
         groups:
           items:
@@ -20,6 +19,7 @@ components:
     accounts_groups:
       additionalProperties: false
       description: Operating system group accounts to be created on the image.
+      nullable: true
       properties:
         gid:
           description: The group ID (GID) of the group. Must be non-zero.
@@ -196,7 +196,6 @@ components:
           description: |
             The description attribute is a string that can be a longer description
             of the blueprint and is only used for display purposes.
-          nullable: true
           type: string
           x-omitempty: true
         distribution:
@@ -248,7 +247,6 @@ components:
           description: |
             Hostname is an optional string that can be used to configure the
             hostname of the final image.
-          nullable: true
           type: string
           x-omitempty: true
         ignition:
@@ -276,7 +274,6 @@ components:
             The name attribute is a string that contains the name of the blueprint.
             It can contain spaces, but they may be converted to dash characters during build.
             It should be short and descriptive.
-          nullable: true
           type: string
           x-omitempty: true
         network:
@@ -341,7 +338,6 @@ components:
         package name the version glob should be *. And be aware that you will be unable
         to freeze the blueprint. This is because the provides will expand into multiple
         packages with their own names and versions.
-      nullable: true
       properties:
         groups:
           description: |
@@ -356,7 +352,6 @@ components:
             packages.
           items:
             type: string
-          nullable: true
           type: array
           x-omitempty: true
         import_keys:
@@ -365,7 +360,6 @@ components:
             must be present in the image. Does not support importing from URLs.
           items:
             type: string
-          nullable: true
           type: array
           x-omitempty: true
         modules:
@@ -374,7 +368,6 @@ components:
             Software Collections (SCL) modules must be enabled via the packages field.
           items:
             type: string
-          nullable: true
           type: array
           x-omitempty: true
         packages:
@@ -388,7 +381,6 @@ components:
             modules, use the modules field instead.
           items:
             type: string
-          nullable: true
           type: array
           x-omitempty: true
         repositories:
@@ -398,7 +390,6 @@ components:
             All fields reflect configuration values of dnf, see man dnf.conf(5) for more information.
           items:
             $ref: '#/components/schemas/dnf_repository'
-          nullable: true
           type: array
           x-omitempty: true
       type: object
@@ -548,7 +539,6 @@ components:
     fips:
       additionalProperties: false
       description: FIPS details, optional.
-      nullable: true
       properties:
         enabled:
           description: |
@@ -563,7 +553,6 @@ components:
       additionalProperties: false
       default: true
       description: Whether the firewall rule is enabled or not. Defaults to true.
-      nullable: true
       type: boolean
       x-go-type-skip-optional-pointer: false
       x-omitempty: true
@@ -627,7 +616,6 @@ components:
           description: |
             Contents is the file system node contents. When not present,
             an empty file is created.
-          nullable: true
           oneOf:
           - $ref: '#/components/schemas/fsnode_contents_text'
           - $ref: '#/components/schemas/fsnode_contents_base64'
@@ -734,7 +722,6 @@ components:
       description: |
         Extra customization for Anaconda installer (ISO) and Edge/IOT simplified
         installer image types.
-      nullable: true
       properties:
         anaconda:
           $ref: '#/components/schemas/installer_anaconda'
@@ -758,7 +745,6 @@ components:
             modules that are not required for the installation.
           items:
             $ref: '#/components/schemas/anaconda_modules'
-          nullable: true
           type: array
           x-omitempty: true
         enabled_modules:
@@ -769,12 +755,10 @@ components:
             modules that are not required for the installation.
           items:
             $ref: '#/components/schemas/anaconda_modules'
-          nullable: true
           type: array
           x-omitempty: true
         kickstart:
           description: Kickstart installer configuration.
-          nullable: true
           type: string
           x-omitempty: true
         sudo_nopasswd:
@@ -787,7 +771,6 @@ components:
             maxLength: 256
             pattern: ^[%a-zA-Z0-9_.][a-zA-Z0-9_.$-]*$
             type: string
-          nullable: true
           type: array
           x-go-name: SudoNOPASSWD
           x-omitempty: true
@@ -796,7 +779,6 @@ components:
           description: |
             Unattended installation Anaconda flag. When not set, Anaconda
             installer will ask for user input.
-          nullable: true
           type: boolean
           x-omitempty: true
       type: object
@@ -816,7 +798,6 @@ components:
     kernel:
       additionalProperties: false
       description: Custom Linux kernel details, optional.
-      nullable: true
       properties:
         cmdline_append:
           description: |
@@ -824,12 +805,10 @@ components:
             command line. The list will be concatenated with spaces.
           items:
             type: string
-          nullable: true
           type: array
           x-omitempty: true
         package:
           description: Kernel package name to be installed.
-          nullable: true
           type: string
           x-omitempty: true
       type: object
@@ -840,7 +819,6 @@ components:
         An optional object that contains the following attributes to customize
         the locale settings for the system. If the locale is not specified, the default
         locale and keyboard settings are used: en_US.UTF-8 and us.
-      nullable: true
       properties:
         keyboards:
           description: |
@@ -852,7 +830,6 @@ components:
             set to "en_US.UTF-8" for most types.
           items:
             type: string
-          nullable: true
           type: array
           x-omitempty: true
         languages:
@@ -865,7 +842,6 @@ components:
             set to "en_US.UTF-8" for most types.
           items:
             type: string
-          nullable: true
           type: array
           x-omitempty: true
       type: object
@@ -873,7 +849,6 @@ components:
     network:
       additionalProperties: false
       description: Networking details including firewall configuration.
-      nullable: true
       properties:
         firewall:
           $ref: '#/components/schemas/network_firewall'
@@ -901,7 +876,6 @@ components:
             type: object
             x-go-name: NetworkService
             x-go-type-name: NetworkService
-          nullable: true
           type: array
           x-go-type-skip-optional-pointer: true
           x-omitempty: true
@@ -930,7 +904,6 @@ components:
         OpenSCAP policy to be applied on the operating system. Added in
         RHEL 8.7 & RHEL 9.1. It is possible to either list policy rules (enable or
         disable) or to provide a full policy file.
-      nullable: true
       properties:
         datastream:
           description: |
@@ -965,7 +938,6 @@ components:
             must be provided using the blueprint and used in json_filepath field
             alongside with json_profile_id field. The generated XML tailoring file
             is saved to the image as /oscap_data/tailoring.xml.
-          nullable: true
           oneOf:
           - $ref: '#/components/schemas/tailoring_json'
           - $ref: '#/components/schemas/tailoring_profiles'
@@ -1078,7 +1050,6 @@ components:
       description: |
         Registration details for various registration types, namely Red Hat
         Subscription Manager.
-      nullable: true
       properties:
         fdo:
           $ref: '#/components/schemas/registration_fdo'
@@ -1209,7 +1180,6 @@ components:
         containing the root filesystem is grown to fill any left over space on the
         partition table. Logical Volumes are not grown to fill the space in the Volume
         Group since they are trivial to grow on a live system.
-      nullable: true
       properties:
         minsize:
           $ref: '#/components/schemas/storage_minsize'
@@ -1218,7 +1188,6 @@ components:
             Partitions of the following types: plain (default), lvm, or btrfs.
           items:
             $ref: '#/components/schemas/storage_partition'
-          nullable: true
           type: array
           x-go-type-name: StoragePartitions
         type:
@@ -1266,7 +1235,6 @@ components:
       - $ref: '#/components/schemas/partition_btrfs'
       description: |
         Partitions of the following types: plain (default), lvm, or btrfs.
-      nullable: true
       type: object
       x-go-type-skip-optional-pointer: true
     storage_type:
@@ -1292,7 +1260,6 @@ components:
         sshd, chronyd, and cloud-init services. Blueprint services do not replace these
         services, but add them to the list of services already present in the templates,
         if any.
-      nullable: true
       properties:
         disabled:
           description: The disabled attribute is a list of strings that contains the
@@ -1354,7 +1321,6 @@ components:
       description: |
         Time and date details allowing configuration of the timezone and
         NTP servers. The timezone is set by default to UTC.
-      nullable: true
       properties:
         ntp_servers:
           description: |

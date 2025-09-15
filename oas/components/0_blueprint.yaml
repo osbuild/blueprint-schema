@@ -12,7 +12,6 @@ properties:
       It can contain spaces, but they may be converted to dash characters during build.
       It should be short and descriptive.
     type: string
-    nullable: true
     x-omitempty: true
   description:
     description: |
@@ -20,7 +19,6 @@ properties:
       of the blueprint and is only used for display purposes.
     type: string
     x-omitempty: true
-    nullable: true
   distribution:
     description: |
       Linux OS distribution name followed by dash and version.
@@ -116,7 +114,6 @@ properties:
       hostname of the final image.
     type: string
     x-omitempty: true
-    nullable: true
   ignition:
     description: |
       Provides Ignition configuration files to be used in edge-raw-image and

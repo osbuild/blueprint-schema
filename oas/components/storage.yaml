@@ -19,7 +19,6 @@ description: |
   containing the root filesystem is grown to fill any left over space on the
   partition table. Logical Volumes are not grown to fill the space in the Volume
   Group since they are trivial to grow on a live system.
-nullable: true
 x-omitempty: true
 required:
   - type
@@ -35,6 +34,5 @@ properties:
     type: array
     items:
       "$ref": "storage_partition.yaml"
-    nullable: true
     x-go-type-name: StoragePartitions
 additionalProperties: false

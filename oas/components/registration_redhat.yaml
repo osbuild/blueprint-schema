@@ -10,14 +10,11 @@ properties:
     type: string
   connector:
     "$ref": "registration_connector.yaml"
-    nullable: true
   insights:
     "$ref": "registration_insights.yaml"
-    nullable: true
   organization:
     description: Subscription manager organization name to use during registration.
     type: string
   subscription_manager:
     "$ref": "registration_rhsm.yaml"
-    nullable: true
 additionalProperties: false

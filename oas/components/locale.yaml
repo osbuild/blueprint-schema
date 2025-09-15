@@ -5,7 +5,6 @@ description: |
   the locale settings for the system. If the locale is not specified, the default
   locale and keyboard settings are used: en_US.UTF-8 and us.
 x-omitempty: true
-nullable: true
 properties:
   keyboards:
     description: |
@@ -18,7 +17,6 @@ properties:
     type: array
     items:
       type: string
-    nullable: true
     x-omitempty: true
   languages:
     description: |
@@ -31,6 +29,5 @@ properties:
     type: array
     items:
       type: string
-    nullable: true
     x-omitempty: true
 additionalProperties: false
