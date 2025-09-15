@@ -24,5 +24,4 @@ properties:
     # Must be kept because oneOf is used: https://github.com/oapi-codegen/oapi-codegen/issues/2052
     x-go-type-skip-optional-pointer: true
     x-omitempty: true
-    nullable: true
 additionalProperties: false

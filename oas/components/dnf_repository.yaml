@@ -77,9 +77,5 @@ properties:
     x-go-name: TLSVerify
     x-go-type-skip-optional-pointer: false
   usage:
-    description: |
-      Repository usage. By default, the repository is configured
-      on the image but not used for image build.
-    nullable: true
     "$ref": "dnf_repository_usage.yaml"
 additionalProperties: false

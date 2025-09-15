@@ -15,7 +15,6 @@ properties:
     type: array
     items:
       "$ref": "anaconda_modules.yaml"
-    nullable: true
     x-omitempty: true
   enabled_modules:
     description: |
@@ -26,12 +25,10 @@ properties:
     type: array
     items:
       "$ref": "anaconda_modules.yaml"
-    nullable: true
     x-omitempty: true
   kickstart:
     description: Kickstart installer configuration.
     type: string
-    nullable: true
     x-omitempty: true
   sudo_nopasswd:
     description: |
@@ -44,7 +41,6 @@ properties:
       type: string
       pattern: "^[%a-zA-Z0-9_.][a-zA-Z0-9_.$-]*$"
       maxLength: 256
-    nullable: true
     x-go-name: SudoNOPASSWD
     x-omitempty: true
   unattended:
@@ -53,6 +49,5 @@ properties:
       installer will ask for user input.
     type: boolean
     default: false
-    nullable: true
     x-omitempty: true
 additionalProperties: false

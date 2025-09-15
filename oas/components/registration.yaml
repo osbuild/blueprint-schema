@@ -4,11 +4,9 @@ description: |
   Registration details for various registration types, namely Red Hat
   Subscription Manager.
 x-omitempty: true
-nullable: true
 properties:
   fdo:
     "$ref": "registration_fdo.yaml"
-    nullable: true
   redhat:
     "$ref": "registration_redhat.yaml"
 additionalProperties: false
