@@ -82,14 +82,14 @@ type FirewallEnabled = bool
 
 // Accounts Operating system user and group accounts to be created on the image.
 type Accounts struct {
-	Groups []AccountsGroups `json:"groups"`
-	Users  []AccountsUsers  `json:"users"`
+	Groups []AccountsGroups `json:"groups,omitzero"`
+	Users  []AccountsUsers  `json:"users,omitzero"`
 }
 
 // AccountsGroups Operating system group accounts to be created on the image.
 type AccountsGroups struct {
 	// GID The group ID (GID) of the group. Must be non-zero.
-	GID int `json:"gid,omitempty"`
+	GID int `json:"gid,omitempty,omitzero"`
 
 	// Name Group name. Accepted characters: lowercase letters, digits,
 	// underscores, dollars, and hyphens. Name must not start with a hyphen. Maximum
@@ -101,7 +101,7 @@ type AccountsGroups struct {
 // AccountsUsers Operating system user accounts to be created on the image.
 type AccountsUsers struct {
 	// Description A longer description of the account.
-	Description string `json:"description,omitempty"`
+	Description string `json:"description,omitempty,omitzero"`
 
 	// Expires The expiration date in the format YYYY-MM-DD. Leave empty to never expire.
 	//
@@ -116,13 +116,13 @@ type AccountsUsers struct {
 
 	// GID The primary group ID (GID) of the user. Value of zero (or ommited
 	// value) means that the next available UID will be assigned.
-	GID int `json:"gid,omitempty"`
+	GID int `json:"gid,omitempty,omitzero"`
 
 	// Groups Additional groups that the user should be a member of.
-	Groups []string `json:"groups,omitempty"`
+	Groups []string `json:"groups,omitempty,omitzero"`
 
 	// Home The home directory of the user.
-	Home string `json:"home,omitempty"`
+	Home string `json:"home,omitempty,omitzero"`
 
 	// Name Account name. Accepted characters: lowercase letters, digits,
 	// underscores, dollars, and hyphens. Name must not start with a hyphen. Maximum
@@ -138,14 +138,14 @@ type AccountsUsers struct {
 	Password *string `json:"password,omitempty"`
 
 	// Shell The shell of the user.
-	Shell string `json:"shell,omitempty"`
+	Shell string `json:"shell,omitempty,omitzero"`
 
 	// SSHKeys SSH keys to be added to the account's authorized_keys file.
-	SSHKeys []string `json:"ssh_keys,omitempty"`
+	SSHKeys []string `json:"ssh_keys,omitempty,omitzero"`
 
 	// UID The user ID (UID) of the user. Value of zero (or ommited value)
 	// means that the next available UID will be assigned.
-	UID int `json:"uid,omitempty"`
+	UID int `json:"uid,omitempty,omitzero"`
 }
 
 // AnacondaModules defines model for anaconda_modules.
@@ -156,39 +156,39 @@ type AnacondaModules string
 // THIS IS WORK IN PROGRESS
 type Blueprint struct {
 	// Accounts Operating system user and group accounts to be created on the image.
-	Accounts Accounts `json:"accounts,omitempty"`
+	Accounts Accounts `json:"accounts,omitempty,omitzero"`
 
 	// Architecture Architecture of the image. This is the architecture of the target system, not the build system.
-	Architecture Arch `json:"architecture,omitempty"`
+	Architecture Arch `json:"architecture,omitempty,omitzero"`
 
 	// CACerts The CA certificates to be added to the image. The certificates
 	// are added to the system-wide CA trust store. The certificates are added to
 	// the /etc/pki/ca-trust/source/anchors/ directory and the update-ca-trust command
 	// is run to update the system-wide CA trust store.
-	CACerts []CACert `json:"cacerts,omitempty"`
+	CACerts []CACert `json:"cacerts,omitempty,omitzero"`
 
 	// Containers Containers to be pulled during the image build and stored in the
 	// image at the default local container storage location that is appropriate
 	// for the image type, so that all supported container tools like podman and
 	// cri-o will be able to work with it. The embedded containers are not started,
 	// to do so you can create systemd unit files or quadlets with the files customization.
-	Containers []Container `json:"containers,omitempty"`
+	Containers []Container `json:"containers,omitempty,omitzero"`
 
 	// Description The description attribute is a string that can be a longer description
 	// of the blueprint and is only used for display purposes.
-	Description string `json:"description,omitempty"`
+	Description string `json:"description,omitempty,omitzero"`
 
 	// Distribution Linux OS distribution name followed by dash and version.
-	Distribution string `json:"distribution,omitempty"`
+	Distribution string `json:"distribution,omitempty,omitzero"`
 
 	// DNF DNF package managers details. When using virtual provides as the
 	// package name the version glob should be *. And be aware that you will be unable
 	// to freeze the blueprint. This is because the provides will expand into multiple
 	// packages with their own names and versions.
-	DNF DNF `json:"dnf,omitempty"`
+	DNF DNF `json:"dnf,omitempty,omitzero"`
 
 	// FIPS FIPS details, optional.
-	FIPS FIPS `json:"fips,omitempty"`
+	FIPS FIPS `json:"fips,omitempty,omitzero"`
 
 	// FSNodes File system nodes details.
 	//
@@ -217,11 +217,11 @@ type Blueprint struct {
 	// of these customizations are specified and the directory already exists in the
 	// image, the image build will fail. The intention is to prevent changing the
 	// ownership or permissions of existing directories.
-	FSNodes []FSNode `json:"fsnodes,omitempty"`
+	FSNodes []FSNode `json:"fsnodes,omitempty,omitzero"`
 
 	// Hostname Hostname is an optional string that can be used to configure the
 	// hostname of the final image.
-	Hostname string `json:"hostname,omitempty"`
+	Hostname string `json:"hostname,omitempty,omitzero"`
 
 	// Ignition Provides Ignition configuration files to be used in edge-raw-image and
 	// edge-simplified-installer images. Check the RHEL for Edge butane specification for
@@ -229,36 +229,36 @@ type Blueprint struct {
 	//
 	// The blueprint configuration can be done either by embedding an Ignition configuration
 	// file into the image, or providing a provisioning URL that will be fetched at first boot.
-	Ignition Ignition `json:"ignition,omitempty"`
+	Ignition Ignition `json:"ignition,omitempty,omitzero"`
 
 	// Installer Extra customization for Anaconda installer (ISO) and Edge/IOT simplified
 	// installer image types.
-	Installer Installer `json:"installer,omitempty"`
+	Installer Installer `json:"installer,omitempty,omitzero"`
 
 	// Kernel Custom Linux kernel details, optional.
-	Kernel Kernel `json:"kernel,omitempty"`
+	Kernel Kernel `json:"kernel,omitempty,omitzero"`
 
 	// Locale An optional object that contains the following attributes to customize
 	// the locale settings for the system. If the locale is not specified, the default
 	// locale and keyboard settings are used: en_US.UTF-8 and us.
-	Locale Locale `json:"locale,omitempty"`
+	Locale Locale `json:"locale,omitempty,omitzero"`
 
 	// Name The name attribute is a string that contains the name of the blueprint.
 	// It can contain spaces, but they may be converted to dash characters during build.
 	// It should be short and descriptive.
-	Name string `json:"name,omitempty"`
+	Name string `json:"name,omitempty,omitzero"`
 
 	// Network Networking details including firewall configuration.
-	Network Network `json:"network,omitempty"`
+	Network Network `json:"network,omitempty,omitzero"`
 
 	// OpenSCAP OpenSCAP policy to be applied on the operating system. Added in
 	// RHEL 8.7 & RHEL 9.1. It is possible to either list policy rules (enable or
 	// disable) or to provide a full policy file.
-	OpenSCAP OpenSCAP `json:"openscap,omitempty"`
+	OpenSCAP OpenSCAP `json:"openscap,omitempty,omitzero"`
 
 	// Registration Registration details for various registration types, namely Red Hat
 	// Subscription Manager.
-	Registration Registration `json:"registration,omitempty"`
+	Registration Registration `json:"registration,omitempty,omitzero"`
 
 	// Storage Disk partitioning details. Not available for installer-based images.
 	//
@@ -278,7 +278,7 @@ type Blueprint struct {
 	// containing the root filesystem is grown to fill any left over space on the
 	// partition table. Logical Volumes are not grown to fill the space in the Volume
 	// Group since they are trivial to grow on a live system.
-	Storage Storage `json:"storage,omitempty"`
+	Storage Storage `json:"storage,omitempty,omitzero"`
 
 	// Systemd Systemd unit configuration.
 	//
@@ -288,11 +288,11 @@ type Blueprint struct {
 	// sshd, chronyd, and cloud-init services. Blueprint services do not replace these
 	// services, but add them to the list of services already present in the templates,
 	// if any.
-	Systemd Systemd `json:"systemd,omitempty"`
+	Systemd Systemd `json:"systemd,omitempty,omitzero"`
 
 	// Timedate Time and date details allowing configuration of the timezone and
 	// NTP servers. The timezone is set by default to UTC.
-	Timedate TimeDate `json:"timedate,omitempty"`
+	Timedate TimeDate `json:"timedate,omitempty,omitzero"`
 }
 
 // Arch Architecture of the image. This is the architecture of the target system, not the build system.
@@ -317,7 +317,7 @@ type CACert struct {
 // Container defines model for container.
 type Container struct {
 	// LocalStorage Whether to pull the container image from the host's local-storage.
-	LocalStorage bool `json:"local_storage,omitempty"`
+	LocalStorage bool `json:"local_storage,omitempty,omitzero"`
 
 	// Name Container name is an optional string to set the name under which the container image will be saved in the image. If not specified name falls back to the same value as source.
 	Name string `json:"name"`
@@ -343,15 +343,15 @@ type DNF struct {
 	// and optional. For the purposes of blueprints, only mandatory and default
 	// packages will be installed. There is no mechanism for selecting optional
 	// packages.
-	Groups []string `json:"groups,omitempty"`
+	Groups []string `json:"groups,omitempty,omitzero"`
 
 	// ImportKeys Additional file paths to the GPG keys to import. The files
 	// must be present in the image. Does not support importing from URLs.
-	ImportKeys []string `json:"import_keys,omitempty"`
+	ImportKeys []string `json:"import_keys,omitempty,omitzero"`
 
 	// Modules Modules to enable or disable. This field only supports native DNF module names, not the full module stream name. For example, to enable the 'nodejs' module, use 'nodejs' as the value. To enable a specific stream, use 'nodejs:20'.
 	// Software Collections (SCL) modules must be enabled via the packages field.
-	Modules []string `json:"modules,omitempty"`
+	Modules []string `json:"modules,omitempty,omitzero"`
 
 	// Packages Packages to install. Package name or NVRA is accepted as long
 	// as DNF can resolve it. Examples: vim-enhanced, vim-enhanced-9.1.866-1
@@ -360,12 +360,12 @@ type DNF struct {
 	//
 	// Software Collections (SCL) modules can be enabled via this field. For native DNF
 	// modules, use the modules field instead.
-	Packages []string `json:"packages,omitempty"`
+	Packages []string `json:"packages,omitempty,omitzero"`
 
 	// Repositories Third-party repositories are supported by the blueprint customizations.
 	//
 	// All fields reflect configuration values of dnf, see man dnf.conf(5) for more information.
-	Repositories []DNFRepository `json:"repositories,omitempty"`
+	Repositories []DNFRepository `json:"repositories,omitempty,omitzero"`
 }
 
 // DNFRepository defines model for dnf_repository.
@@ -373,7 +373,7 @@ type DNFRepository struct {
 	// Filename Repository filename to use for the repository configuration file.
 	// If not provided, the ID is used. Filename must be provided without the .repo
 	// extension.
-	Filename string `json:"filename,omitempty"`
+	Filename string `json:"filename,omitempty,omitzero"`
 
 	// GPGCheck Enable GPG check for the repository. GPG key(s) must be provided. Disabled by default.
 	GPGCheck *bool `json:"gpg_check,omitempty"`
@@ -388,7 +388,7 @@ type DNFRepository struct {
 	// will be saved to the /etc/pki/rpm-gpg directory and will be referenced accordingly in the repository
 	// configuration. GPG keys are not imported to the RPM database and will only be imported when first
 	// installing a package from the third-party repository.
-	GPGKeys []string `json:"gpg_keys,omitempty"`
+	GPGKeys []string `json:"gpg_keys,omitempty,omitzero"`
 
 	// ID Repository ID. Required.
 	ID string `json:"id"`
@@ -397,10 +397,10 @@ type DNFRepository struct {
 	//
 	// Adds module_hotfixes flag to all repo types so it can be used during osbuild. This enables users
 	// to disable modularity filtering on specific repositories.
-	ModuleHotfixes bool `json:"module_hotfixes,omitempty"`
+	ModuleHotfixes bool `json:"module_hotfixes,omitempty,omitzero"`
 
 	// Name Repository name.
-	Name string `json:"name,omitempty"`
+	Name string `json:"name,omitempty,omitzero"`
 
 	// Priority Repository priority. When unset, default DNF priority is used. This is useful for third-party repositories that are not part of the base image.
 	Priority *int `json:"priority,omitempty"`
@@ -410,7 +410,7 @@ type DNFRepository struct {
 
 	// TLSVerify Enable TLS verification for the repository. Enabled by default.
 	TLSVerify *bool              `json:"tls_verify,omitempty"`
-	Usage     DnfRepositoryUsage `json:"usage,omitempty"`
+	Usage     DnfRepositoryUsage `json:"usage,omitempty,omitzero"`
 }
 
 // DNFSource Repository source.
@@ -473,7 +473,7 @@ type FIPS struct {
 	// Enabled Enables the system FIPS mode (disabled by default). Currently
 	// only edge-raw-image, edge-installer, edge-simplified-installer, edge-ami
 	// and edge-vsphere images support this customization.
-	Enabled bool `json:"enabled,omitempty"`
+	Enabled bool `json:"enabled,omitempty,omitzero"`
 }
 
 // FirewallFromTo defines model for firewall_from_to.
@@ -481,16 +481,16 @@ type FirewallFromTo struct {
 	// Protocol The network protocol used for the connection. This can be either TCP, UDP, ICMP or ANY protocol.
 	//
 	// Empty value is equivalent to `any` for port definitions. Protocol is ignored for service definitions.
-	Protocol NetworkProtocol `json:"protocol,omitempty"`
+	Protocol NetworkProtocol `json:"protocol,omitempty,omitzero"`
 
 	// Enabled Whether the firewall rule is enabled or not. Defaults to true.
 	Enabled *FirewallEnabled `json:"enabled,omitempty"`
 
 	// From The from port number, must be between 1 and 65535.
-	From int `json:"from,omitempty"`
+	From int `json:"from,omitempty,omitzero"`
 
 	// To The to port number, must be between 1 and 65535.
-	To int `json:"to,omitempty"`
+	To int `json:"to,omitempty,omitzero"`
 }
 
 // FirewallPort defines model for firewall_port.
@@ -498,13 +498,13 @@ type FirewallPort struct {
 	// Protocol The network protocol used for the connection. This can be either TCP, UDP, ICMP or ANY protocol.
 	//
 	// Empty value is equivalent to `any` for port definitions. Protocol is ignored for service definitions.
-	Protocol NetworkProtocol `json:"protocol,omitempty"`
+	Protocol NetworkProtocol `json:"protocol,omitempty,omitzero"`
 
 	// Enabled Whether the firewall rule is enabled or not. Defaults to true.
 	Enabled *FirewallEnabled `json:"enabled,omitempty"`
 
 	// Port The port number, must be between 1 and 65535.
-	Port int `json:"port,omitempty"`
+	Port int `json:"port,omitempty,omitzero"`
 }
 
 // FirewallService defines model for firewall_service.
@@ -512,14 +512,14 @@ type FirewallService struct {
 	// Protocol The network protocol used for the connection. This can be either TCP, UDP, ICMP or ANY protocol.
 	//
 	// Empty value is equivalent to `any` for port definitions. Protocol is ignored for service definitions.
-	Protocol NetworkProtocol `json:"protocol,omitempty"`
+	Protocol NetworkProtocol `json:"protocol,omitempty,omitzero"`
 
 	// Enabled Whether the firewall rule is enabled or not. Defaults to true.
 	Enabled *FirewallEnabled `json:"enabled,omitempty"`
 
 	// Service The name of the IANA service name. This is the name of the service as defined in
 	// the /etc/services file.
-	Service string `json:"service,omitempty"`
+	Service string `json:"service,omitempty,omitzero"`
 }
 
 // FSNode defines model for fsnode.
@@ -530,26 +530,26 @@ type FSNode struct {
 
 	// EnsureParents EnsureParents is a boolean that determines if the parent directories
 	// should be created if they do not exist.
-	EnsureParents bool `json:"ensure_parents,omitempty"`
+	EnsureParents bool `json:"ensure_parents,omitempty,omitzero"`
 
 	// Group Group is the file system node group. Can be also a decimal GID. Defaults to root.
-	Group string `json:"group,omitempty"`
+	Group string `json:"group,omitempty,omitzero"`
 
 	// Mode Mode is the file system node permissions. Defaults to 0644 for
 	// files and 0755 for directories. Must be a valid octal number as a string.
-	Mode FSNodeMode `json:"mode,omitempty"`
+	Mode FSNodeMode `json:"mode,omitempty,omitzero"`
 
 	// Path Path is the absolute path to the file or directory.
 	Path string `json:"path"`
 
 	// State State is the state of the file system node, one of: present, absent. Defaults to present.
-	State FSNodeState `json:"state,omitempty"`
+	State FSNodeState `json:"state,omitempty,omitzero"`
 
 	// Type Type is the type of the file system node, one of: file, dir.
-	Type FSNodeType `json:"type,omitempty"`
+	Type FSNodeType `json:"type,omitempty,omitzero"`
 
 	// User User is the file system node owner. Can be also a decimal UID. Defaults to root.
-	User string `json:"user,omitempty"`
+	User string `json:"user,omitempty,omitzero"`
 }
 
 // FSNodeContents Contents is the file system node contents. When not present,
@@ -602,11 +602,11 @@ type Installer struct {
 	//
 	// Blueprint customizations that match the kickstart options (languages, keyboard,
 	// timezone) will change the value in the kickstart file as well.
-	Anaconda InstallerAnaconda `json:"anaconda,omitempty"`
+	Anaconda InstallerAnaconda `json:"anaconda,omitempty,omitzero"`
 
 	// CoreOS CoreOS installer configuration is required by the edge-simplified-installer
 	// image. It allows to define the destination device for the installation.
-	CoreOS CoreOS `json:"coreos,omitempty"`
+	CoreOS CoreOS `json:"coreos,omitempty,omitzero"`
 }
 
 // InstallerAnaconda Extra customizations for Anaconda installer (ISO) image types.
@@ -618,26 +618,26 @@ type InstallerAnaconda struct {
 	// can be disabled is limited to the modules that are not required for the
 	// installation. The list of modules that can be disabled is limited to the
 	// modules that are not required for the installation.
-	DisabledModules []AnacondaModules `json:"disabled_modules,omitempty"`
+	DisabledModules []AnacondaModules `json:"disabled_modules,omitempty,omitzero"`
 
 	// EnabledModules Anaconda modules to be enabled. The list of modules that
 	// can be enabled is limited to the modules that are not required for the
 	// installation. The list of modules that can be enabled is limited to the
 	// modules that are not required for the installation.
-	EnabledModules []AnacondaModules `json:"enabled_modules,omitempty"`
+	EnabledModules []AnacondaModules `json:"enabled_modules,omitempty,omitzero"`
 
 	// Kickstart Kickstart installer configuration.
-	Kickstart string `json:"kickstart,omitempty"`
+	Kickstart string `json:"kickstart,omitempty,omitzero"`
 
 	// SudoNOPASSWD Sudo users with NOPASSWD option. Adds a snippet to the kickstart
 	// file that, after installation, will create drop-in files in /etc/sudoers.d
 	// to allow the specified users and groups to run sudo without a password (groups
 	// must be prefixed with %).
-	SudoNOPASSWD []string `json:"sudo_nopasswd,omitempty"`
+	SudoNOPASSWD []string `json:"sudo_nopasswd,omitempty,omitzero"`
 
 	// Unattended Unattended installation Anaconda flag. When not set, Anaconda
 	// installer will ask for user input.
-	Unattended bool `json:"unattended,omitempty"`
+	Unattended bool `json:"unattended,omitempty,omitzero"`
 }
 
 // CoreOS CoreOS installer configuration is required by the edge-simplified-installer
@@ -648,17 +648,17 @@ type CoreOS = InstallerCoreOS
 // image. It allows to define the destination device for the installation.
 type InstallerCoreOS struct {
 	// InstallationDevice Installation device for iot/edge simplified installer image types.
-	InstallationDevice string `json:"installation_device,omitempty"`
+	InstallationDevice string `json:"installation_device,omitempty,omitzero"`
 }
 
 // Kernel Custom Linux kernel details, optional.
 type Kernel struct {
 	// CmdlineAppend An optional string to append arguments to the bootloader kernel
 	// command line. The list will be concatenated with spaces.
-	CmdlineAppend []string `json:"cmdline_append,omitempty"`
+	CmdlineAppend []string `json:"cmdline_append,omitempty,omitzero"`
 
 	// Package Kernel package name to be installed.
-	Package string `json:"package,omitempty"`
+	Package string `json:"package,omitempty,omitzero"`
 }
 
 // Locale An optional object that contains the following attributes to customize
@@ -671,7 +671,7 @@ type Locale struct {
 	//
 	// The default value depends on the image type and distribution, usually it is
 	// set to "en_US.UTF-8" for most types.
-	Keyboards []string `json:"keyboards,omitempty"`
+	Keyboards []string `json:"keyboards,omitempty,omitzero"`
 
 	// Languages The languages attribute is a list of strings that contains
 	// the languages to be installed on the image. To list available languages,
@@ -679,13 +679,13 @@ type Locale struct {
 	//
 	// The default value depends on the image type and distribution, usually it is
 	// set to "en_US.UTF-8" for most types.
-	Languages []string `json:"languages,omitempty"`
+	Languages []string `json:"languages,omitempty,omitzero"`
 }
 
 // Network Networking details including firewall configuration.
 type Network struct {
 	// Firewall Firewall details - package firewalld must be installed in the image.
-	Firewall NetworkFirewall `json:"firewall,omitempty"`
+	Firewall NetworkFirewall `json:"firewall,omitempty,omitzero"`
 }
 
 // NetworkFirewall Firewall details - package firewalld must be installed in the image.
@@ -698,7 +698,7 @@ type NetworkFirewall struct {
 	//
 	// By default the firewall blocks all access, except for services that enable their
 	// ports explicitly such as the sshd.
-	Services []NetworkService `json:"services,omitempty"`
+	Services []NetworkService `json:"services,omitempty,omitzero"`
 }
 
 // NetworkService defines model for .
@@ -714,7 +714,7 @@ type OpenSCAP struct {
 	// the SCAP datastream file to use for the scan. If the datastream parameter
 	// is not provided, a sensible default based on the selected distro will be
 	// chosen.
-	Datastream string `json:"datastream,omitempty"`
+	Datastream string `json:"datastream,omitempty,omitzero"`
 
 	// ProfileID The desired security profile ID.
 	ProfileID string `json:"profile_id"`
@@ -778,7 +778,7 @@ type PartitionBTRFS struct {
 	// TiB, PiB, EiB).
 	//
 	// If unit is ommited, it is assumed to be in bytes.
-	Minsize StorageMinsize `json:"minsize,omitempty"`
+	Minsize StorageMinsize `json:"minsize,omitempty,omitzero"`
 
 	// Subvolumes BTRFS subvolumes to create.
 	Subvolumes []PartitionSubvolumes `json:"subvolumes,omitempty"`
@@ -795,10 +795,10 @@ type PartitionLV struct {
 	// FSType File system type: ext4, xfs, swap, or vfat.
 	//
 	// Default value is image-type specific.
-	FSType FSType `json:"fs_type,omitempty"`
+	FSType FSType `json:"fs_type,omitempty,omitzero"`
 
 	// Label Optional label of the partition.
-	Label string `json:"label,omitempty"`
+	Label string `json:"label,omitempty,omitzero"`
 
 	// Minsize Minimum size of the disk or partition.
 	//
@@ -807,13 +807,13 @@ type PartitionLV struct {
 	// TiB, PiB, EiB).
 	//
 	// If unit is ommited, it is assumed to be in bytes.
-	Minsize StorageMinsize `json:"minsize,omitempty"`
+	Minsize StorageMinsize `json:"minsize,omitempty,omitzero"`
 
 	// Mountpoint Mount point of the partition. Must start with a slash.
-	Mountpoint StorageMountpoint `json:"mountpoint,omitempty"`
+	Mountpoint StorageMountpoint `json:"mountpoint,omitempty,omitzero"`
 
 	// Name Logical volume name. When not set, will be generated automatically.
-	Name string `json:"name,omitempty"`
+	Name string `json:"name,omitempty,omitzero"`
 }
 
 // PartitionLvm defines model for partition_lvm.
@@ -831,10 +831,10 @@ type PartitionLVM struct {
 	// TiB, PiB, EiB).
 	//
 	// If unit is ommited, it is assumed to be in bytes.
-	Minsize StorageMinsize `json:"minsize,omitempty"`
+	Minsize StorageMinsize `json:"minsize,omitempty,omitzero"`
 
 	// Name Optional name of the volume group. Will be generated automatically if not specified.
-	Name string `json:"name,omitempty"`
+	Name string `json:"name,omitempty,omitzero"`
 
 	// Type Partition type: plain, lvm, or btrfs. Must be set.
 	Type PartitionType `json:"type"`
@@ -845,10 +845,10 @@ type PartitionPlain struct {
 	// FSType File system type: ext4, xfs, swap, or vfat.
 	//
 	// Default value is image-type specific.
-	FSType FSType `json:"fs_type,omitempty"`
+	FSType FSType `json:"fs_type,omitempty,omitzero"`
 
 	// Label Optional label of the partition.
-	Label string `json:"label,omitempty"`
+	Label string `json:"label,omitempty,omitzero"`
 
 	// Minsize Minimum size of the disk or partition.
 	//
@@ -857,10 +857,10 @@ type PartitionPlain struct {
 	// TiB, PiB, EiB).
 	//
 	// If unit is ommited, it is assumed to be in bytes.
-	Minsize StorageMinsize `json:"minsize,omitempty"`
+	Minsize StorageMinsize `json:"minsize,omitempty,omitzero"`
 
 	// Mountpoint Mount point of the partition. Must start with a slash.
-	Mountpoint StorageMountpoint `json:"mountpoint,omitempty"`
+	Mountpoint StorageMountpoint `json:"mountpoint,omitempty,omitzero"`
 
 	// Type Partition type: plain, lvm, or btrfs. Must be set.
 	Type PartitionType `json:"type"`
@@ -869,10 +869,10 @@ type PartitionPlain struct {
 // PartitionSubvolumes defines model for partition_subvolumes.
 type PartitionSubvolumes struct {
 	// Mountpoint Mount point of the partition. Must start with a slash.
-	Mountpoint StorageMountpoint `json:"mountpoint,omitempty"`
+	Mountpoint StorageMountpoint `json:"mountpoint,omitempty,omitzero"`
 
 	// Name Subvolume name, must also define its parent volume.
-	Name string `json:"name,omitempty"`
+	Name string `json:"name,omitempty,omitzero"`
 }
 
 // PartitionType Partition type: plain, lvm, or btrfs. Must be set.
@@ -884,10 +884,10 @@ type Registration struct {
 	// RegistrationFDO FDO allows users to configure FIDO Device Onboard device initialization
 	// parameters. It is only available with the edge-simplified-installer or
 	// iot-simplified-installer image types.
-	RegistrationFDO RegistrationFDO `json:"fdo,omitempty"`
+	RegistrationFDO RegistrationFDO `json:"fdo,omitempty,omitzero"`
 
 	// RegistrationRedHat Registration details for Red Hat operating system images.
-	RegistrationRedHat RegistrationRedHat `json:"redhat,omitempty"`
+	RegistrationRedHat RegistrationRedHat `json:"redhat,omitempty,omitzero"`
 }
 
 // RegistrationConnector Red Hat console.redhat.com connector (rhc) details.
@@ -901,16 +901,16 @@ type RegistrationConnector struct {
 // iot-simplified-installer image types.
 type RegistrationFDO struct {
 	// DiMfgStringTypeMacIface Optional interface name for the MAC address.
-	DiMfgStringTypeMacIface string `json:"di_mfg_string_type_mac_iface,omitempty"`
+	DiMfgStringTypeMacIface string `json:"di_mfg_string_type_mac_iface,omitempty,omitzero"`
 
 	// DiunPubKeyHash FDO server public key hex-encoded hash. Cannot be used together with insecure option or root certs.
-	DiunPubKeyHash string `json:"diun_pub_key_hash,omitempty"`
+	DiunPubKeyHash string `json:"diun_pub_key_hash,omitempty,omitzero"`
 
 	// DiunPubKeyInsecure FDO insecure option. When set, both hash or root certs must not be set.
-	DiunPubKeyInsecure bool `json:"diun_pub_key_insecure,omitempty"`
+	DiunPubKeyInsecure bool `json:"diun_pub_key_insecure,omitempty,omitzero"`
 
 	// DiunPubKeyRootCerts FDO server public key root certificate path. Cannot be used together with insecure option or hash.
-	DiunPubKeyRootCerts string `json:"diun_pub_key_root_certs,omitempty"`
+	DiunPubKeyRootCerts string `json:"diun_pub_key_root_certs,omitempty,omitzero"`
 
 	// ManufacturingServerURL FDO manufacturing server URL.
 	ManufacturingServerURL string `json:"manufacturing_server_url"`
@@ -926,23 +926,23 @@ type RegistrationInsights struct {
 type RegistrationRedHat struct {
 	// ActivationKey Subscription manager activation key to use during registration.
 	// A list of keys to use to redeem or apply specific subscriptions to the system.
-	ActivationKey string `json:"activation_key,omitempty"`
+	ActivationKey string `json:"activation_key,omitempty,omitzero"`
 
 	// Connector Red Hat console.redhat.com connector (rhc) details.
-	Connector RegistrationConnector `json:"connector,omitempty"`
+	Connector RegistrationConnector `json:"connector,omitempty,omitzero"`
 
 	// Insights Red Hat Insights client details.
-	Insights RegistrationInsights `json:"insights,omitempty"`
+	Insights RegistrationInsights `json:"insights,omitempty,omitzero"`
 
 	// Organization Subscription manager organization name to use during registration.
-	Organization string `json:"organization,omitempty"`
+	Organization string `json:"organization,omitempty,omitzero"`
 
 	// RegistrationRHSM Subscription manager details (internal use only). The customization
 	// expects that subscription-manager package is installed in the image, which
 	// is by default part of the RHEL distribution bootable images. To explicitly
 	// install the package, add it to the packages section in the blueprint.
 	// The customization is not supported on Fedora distribution images.
-	RegistrationRHSM RegistrationRHSM `json:"subscription_manager,omitempty"`
+	RegistrationRHSM RegistrationRHSM `json:"subscription_manager,omitempty,omitzero"`
 }
 
 // RegistrationRHSM Subscription manager details (internal use only). The customization
@@ -993,7 +993,7 @@ type Storage struct {
 	// TiB, PiB, EiB).
 	//
 	// If unit is ommited, it is assumed to be in bytes.
-	Minsize StorageMinsize `json:"minsize,omitempty"`
+	Minsize StorageMinsize `json:"minsize,omitempty,omitzero"`
 
 	// Partitions Partitions of the following types: plain (default), lvm, or btrfs.
 	Partitions []StoragePartition `json:"partitions"`
@@ -1041,13 +1041,13 @@ type StorageType string
 // if any.
 type Systemd struct {
 	// Disabled The disabled attribute is a list of strings that contains the systemd units to be disabled.
-	Disabled []string `json:"disabled,omitempty"`
+	Disabled []string `json:"disabled,omitempty,omitzero"`
 
 	// Enabled The enabled attribute is a list of strings that contains the systemd units to be enabled.
-	Enabled []string `json:"enabled,omitempty"`
+	Enabled []string `json:"enabled,omitempty,omitzero"`
 
 	// Masked The masked attribute is a list of strings that contains the systemd units to be masked.
-	Masked []string `json:"masked,omitempty"`
+	Masked []string `json:"masked,omitempty,omitzero"`
 }
 
 // TailoringJSON defines model for tailoring_json.
@@ -1062,10 +1062,10 @@ type TailoringJSON struct {
 // TailoringProfiles defines model for tailoring_profiles.
 type TailoringProfiles struct {
 	// Selected Selected rules, cannot be used with json_profile_id and json_filepath.
-	Selected []string `json:"selected,omitempty"`
+	Selected []string `json:"selected,omitempty,omitzero"`
 
 	// Unselected Unselected rules, cannot be used with json_profile_id and json_filepath.
-	Unselected []string `json:"unselected,omitempty"`
+	Unselected []string `json:"unselected,omitempty,omitzero"`
 }
 
 // Text defines model for text.
@@ -1076,12 +1076,12 @@ type Text = string
 type TimeDate struct {
 	// NTPServers An optional list of strings containing NTP servers to use. If
 	// not provided the distribution defaults are used.
-	NTPServers []string `json:"ntp_servers,omitempty"`
+	NTPServers []string `json:"ntp_servers,omitempty,omitzero"`
 
 	// Timezone System time zone. Defaults to UTC. To list available time zones run:
 	//
 	// timedatectl list-timezones
-	Timezone string `json:"timezone,omitempty"`
+	Timezone string `json:"timezone,omitempty,omitzero"`
 }
 
 // ExportTomlJSONRequestBody defines body for ExportToml for application/json ContentType.
