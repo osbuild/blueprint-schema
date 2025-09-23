@@ -1,5 +1,4 @@
 ---
-# BUG IS IN THIS FILE SOMEWHERE
 type: object
 description: |
   DNF package managers details. When using virtual provides as the
