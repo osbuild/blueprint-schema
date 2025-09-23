@@ -21,19 +21,19 @@ The Go library requires Go 1.24+.
 
 ### Schema source
 
-All schema source files are in `oas/` directory, each component resides in its own YAML file in `oas/components`. Make sure to create component for each object that is supposed to be a Go type (`struct`). There is a README in the `oas/` directory with some tips on how to write OAS3 schemas.
+All schema source files are in the `schema/oas/` directory, each component resides in its own YAML file in `schema/oas/components`. Make sure to create component for each object that is supposed to be a Go type (`struct`). There is a README in the `schema/oas/` directory with some tips on how to write OAS3 schemas.
 
 ### Schema files
 
-* `blueprint-oas3.yaml` - OpenAPI 3.0 schema, the blueprint document is at `#/components/schemas/blueprint`
-* `blueprint-oas3.json` - the same schema but in JSON format
-* `blueprint-oas3-ext.json` - the schema with additional "extensions" which would confuse Go code generator but are useful for validation purposes, they are defined in `oas/extensions`
+* `schema/blueprint-oas3.yaml` - OpenAPI 3.0 schema, the blueprint document is at `#/components/schemas/blueprint`
+* `schema/blueprint-oas3.json` - the same schema but in JSON format
+* `schema/blueprint-oas3-ext.json` - the schema with additional "extensions" which would confuse Go code generator but are useful for validation purposes, they are defined in `schema/oas/extensions`
 
 All the mentioned files are generated using `make schema`
 
 ### Go code
 
-Go code is generated from `blueprint-oas3.json` via `oapi-codegen` using `make schema`.
+Go code is generated from `schema/blueprint-oas3.json` via `oapi-codegen` using `make schema`.
 
 All the code resides in `pkg/ubp` except embedded schemas from above which are in the top-level directory for technical reasons (Go embedding limitations). Direct access to schema files is not required for any scenario, so only import the former package.
 
@@ -78,7 +78,7 @@ go run github.com/osbuild/blueprint-schema/cmd/image-builder-blueprint/ -validat
 The return value is non-zero when validation fails and error is printed on the standard error. Example export:
 
 ```
-go run github.com/osbuild/blueprint-schema/cmd/image-builder-blueprint/ -export-toml -input testdata/valid-kernel.in.yaml 
+go run github.com/osbuild/blueprint-schema/cmd/image-builder-blueprint/ -export-toml -input testdata/valid-kernel.in.yaml
 ```
 
 Output (TOML):
