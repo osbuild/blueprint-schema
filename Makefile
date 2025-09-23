@@ -1,5 +1,5 @@
 SOURCES=$(shell find . \( -name '*.go' -not -name '*.gen.go' \) -or -name 'go.*' -or -name 'Makefile')
-SCHEMA_SRC=$(shell find ./oas -name '*.yaml')
+SCHEMA_SRC=$(shell find ./schema/oas -name '*.yaml')
 DISTDIR=dist
 SCHEMA_DST=blueprint-schema.json
 
@@ -16,7 +16,7 @@ $(DISTDIR):
 .PHONY: write-fixtures
 write-fixtures: ## Write new test fixtures
 	@rm -f ./testdata/*.out.yaml ./testdata/*.validator.out ./testdata/*.validator.out
-	@WRITE_FIXTURES=1 go test -count=1 . ./pkg/...
+	@WRITE_FIXTURES=1 go test -count=1 ./...
 
 .PHONY: pkg-go-dev-update
 pkg-go-dev-update: ## Schedule https://pkg.go.dev/github.com/osbuild/blueprint-schema for update
@@ -24,7 +24,7 @@ pkg-go-dev-update: ## Schedule https://pkg.go.dev/github.com/osbuild/blueprint-s
 
 .PHONY: test
 test: ## Run all tests
-	@go test -count=1 . ./pkg/...
+	@go test -count=1 ./...
 
 image-builder-blueprint: $(SOURCES) $(SCHEMA_SRC) ## Build the image-builder-blueprint binary
 	go build -o image-builder-blueprint ./cmd/image-builder-blueprint
@@ -32,23 +32,23 @@ image-builder-blueprint: $(SOURCES) $(SCHEMA_SRC) ## Build the image-builder-blu
 SCHEMA_BUILD_CLI=go run ./cmd/image-builder-blueprint
 # If you find yourself in a loop being unable to build the CLI, switch to the "main" branch
 # and build the CLI command via "make image-builder-blueprint" and use it.
-blueprint-oas3.yaml: $(SCHEMA_SRC) $(SOURCES)
-	$(SCHEMA_BUILD_CLI) -print-yaml-schema > blueprint-oas3.yaml
+schema/blueprint-oas3.yaml: $(SCHEMA_SRC) $(SOURCES)
+	$(SCHEMA_BUILD_CLI) -print-yaml-schema > schema/blueprint-oas3.yaml
 
-blueprint-oas3.json: $(SCHEMA_SRC) $(SOURCES)
-	$(SCHEMA_BUILD_CLI) -print-json-schema > blueprint-oas3.json
+schema/blueprint-oas3.json: $(SCHEMA_SRC) $(SOURCES)
+	$(SCHEMA_BUILD_CLI) -print-json-schema > schema/blueprint-oas3.json
 
-blueprint-oas3-ext.json: $(SCHEMA_SRC) $(SOURCES)
-	$(SCHEMA_BUILD_CLI) -print-json-extended-schema > blueprint-oas3-ext.json
+schema/blueprint-oas3-ext.json: $(SCHEMA_SRC) $(SOURCES)
+	$(SCHEMA_BUILD_CLI) -print-json-extended-schema > schema/blueprint-oas3-ext.json
 
 .PHONY: schema-bundle
-schema-bundle: blueprint-oas3.yaml blueprint-oas3.json blueprint-oas3-ext.json ## Bundle OpenAPI schema
+schema-bundle: schema/blueprint-oas3.yaml schema/blueprint-oas3.json schema/blueprint-oas3-ext.json ## Bundle OpenAPI schema
 
-pkg/ubp/types.gen.go: blueprint-oas3.yaml blueprint-oas3.json blueprint-oas3-ext.json oapi-codegen.cfg.yml
-	go run github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest -config oapi-codegen.cfg.yml -generate types -o pkg/ubp/types.gen.go blueprint-oas3.json
+pkg/ubp/types.gen.go: schema/blueprint-oas3.yaml schema/blueprint-oas3.json schema/blueprint-oas3-ext.json schema/oapi-codegen.cfg.yml
+	go run github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest -config schema/oapi-codegen.cfg.yml -generate types -o pkg/ubp/types.gen.go schema/blueprint-oas3.json
 
-pkg/ubp/http.gen.go: blueprint-oas3.yaml blueprint-oas3.json blueprint-oas3-ext.json oapi-codegen.cfg.yml
-	go run github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest -config oapi-codegen.cfg.yml -generate std-http -o pkg/ubp/http.gen.go blueprint-oas3.json
+pkg/ubp/http.gen.go: schema/blueprint-oas3.yaml schema/blueprint-oas3.json schema/blueprint-oas3-ext.json schema/oapi-codegen.cfg.yml
+	go run github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest -config schema/oapi-codegen.cfg.yml -generate std-http -o pkg/ubp/http.gen.go schema/blueprint-oas3.json
 
 schema: pkg/ubp/types.gen.go pkg/ubp/http.gen.go ## Generate bundled schema and Go code
 

@@ -15,7 +15,7 @@ import (
 	"github.com/gabriel-vasile/mimetype"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3filter"
-	"github.com/osbuild/blueprint-schema"
+	blueprint "github.com/osbuild/blueprint-schema/schema"
 	"sigs.k8s.io/yaml"
 )
 
