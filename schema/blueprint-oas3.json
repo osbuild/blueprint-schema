@@ -328,6 +328,9 @@
         "additionalProperties": false,
         "description": "DNF package managers details. When using virtual provides as the\npackage name the version glob should be *. And be aware that you will be unable\nto freeze the blueprint. This is because the provides will expand into multiple\npackages with their own names and versions.\n",
         "properties": {
+          "config": {
+            "$ref": "#/components/schemas/dnf_config"
+          },
           "groups": {
             "description": "Groups to install, must match exactly. Groups describes groups\nof packages to be installed into the image. Package groups are defined\nin the repository metadata. Each group has a descriptive name used primarily\nfor display in user interfaces and an ID more commonly used in kickstart\nfiles. Here, the ID is the expected way of listing a group. Groups have\nthree different ways of categorizing their packages: mandatory, default,\nand optional. For the purposes of blueprints, only mandatory and default\npackages will be installed. There is no mechanism for selecting optional\npackages.\n",
             "items": {
@@ -371,6 +374,19 @@
         },
         "type": "object",
         "x-go-name": "DNF",
+        "x-omitempty": true
+      },
+      "dnf_config": {
+        "additionalProperties": false,
+        "properties": {
+          "set_releasever": {
+            "description": "Set the $releasever DNF variable to the distribution's release.  On RHEL\nsystems, this ties a system to a specific release, preventing it from\nbeing updated to a later minor RHEL release through 'dnf upgrade', and is\nthe mechanism for keeping systems on extended support releases (EUS and\nE4S).\n",
+            "type": "boolean",
+            "x-go-name": "SetReleasever"
+          }
+        },
+        "type": "object",
+        "x-go-name": "DNFConfig",
         "x-omitempty": true
       },
       "dnf_repository": {
