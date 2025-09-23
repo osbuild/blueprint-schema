@@ -1,0 +1,15 @@
+---
+type: object
+x-go-name: DNFConfig
+x-omitempty: true
+properties:
+  set_releasever:
+    description: |
+      Set the $releasever DNF variable to the distribution's release.  On RHEL
+      systems, this ties a system to a specific release, preventing it from
+      being updated to a later minor RHEL release through 'dnf upgrade', and is
+      the mechanism for keeping systems on extended support releases (EUS and
+      E4S).
+    type: boolean
+    x-go-name: SetReleasever
+additionalProperties: false

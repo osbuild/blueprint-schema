@@ -339,6 +339,8 @@ components:
         to freeze the blueprint. This is because the provides will expand into multiple
         packages with their own names and versions.
       properties:
+        config:
+          $ref: '#/components/schemas/dnf_config'
         groups:
           description: |
             Groups to install, must match exactly. Groups describes groups
@@ -394,6 +396,21 @@ components:
           x-omitempty: true
       type: object
       x-go-name: DNF
+      x-omitempty: true
+    dnf_config:
+      additionalProperties: false
+      properties:
+        set_releasever:
+          description: |
+            Set the $releasever DNF variable to the distribution's release.  On RHEL
+            systems, this ties a system to a specific release, preventing it from
+            being updated to a later minor RHEL release through 'dnf upgrade', and is
+            the mechanism for keeping systems on extended support releases (EUS and
+            E4S).
+          type: boolean
+          x-go-name: SetReleasever
+      type: object
+      x-go-name: DNFConfig
       x-omitempty: true
     dnf_repository:
       additionalProperties: false

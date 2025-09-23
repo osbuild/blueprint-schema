@@ -334,6 +334,8 @@ type Container struct {
 // to freeze the blueprint. This is because the provides will expand into multiple
 // packages with their own names and versions.
 type DNF struct {
+	DNFConfig DNFConfig `json:"config,omitempty,omitzero"`
+
 	// Groups Groups to install, must match exactly. Groups describes groups
 	// of packages to be installed into the image. Package groups are defined
 	// in the repository metadata. Each group has a descriptive name used primarily
@@ -366,6 +368,16 @@ type DNF struct {
 	//
 	// All fields reflect configuration values of dnf, see man dnf.conf(5) for more information.
 	Repositories []DNFRepository `json:"repositories,omitempty,omitzero"`
+}
+
+// DNFConfig defines model for dnf_config.
+type DNFConfig struct {
+	// SetReleasever Set the $releasever DNF variable to the distribution's release.  On RHEL
+	// systems, this ties a system to a specific release, preventing it from
+	// being updated to a later minor RHEL release through 'dnf upgrade', and is
+	// the mechanism for keeping systems on extended support releases (EUS and
+	// E4S).
+	SetReleasever bool `json:"set_releasever,omitempty,omitzero"`
 }
 
 // DNFRepository defines model for dnf_repository.
