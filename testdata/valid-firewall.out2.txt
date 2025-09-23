@@ -6,6 +6,7 @@ network:
     - service: ssh
     - enabled: false
       service: dhcp
+    - port: 53
     - from: 60000
       protocol: udp
       to: 60010
