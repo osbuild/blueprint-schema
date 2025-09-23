@@ -35,6 +35,8 @@ dnf:
       usage:
         install: false
         configure: false
+  config:
+    set_releasever: true
 containers:
   - source: "quay.io/fedora/fedora:latest"
     name: "fedora"
