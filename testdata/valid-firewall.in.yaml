@@ -8,7 +8,7 @@ network:
       - service: "ssh"
         protocol: tcp
       - port: 53
-        enabled: false
+        enabled: true
       - from: 60000
         to: 60010
         protocol: udp

@@ -1,5 +1,3 @@
-# registration not converted
-
 name = "Blueprint example: registration"
 
 [customizations]

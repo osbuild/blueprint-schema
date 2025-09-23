@@ -1,5 +1,3 @@
-# package(s) with dash were converted as names
-
 name = "Blueprint example: DNF"
 
 [[packages]]
