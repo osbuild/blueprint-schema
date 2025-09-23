@@ -1,6 +1,8 @@
 package conv
 
 import (
+	"errors"
+	"fmt"
 	"reflect"
 	"strconv"
 	"strings"
@@ -13,19 +15,19 @@ import (
 // InternalExporter is used to convert a blueprint to the internal representation.
 type InternalExporter struct {
 	from *ubp.Blueprint
-	log  *warnings
 }
 
 func NewInternalExporter(inputBlueprint *ubp.Blueprint) *InternalExporter {
 	return &InternalExporter{
 		from: inputBlueprint,
-		log:  &warnings{},
 	}
 }
 
 // ExportInternal converts the blueprint to the internal representation.
 func (e *InternalExporter) Export() (*bp.Blueprint, error) {
 	to := &bp.Blueprint{}
+	var errs []error
+	var err error
 
 	if e.from == nil {
 		return nil, nil
@@ -33,27 +35,43 @@ func (e *InternalExporter) Export() (*bp.Blueprint, error) {
 
 	to.Name = e.from.Name
 	to.Description = e.from.Description
-	to.Packages = e.exportPackages()
-	to.EnabledModules = e.exportModules()
-	to.Groups = e.exportGroups()
-	to.Containers = e.exportContainers()
-	to.Customizations = e.exportCustomizations()
+
+	to.Packages, err = e.exportPackages()
+	if err != nil {
+		errs = append(errs, err)
+	}
+
+	to.EnabledModules, err = e.exportModules()
+	if err != nil {
+		errs = append(errs, err)
+	}
+
+	to.Groups, err = e.exportGroups()
+	if err != nil {
+		errs = append(errs, err)
+	}
+
+	to.Containers, err = e.exportContainers()
+	if err != nil {
+		errs = append(errs, err)
+	}
+
+	to.Customizations, err = e.exportCustomizations()
+	if err != nil {
+		errs = append(errs, err)
+	}
 	to.Distro = e.from.Distribution
 	to.Arch = e.from.Architecture.String()
 
-	return to, e.log.Error()
+	return to, errors.Join(errs...)
 }
 
-func (e *InternalExporter) exportPackages() []bp.Package {
-	var dash bool
+func (e *InternalExporter) exportPackages() ([]bp.Package, error) {
 	var s []bp.Package
 	for _, pkg := range e.from.DNF.Packages {
 		// It is not possible to reliably detect version of a package with a dash in its name,
 		// let's do best effort and split it at the second last dash and issue a warning.
 		en, vr := splitEnVr(pkg)
-		if vr != "" {
-			dash = true
-		}
 
 		s = append(s, bp.Package{
 			Name:    en, // Epoch + Name
@@ -61,25 +79,20 @@ func (e *InternalExporter) exportPackages() []bp.Package {
 		})
 	}
 
-	if dash {
-		e.log.Printf("package(s) with dash were converted as names")
-	}
-
-	return s
+	return s, nil
 }
 
-func (e *InternalExporter) exportGroups() []bp.Group {
+func (e *InternalExporter) exportGroups() ([]bp.Group, error) {
 	var s []bp.Group
 	for _, pkg := range e.from.DNF.Groups {
 		s = append(s, bp.Group{
 			Name: pkg,
 		})
 	}
-
-	return s
+	return s, nil
 }
 
-func (e *InternalExporter) exportModules() []bp.EnabledModule {
+func (e *InternalExporter) exportModules() ([]bp.EnabledModule, error) {
 	var s []bp.EnabledModule
 	for _, pkg := range e.from.DNF.Modules {
 		p := splitStringEmptyN(pkg, ":", 2)
@@ -90,10 +103,10 @@ func (e *InternalExporter) exportModules() []bp.EnabledModule {
 		})
 	}
 
-	return s
+	return s, nil
 }
 
-func (e *InternalExporter) exportContainers() []bp.Container {
+func (e *InternalExporter) exportContainers() ([]bp.Container, error) {
 	var s []bp.Container
 	for _, container := range e.from.Containers {
 		s = append(s, bp.Container{
@@ -104,45 +117,110 @@ func (e *InternalExporter) exportContainers() []bp.Container {
 		})
 	}
 
-	return s
+	return s, nil
 }
 
-func (e *InternalExporter) exportCustomizations() *bp.Customizations {
-	to := bp.Customizations{}
+func (e *InternalExporter) exportCustomizations() (*bp.Customizations, error) {
+	to := &bp.Customizations{}
+	var errs []error
+	var err error
 
 	to.Hostname = ptr.ToNilIfEmpty(e.from.Hostname)
-	to.Kernel = e.exportKernel()
-	to.User = e.exportUserCustomization()
-	to.Group = e.exportGroupCustomization()
-	to.Timezone = e.exportTimezoneCustomization()
-	to.Locale = e.exportLocaleCustomization()
-	to.Firewall = e.exportFirewallCustomization()
-	to.Services = e.exportSystemdCustomization()
-	to.Disk = e.exportStorage()
-	to.InstallationDevice, to.Installer = e.exportInstaller()
-	to.RHSM, to.FDO = e.exportRegistration()
-	to.OpenSCAP = e.exportOpenSCAP()
-	to.Ignition = e.exportIgnition()
-	to.Files, to.Directories = e.exportFSNodes()
-	to.Repositories, to.RPM = e.exportRepositories()
 	to.FIPS = ptr.ToNilIfEmpty(e.from.FIPS.Enabled)
-	to.CACerts = e.exportCACerts()
 
-	return &to
+	to.Kernel, err = e.exportKernel()
+	if err != nil {
+		errs = append(errs, err)
+	}
+
+	to.User, err = e.exportUserCustomization()
+	if err != nil {
+		errs = append(errs, err)
+	}
+
+	to.Group, err = e.exportGroupCustomization()
+	if err != nil {
+		errs = append(errs, err)
+	}
+
+	to.Timezone, err = e.exportTimezoneCustomization()
+	if err != nil {
+		errs = append(errs, err)
+	}
+
+	to.Locale, err = e.exportLocaleCustomization()
+	if err != nil {
+		errs = append(errs, err)
+	}
+
+	to.Firewall, err = e.exportFirewallCustomization()
+	if err != nil {
+		errs = append(errs, err)
+	}
+
+	to.Services, err = e.exportSystemdCustomization()
+	if err != nil {
+		errs = append(errs, err)
+	}
+
+	to.Disk, err = e.exportStorage()
+	if err != nil {
+		errs = append(errs, err)
+	}
+
+	to.InstallationDevice, to.Installer, err = e.exportInstaller()
+	if err != nil {
+		errs = append(errs, err)
+	}
+
+	to.RHSM, to.FDO, err = e.exportRegistration()
+	if err != nil {
+		errs = append(errs, err)
+	}
+
+	to.OpenSCAP, err = e.exportOpenSCAP()
+	if err != nil {
+		errs = append(errs, err)
+	}
+
+	to.Ignition, err = e.exportIgnition()
+	if err != nil {
+		errs = append(errs, err)
+	}
+
+	to.Files, to.Directories, err = e.exportFSNodes()
+	if err != nil {
+		errs = append(errs, err)
+	}
+
+	to.Repositories, to.RPM, err = e.exportRepositories()
+	if err != nil {
+		errs = append(errs, err)
+	}
+
+	to.CACerts, err = e.exportCACerts()
+	if err != nil {
+		errs = append(errs, err)
+	}
+
+	return to, errors.Join(errs...)
 }
 
-func (e *InternalExporter) exportKernel() *bp.KernelCustomization {
+func (e *InternalExporter) exportKernel() (*bp.KernelCustomization, error) {
 	to := &bp.KernelCustomization{}
+
 	to.Name = e.from.Kernel.Package
 	if len(e.from.Kernel.CmdlineAppend) > 0 {
 		to.Append = strings.Join(e.from.Kernel.CmdlineAppend, " ")
 	}
 
-	return ptr.EmptyToNil(to)
+	return ptr.EmptyToNil(to), nil
 }
 
-func (e *InternalExporter) exportUserCustomization() []bp.UserCustomization {
+func (e *InternalExporter) exportUserCustomization() ([]bp.UserCustomization, error) {
 	var s []bp.UserCustomization
+	var err error
+
 	for _, u := range e.from.Accounts.Users {
 		uc := bp.UserCustomization{}
 		uc.Name = u.Name
@@ -152,7 +230,7 @@ func (e *InternalExporter) exportUserCustomization() []bp.UserCustomization {
 			uc.Key = ptr.ToNilIfEmpty(u.SSHKeys[0])
 		} else if len(u.SSHKeys) > 1 {
 			uc.Key = ptr.ToNilIfEmpty(u.SSHKeys[0])
-			e.log.Printf("only one ssh key supported for user: %s", u.Name)
+			err = fmt.Errorf("only one SSH key supported, selecting the first one for user %q", u.Name)
 		}
 		uc.Home = ptr.ToNilIfEmpty(u.Home)
 		uc.Shell = ptr.ToNilIfEmpty(u.Shell)
@@ -174,11 +252,12 @@ func (e *InternalExporter) exportUserCustomization() []bp.UserCustomization {
 		s = append(s, uc)
 	}
 
-	return s
+	return s, err
 }
 
-func (e *InternalExporter) exportGroupCustomization() []bp.GroupCustomization {
+func (e *InternalExporter) exportGroupCustomization() ([]bp.GroupCustomization, error) {
 	var s []bp.GroupCustomization
+
 	for _, g := range e.from.Accounts.Groups {
 		gc := bp.GroupCustomization{}
 		gc.Name = g.Name
@@ -188,39 +267,42 @@ func (e *InternalExporter) exportGroupCustomization() []bp.GroupCustomization {
 		s = append(s, gc)
 	}
 
-	return s
+	return s, nil
 }
 
-func (e *InternalExporter) exportTimezoneCustomization() *bp.TimezoneCustomization {
+func (e *InternalExporter) exportTimezoneCustomization() (*bp.TimezoneCustomization, error) {
 	to := &bp.TimezoneCustomization{}
+
 	to.Timezone = ptr.ToNilIfEmpty(e.from.Timedate.Timezone)
 	to.NTPServers = e.from.Timedate.NTPServers
 
-	return to
+	return to, nil
 }
 
-func (e *InternalExporter) exportLocaleCustomization() *bp.LocaleCustomization {
+func (e *InternalExporter) exportLocaleCustomization() (*bp.LocaleCustomization, error) {
 	to := &bp.LocaleCustomization{}
+	var err error
+
 	if len(e.from.Locale.Keyboards) > 0 {
 		to.Keyboard = ptr.ToNilIfEmpty(e.from.Locale.Keyboards[0])
 		if len(e.from.Locale.Keyboards) > 1 {
-			e.log.Println("only one keyboard layout supported, selecting first one")
+			err = fmt.Errorf("only one keyboard supported, selecting the first one: %q", e.from.Locale.Keyboards[0])
 		}
 	}
 	to.Languages = append(to.Languages, e.from.Locale.Languages...)
 
-	return to
+	return to, err
 }
 
-func (e *InternalExporter) exportFirewallCustomization() *bp.FirewallCustomization {
+func (e *InternalExporter) exportFirewallCustomization() (*bp.FirewallCustomization, error) {
 	to := &bp.FirewallCustomization{
 		Services: &bp.FirewallServicesCustomization{},
 	}
+
 	for i, s := range e.from.Network.Firewall.Services {
 		fs, fp, fft, err := s.SelectUnion()
 		if err != nil {
-			e.log.Printf("could not parse network service %d: %v", i, err)
-			continue
+			return nil, fmt.Errorf("network service %d parsing error: %v", i, err)
 		}
 
 		if fs.Service != "" {
@@ -235,8 +317,7 @@ func (e *InternalExporter) exportFirewallCustomization() *bp.FirewallCustomizati
 			if fp.Enabled == nil || *fp.Enabled {
 				to.Ports = append(to.Ports, srv)
 			} else {
-				e.log.Printf("network service %d error: port number %d cannot be disabled", i, fp.Port)
-				continue
+				return nil, fmt.Errorf("network service %d error: port number %d cannot be disabled", i, fp.Port)
 			}
 		} else if fft.From != 0 && fft.To != 0 {
 			srv := ubp.PortsProtoToFirewalld(fft.From, fft.To, fp.Protocol)
@@ -244,36 +325,36 @@ func (e *InternalExporter) exportFirewallCustomization() *bp.FirewallCustomizati
 			if fft.Enabled == nil || *fft.Enabled {
 				to.Ports = append(to.Ports, srv)
 			} else {
-				e.log.Printf("network service %d error: port number %d cannot be disabled", i, fp.Port)
-				continue
+				return nil, fmt.Errorf("network service %d error: port number %d cannot be disabled", i, fp.Port)
 			}
 		} else {
-			e.log.Printf("network service %d error: one of service, port or from and to present", i)
+			return nil, fmt.Errorf("network service %d error: one of service, port or from and to present", i)
 		}
 	}
 
-	return to
+	return to, nil
 }
 
-func (e *InternalExporter) exportSystemdCustomization() *bp.ServicesCustomization {
+func (e *InternalExporter) exportSystemdCustomization() (*bp.ServicesCustomization, error) {
 	to := &bp.ServicesCustomization{}
+
 	to.Enabled = e.from.Systemd.Enabled
 	to.Disabled = e.from.Systemd.Disabled
 	to.Masked = e.from.Systemd.Masked
 
-	return to
+	return to, nil
 }
 
-func (e *InternalExporter) exportStorage() *bp.DiskCustomization {
+func (e *InternalExporter) exportStorage() (*bp.DiskCustomization, error) {
 	to := &bp.DiskCustomization{}
+
 	to.Type = e.from.Storage.Type.String()
 	to.MinSize = e.from.Storage.Minsize.Bytes()
 
 	for i, p := range e.from.Storage.Partitions {
 		pp, pl, pb, err := p.SelectUnion()
 		if err != nil {
-			e.log.Printf("could not parse partition %d: %v", i, err)
-			continue
+			return nil, fmt.Errorf("could not parse partition %d: %v", i, err)
 		}
 
 		if pp.Type == ubp.PartTypePlain {
@@ -328,18 +409,19 @@ func (e *InternalExporter) exportStorage() *bp.DiskCustomization {
 
 			to.Partitions = append(to.Partitions, *part)
 		} else {
-			e.log.Printf("unknown partition type %q", pl.Type)
+			return nil, fmt.Errorf("unknown partition type %q", pl.Type)
 		}
 	}
 
-	return to
+	return to, nil
 }
 
-func (e *InternalExporter) exportInstaller() (string, *bp.InstallerCustomization) {
+func (e *InternalExporter) exportInstaller() (string, *bp.InstallerCustomization, error) {
 	var installationDevice string
 	to := &bp.InstallerCustomization{
 		Modules: &bp.AnacondaModules{},
 	}
+
 	to.Unattended = e.from.Installer.Anaconda.Unattended
 	to.SudoNopasswd = e.from.Installer.Anaconda.SudoNOPASSWD
 	if e.from.Installer.Anaconda.Kickstart != "" {
@@ -360,15 +442,11 @@ func (e *InternalExporter) exportInstaller() (string, *bp.InstallerCustomization
 
 	installationDevice = e.from.Installer.CoreOS.InstallationDevice
 
-	return installationDevice, to
+	return installationDevice, to, nil
 }
 
-func (e *InternalExporter) exportRegistration() (*bp.RHSMCustomization, *bp.FDOCustomization) {
+func (e *InternalExporter) exportRegistration() (*bp.RHSMCustomization, *bp.FDOCustomization, error) {
 	r := e.from.Registration
-
-	if !reflect.DeepEqual(r, ubp.Registration{}) {
-		e.log.Println("registration not converted")
-	}
 
 	fdo := &bp.FDOCustomization{}
 	fdo.DiMfgStringTypeMacIface = r.RegistrationFDO.DiMfgStringTypeMacIface
@@ -419,18 +497,19 @@ func (e *InternalExporter) exportRegistration() (*bp.RHSMCustomization, *bp.FDOC
 		rhsm.Config.SubscriptionManager = nil // omitzero
 	}
 
-	return ptr.EmptyToNil(rhsm), ptr.EmptyToNil(fdo)
+	return ptr.EmptyToNil(rhsm), ptr.EmptyToNil(fdo), nil
 }
 
-func (e *InternalExporter) exportOpenSCAP() *bp.OpenSCAPCustomization {
+func (e *InternalExporter) exportOpenSCAP() (*bp.OpenSCAPCustomization, error) {
 	to := &bp.OpenSCAPCustomization{}
+
 	to.DataStream = e.from.OpenSCAP.Datastream
 	to.ProfileID = e.from.OpenSCAP.ProfileID
 
 	if e.from.OpenSCAP.Tailoring != nil {
 		tp, tj, err := e.from.OpenSCAP.Tailoring.SelectUnion()
 		if err != nil {
-			e.log.Printf("could not parse tailoring: %v", err)
+			return nil, fmt.Errorf("could not parse tailoring: %v", err)
 		}
 
 		if tj.JSONProfileID != "" || tj.JSONFilePath != "" {
@@ -444,19 +523,21 @@ func (e *InternalExporter) exportOpenSCAP() *bp.OpenSCAPCustomization {
 				Unselected: tp.Unselected,
 			}
 		} else {
-			e.log.Printf("could not parse tailoring: %v", err)
+			return nil, fmt.Errorf("could not parse tailoring: %v", err)
 		}
 	}
 
-	return ptr.EmptyToNil(to)
+	return ptr.EmptyToNil(to), nil
 }
 
-func (e *InternalExporter) exportIgnition() *bp.IgnitionCustomization {
-	to := bp.IgnitionCustomization{}
+func (e *InternalExporter) exportIgnition() (*bp.IgnitionCustomization, error) {
+	to := &bp.IgnitionCustomization{}
+
 	iu, ie, err := e.from.Ignition.SelectUnion()
 	if err != nil {
-		e.log.Printf("could not parse ignition: %v", err)
+		return nil, fmt.Errorf("could not parse ignition: %v", err)
 	}
+
 	if ie.Text != "" {
 		to.Embedded = &bp.EmbeddedIgnitionCustomization{
 			Config: ie.Text,
@@ -467,16 +548,18 @@ func (e *InternalExporter) exportIgnition() *bp.IgnitionCustomization {
 		}
 	}
 
-	return &to
+	// XXX: use ptr.EmptyToNil to omit empty struct
+	return to, nil
 }
 
-func (e *InternalExporter) exportFSNodes() ([]bp.FileCustomization, []bp.DirectoryCustomization) {
+func (e *InternalExporter) exportFSNodes() ([]bp.FileCustomization, []bp.DirectoryCustomization, error) {
 	if e.from.FSNodes == nil {
-		return nil, nil
+		return nil, nil, nil
 	}
 
 	var files []bp.FileCustomization
 	var dirs []bp.DirectoryCustomization
+
 	for i, node := range e.from.FSNodes {
 		switch node.Type {
 		case ubp.FSNodeFile, "":
@@ -485,13 +568,12 @@ func (e *InternalExporter) exportFSNodes() ([]bp.FileCustomization, []bp.Directo
 			if node.Contents != nil {
 				contents, err = node.Contents.String()
 				if err != nil {
-					e.log.Printf("could not parse contents of node %d: %v, contents skipped", i, err)
+					return nil, nil, fmt.Errorf("could not parse contents of node %d: %v, contents skipped", i, err)
 				}
 			}
 
 			if node.State.IsAbsent() {
-				e.log.Printf("fs node %d is marked as absent, unsupported", i)
-				continue
+				return nil, nil, fmt.Errorf("fs node %d is marked as absent, unsupported", i)
 			}
 
 			fc := bp.FileCustomization{
@@ -520,21 +602,20 @@ func (e *InternalExporter) exportFSNodes() ([]bp.FileCustomization, []bp.Directo
 
 			dirs = append(dirs, fc)
 		default:
-			e.log.Printf("unknown node type %d: %q", i, node.Type)
-			continue
+			return nil, nil, fmt.Errorf("unknown node type %d: %q", i, node.Type)
 		}
 	}
 
-	return files, dirs
+	return files, dirs, nil
 }
 
-func (e *InternalExporter) exportRepositories() ([]bp.RepositoryCustomization, *bp.RPMCustomization) {
+func (e *InternalExporter) exportRepositories() ([]bp.RepositoryCustomization, *bp.RPMCustomization, error) {
 	var repos []bp.RepositoryCustomization
+
 	for _, repo := range e.from.DNF.Repositories {
 		burl, bmeta, bmirror, err := repo.Source.SelectUnion()
 		if err != nil {
-			e.log.Printf("missing source for repository %q: %v", repo.ID, err)
-			continue
+			return nil, nil, fmt.Errorf("missing source for repository %q: %v", repo.ID, err)
 		}
 
 		var configure, install *bool
@@ -560,6 +641,7 @@ func (e *InternalExporter) exportRepositories() ([]bp.RepositoryCustomization, *
 	}
 
 	var rpm *bp.RPMCustomization
+
 	if len(e.from.DNF.ImportKeys) > 0 {
 		rpm = &bp.RPMCustomization{
 			ImportKeys: &bp.RPMImportKeys{
@@ -568,15 +650,16 @@ func (e *InternalExporter) exportRepositories() ([]bp.RepositoryCustomization, *
 		}
 	}
 
-	return repos, rpm
+	return repos, rpm, nil
 }
 
-func (e *InternalExporter) exportCACerts() *bp.CACustomization {
+func (e *InternalExporter) exportCACerts() (*bp.CACustomization, error) {
 	if e.from.CACerts == nil {
-		return nil
+		return nil, nil
 	}
 
 	var to *bp.CACustomization
+
 	if len(e.from.CACerts) > 0 {
 		to = &bp.CACustomization{}
 		for _, cert := range e.from.CACerts {
@@ -588,5 +671,5 @@ func (e *InternalExporter) exportCACerts() *bp.CACustomization {
 		}
 	}
 
-	return to
+	return to, nil
 }

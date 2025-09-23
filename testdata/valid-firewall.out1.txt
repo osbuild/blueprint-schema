@@ -1,12 +1,10 @@
-# network service 3 error: port number 53 cannot be disabled
-
 name = "Firewall valid example"
 
 [customizations]
   [customizations.timezone]
   [customizations.locale]
   [customizations.firewall]
-    ports = ["60000-60010:udp"]
+    ports = ["53", "60000-60010:udp"]
     [customizations.firewall.services]
       enabled = ["dns", "ssh"]
       disabled = ["dhcp"]
