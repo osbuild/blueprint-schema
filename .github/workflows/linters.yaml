@@ -5,6 +5,7 @@ name: linters
   push:
     branches: [main]
   pull_request:
+  merge_group:  # run tests on merge queue
 
 permissions:
   contents: read
