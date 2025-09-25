@@ -64,4 +64,6 @@ properties:
     items:
       "$ref": "dnf_repository.yaml"
     x-omitempty: true
+  config:
+    "$ref": "dnf_config.yaml"
 additionalProperties: false

@@ -21,3 +21,5 @@ dnf:
       usage:
         install: true
         configure: true
+  config:
+    set_releasever: true
